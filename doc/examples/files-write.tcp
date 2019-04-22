@@ -1,0 +1,15 @@
+0_ht,,;0_pu,,;0_speed,,;int,0,;nl,,;
+obj,towrite,;2_assign,,;[,,;],,;nl,,;
+1_rep,,;:,,;nl,,;
+tab,,;obj,input,;2_assign,,;5_stri,,;nl,,;
+tab,,;if,,;obj,input,;==,,;str,EOF,;:,,;nl,,;
+tab,,;tab,,;3_b,,;nl,,;
+tab,,;obj,towrite,;2_.,,;obj,append,;(,,;obj,input,;),,;nl,,;
+nl,,;
+obj,file,;2_assign,,;5_filediag,,;nl,,;
+0_writelines,,;(,,;obj,towrite,;sep,,;obj,file,;),,;nl,,;
+nl,,;
+obj,data,;2_assign,,;5_readlines,,;(,,;obj,file,;),,;nl,,;
+1_for,,;obj,line,;in,,;obj,data,;:,,;nl,,;
+tab,,;0_wr,,;obj,line,;nl,,;
+tab,,;0_right,,;0_go,,;int,16,;0_left,,;nl,,;

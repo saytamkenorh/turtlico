@@ -1,0 +1,133 @@
+{
+    "app-id": "com.orsan.Turtlico",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "3.32",
+    "sdk": "org.gnome.Sdk",
+    "command": "turtlico",
+    "finish-args": [
+        "--share=network",
+        "--share=ipc",
+        "--socket=x11",
+        "--socket=wayland",
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--filesystem=host",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+    ],
+    "build-options": {
+        "cflags": "-O2 -g",
+        "cxxflags": "-O2 -g",
+        "env": {
+            "V": "1"
+        }
+    },
+    "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "/lib/debug",
+        "/man",
+        "/share/doc",
+        "/share/gtk-doc",
+        "/share/man",
+        "/share/pkgconfig",
+        "/share/vala",
+        "*.la",
+        "*.a"
+    ],
+    "modules": [
+        {
+            "name" : "tcl8.6",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://prdownloads.sourceforge.net/tcl/tcl8.6.9-src.tar.gz",
+                    "sha256" : "ad0cd2de2c87b9ba8086b43957a0de3eb2eb565c7159d5f53ccbba3feb915f4e"
+                }
+            ],
+            "subdir" : "unix",
+            "build-options" : {
+                "no-debuginfo" : false
+            },
+            "post-install" : [
+                "chmod 755 /app/lib/libtcl8.6.so"
+            ]
+        },
+        {
+            "name" : "tk8.6",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://prdownloads.sourceforge.net/tcl/tk8.6.9-src.tar.gz",
+                    "sha256" : "d3f9161e8ba0f107fe8d4df1f6d3a14c30cc3512dfc12a795daa367a27660dac"
+                }
+            ],
+            "subdir" : "unix",
+            "build-options" : {
+                "no-debuginfo" : false
+            },
+            "post-install" : [
+                "chmod 755 /app/lib/libtk8.6.so"
+            ]
+        },
+        {
+            "name" : "python",
+            "config-opts" : [
+                "--enable-shared",
+                "--enable-ipv6",
+                "--with-threads",
+                "--with-lto",
+                "--without-ensurepip",
+                "--with-system-ffi",
+                "--with-system-libmpdec",
+                "--with-system-expat"
+            ],
+            "build-options" : {
+                "no-debuginfo" : true
+            },
+            "cleanup" : [
+                "/bin/2to3*",
+                "/bin/easy_install*",
+                "/bin/idle*",
+                "/bin/python*-config",
+                "/bin/pyvenv*",
+                "/bin/pydoc*",
+                "/include",
+                "/share",
+                "/lib/pkgconfig",
+                "/lib/python*/config-*",
+                "/lib/python3.7/test",
+                "/lib/python*/distutils/tests",
+                "/lib/python*/ctypes/test",
+                "/lib/python*/sqlite3/test",
+                "/lib/python*/lib2to3/tests",
+                "/lib/python*/tkinter/test",
+                "/lib/python*/unittest/test",
+                "/lib/python*/lib-dynload/_*_test.*.so",
+                "/lib/python*/lib-dynload/_test*.*.so",
+                "/lib/python*/idlelib",
+                "*.pyc",
+                "__pycache__",
+                "*.exe"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz",
+                    "sha256" : "da60b54064d4cfcd9c26576f6df2690e62085123826cff2e667e72a91952d318"
+                }
+            ]
+        },
+        {
+            "name": "turtlico",
+            "builddir": true,
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "file:///home/matyas/Projects/turtlico"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,11 @@
+data/com.orsan.Turtlico.desktop.in
+data/com.orsan.Turtlico.appdata.xml.in
+data/com.orsan.Turtlico.gschema.xml
+src/window.ui
+src/programview.ui
+src/main.vala
+src/window.vala
+src/programview.vala
+src/compiler.vala
+src/command.vala
+src/base.json

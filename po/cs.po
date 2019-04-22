@@ -1,0 +1,443 @@
+# Czech translations for turtlico package.
+# Copyright (C) 2018 THE turtlico'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the turtlico package.
+# Automatically generated, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: turtlico\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-22 10:26+0200\n"
+"PO-Revision-Date: 2018-05-31 16:17+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:28
+msgid "Turtlico"
+msgstr ""
+
+#: data/com.orsan.Turtlico.desktop.in:9
+msgid "com.orsan.Turtlico"
+msgstr ""
+
+#: src/window.ui:48
+msgid "Start your program"
+msgstr "Spustit program"
+
+#: src/window.ui:64
+msgid "Save"
+msgstr "Uložit"
+
+#: src/window.ui:80
+msgid "Save as"
+msgstr "Uložit jako"
+
+#: src/window.ui:96
+msgid "Open program"
+msgstr "Otevřít program"
+
+#: src/window.ui:111
+msgid "Drop here items to delete them"
+msgstr "Sem přetáhněte příkazy ke smazání"
+
+#: src/programview.ui:43
+msgid "Enter a number"
+msgstr "Zadejte číslo"
+
+#: src/programview.ui:66 src/programview.ui:166 src/programview.ui:233
+msgid "Done"
+msgstr "Hotovo"
+
+#: src/programview.ui:144
+msgid "Enter a string"
+msgstr "Zadejte řetězec"
+
+#: src/programview.ui:210
+msgid "Select a data type"
+msgstr "Vyberte datový typ"
+
+#: src/programview.ui:266
+msgid "Integer"
+msgstr "Číslo (integer)"
+
+#: src/programview.ui:281
+msgid "Float"
+msgstr "Desetinné číslo (float)"
+
+#: src/programview.ui:297 src/base.json:14
+msgid "String"
+msgstr "Řetězec"
+
+#: src/programview.ui:313
+msgid "Custom"
+msgstr "Jiný"
+
+#: src/programview.ui:343
+msgid "Enter custom data type name"
+msgstr "Sem zadejte datový typ"
+
+#: src/main.vala:38
+msgid "Writes compiled program to FILE"
+msgstr "Uloží zkompilovaný program do SOUBORU"
+
+#: src/main.vala:69
+#, c-format
+msgid "Cannot save the output file: %s\n"
+msgstr "Nepodařilo se uložit výsledný soubor: %s\n"
+
+#: src/window.vala:158
+msgid "Failed to save the program"
+msgstr "Nepodařilo se uložit program"
+
+#: src/window.vala:167 src/window.vala:187
+msgid "Select file"
+msgstr "Vyberte soubor"
+
+#: src/window.vala:173 src/window.vala:193
+msgid "Turtlico project (*.tcp)"
+msgstr "Projekt Turtlico (*.tcp)"
+
+#: src/window.vala:212
+msgid "Failed to open the program"
+msgstr "Nepodařilo se otevřít program"
+
+#: src/programview.vala:526
+msgid "Failed to open the file. Error on line: "
+msgstr "Nepodařilo se načíst program. Chyba je na řádce: "
+
+#: src/programview.vala:541
+msgid "The file to load contains an unkown command!"
+msgstr "Soubor obsahuje neznámý příkaz!"
+
+#: src/programview.vala:543
+msgid ""
+"This might be because of the file was damaged or created by a newer version "
+"of this program.\n"
+"Command ID: "
+msgstr ""
+"Toto může být způsobeno tím, že soubor byl poškozen nebo vytvořen novější "
+"verzí programu.\n"
+"ID příkazu: "
+
+#: src/command.vala:77
+msgid "Failed to load command def file: "
+msgstr "Selhalo načtení souboru s definicemi příkazů: "
+
+#: src/base.json:6
+msgid "New line (Enter)"
+msgstr "Nová řádka (Enter)"
+
+#: src/base.json:7
+msgid "Tab"
+msgstr "Tabulátor"
+
+#: src/base.json:8
+msgid "Go forward"
+msgstr "Popojdi"
+
+#: src/base.json:9
+msgid "Turn left"
+msgstr "Otočit doleva"
+
+#: src/base.json:10
+msgid "Turn right"
+msgstr "Otočit doprava"
+
+#: src/base.json:11
+msgid "Set heading angle"
+msgstr "Nastavit směr"
+
+#: src/base.json:12
+msgid "Speed"
+msgstr "Rychlost"
+
+#: src/base.json:13
+msgid "Number"
+msgstr "Číslo"
+
+#: src/base.json:15
+msgid "Set position"
+msgstr "Nastavit pozici"
+
+#: src/base.json:16
+msgid "Set pen color"
+msgstr "Nastav barvu"
+
+#: src/base.json:17
+msgid "Pull the pen up – no drawing when moving."
+msgstr "Zvednout pero - nekreslit při pohybu"
+
+#: src/base.json:18
+msgid "Pull the pen down – drawing when moving."
+msgstr "Položit pero - kreslit při pohybu"
+
+#: src/base.json:19
+msgid "Pen properties"
+msgstr "Vlastnosi pera"
+
+#: src/base.json:20
+msgid "Left parenthesis"
+msgstr "Levá závorka"
+
+#: src/base.json:21 src/base.json:57
+msgid "Argument separator (Comma)"
+msgstr "Oddělovač argumentů (čárka)"
+
+#: src/base.json:22
+msgid "Right parenthesis"
+msgstr "Pravá závorka"
+
+#: src/base.json:23
+msgid "Hide turtle"
+msgstr "Skrýt želvu"
+
+#: src/base.json:24
+msgid "Show turtle"
+msgstr "Zviditelnit želvu"
+
+#: src/base.json:25
+msgid "Write a text"
+msgstr "Napiš text"
+
+#: src/base.json:26
+msgid "Begin fill"
+msgstr "Začátek vyplněného obrazce"
+
+#: src/base.json:27
+msgid "End fill - fill the drawen shape"
+msgstr "Konec vyplněného obrazce"
+
+#: src/base.json:28
+msgid "Clear screen"
+msgstr "Smaž obrazovku"
+
+#: src/base.json:29
+msgid "Register a shape or an image"
+msgstr "Načti obrazec nebo obrázek"
+
+#: src/base.json:30
+msgid "Set turtle shape"
+msgstr "Nastav vzhled želvy"
+
+#: src/base.json:31
+msgid "Create new turtle"
+msgstr "Vytvořit novou želvu"
+
+#: src/base.json:37
+msgid "East"
+msgstr "Východ"
+
+#: src/base.json:38
+msgid "North"
+msgstr "Sever"
+
+#: src/base.json:39
+msgid "West"
+msgstr "Západ"
+
+#: src/base.json:40
+msgid "South"
+msgstr "Jih"
+
+#: src/base.json:41
+msgid "Pi"
+msgstr "Pi"
+
+#: src/base.json:42
+msgid "Get x coordinate"
+msgstr "Pozice Y"
+
+#: src/base.json:43
+msgid "Get y coordinate"
+msgstr "Pozice Y"
+
+#: src/base.json:44
+msgid "Sinus"
+msgstr "Sínus"
+
+#: src/base.json:45
+msgid "Cosinus"
+msgstr "Cosínus"
+
+#: src/base.json:46
+msgid "Tangent"
+msgstr "Tangens"
+
+#: src/base.json:47
+msgid "Absolute avlue"
+msgstr "Absolutní hodnota"
+
+#: src/base.json:48
+msgid "Convert angle from degrees to radians."
+msgstr "Převede úhel ze stupňů na radiány."
+
+#: src/base.json:49
+msgid "Convert angle from radians to degrees."
+msgstr "Převede úhel z radiánů na stupně"
+
+#: src/base.json:50
+msgid "Round a number"
+msgstr "Zaokrouhlit číslo"
+
+#: src/base.json:56
+msgid "Left square bracket"
+msgstr "Levá hranatá závorka"
+
+#: src/base.json:58
+msgid "Right square bracket"
+msgstr "Pravá hranatá závorka"
+
+#: src/base.json:59
+msgid "Block of commands start"
+msgstr "Začátek bloku příkazů"
+
+#: src/base.json:60
+msgid "If condition do something"
+msgstr "Když podmínka tak"
+
+#: src/base.json:61
+msgid "Else"
+msgstr "Jinak"
+
+#: src/base.json:62
+msgid "Equals"
+msgstr "se rovná"
+
+#: src/base.json:63
+msgid "Repeat block of commands"
+msgstr "Opakovat blok příkazů"
+
+#: src/base.json:64
+msgid "For"
+msgstr "Pro"
+
+#: src/base.json:65
+msgid "in"
+msgstr "v"
+
+#: src/base.json:66
+msgid "Break"
+msgstr "Přerušit cyklus"
+
+#: src/base.json:67
+msgid "Continue"
+msgstr "Pokračovat"
+
+#: src/base.json:68
+msgid "Define a method"
+msgstr "Definice metody"
+
+#: src/base.json:69
+msgid "Return a value"
+msgstr "Vrátit hodnotu"
+
+#: src/base.json:70
+msgid "Object"
+msgstr "Objekt"
+
+#: src/base.json:71
+msgid "Assign value to a variable"
+msgstr "Přiřadit hodnotu do proměnné"
+
+#: src/base.json:72
+msgid "Plus"
+msgstr "Plus"
+
+#: src/base.json:73
+msgid "Minus"
+msgstr "Mínus"
+
+#: src/base.json:74
+msgid "Times"
+msgstr "Krát"
+
+#: src/base.json:75
+msgid "Divided"
+msgstr "Děleno"
+
+#: src/base.json:76
+msgid "Modulo"
+msgstr "Zbytek po dělení (modulo)"
+
+#: src/base.json:77
+msgid "Increase value by"
+msgstr "Zvýšit hodnotu proměnné o"
+
+#: src/base.json:78
+msgid "Decrease value by"
+msgstr "Snížit hodnotu proměnné o"
+
+#: src/base.json:79
+msgid "is less than"
+msgstr "je menší než"
+
+#: src/base.json:80
+msgid "is greater than"
+msgstr "je větší než"
+
+#: src/base.json:81
+msgid "Connect a function to control mouse clicks"
+msgstr "Připojte funkci pro zachycení klikání myší"
+
+#: src/base.json:82
+msgid "Connect a function that will be activated by pressing specified key"
+msgstr "Připojte funkci, která bude aktivována zadanou klávesou"
+
+#: src/base.json:83
+msgid "Call a function after n miliseconds"
+msgstr "Zavolat funkci po n milisekundách"
+
+#: src/base.json:84
+msgid "Random number"
+msgstr "Náhodné číslo"
+
+#: src/base.json:85
+msgid "Number input"
+msgstr "Číselný vstup"
+
+#: src/base.json:86
+msgid "String input"
+msgstr "Řetězcový vstup"
+
+#: src/base.json:87
+msgid "Dot (use to access an object property)"
+msgstr "Tečka (přístup k vlastnostem objektu)"
+
+#: src/base.json:88
+msgid "Type conversion"
+msgstr "Konverze typu"
+
+#: src/base.json:94
+msgid "Read all lines"
+msgstr "Přečti všechny řádky ze souboru"
+
+#: src/base.json:95
+msgid "Write lines"
+msgstr "Zapiš řádky do souboru"
+
+#: src/base.json:96
+msgid "Open file dialog"
+msgstr "Otevře dialog pro výběr souboru"
+
+#: src/base.json:97
+msgid "Check file exists"
+msgstr "Zjistit existenci souboru"
+
+#: src/base.json:98
+msgid "Check directory exists"
+msgstr "Zjistit existenci složky"
+
+#: src/base.json:99
+msgid "Delete file or directory"
+msgstr "Smaž soubor nebo složku"
+
+#~ msgid "Open"
+#~ msgstr "Otevřít"
+
+#~ msgid "Choose file"
+#~ msgstr "Vyberte soubor"

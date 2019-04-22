@@ -1,0 +1,4 @@
+obj,a,;2_assign,,;5_numi,,;(,,;str,Zadejte číslo,;sep,,;str,A:,;),,;nl,,;
+obj,b,;2_assign,,;5_numi,,;(,,;str,Zadejte číslo,;sep,,;str,B:,;),,;nl,,;
+0_wr,,;(,,;tc,str,;obj,a,;+,,;str,+,;+,,;tc,str,;obj,b,;+,,;str,=,;+,,;tc,str,;(,,;obj,a,;+,,;obj,b,;),,;),,;nl,,;
+nl,,;

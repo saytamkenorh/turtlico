@@ -1,0 +1,14 @@
+0_ht,,;nl,,;
+0_speed,,;int,10,;nl,,;
+obj,kroky,;2_assign,,;int,1,;nl,,;
+obj,c,;2_assign,,;int,0,;nl,,;
+obj,step,;2_assign,,;int,2,;nl,,;
+0_pp,,;(,,;obj,pensize,;2_assign,,;int,3,;),,;nl,,;
+1_rep,,;:,,;nl,,;
+tab,,;obj,kroky,;2_assign,,;obj,kroky,;+,,;int,5,;nl,,;
+tab,,;0_go,,;(,,;int,4,;),,;nl,,;
+tab,,;0_penc,,;(,,;obj,c,;sep,,;obj,c,;sep,,;obj,c,;),,;nl,,;
+tab,,;if,,;(,,;obj,c,;<,,;int,255,;-,,;obj,step,;),,;:,,;nl,,;
+tab,,;tab,,;obj,c,;2_+=,,;obj,step,;nl,,;
+tab,,;else,,;:,,;nl,,;
+tab,,;tab,,;3_b,,;nl,,;

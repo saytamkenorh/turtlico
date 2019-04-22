@@ -1,0 +1,434 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the turtlico package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: turtlico\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-22 10:26+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:28
+msgid "Turtlico"
+msgstr ""
+
+#: data/com.orsan.Turtlico.desktop.in:9
+msgid "com.orsan.Turtlico"
+msgstr ""
+
+#: src/window.ui:48
+msgid "Start your program"
+msgstr ""
+
+#: src/window.ui:64
+msgid "Save"
+msgstr ""
+
+#: src/window.ui:80
+msgid "Save as"
+msgstr ""
+
+#: src/window.ui:96
+msgid "Open program"
+msgstr ""
+
+#: src/window.ui:111
+msgid "Drop here items to delete them"
+msgstr ""
+
+#: src/programview.ui:43
+msgid "Enter a number"
+msgstr ""
+
+#: src/programview.ui:66 src/programview.ui:166 src/programview.ui:233
+msgid "Done"
+msgstr ""
+
+#: src/programview.ui:144
+msgid "Enter a string"
+msgstr ""
+
+#: src/programview.ui:210
+msgid "Select a data type"
+msgstr ""
+
+#: src/programview.ui:266
+msgid "Integer"
+msgstr ""
+
+#: src/programview.ui:281
+msgid "Float"
+msgstr ""
+
+#: src/programview.ui:297 src/base.json:14
+msgid "String"
+msgstr ""
+
+#: src/programview.ui:313
+msgid "Custom"
+msgstr ""
+
+#: src/programview.ui:343
+msgid "Enter custom data type name"
+msgstr ""
+
+#: src/main.vala:38
+msgid "Writes compiled program to FILE"
+msgstr ""
+
+#: src/main.vala:69
+#, c-format
+msgid "Cannot save the output file: %s\n"
+msgstr ""
+
+#: src/window.vala:158
+msgid "Failed to save the program"
+msgstr ""
+
+#: src/window.vala:167 src/window.vala:187
+msgid "Select file"
+msgstr ""
+
+#: src/window.vala:173 src/window.vala:193
+msgid "Turtlico project (*.tcp)"
+msgstr ""
+
+#: src/window.vala:212
+msgid "Failed to open the program"
+msgstr ""
+
+#: src/programview.vala:526
+msgid "Failed to open the file. Error on line: "
+msgstr ""
+
+#: src/programview.vala:541
+msgid "The file to load contains an unkown command!"
+msgstr ""
+
+#: src/programview.vala:543
+msgid ""
+"This might be because of the file was damaged or created by a newer version "
+"of this program.\n"
+"Command ID: "
+msgstr ""
+
+#: src/command.vala:77
+msgid "Failed to load command def file: "
+msgstr ""
+
+#: src/base.json:6
+msgid "New line (Enter)"
+msgstr ""
+
+#: src/base.json:7
+msgid "Tab"
+msgstr ""
+
+#: src/base.json:8
+msgid "Go forward"
+msgstr ""
+
+#: src/base.json:9
+msgid "Turn left"
+msgstr ""
+
+#: src/base.json:10
+msgid "Turn right"
+msgstr ""
+
+#: src/base.json:11
+msgid "Set heading angle"
+msgstr ""
+
+#: src/base.json:12
+msgid "Speed"
+msgstr ""
+
+#: src/base.json:13
+msgid "Number"
+msgstr ""
+
+#: src/base.json:15
+msgid "Set position"
+msgstr ""
+
+#: src/base.json:16
+msgid "Set pen color"
+msgstr ""
+
+#: src/base.json:17
+msgid "Pull the pen up – no drawing when moving."
+msgstr ""
+
+#: src/base.json:18
+msgid "Pull the pen down – drawing when moving."
+msgstr ""
+
+#: src/base.json:19
+msgid "Pen properties"
+msgstr ""
+
+#: src/base.json:20
+msgid "Left parenthesis"
+msgstr ""
+
+#: src/base.json:21 src/base.json:57
+msgid "Argument separator (Comma)"
+msgstr ""
+
+#: src/base.json:22
+msgid "Right parenthesis"
+msgstr ""
+
+#: src/base.json:23
+msgid "Hide turtle"
+msgstr ""
+
+#: src/base.json:24
+msgid "Show turtle"
+msgstr ""
+
+#: src/base.json:25
+msgid "Write a text"
+msgstr ""
+
+#: src/base.json:26
+msgid "Begin fill"
+msgstr ""
+
+#: src/base.json:27
+msgid "End fill - fill the drawen shape"
+msgstr ""
+
+#: src/base.json:28
+msgid "Clear screen"
+msgstr ""
+
+#: src/base.json:29
+msgid "Register a shape or an image"
+msgstr ""
+
+#: src/base.json:30
+msgid "Set turtle shape"
+msgstr ""
+
+#: src/base.json:31
+msgid "Create new turtle"
+msgstr ""
+
+#: src/base.json:37
+msgid "East"
+msgstr ""
+
+#: src/base.json:38
+msgid "North"
+msgstr ""
+
+#: src/base.json:39
+msgid "West"
+msgstr ""
+
+#: src/base.json:40
+msgid "South"
+msgstr ""
+
+#: src/base.json:41
+msgid "Pi"
+msgstr ""
+
+#: src/base.json:42
+msgid "Get x coordinate"
+msgstr ""
+
+#: src/base.json:43
+msgid "Get y coordinate"
+msgstr ""
+
+#: src/base.json:44
+msgid "Sinus"
+msgstr ""
+
+#: src/base.json:45
+msgid "Cosinus"
+msgstr ""
+
+#: src/base.json:46
+msgid "Tangent"
+msgstr ""
+
+#: src/base.json:47
+msgid "Absolute avlue"
+msgstr ""
+
+#: src/base.json:48
+msgid "Convert angle from degrees to radians."
+msgstr ""
+
+#: src/base.json:49
+msgid "Convert angle from radians to degrees."
+msgstr ""
+
+#: src/base.json:50
+msgid "Round a number"
+msgstr ""
+
+#: src/base.json:56
+msgid "Left square bracket"
+msgstr ""
+
+#: src/base.json:58
+msgid "Right square bracket"
+msgstr ""
+
+#: src/base.json:59
+msgid "Block of commands start"
+msgstr ""
+
+#: src/base.json:60
+msgid "If condition do something"
+msgstr ""
+
+#: src/base.json:61
+msgid "Else"
+msgstr ""
+
+#: src/base.json:62
+msgid "Equals"
+msgstr ""
+
+#: src/base.json:63
+msgid "Repeat block of commands"
+msgstr ""
+
+#: src/base.json:64
+msgid "For"
+msgstr ""
+
+#: src/base.json:65
+msgid "in"
+msgstr ""
+
+#: src/base.json:66
+msgid "Break"
+msgstr ""
+
+#: src/base.json:67
+msgid "Continue"
+msgstr ""
+
+#: src/base.json:68
+msgid "Define a method"
+msgstr ""
+
+#: src/base.json:69
+msgid "Return a value"
+msgstr ""
+
+#: src/base.json:70
+msgid "Object"
+msgstr ""
+
+#: src/base.json:71
+msgid "Assign value to a variable"
+msgstr ""
+
+#: src/base.json:72
+msgid "Plus"
+msgstr ""
+
+#: src/base.json:73
+msgid "Minus"
+msgstr ""
+
+#: src/base.json:74
+msgid "Times"
+msgstr ""
+
+#: src/base.json:75
+msgid "Divided"
+msgstr ""
+
+#: src/base.json:76
+msgid "Modulo"
+msgstr ""
+
+#: src/base.json:77
+msgid "Increase value by"
+msgstr ""
+
+#: src/base.json:78
+msgid "Decrease value by"
+msgstr ""
+
+#: src/base.json:79
+msgid "is less than"
+msgstr ""
+
+#: src/base.json:80
+msgid "is greater than"
+msgstr ""
+
+#: src/base.json:81
+msgid "Connect a function to control mouse clicks"
+msgstr ""
+
+#: src/base.json:82
+msgid "Connect a function that will be activated by pressing specified key"
+msgstr ""
+
+#: src/base.json:83
+msgid "Call a function after n miliseconds"
+msgstr ""
+
+#: src/base.json:84
+msgid "Random number"
+msgstr ""
+
+#: src/base.json:85
+msgid "Number input"
+msgstr ""
+
+#: src/base.json:86
+msgid "String input"
+msgstr ""
+
+#: src/base.json:87
+msgid "Dot (use to access an object property)"
+msgstr ""
+
+#: src/base.json:88
+msgid "Type conversion"
+msgstr ""
+
+#: src/base.json:94
+msgid "Read all lines"
+msgstr ""
+
+#: src/base.json:95
+msgid "Write lines"
+msgstr ""
+
+#: src/base.json:96
+msgid "Open file dialog"
+msgstr ""
+
+#: src/base.json:97
+msgid "Check file exists"
+msgstr ""
+
+#: src/base.json:98
+msgid "Check directory exists"
+msgstr ""
+
+#: src/base.json:99
+msgid "Delete file or directory"
+msgstr ""

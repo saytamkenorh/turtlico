@@ -1,0 +1,142 @@
+{
+	"categories": [
+		{
+			"icon": "🐢",
+			"commands": [
+				{"id":"nl", "icon":"⏎", "?": 'New line (Enter)', "type": -1 },
+				{"id":"tab", "icon":"·", "?": 'Tab', "type": -1 },
+				{"id":"0_go", "icon":"🐢", "?": 'Go forward', "type": 0, "func": "forward", "params": "30" },
+				{"id":"0_left", "icon":"↺", "?": 'Turn left', "type": 0, "func": "left", "params": "90" },
+				{"id":"0_right", "icon":"↻", "?": 'Turn right', "type": 0, "func": "right", "params": "90" },
+				{"id":"0_seth", "icon":"📡", "?": 'Set heading angle' ,"type": 0, "func": "setheading", "params": "0" },
+				{"id":"0_speed", "icon":"⏩", "?": 'Speed' ,"type": 0, "func": "speed", "params": "1" },
+				{"id":"int", "icon":"🔢", "?": 'Number', "type": -1 },
+				{"id":"str", "icon":"🔤", "?": 'String', "type": -1 },
+				{"id":"0_pos", "icon":"🚩", "?": 'Set position' ,"type": 0, "func": "setposition", "params": "0, 0" },
+				{"id":"0_penc", "icon":"🎨", "?": 'Set pen color' ,"type": 0, "func": "color", "params": "'black'" },
+				{"id":"0_pu", "icon":"✐", "?": 'Pull the pen up – no drawing when moving.' ,"type": 0, "func": "penup", "params": "" },
+				{"id":"0_pd", "icon":"✎", "?": 'Pull the pen down – drawing when moving.' ,"type": 0, "func": "pendown", "params": "" },
+				{"id":"0_pp", "icon":"🖊", "?": 'Pen properties' ,"type": 0, "func": "pen", "params": "" },
+				{"id":"(", "icon":"(", "?": 'Left parenthesis', "type": 4, "c":"(" },
+				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":"," },
+				{"id":")", "icon":")", "?": 'Right parenthesis', "type": 4,  "c":")" },
+				{"id":"0_ht", "icon":"🔅", "?": 'Hide turtle' , "type": 0, "func": "hideturtle", "params": "" },
+				{"id":"0_st", "icon":"🔆", "?": 'Show turtle' , "type": 0, "func": "showturtle", "params": "" },
+				{"id":"0_wr", "icon":"✍", "?": 'Write a text' , "type": 0, "func": "write", "params": "" },
+				{"id":"0_bf", "icon":"🔛", "?": 'Begin fill' , "type": 0, "func": "begin_fill", "params": "" },
+				{"id":"0_ef", "icon":"🖋", "?": 'End fill - fill the drawen shape' , "type": 0, "func": "end_fill", "params": "" },
+				{"id":"0_cs", "icon":"💧", "?": 'Clear screen' , "type": 0, "func": "clear", "params": "" },
+				{"id":"0_rs", "icon":"🌄", "?": 'Register a shape or an image' , "type": 0, "func": "addshape", "params": "" },
+				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "" },
+				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" }
+			]
+		},
+		{
+			"icon" : "📜",
+			"commands" : [
+				{"id":"4_0", "icon":"→", "?": 'East', "type": 4, "c":"0"},
+				{"id":"4_90", "icon":"↑", "?": 'North', "type": 4, "c":"90"},
+				{"id":"4_180", "icon":"←", "?": 'West', "type": 4, "c":"180"},
+				{"id":"4_270", "icon":"↓", "?": 'South', "type": 4, "c":"270"},
+				{"id":"4_math.pi", "icon":"π", "?": 'Pi', "type": 4, "c":"math.pi"},
+				{"id":"4_xcor()", "icon":"❓X", "?": 'Get x coordinate', "type": 4, "c":"xcor()"},
+				{"id":"4_ycor()", "icon":"❓Y", "?": 'Get y coordinate', "type": 4, "c":"ycor()"},
+				{"id":"5_sin", "icon":"sin", "?": 'Sinus', "type": 5, "func": "math.sin", "params": ""},
+				{"id":"5_cos", "icon":"cos", "?": 'Cosinus', "type": 5, "func": "math.cos", "params": ""},
+				{"id":"5_tan", "icon":"tan", "?": 'Tangent', "type": 5, "func": "math.tan", "params": ""},
+				{"id":"5_abs", "icon":"abs", "?": 'Absolute avlue', "type": 5, "func": "abs", "params": ""},
+				{"id":"5_rad", "icon":"rad", "?": 'Convert angle from degrees to radians.', "type": 5, "func": "math.radians", "params": ""},
+				{"id":"5_deg", "icon":"deg", "?": 'Convert angle from radians to degrees.', "type": 5, "func": "math.degrees", "params": ""},
+				{"id":"5_rnd", "icon":"rnd", "?": 'Round a number', "type": 5, "func": "round", "params": ""}
+			]
+		},
+		{
+			"icon" : "⚙",
+			"commands" : [
+				{"id":"[", "icon":"[", "?": 'Left square bracket', "type": 4, "c":"["},
+				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":","},
+				{"id":"]", "icon":"]", "?": 'Right square bracket', "type": 4, "c":"]"},
+				{"id":":", "icon":":", "?": 'Block of commands start', "type": 4, "c":":"},
+				{"id":"if", "icon":"❔if", "?": 'If condition do something', "type": 3, "c":"if"},
+				{"id":"else", "icon":"else", "?": 'Else', "type": 3, "c":"else"},
+				{"id":"==", "icon":"==", "?": 'Equals', "type": 4, "c":"=="},
+				{"id":"1_rep", "icon":"🔂", "?": 'Repeat block of commands', "type": -1},
+				{"id":"1_for", "icon":"for", "?": 'For', "type": -1},
+				{"id":"in", "icon":"in", "?": 'in', "type": 4, "c":" in "},
+				{"id":"3_b", "icon":"🛑", "?": 'Break', "type": 3, "c":"break"},
+				{"id":"3_c", "icon":"↦", "?": 'Continue', "type": 3, "c":"continue"},
+				{"id":"3_def", "icon":"def", "?": 'Define a method', "type": -1},
+				{"id":"3_r", "icon":"⭕", "?": 'Return a value', "type": 3, "c":"return"},
+				{"id":"obj", "icon":"🆔", "?": 'Object', "type": -1},
+				{"id":"2_assign", "icon":"=", "?": 'Assign value to a variable', "type": 4, "c":"="},
+				{"id":"+", "icon":"➕", "?": 'Plus', "type": 4, "c":"+"},
+				{"id":"-", "icon":"➖", "?": 'Minus', "type": 4, "c":"-"},
+				{"id":"*", "icon":"❌", "?": 'Times', "type": 4, "c":"*"},
+				{"id":"/", "icon":"➗", "?": 'Divided', "type": 4, "c":"/"},
+				{"id":"%", "icon":"%", "?": 'Modulo', "type": 4, "c":"%"},
+				{"id":"2_+=", "icon":"↖", "?": 'Increase value by', "type": 4, "c":"+="},
+				{"id":"2_-=", "icon":"↙", "?": 'Decrease value by', "type": 4, "c":"-="},
+				{"id":"<", "icon":"<", "?": 'is less than', "type": 4, "c":"<"},
+				{"id":">", "icon":">", "?": 'is greater than', "type": 4, "c":">"},
+				{"id":"0_emc", "icon":"👇", "?": 'Connect a function to control mouse clicks' , "type": 0, "func": "onscreenclick", "params": "" },
+				{"id":"0_ekey", "icon":"⌨", "?": 'Connect a function that will be activated by pressing specified key' , "type": 0, "func": "onkey", "params": "" },
+				{"id":"0_tmr", "icon":"⌚", "?": 'Call a function after n miliseconds' , "type": 0, "func": "ontimer", "params": "" },
+				{"id":"5_rand", "icon":"🎲", "?": 'Random number' , "type": 5, "func": "ontimer", "params": "1, 100" },
+				{"id":"5_numi", "icon":"⌨#", "?": 'Number input' , "type": 5, "func": "numinput", "params": "'Number','Enter a number:'" },
+				{"id":"5_stri", "icon":"⌨\"", "?": 'String input' , "type": 5, "func": "textinput", "params": "'String','Enter a string:'" },
+				{"id":"2_.", "icon":".", "?": 'Dot (use to access an object property)', "type": 4, "c":"."},
+				{"id":"tc", "icon":"🔄", "?": 'Type conversion', "type": -1}
+			]
+		},
+		{
+			"icon" : "💾",
+			"commands" : [
+				{"id":"5_readlines", "icon":"📤", "?": 'Read all lines' , "type": 5, "func": "tcf_readlines", "params": "" },
+				{"id":"0_writelines", "icon":"📥", "?": 'Write lines' , "type": 0, "func": "tcf_writelines", "params": "" },
+				{"id":"5_filediag", "icon":"📂", "?": 'Open file dialog' , "type": 5, "func": "tcf_filedialog", "params": "" },
+				{"id":"5_fileis", "icon":"💾", "?": 'Check file exists' , "type": 5, "func": "os.path.isfile", "params": "" },
+				{"id":"5_diris", "icon":"📁", "?": 'Check directory exists' , "type": 5, "func": "os.path.isdir", "params": "" },
+				{"id":"0_filedirdel", "icon":"␡", "?": 'Delete file or directory' , "type": 0, "func": "tcf_filedirdel", "params": "" }
+			]
+		}
+	],
+	"modules": [
+		{
+			"id": "tcf_readlines",
+			"code": "def tcf_readlines(file=None):\
+	if file == None: file = __file__ + '.save'\
+	f = open(file, 'r'); ret = f.readlines(); f.close()\
+	ret = [x.replace('\\n', '') for x in ret]\
+	return ret"
+		},
+		{
+			"id": "tcf_writelines",
+			"code": "def tcf_writelines(data, file=None):\
+	if file == None: file = __file__ + '.save'\
+	data = [x + '\\n' for x in data]\
+	f = open(file, 'w'); f.writelines(data); f.close()"
+		},
+		{
+			"id": "tcf_filedialog",
+			"code": "def tcf_filedialog(text = 'Choose a file', filter = '*'):\
+	from subprocess import Popen, PIPE\
+	my_env=os.environ.copy()\
+	my_env['G_MESSAGES_DEBUG']=''\
+	proc = Popen(['zenity', '--file-selection', '--title', text,\
+                 '--file-filter', filter], stdout=PIPE, env=my_env)\
+	(output, err) = proc.communicate(); proc.wait()\
+	output = output.decode().replace('\\n', ''); return output"
+		},
+		{
+			"id": "tcf_filedirdel",
+			"code": "def tcf_filedirdel(path):\
+	if os.path.isfile(path):\
+		os.remove(path)\
+	elif os.path.isdir(path):\
+		import shutil\
+		shutil.rmtree(path)\
+	else: raise Exception('File or direcotry {} does not exists!'.format(path))"
+		}
+	]
+}
+

@@ -1,0 +1,9 @@
+0_bf,,;nl,,;
+0_speed,,;int,0,;nl,,;
+0_penc,,;(,,;str,red,;sep,,;str,yellow,;),,;nl,,;
+1_rep,,;:,,;nl,,;
+tab,,;0_go,,;int,200,;nl,,;
+tab,,;0_left,,;int,170,;nl,,;
+tab,,;if,,;(,,;5_abs,,;(,,;obj,pos,;(,,;),,;),,;<,,;int,1,;),,;:,,;nl,,;
+tab,,;tab,,;3_b,,;nl,,;
+0_ef,,;nl,,;

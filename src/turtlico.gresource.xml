@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/orsan/Turtlico">
+    <file>window.ui</file>
+    <file>window.css</file>
+    <file>programview.ui</file>
+    <file>programview.css</file>
+    <file>base.json</file>
+  </gresource>
+</gresources>
