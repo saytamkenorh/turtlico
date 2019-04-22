@@ -1,4 +1,3 @@
-
 ## Turtlico
 Turtlico is a programming tool for learning programming basics.<br>
 It uses Python turtle so you can imagine a robotic turtle which is controled by your program.<br>
@@ -10,8 +9,8 @@ This is free software, and you are welcome to redistribute it
 under certain conditions; see [COPYING](./COPYING) for details.
 
 ## Downloads
-Turtlico supports Windows and Linux.
-**[Download the latest release](./tags)**
+Turtlico supports Windows and Linux. <br>
+**[Download the latest release](https://gitlab.com/matyas5/turtlico/tags)**
 
 Or clone this repository and build the program yourself:
 	
