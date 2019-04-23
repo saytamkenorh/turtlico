@@ -1,0 +1,38 @@
+_realname=turtlico
+pkgbase=mingw-w64-${_realname}
+pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
+pkgver=1.0
+pkgrel=1
+epoch=
+pkgdesc=
+arch=('any')
+url=
+license=('GPL')
+groups=()
+depends=()
+makedepends=()
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+noextract=()
+md5sums=()
+validpgpkeys=()
+
+build() {	
+	cd ../
+	CFLAGS=-mwindows meson ../ ./build --prefix ${MINGW_PREFIX} --libdir lib
+	cd ./build
+	ninja
+}
+
+
+package() {
+	cd ../build
+	DESTDIR="${pkgdir}${MINGW_PREFIX}" ninja install
+}

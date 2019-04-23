@@ -137,7 +137,7 @@ namespace Turtlico {
                 #if linux
                 GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
                 #endif
-                GLib.Process.spawn_command_line_sync("python3 '" + path + "'");
+                GLib.Process.spawn_command_line_async("python3 '" + path + "'");
             }
             catch (Error e) {
                 msg(e.message, "", Gtk.MessageType.ERROR);
