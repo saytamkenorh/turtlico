@@ -26,7 +26,7 @@ validpgpkeys=()
 
 build() {	
 	cd ../
-	CFLAGS=-mwindows meson ../ ./build --prefix ${MINGW_PREFIX} --libdir lib
+	CFLAGS=-Wl,-subsystem,windows meson ../ ./build --prefix ${MINGW_PREFIX} --libdir lib
 	cd ./build
 	ninja
 }

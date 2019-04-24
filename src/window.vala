@@ -42,6 +42,9 @@ namespace Turtlico {
 
 		public Window (Gtk.Application app) {
 			Object (application: app);
+            string icon_file = Path.build_filename(Path.get_dirname(Environment.get_current_dir()), "share/icons/hicolor/256x256/apps/com.orsan.Turtlico.png");
+            if (FileUtils.test(icon_file, FileTest.IS_REGULAR))
+		set_default_icon_from_file(icon_file);
             // CSS
             var screen = this.get_screen ();
             var css_provider = new Gtk.CssProvider();
@@ -134,10 +137,12 @@ namespace Turtlico {
                     written += dos.write (data[written:data.length]);
                 }
                 // RUN
-                #if linux
+                #if __linux__
                 GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
-                #endif
                 GLib.Process.spawn_command_line_async("python3 '" + path + "'");
+		#else
+		GLib.Process.spawn_command_line_async("python3w '" + path + "'");
+		#endif
             }
             catch (Error e) {
                 msg(e.message, "", Gtk.MessageType.ERROR);
@@ -175,6 +180,8 @@ namespace Turtlico {
             int result = dialog.run();
             if (result == Gtk.ResponseType.ACCEPT) {
                 var file = dialog.get_file();
+                if (!file.get_path().has_suffix(".tcp"))
+                    file = File.new_for_path(file.get_path() + ".tcp");
                 current_file = file;
                 // Prevents infinite cycle
                 if (file != null)

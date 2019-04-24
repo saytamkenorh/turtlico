@@ -88,7 +88,6 @@ namespace Turtlico {
             color_object.parse("rgb(200, 200, 200)");
             color_type_conversion.parse("rgb(255, 140, 0)");
             color_cell = style_context.get_color(Gtk.StateFlags.ACTIVE);
-            font.set_family("Monospace");
             font.set_weight(Pango.Weight.BOLD);
             font.set_size(15 * Pango.SCALE);
             small_font.set_family("Monospace");
