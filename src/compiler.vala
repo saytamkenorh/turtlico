@@ -122,8 +122,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                         }
                         output.add(indentation + "for iter_" +
                                    y.to_string() + "_" + x.to_string()
-                                   + "in range");
-                        if (check_next_icon && program[y][x+1].id == "int"){
+                                   + " in range");
+                        if (check_next_icon && (program[y][x+1].id == "int" || program[y][x+1].id == "obj")){
                             // Inserts number at line added above
                             output[out_line + 1] = output[out_line + 1] +
                                                    "(" + program[y][x + 1].data + ")";
