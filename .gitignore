@@ -5,3 +5,7 @@ windows/pkg/
 windows/src/
 doc/examples/*.py
 *.pkg.tar.xz
+build-portable
+*.AppDir
+*.AppImage
+*~
