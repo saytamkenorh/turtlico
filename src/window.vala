@@ -43,8 +43,11 @@ namespace Turtlico {
 		public Window (Gtk.Application app) {
 			Object (application: app);
             string icon_file = Path.build_filename(Path.get_dirname(Environment.get_current_dir()), "share/icons/hicolor/256x256/apps/com.orsan.Turtlico.png");
-            if (FileUtils.test(icon_file, FileTest.IS_REGULAR))
-		set_default_icon_from_file(icon_file);
+            try {
+                
+                if (FileUtils.test(icon_file, FileTest.IS_REGULAR))
+                    set_default_icon_from_file(icon_file);
+            } catch {}
             // CSS
             var screen = this.get_screen ();
             var css_provider = new Gtk.CssProvider();
@@ -137,12 +140,13 @@ namespace Turtlico {
                     written += dos.write (data[written:data.length]);
                 }
                 // RUN
-                #if __linux__
-                GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
-                GLib.Process.spawn_command_line_async("python3 '" + path + "'");
-		#else
-		GLib.Process.spawn_command_line_async("python3w '" + path + "'");
-		#endif
+                if (GLib.FileUtils.test("C:\\Windows", GLib.FileTest.IS_DIR)){
+                    GLib.Process.spawn_command_line_async("python3w '" + path + "'");
+                }
+                else {
+                    GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
+                    GLib.Process.spawn_command_line_async("python3 '" + path + "'");
+                }
             }
             catch (Error e) {
                 msg(e.message, "", Gtk.MessageType.ERROR);

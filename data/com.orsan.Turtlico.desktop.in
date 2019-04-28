@@ -3,6 +3,6 @@ Name=Turtlico
 Exec=turtlico
 Terminal=false
 Type=Application
-Categories=GTK;Development
+Categories=GTK;Development;
 StartupNotify=true
 Icon=com.orsan.Turtlico
