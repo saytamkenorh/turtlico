@@ -28,7 +28,8 @@
 				{"id":"0_cs", "icon":"💧", "?": 'Clear screen' , "type": 0, "func": "clear", "params": "" },
 				{"id":"0_rs", "icon":"🌄", "?": 'Register a shape or an image' , "type": 0, "func": "addshape", "params": "" },
 				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "" },
-				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" }
+				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
+				{"id":"0_sleep", "icon":"⏱", "?": 'Sleep n seconds(freezes window)' , "type": 0, "func": "time.sleep", "params": "1" }
 			]
 		},
 		{

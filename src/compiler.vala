@@ -86,6 +86,7 @@ namespace Turtlico {
             output = new Gee.ArrayList<string>();
             output.add("""#!/usr/bin/python3
 from turtle import *
+import math, random, os, time
 color('black');speed(1);title('Turtle');colormode(255)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Generated code""");
