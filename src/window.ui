@@ -23,6 +23,11 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-open</property>
   </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-preferences</property>
+  </object>
   <template class="TurtlicoWindow" parent="GtkApplicationWindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Turtlico</property>
@@ -105,6 +110,22 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="settings_btn">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Project settings</property>
+                <property name="image">image5</property>
+                <property name="relief">none</property>
+                <signal name="clicked" handler="on_settings_btn_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkImage" id="delete_btn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -117,7 +138,7 @@
                 <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="pack_type">end</property>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
           </object>
@@ -155,6 +176,7 @@
                 </child>
                 <child>
                   <object class="GtkScrolledWindow">
+                    <property name="width_request">220</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="shadow_type">in</property>
@@ -165,7 +187,6 @@
                         <property name="can_focus">False</property>
                         <property name="margin">6</property>
                         <property name="item_orientation">horizontal</property>
-                        <property name="columns">4</property>
                         <property name="row_spacing">2</property>
                         <property name="column_spacing">2</property>
                         <property name="tooltip_column">1</property>

@@ -37,54 +37,55 @@ namespace Turtlico {
         Gee.LinkedList<string> modules_to_load;
         int out_line;
 
-        public Compiler () {
-            var parser = Command.create_parsers()[0];
-            // Get the root node:
-		    Json.Node node = parser.get_root ();
-		    // For all commands in all categories
-            var categories = node.get_object().get_array_member("categories");
-            categories.foreach_element((array, index_, category_node)=>{
-                var commands = category_node.get_object().get_array_member("commands");
-                commands.foreach_element((array, index_, command_node)=>{
-                    // Parse one command
-                    Json.Object command = command_node.get_object();
-                    if (command.get_int_member("type") == 0 || command.get_int_member("type") == 5){
-                        CompilerFunction f = new CompilerFunction();
-                        f.id = command.get_string_member("id");
-                        f.function = command.get_string_member("func");
-                        f.default_params = command.get_string_member("params");
-                        functions.add(f);
-                    }
-                    else if(command.get_int_member("type") == 4) {
-                        CompilerSimpleIcon f = new CompilerSimpleIcon();
-                        f.id = command.get_string_member("id");
-                        f.code = command.get_string_member("c");
-                        simple_icons.add(f);
-                    }
-                    else if(command.get_int_member("type") == 3) {
-                        CompilerSimpleIcon f = new CompilerSimpleIcon();
-                        f.id = command.get_string_member("id");
-                        f.code = command.get_string_member("c");
-                        keywords.add(f);
-                    }
-                    //debug(command.get_string_member("id"));
+        public Compiler (string[] enabled_plugins) {
+            var parsers = Command.create_parsers(enabled_plugins);
+            foreach (var parser in parsers) {
+                // Get the root node:
+		        Json.Node node = parser.get_root ();
+		        // For all commands in all categories
+                var categories = node.get_object().get_array_member("categories");
+                categories.foreach_element((array, index_, category_node)=>{
+                    var commands = category_node.get_object().get_array_member("commands");
+                    commands.foreach_element((array, index_, command_node)=>{
+                        // Parse one command
+                        Json.Object command = command_node.get_object();
+                        if (command.get_int_member("type") == 0 || command.get_int_member("type") == 5){
+                            CompilerFunction f = new CompilerFunction();
+                            f.id = command.get_string_member("id");
+                            f.function = command.get_string_member("func");
+                            f.default_params = command.get_string_member("params");
+                            functions.add(f);
+                        }
+                        else if(command.get_int_member("type") == 4) {
+                            CompilerSimpleIcon f = new CompilerSimpleIcon();
+                            f.id = command.get_string_member("id");
+                            f.code = command.get_string_member("c");
+                            simple_icons.add(f);
+                        }
+                        else if(command.get_int_member("type") == 3) {
+                            CompilerSimpleIcon f = new CompilerSimpleIcon();
+                            f.id = command.get_string_member("id");
+                            f.code = command.get_string_member("c");
+                            keywords.add(f);
+                        }
+                        //debug(command.get_string_member("id"));
+                    });
                 });
-            });
-            var modules = node.get_object().get_array_member("modules");
-            modules.foreach_element((array, index_, module_node)=>{
-                var module = module_node.get_object();
-                CompilerSimpleIcon f = new CompilerSimpleIcon();
-                f.id = module.get_string_member("id");
-                f.code = module.get_string_member("code");
-                this.modules.add(f);
-            });
+                var modules = node.get_object().get_array_member("modules");
+                modules.foreach_element((array, index_, module_node)=>{
+                    var module = module_node.get_object();
+                    CompilerSimpleIcon f = new CompilerSimpleIcon();
+                    f.id = module.get_string_member("id");
+                    f.code = module.get_string_member("code");
+                    this.modules.add(f);
+                });
+            }
         }
 
         public string compile(Gee.ArrayList<Gee.ArrayList<Command>> program) {
             output = new Gee.ArrayList<string>();
             output.add("""#!/usr/bin/python3
 from turtle import *
-import math, random, os
 color('black');speed(1);title('Turtle');colormode(255)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Generated code""");

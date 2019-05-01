@@ -33,6 +33,7 @@ namespace Turtlico {
         public const int cell_height = 35;
         public ArrayList<Command> commands = new ArrayList<Command>();
         public ArrayList<ArrayList<Command>> program  = new ArrayList<ArrayList<Command>>();
+        public ArrayList<string> enabled_plugins = new ArrayList<string>();
         // Used in drag_data_get
         int mouse_x;
         int mouse_y;
@@ -371,10 +372,9 @@ namespace Turtlico {
         }
 
         bool on_key_press_event(Gdk.EventKey key_event) {
-            var modifiers = Gtk.accelerator_get_default_mod_mask();
+            //var modifiers = Gtk.accelerator_get_default_mod_mask();
 
-            if ((key_event.state & modifiers) == Gdk.ModifierType.SHIFT_MASK &&
-               key_event.keyval == Gdk.Key.Delete) {
+            if (key_event.keyval == Gdk.Key.Delete) {
                 int x = mouse_x / cell_width;
                 int y = mouse_y / cell_height;
                 if(y < program.size && x < program[y].size) {

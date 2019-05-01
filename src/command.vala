@@ -60,17 +60,23 @@ namespace Turtlico {
         /*
          * Creates a parsers that can be used to load commands defs
         */
-        public static Json.Parser[] create_parsers() {
+        public static Json.Parser[] create_parsers(string[] enabled_plugins) {
             // Load paths
             Gee.ArrayList<string> command_files = new Gee.ArrayList<string>();
-            command_files.add("/com/orsan/Turtlico/base.json");
+            command_files.add("r:/com/orsan/Turtlico/base.json");
+            command_files.add_all_array(enabled_plugins);
             // Load commands
             Gee.ArrayList<Json.Parser> parsers = new Gee.ArrayList<Json.Parser>();
             foreach(string file in command_files) {
                 try {
-                    var stream = GLib.resources_open_stream(file, GLib.ResourceLookupFlags.NONE);
                     var parser = new Json.Parser();
-                    parser.load_from_stream(stream);
+                    if (file.has_prefix("r:")) {
+                        var stream = GLib.resources_open_stream(file.substring(2), GLib.ResourceLookupFlags.NONE);
+                        parser.load_from_stream(stream);
+                    }
+                    else {
+                        parser.load_from_file(file);
+                    }
                     parsers.add(parser);
                 }
                 catch (Error e) {

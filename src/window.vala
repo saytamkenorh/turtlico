@@ -37,7 +37,7 @@ namespace Turtlico {
         [GtkChild]
         Gtk.Image delete_btn;
 
-        public Compiler compiler = new Compiler();
+        public Compiler compiler;
         File current_file = null;
 
 		public Window (Gtk.Application app) {
@@ -212,6 +212,17 @@ namespace Turtlico {
             }
         }
 
+        [GtkCallback]
+        void on_settings_btn_clicked() {
+            var program_settings = new ProgramSettings(ref programview.enabled_plugins);
+            program_settings.set_transient_for(this);
+            program_settings.show_all();
+            program_settings.delete_event.connect(()=>{
+                load_commands();
+                return false;
+            });
+        }
+
         public void open_file (File file) {
             try {
                 var ostream = file.read();
@@ -225,8 +236,13 @@ namespace Turtlico {
         }
 
         void load_commands () {
+            // Clear
+            categories_box.get_children().foreach((w)=>{categories_box.remove(w);});
+            programview.commands.clear();
+            // Compiler
+            compiler =  new Compiler(programview.enabled_plugins.to_array());
             // Load from JSON
-            var parsers = Command.create_parsers();
+            var parsers = Command.create_parsers(programview.enabled_plugins.to_array());
             foreach(Json.Parser parser in parsers) {
                 // Get the root node:
 		        Json.Node node = parser.get_root ();
@@ -268,6 +284,7 @@ namespace Turtlico {
                 });
             }
             // end foreach
+            categories_box.show_all();
         }
 
         void msg (string text, string secondary_text = "", Gtk.MessageType type = Gtk.MessageType.INFO) {

@@ -4,6 +4,7 @@ turtlico_sources = [
   'programview.vala',
   'command.vala',
   'compiler.vala',
+  'program-settings.vala',
 ]
 
 turtlico_deps = [
