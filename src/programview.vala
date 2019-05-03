@@ -466,6 +466,8 @@ namespace Turtlico {
         public void save_to_stream (OutputStream _ostream) throws IOError {
             var dostream = new DataOutputStream(_ostream);
             for(int y = 0; y < program.size; y++) {
+                if (program[y].size == 0)
+                    continue;
                 for(int x = 0; x < program[y].size; x++) {
                     dostream.put_string(program[y][x].id + ",");
                     dostream.put_string(str_mark + program[y][x].data + str_mark + ",");
@@ -473,14 +475,25 @@ namespace Turtlico {
                 }
                 dostream.put_string("\n");
             }
+            foreach(string plugin in enabled_plugins) {
+                dostream.put_string("plugin,");
+                dostream.put_string(plugin + ",;");
+            }
         }
 
         public void load_from_stream (InputStream istream) throws IOError {
+            load_from_stream_(istream, true);
+            load_from_stream_(istream, false);
+        }
+
+        public void load_from_stream_ (InputStream istream, bool plugins_only) throws IOError {
             program.clear();
+            enabled_plugins.clear();
             var distream = new DataInputStream(istream);
             size_t data_read = 0;
+            string line = null;
             do {
-                string line = distream.read_line(out data_read);
+                line = distream.read_line(out data_read);
                 if (data_read == 0) continue;
                 // Separate line into individual commands with data
                 Gee.LinkedList<string> cmds = new Gee.LinkedList<string>();
@@ -516,6 +529,14 @@ namespace Turtlico {
                         else if (c == str_mark[0]) ingore = !ignore;
                         if (c != str_mark[0]) prop = prop + c.to_string();
                     }
+                    // Plugins
+                    if (props[0] == "plugin" && !enabled_plugins.contains(props[1])) {
+                        enabled_plugins.add(props[1]);
+                        continue;
+                    }
+                    else if (plugins_only) {
+                        continue;
+                    }
                     // Add command
                     if (props.size < 2){
                          var dialog = new Gtk.MessageDialog((Gtk.Window)get_toplevel(),
@@ -544,7 +565,7 @@ namespace Turtlico {
                     }
                 }
 
-            }  while (data_read > 0);
+            }  while (line != null);
             queue_draw();
         }
     }

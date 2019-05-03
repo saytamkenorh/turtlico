@@ -76,11 +76,6 @@ namespace Turtlico {
             // Load commands database
             load_commands();
 
-            Gtk.RadioButton rb = (Gtk.RadioButton)categories_box.get_children().nth_data(1);
-            rb.clicked();
-            rb = (Gtk.RadioButton)categories_box.get_children().nth_data(0);
-            rb.clicked();
-
 			show_all();
 			programview.grab_focus();
 		}
@@ -225,9 +220,12 @@ namespace Turtlico {
 
         public void open_file (File file) {
             try {
-                var ostream = file.read();
-                programview.load_from_stream(ostream);
-                ostream.close();
+                var stream = file.read();
+                programview.load_from_stream_(stream, true);
+                load_commands();
+                stream = file.read();
+                programview.load_from_stream_(stream, false);
+                stream.close();
                 current_file = file;
             }
             catch (Error e) {
@@ -285,6 +283,10 @@ namespace Turtlico {
             }
             // end foreach
             categories_box.show_all();
+            Gtk.RadioButton rb = (Gtk.RadioButton)categories_box.get_children().nth_data(1);
+            rb.clicked();
+            rb = (Gtk.RadioButton)categories_box.get_children().nth_data(0);
+            rb.clicked();
         }
 
         void msg (string text, string secondary_text = "", Gtk.MessageType type = Gtk.MessageType.INFO) {

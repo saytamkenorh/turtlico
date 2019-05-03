@@ -35,9 +35,11 @@ namespace Turtlico {
 
         Gee.ArrayList<string> output;
         Gee.LinkedList<string> modules_to_load;
+        string[] enabled_plugins;
         int out_line;
 
         public Compiler (string[] enabled_plugins) {
+            this.enabled_plugins = enabled_plugins;
             var parsers = Command.create_parsers(enabled_plugins);
             foreach (var parser in parsers) {
                 // Get the root node:
@@ -91,6 +93,10 @@ color('black');speed(1);title('Turtle');colormode(255)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Generated code""");
             modules_to_load = new Gee.LinkedList<string>();
+            // Plugins
+            foreach(string plugin in enabled_plugins) {
+                modules_to_load.add(Path.get_basename(plugin));
+            }
 
             for(int y = 0; y < program.size; y++) {
                 string indentation = "";
