@@ -4,10 +4,12 @@ data/com.orsan.Turtlico.gschema.xml
 src/window.ui
 src/programview.ui
 src/program-settings.ui
+src/app-settings.ui
 src/main.vala
 src/window.vala
 src/programview.vala
 src/compiler.vala
 src/command.vala
 src/program-settings.vala
+src/app-settings.vala
 src/base.json

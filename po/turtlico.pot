@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-22 10:26+0200\n"
+"POT-Creation-Date: 2019-05-04 13:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:28
+#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:33
 msgid "Turtlico"
 msgstr ""
 
@@ -25,23 +25,35 @@ msgstr ""
 msgid "com.orsan.Turtlico"
 msgstr ""
 
-#: src/window.ui:48
+#: data/com.orsan.Turtlico.gschema.xml:6
+msgid "Enable dark mode"
+msgstr ""
+
+#: data/com.orsan.Turtlico.gschema.xml:7
+msgid "If enabled, the app interface will use the dark theme."
+msgstr ""
+
+#: src/window.ui:53 src/window.ui:134 src/program-settings.ui:9
+msgid "Project settings"
+msgstr ""
+
+#: src/window.ui:70
 msgid "Start your program"
 msgstr ""
 
-#: src/window.ui:64
+#: src/window.ui:86
 msgid "Save"
 msgstr ""
 
-#: src/window.ui:80
+#: src/window.ui:102
 msgid "Save as"
 msgstr ""
 
-#: src/window.ui:96
+#: src/window.ui:118
 msgid "Open program"
 msgstr ""
 
-#: src/window.ui:111
+#: src/window.ui:149
 msgid "Drop here items to delete them"
 msgstr ""
 
@@ -49,36 +61,52 @@ msgstr ""
 msgid "Enter a number"
 msgstr ""
 
-#: src/programview.ui:66 src/programview.ui:166 src/programview.ui:233
+#: src/programview.ui:66 src/programview.ui:167 src/programview.ui:234
 msgid "Done"
 msgstr ""
 
-#: src/programview.ui:144
+#: src/programview.ui:145
 msgid "Enter a string"
 msgstr ""
 
-#: src/programview.ui:210
+#: src/programview.ui:211
 msgid "Select a data type"
 msgstr ""
 
-#: src/programview.ui:266
+#: src/programview.ui:267
 msgid "Integer"
 msgstr ""
 
-#: src/programview.ui:281
+#: src/programview.ui:282
 msgid "Float"
 msgstr ""
 
-#: src/programview.ui:297 src/base.json:14
+#: src/programview.ui:298 src/base.json:14
 msgid "String"
 msgstr ""
 
-#: src/programview.ui:313
+#: src/programview.ui:314
 msgid "Custom"
 msgstr ""
 
-#: src/programview.ui:343
+#: src/programview.ui:344
 msgid "Enter custom data type name"
+msgstr ""
+
+#: src/program-settings.ui:28
+msgid "Addinitional commands"
+msgstr ""
+
+#: src/app-settings.ui:9
+msgid "Settings"
+msgstr ""
+
+#: src/app-settings.ui:31
+msgid "Dark mode"
+msgstr ""
+
+#: src/app-settings.ui:76
+msgid "About Turtlico"
 msgstr ""
 
 #: src/main.vala:38
@@ -90,39 +118,43 @@ msgstr ""
 msgid "Cannot save the output file: %s\n"
 msgstr ""
 
-#: src/window.vala:158
+#: src/window.vala:167
 msgid "Failed to save the program"
 msgstr ""
 
-#: src/window.vala:167 src/window.vala:187
+#: src/window.vala:176 src/window.vala:198
 msgid "Select file"
 msgstr ""
 
-#: src/window.vala:173 src/window.vala:193
+#: src/window.vala:182 src/window.vala:204
 msgid "Turtlico project (*.tcp)"
 msgstr ""
 
-#: src/window.vala:212
+#: src/window.vala:244
 msgid "Failed to open the program"
 msgstr ""
 
-#: src/programview.vala:526
+#: src/programview.vala:550
 msgid "Failed to open the file. Error on line: "
 msgstr ""
 
-#: src/programview.vala:541
+#: src/programview.vala:565
 msgid "The file to load contains an unkown command!"
 msgstr ""
 
-#: src/programview.vala:543
+#: src/programview.vala:567
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
 "Command ID: "
 msgstr ""
 
-#: src/command.vala:77
+#: src/command.vala:83
 msgid "Failed to load command def file: "
+msgstr ""
+
+#: src/program-settings.vala:50
+msgid "Failed to load list of addinitional modules"
 msgstr ""
 
 #: src/base.json:6
@@ -181,7 +213,7 @@ msgstr ""
 msgid "Left parenthesis"
 msgstr ""
 
-#: src/base.json:21 src/base.json:57
+#: src/base.json:21 src/base.json:58
 msgid "Argument separator (Comma)"
 msgstr ""
 
@@ -225,210 +257,214 @@ msgstr ""
 msgid "Create new turtle"
 msgstr ""
 
-#: src/base.json:37
-msgid "East"
+#: src/base.json:32
+msgid "Sleep n seconds(freezes window)"
 msgstr ""
 
 #: src/base.json:38
-msgid "North"
+msgid "East"
 msgstr ""
 
 #: src/base.json:39
-msgid "West"
+msgid "North"
 msgstr ""
 
 #: src/base.json:40
-msgid "South"
+msgid "West"
 msgstr ""
 
 #: src/base.json:41
-msgid "Pi"
+msgid "South"
 msgstr ""
 
 #: src/base.json:42
-msgid "Get x coordinate"
+msgid "Pi"
 msgstr ""
 
 #: src/base.json:43
-msgid "Get y coordinate"
+msgid "Get x coordinate"
 msgstr ""
 
 #: src/base.json:44
-msgid "Sinus"
+msgid "Get y coordinate"
 msgstr ""
 
 #: src/base.json:45
-msgid "Cosinus"
+msgid "Sinus"
 msgstr ""
 
 #: src/base.json:46
-msgid "Tangent"
+msgid "Cosinus"
 msgstr ""
 
 #: src/base.json:47
-msgid "Absolute avlue"
+msgid "Tangent"
 msgstr ""
 
 #: src/base.json:48
-msgid "Convert angle from degrees to radians."
+msgid "Absolute avlue"
 msgstr ""
 
 #: src/base.json:49
-msgid "Convert angle from radians to degrees."
+msgid "Convert angle from degrees to radians."
 msgstr ""
 
 #: src/base.json:50
+msgid "Convert angle from radians to degrees."
+msgstr ""
+
+#: src/base.json:51
 msgid "Round a number"
 msgstr ""
 
-#: src/base.json:56
+#: src/base.json:57
 msgid "Left square bracket"
 msgstr ""
 
-#: src/base.json:58
+#: src/base.json:59
 msgid "Right square bracket"
 msgstr ""
 
-#: src/base.json:59
+#: src/base.json:60
 msgid "Block of commands start"
 msgstr ""
 
-#: src/base.json:60
+#: src/base.json:61
 msgid "If condition do something"
 msgstr ""
 
-#: src/base.json:61
+#: src/base.json:62
 msgid "Else"
 msgstr ""
 
-#: src/base.json:62
+#: src/base.json:63
 msgid "Equals"
 msgstr ""
 
-#: src/base.json:63
+#: src/base.json:64
 msgid "Repeat block of commands"
 msgstr ""
 
-#: src/base.json:64
+#: src/base.json:65
 msgid "For"
 msgstr ""
 
-#: src/base.json:65
+#: src/base.json:66
 msgid "in"
 msgstr ""
 
-#: src/base.json:66
+#: src/base.json:67
 msgid "Break"
 msgstr ""
 
-#: src/base.json:67
+#: src/base.json:68
 msgid "Continue"
 msgstr ""
 
-#: src/base.json:68
+#: src/base.json:69
 msgid "Define a method"
 msgstr ""
 
-#: src/base.json:69
+#: src/base.json:70
 msgid "Return a value"
 msgstr ""
 
-#: src/base.json:70
+#: src/base.json:71
 msgid "Object"
 msgstr ""
 
-#: src/base.json:71
+#: src/base.json:72
 msgid "Assign value to a variable"
 msgstr ""
 
-#: src/base.json:72
+#: src/base.json:73
 msgid "Plus"
 msgstr ""
 
-#: src/base.json:73
+#: src/base.json:74
 msgid "Minus"
 msgstr ""
 
-#: src/base.json:74
+#: src/base.json:75
 msgid "Times"
 msgstr ""
 
-#: src/base.json:75
+#: src/base.json:76
 msgid "Divided"
 msgstr ""
 
-#: src/base.json:76
+#: src/base.json:77
 msgid "Modulo"
 msgstr ""
 
-#: src/base.json:77
+#: src/base.json:78
 msgid "Increase value by"
 msgstr ""
 
-#: src/base.json:78
+#: src/base.json:79
 msgid "Decrease value by"
 msgstr ""
 
-#: src/base.json:79
+#: src/base.json:80
 msgid "is less than"
 msgstr ""
 
-#: src/base.json:80
+#: src/base.json:81
 msgid "is greater than"
 msgstr ""
 
-#: src/base.json:81
+#: src/base.json:82
 msgid "Connect a function to control mouse clicks"
 msgstr ""
 
-#: src/base.json:82
+#: src/base.json:83
 msgid "Connect a function that will be activated by pressing specified key"
 msgstr ""
 
-#: src/base.json:83
+#: src/base.json:84
 msgid "Call a function after n miliseconds"
 msgstr ""
 
-#: src/base.json:84
+#: src/base.json:85
 msgid "Random number"
 msgstr ""
 
-#: src/base.json:85
+#: src/base.json:86
 msgid "Number input"
 msgstr ""
 
-#: src/base.json:86
+#: src/base.json:87
 msgid "String input"
 msgstr ""
 
-#: src/base.json:87
+#: src/base.json:88
 msgid "Dot (use to access an object property)"
 msgstr ""
 
-#: src/base.json:88
+#: src/base.json:89
 msgid "Type conversion"
 msgstr ""
 
-#: src/base.json:94
+#: src/base.json:95
 msgid "Read all lines"
 msgstr ""
 
-#: src/base.json:95
+#: src/base.json:96
 msgid "Write lines"
 msgstr ""
 
-#: src/base.json:96
+#: src/base.json:97
 msgid "Open file dialog"
 msgstr ""
 
-#: src/base.json:97
+#: src/base.json:98
 msgid "Check file exists"
 msgstr ""
 
-#: src/base.json:98
+#: src/base.json:99
 msgid "Check directory exists"
 msgstr ""
 
-#: src/base.json:99
+#: src/base.json:100
 msgid "Delete file or directory"
 msgstr ""
