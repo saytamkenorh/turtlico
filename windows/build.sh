@@ -24,8 +24,6 @@ mkdir "$srcdir/output/lib"
 cp -r $1/mingw64/lib/gdk-pixbuf-2.0 "$srcdir/output/lib"
 cp -r $1/mingw64/share/mime "$srcdir/output/share"
 gdk-pixbuf-query-loaders > "$srcdir/output/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
-glib-compile-schemas "$srcdir/output/share/glib-2.0/schemas"
-update-mime-database "$srcdir/output/share/mime"
 
 # Useless Adwaita icons
 rm -rf "$srcdir/output/share/icons/Adwaita/cursors"
@@ -51,6 +49,9 @@ cd $tmp
 tar -xf $srcdir/mingw-w64-x86_64-turtlico-1.0-1-any.pkg.tar.xz
 cp -r $PWD/mingw64/bin "$srcdir/output"
 cp -r $PWD/mingw64/share "$srcdir/output"
+
+glib-compile-schemas "$srcdir/output/share/glib-2.0/schemas"
+update-mime-database "$srcdir/output/share/mime"
 
 cd $srcdir
 

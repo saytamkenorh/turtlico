@@ -13,3 +13,4 @@ src/command.vala
 src/program-settings.vala
 src/app-settings.vala
 src/base.json
+src/rpi.json
