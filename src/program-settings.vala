@@ -42,6 +42,25 @@ namespace Turtlico {
                         add_plugin(_(node.get_object().get_string_member("name")), "r:" + full_path);
                     }
                 }
+                var plugins_search_dirs = new Gee.ArrayList<string>.wrap(Environment.get_system_data_dirs());
+                plugins_search_dirs.add(Environment.get_user_data_dir());
+                foreach (var path in plugins_search_dirs) {
+                    debug(path);
+                    path = path + "/turtlico/plugins";
+                    if (FileUtils.test(path, FileTest.IS_DIR)) {
+                        Dir dir = Dir.open (path, 0);
+		                string? name = null;
+		                while ((name = dir.read_name ()) != null) {
+			                string file = Path.build_filename (path, name);
+			                if (FileUtils.test (file, FileTest.IS_REGULAR)) {
+                                var json = new Json.Parser();
+                                json.load_from_file(file);
+                                Json.Node node = json.get_root ();
+                                add_plugin(_(node.get_object().get_string_member("name")), file);
+			                }
+		                }
+                    }
+                }
             }
             catch (Error e) {
                 var dialog = new Gtk.MessageDialog(this, Gtk.DialogFlags.MODAL,

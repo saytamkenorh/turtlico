@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-04 13:53+0200\n"
+"POT-Creation-Date: 2019-05-04 14:27+0200\n"
 "PO-Revision-Date: 2018-05-31 16:17+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:33
+#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:38
 msgid "Turtlico"
 msgstr ""
 
@@ -33,27 +33,31 @@ msgstr "Povolit tmavý režim"
 msgid "If enabled, the app interface will use the dark theme."
 msgstr "Pokud je zapnuto, rozhraní aplikace použije tmavý motiv"
 
-#: src/window.ui:53 src/window.ui:134 src/program-settings.ui:9
-msgid "Project settings"
-msgstr "Nastavení projektu"
+#: src/window.ui:58
+msgid "Application settings"
+msgstr "Nastavení aplikace"
 
-#: src/window.ui:70
+#: src/window.ui:75
 msgid "Start your program"
 msgstr "Spustit program"
 
-#: src/window.ui:86
+#: src/window.ui:91
 msgid "Save"
 msgstr "Uložit"
 
-#: src/window.ui:102
+#: src/window.ui:107
 msgid "Save as"
 msgstr "Uložit jako"
 
-#: src/window.ui:118
+#: src/window.ui:123
 msgid "Open program"
 msgstr "Otevřít program"
 
-#: src/window.ui:149
+#: src/window.ui:139 src/program-settings.ui:9
+msgid "Project settings"
+msgstr "Nastavení projektu"
+
+#: src/window.ui:154
 msgid "Drop here items to delete them"
 msgstr "Sem přetáhněte příkazy ke smazání"
 
@@ -156,7 +160,7 @@ msgstr ""
 msgid "Failed to load command def file: "
 msgstr "Selhalo načtení souboru s definicemi příkazů: "
 
-#: src/program-settings.vala:50
+#: src/program-settings.vala:69
 msgid "Failed to load list of addinitional modules"
 msgstr "Selhalo načtení listu přídavných příkazů"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-04 13:53+0200\n"
+"POT-Creation-Date: 2019-05-04 14:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:33
+#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:38
 msgid "Turtlico"
 msgstr ""
 
@@ -33,27 +33,31 @@ msgstr ""
 msgid "If enabled, the app interface will use the dark theme."
 msgstr ""
 
-#: src/window.ui:53 src/window.ui:134 src/program-settings.ui:9
-msgid "Project settings"
+#: src/window.ui:58
+msgid "Application settings"
 msgstr ""
 
-#: src/window.ui:70
+#: src/window.ui:75
 msgid "Start your program"
 msgstr ""
 
-#: src/window.ui:86
+#: src/window.ui:91
 msgid "Save"
 msgstr ""
 
-#: src/window.ui:102
+#: src/window.ui:107
 msgid "Save as"
 msgstr ""
 
-#: src/window.ui:118
+#: src/window.ui:123
 msgid "Open program"
 msgstr ""
 
-#: src/window.ui:149
+#: src/window.ui:139 src/program-settings.ui:9
+msgid "Project settings"
+msgstr ""
+
+#: src/window.ui:154
 msgid "Drop here items to delete them"
 msgstr ""
 
@@ -153,7 +157,7 @@ msgstr ""
 msgid "Failed to load command def file: "
 msgstr ""
 
-#: src/program-settings.vala:50
+#: src/program-settings.vala:69
 msgid "Failed to load list of addinitional modules"
 msgstr ""
 
