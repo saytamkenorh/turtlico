@@ -417,11 +417,15 @@ namespace Turtlico {
                         str_chooser_dialog_entry.grab_focus();
                         if(program[y][x].id == "str") {
                             str_chooser_dialog_entry.input_purpose = Gtk.InputPurpose.FREE_FORM;
+                            #if TURTLICO_EMOJI_HINT
                             str_chooser_dialog_entry.input_hints = Gtk.InputHints.EMOJI;
+                            #endif
                         }
                         else {
                             str_chooser_dialog_entry.input_purpose = Gtk.InputPurpose.ALPHA;
+                            #if TURTLICO_EMOJI_HINT
                             str_chooser_dialog_entry.input_hints = Gtk.InputHints.NO_EMOJI;
+                            #endif
                         }
                         str_chooser_dialog.set_transient_for((Gtk.Window)get_toplevel());
                         str_chooser_dialog.run();

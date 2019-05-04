@@ -92,6 +92,7 @@ Author: matyas5
             <property name="can_focus">True</property>
             <property name="has_focus">True</property>
             <property name="is_focus">True</property>
+            <property name="input_hints">GTK_INPUT_HINT_NO_EMOJI | GTK_INPUT_HINT_NONE</property>
             <property name="adjustment">adjustment1</property>
             <property name="digits">2</property>
             <property name="numeric">True</property>

@@ -7,6 +7,5 @@
     <file>programview.css</file>
     <file>program-settings.ui</file>
     <file>base.json</file>
-    <file>rpi.json</file>
   </gresource>
 </gresources>
