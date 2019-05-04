@@ -7,12 +7,9 @@ builddir="$srcdir/build-portable/meson"
 installdir="$srcdir/build-portable/install"
 
 #build and install project
-meson $srcdir $builddir --prefix $installdir
-cd $builddir
-ninja
-ninja install
-
-cd $srcdir
+meson $srcdir $builddir --prefix $installdir || exit 1
+ninja -C $builddir || exit 2
+ninja -C $builddir install
 
 #Creates AppImage directory
 appdir="./$projectname.AppDir"
@@ -44,7 +41,7 @@ if [ ! -f ./appimagetool-x86_64.AppImage ]; then
 	chmod +x ./appimagetool-x86_64.AppImage
 fi
 arch=x86_64
-ARCH=$arch ./appimagetool-x86_64.AppImage --no-appstream $appdir $projectname-$arch.AppImage
+ARCH=$arch ./appimagetool-x86_64.AppImage --no-appstream $appdir $projectname-$arch.AppImage || exit 3
 
 #remove temp files and cd to default dir
-#rm -rf ./build-portable
+rm -rf ./build-portable
