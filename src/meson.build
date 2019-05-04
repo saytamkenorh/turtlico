@@ -5,6 +5,7 @@ turtlico_sources = [
   'command.vala',
   'compiler.vala',
   'program-settings.vala',
+  'app-settings.vala',
 ]
 
 turtlico_deps = [
@@ -24,7 +25,8 @@ turtlico_sources += gnome.compile_resources('turtlico-resources',
 localedir = join_paths(get_option('prefix'), get_option('localedir'))
 
 add_project_arguments(['-DGETTEXT_PACKAGE="turtlico"',
-  '-DLOCALE_DIR="' + localedir + '"'], language: 'c')
+  '-DLOCALE_DIR="' + localedir + '"',
+  '-DTURTLICO_VERSION="' + meson.project_version() + '"'], language: 'c')
 
 if turtlico_deps[1].version() > '3.22.20'
 	add_project_arguments(['-D', 'TURTLICO_EMOJI_HINT'], language: 'vala')

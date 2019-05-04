@@ -40,6 +40,8 @@ namespace Turtlico {
         public Compiler compiler;
         File current_file = null;
 
+        Settings settings = new Settings("com.orsan.Turtlico");
+
 		public Window (Gtk.Application app) {
 			Object (application: app);
             string icon_file = Path.build_filename(Path.get_dirname(Environment.get_current_dir()), "share/icons/hicolor/256x256/apps/com.orsan.Turtlico.png");
@@ -75,6 +77,9 @@ namespace Turtlico {
             icons_scrolled_window.add(programview);
             // Load commands database
             load_commands();
+
+            load_settings("");
+            settings.changed.connect(load_settings);
 
 			show_all();
 			programview.grab_focus();
@@ -218,6 +223,13 @@ namespace Turtlico {
             });
         }
 
+        [GtkCallback]
+        void on_preferences_btn_clicked() {
+            var app_settings = new AppSettings();
+            app_settings.set_transient_for(this);
+            app_settings.show_all();
+        }
+
         public void open_file (File file) {
             try {
                 var stream = file.read();
@@ -297,6 +309,13 @@ namespace Turtlico {
             }
             dialog.run();
             dialog.destroy();
+        }
+
+        void load_settings(string key) {
+            if (key == "dark-mode" || key == "") {
+                var gtk_settings = Gtk.Settings.get_default();
+                gtk_settings.gtk_application_prefer_dark_theme = settings.get_boolean("dark-mode");
+            }
         }
 	}
 }

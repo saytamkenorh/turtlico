@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="turtlico">
   <schema id="com.orsan.Turtlico" path="/com/orsan/Turtlico/">
+    <key name="dark-mode" type="b">
+      <default>false</default>
+      <summary>Enable dark mode</summary>
+      <description>
+           If enabled, the app interface will use the dark theme.
+        </description>
+    </key>
   </schema>
 </schemalist>
 

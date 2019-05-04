@@ -35,7 +35,7 @@ int main (string[] args) {
     Intl.textdomain ("turtlico");
 
 	var app = new Gtk.Application ("com.orsan.Turtlico", ApplicationFlags.HANDLES_OPEN | ApplicationFlags.HANDLES_COMMAND_LINE);
-	app.add_main_option("compile", 'c', OptionFlags.NONE, OptionArg.STRING, _("Writes compiled program to FILE"), "");
+	app.add_main_option("compile", 'c', 0, OptionArg.STRING, _("Writes compiled program to FILE"), "");
 	app.activate.connect (() => {
 		var win = app.active_window;
 		if (win == null) {
