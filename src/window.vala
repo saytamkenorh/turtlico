@@ -317,5 +317,40 @@ namespace Turtlico {
                 gtk_settings.gtk_application_prefer_dark_theme = settings.get_boolean("dark-mode");
             }
         }
+
+        [GtkCallback]
+        void on_undo_btn_clicked () {
+            programview.undo();
+        }
+
+        [GtkCallback]
+        void on_redo_btn_clicked () {
+            programview.redo();
+        }
+
+        [GtkCallback]
+        bool on_categories_box_eb_scroll_event (Gtk.Widget widget, Gdk.EventScroll event) {
+            int direction = 0;
+            if (event.direction == Gdk.ScrollDirection.DOWN)
+                direction = 1;
+            else if (event.direction == Gdk.ScrollDirection.UP)
+                direction = -1;
+            else if (event.direction == Gdk.ScrollDirection.SMOOTH)
+                direction = event.delta_y < 0 ? -1 : 1;
+
+            var children = categories_box.get_children();
+            int index = 0;
+            for (int i = 0; i < children.length(); i++) {
+                Gtk.ToggleButton btn = (Gtk.ToggleButton)children.nth_data(i);
+                if (btn.active)
+                    index = i + direction;
+            }
+
+            if (index < 0) index = (int)children.length() - 1;
+            if (index >= children.length()) index = 0;
+
+            ((Gtk.ToggleButton)children.nth_data(index)).clicked();
+            return false;
+        }
 	}
 }

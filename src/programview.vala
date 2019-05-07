@@ -33,6 +33,9 @@ namespace Turtlico {
         public const int cell_height = 35;
         public ArrayList<Command> commands = new ArrayList<Command>();
         public ArrayList<ArrayList<Command>> program  = new ArrayList<ArrayList<Command>>();
+        private ArrayList<ArrayList<ArrayList<Command>>> history  = new ArrayList<ArrayList<ArrayList<Command>>>();
+        private int history_index = 0;
+        public int history_buffer_size = 20;
         public ArrayList<string> enabled_plugins = new ArrayList<string>();
         // Used in drag_data_get
         int mouse_x;
@@ -147,6 +150,8 @@ namespace Turtlico {
                 return false;
             });
             has_tooltip = true;
+
+            backup_program();
         }
 
         void on_drag_data_received (Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint info, uint time) {
@@ -189,6 +194,7 @@ namespace Turtlico {
                             c = c.set_data(data[1]);
                         program[y].insert(x, c);
                     }
+                    backup_program();
                     queue_draw();
                     Gtk.drag_finish(context, true, false, time);
                     if (c.id == "tc") {
@@ -336,6 +342,7 @@ namespace Turtlico {
                             program.remove_at(y);
                         }
                     }
+                    backup_program();
                     queue_draw();
                 }
             }
@@ -372,7 +379,7 @@ namespace Turtlico {
         }
 
         bool on_key_press_event(Gdk.EventKey key_event) {
-            //var modifiers = Gtk.accelerator_get_default_mod_mask();
+            var modifiers = Gtk.accelerator_get_default_mod_mask();
 
             if (key_event.keyval == Gdk.Key.Delete) {
                 int x = mouse_x / cell_width;
@@ -380,10 +387,17 @@ namespace Turtlico {
                 if(y < program.size && x < program[y].size) {
                     if(program[y][x].id != "nl") {
                         program[y].remove_at(x);
+                        backup_program();
                         queue_draw();
                     }
                 }
             }
+            if (key_event.keyval == Gdk.Key.z &&
+                (key_event.state & modifiers) == Gdk.ModifierType.CONTROL_MASK)
+                undo();
+            if (key_event.keyval == Gdk.Key.y &&
+                (key_event.state & modifiers) == Gdk.ModifierType.CONTROL_MASK)
+                redo();
             if (key_event.keyval == Gdk.Key.F2) {
                 int x = mouse_x / cell_width;
                 int y = mouse_y / cell_height;
@@ -571,6 +585,50 @@ namespace Turtlico {
 
             }  while (line != null);
             queue_draw();
+        }
+
+        public void undo () {
+            if (history.size - history_index - 2 < 0)
+                return;
+            var h = history[history.size - history_index - 2];
+            copy_list(h, ref program);
+            queue_draw();
+            history_index++;
+        }
+
+        public void redo() {
+            if (history_index == 0)
+                return;
+            history_index--;
+            var h = history[history.size - history_index - 1];
+            copy_list(h, ref program);
+            queue_draw();
+        }
+
+        void backup_program () {
+            if (history_index > 0) {
+                for (int i = history.size - history_index; i < history.size; i++)
+                    history.remove_at(i);
+            }
+            history_index = 0;
+            var undo = new ArrayList<ArrayList<Command>>();
+            copy_list(program, ref undo);
+            history.add(undo);
+            while (history.size > history_buffer_size)
+                history.remove_at(0);
+        }
+
+        void copy_list(ArrayList<ArrayList<Command>> l1,
+            ref ArrayList<ArrayList<Command>> l2)
+        {
+            l2.clear();
+            foreach (var line in l1) {
+                var l = new ArrayList<Command>();
+                foreach (var icon in line) {
+                    l.add(icon);
+                }
+                l2.add(l);
+            }
         }
     }
 }
