@@ -5,14 +5,16 @@
 			"icon" : "🔴",
 			"commands": [
 				{"id":"5_rpiled", "icon":"LED", "?": 'Connect LED' , "type": 5, "func": "LED", "params": "" },
+				{"id":"5_rpirgb", "icon":"RGB", "?": 'Connect RGB LED' , "type": 5, "func": "RGBLED", "params": "" },
 				{"id":"5_rpibtn", "icon":"BTN", "?": 'Connect Button' , "type": 5, "func": "Button", "params": "" },
 				{"id":"5_rpiin", "icon":"IN", "?": 'Connect Input Device' , "type": 5, "func": "SmoothedInputDevice", "params": "" },
 				{"id":"5_rpipwm", "icon":"PW ", "?": 'Connect PWM Output Device' , "type": 5, "func": "PWMOutputDevice", "params": "" },
-				{"id":"5_rpiout", "icon":"DOD", "?": 'Connect Digital Output Device' , "type": 5, "func": "DigitalOutputDevice", "params": "" },
-				{"id":"5_rpiang", "icon":"OUT", "?": 'Connect Output Device' , "type": 5, "func": "DigitalOutputDevice", "params": "" },
+				{"id":"5_rpiout", "icon":"OUT", "?": 'Connect Digital Output Device' , "type": 5, "func": "DigitalOutputDevice", "params": "" },
 				{"id":"0_rpion", "icon":"▶️	", "?": 'Turn on device', "type": 0, "func": "on", "params": "" },
 				{"id":"0_rpioff", "icon":"⏹", "?": 'Turn off device', "type": 0, "func": "off", "params": "" },
-				{"id":"0_rpival", "icon":"🔧", "?": 'Value (input and output)', "type": 0, "func": "value", "params": "" }
+				{"id":"0_rpival", "icon":"🔧", "?": 'Value (input and output)', "type": 0, "func": "value", "params": "" },
+				{"id":"0_rpievent", "icon":"⚡", "?": 'Connect a function that is called when the device value changes to active', "type": 0, "func": "tcf_rpi_event", "params": "" },
+				{"id":"0_rpieventoff", "icon":"🌧", "?": 'Connect a function that is called when the device value changes to inactive', "type": 0, "func": "tcf_rpi_event_off", "params": "" }
 			]
 		}
 	],
@@ -20,6 +22,18 @@
 		{
 			"id": "rpi.json",
 			"code": "from gpiozero import *"
+		},
+		{
+			"id": "tcf_rpi_event",
+			"code": "def tcf_rpi_event(obj, function):\
+	if (type(obj) is Button):\
+		obj.when_pressed = function"
+		},
+		{
+			"id": "tcf_rpi_event_off",
+			"code": "def tcf_rpi_event(obj, function):\
+	if (type(obj) is Button):\
+		obj.when_released = function"
 		}
 	]
 }

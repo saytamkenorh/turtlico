@@ -13,7 +13,7 @@
 				{"id":"int", "icon":"🔢", "?": 'Number', "type": -1 },
 				{"id":"str", "icon":"🔤", "?": 'String', "type": -1 },
 				{"id":"0_pos", "icon":"🚩", "?": 'Set position' ,"type": 0, "func": "setposition", "params": "0, 0" },
-				{"id":"0_penc", "icon":"🎨", "?": 'Set pen color' ,"type": 0, "func": "color", "params": "'black'" },
+				{"id":"0_penc", "icon":"🖌", "?": 'Set pen color' ,"type": 0, "func": "color", "params": "'black'" },
 				{"id":"0_pu", "icon":"✐", "?": 'Pull the pen up – no drawing when moving.' ,"type": 0, "func": "penup", "params": "" },
 				{"id":"0_pd", "icon":"✎", "?": 'Pull the pen down – drawing when moving.' ,"type": 0, "func": "pendown", "params": "" },
 				{"id":"0_pp", "icon":"🖊", "?": 'Pen properties' ,"type": 0, "func": "pen", "params": "" },
@@ -48,7 +48,8 @@
 				{"id":"5_abs", "icon":"abs", "?": 'Absolute avlue', "type": 5, "func": "abs", "params": ""},
 				{"id":"5_rad", "icon":"rad", "?": 'Convert angle from degrees to radians.', "type": 5, "func": "math.radians", "params": ""},
 				{"id":"5_deg", "icon":"deg", "?": 'Convert angle from radians to degrees.', "type": 5, "func": "math.degrees", "params": ""},
-				{"id":"5_rnd", "icon":"rnd", "?": 'Round a number', "type": 5, "func": "round", "params": ""}
+				{"id":"5_rnd", "icon":"rnd", "?": 'Round a number', "type": 5, "func": "round", "params": ""},
+				{"id":"4_color", "icon":"🎨", "?": 'Color (property)' , "type": 4, "c":"color"}
 			]
 		},
 		{
