@@ -6,12 +6,14 @@
 import json, os
 import subprocess
 
-files = ['./src/base.json']
+files = ['./src/base.json', './src/rpi.json']
+original_data = []
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
 for path in files:
 	f = open(path, 'r')
 	data = f.read()
+	original_data.append(data)
 	f.close()
 	output = ""
 
@@ -30,11 +32,13 @@ for path in files:
 	f = open(path, 'w')
 	f.write(output)
 	f.close()
-	build_dir = os.path.join(src_dir, 'build')
-	os.chdir(build_dir)
-	subprocess.call(["ninja", "turtlico-update-po"])
-	os.chdir(src_dir)
 
-	f = open(path, 'w')
-	f.write(data)
+build_dir = os.path.join(src_dir, 'build')
+os.chdir(build_dir)
+subprocess.call(["ninja", "turtlico-update-po"])
+os.chdir(src_dir)
+
+for i in range(len(files)):
+	f = open(files[i], 'w')
+	f.write(original_data[i])
 	f.close()
