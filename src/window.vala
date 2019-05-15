@@ -35,6 +35,8 @@ namespace Turtlico {
         public ProgramView programview;
 
         [GtkChild]
+        Gtk.Button save_btn;
+        [GtkChild]
         Gtk.Image delete_btn;
 
         public Compiler compiler;
@@ -75,6 +77,14 @@ namespace Turtlico {
             // ProgramView
             programview = new ProgramView();
             icons_scrolled_window.add(programview);
+            programview.notify["program-changed"].connect(()=>{
+                if (programview.program_changed)
+                    save_btn.sensitive = true;
+                else
+                    save_btn.sensitive = false;
+            });
+            programview.program_changed = false;
+
             // Load commands database
             load_commands();
 
@@ -350,6 +360,31 @@ namespace Turtlico {
             if (index >= children.length()) index = 0;
 
             ((Gtk.ToggleButton)children.nth_data(index)).clicked();
+            return false;
+        }
+
+        public override bool delete_event (Gdk.EventAny event) {
+            // Program not changed (no confirm dialog)
+            if (!programview.program_changed)
+                return false;
+            // Program changed (show a confirm dialog)
+            var dialog = new Gtk.MessageDialog(this,
+                Gtk.DialogFlags.MODAL,
+                Gtk.MessageType.QUESTION,
+                Gtk.ButtonsType.NONE,
+                _("Would you like to save your changes before closing the program?"));
+            dialog.secondary_text = _("Otherwise the unsaved changes will be lost!");
+            dialog.add_buttons (
+                _("Yes"), Gtk.ResponseType.YES,
+                _("No"), Gtk.ResponseType.NO,
+                 _("Cancel"), Gtk.ResponseType.CANCEL
+            );
+            var answer = dialog.run();
+            dialog.destroy();
+            if (answer == Gtk.ResponseType.YES)
+                save_btn.clicked();
+            else if (answer == Gtk.ResponseType.CANCEL)
+                return true;
             return false;
         }
 	}

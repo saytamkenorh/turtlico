@@ -37,6 +37,11 @@ namespace Turtlico {
         private int history_index = 0;
         public int history_buffer_size = 20;
         public ArrayList<string> enabled_plugins = new ArrayList<string>();
+        private bool _program_changed = true;
+        public bool program_changed {
+            get { return _program_changed; }
+            set { _program_changed = value; }
+        }
         // Used in drag_data_get
         int mouse_x;
         int mouse_y;
@@ -152,6 +157,7 @@ namespace Turtlico {
             has_tooltip = true;
 
             backup_program();
+            program_changed = false;
         }
 
         void on_drag_data_received (Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint info, uint time) {
@@ -168,7 +174,7 @@ namespace Turtlico {
                         var new_line = new Gee.ArrayList<Turtlico.Command>();
                         new_line.add(commands[0]);
                         y = program.size; program.add(new_line);
-                        if (c.id == "nl") { return; }
+                        if (c.id == "nl") { program_changed = true; return; }
                     }
                     // Icon dropped beyond the end of the line
                     if (x >= program[y].size) {
@@ -497,6 +503,7 @@ namespace Turtlico {
                 dostream.put_string("plugin,");
                 dostream.put_string(plugin + ",;");
             }
+            program_changed = false;
         }
 
         public void load_from_stream (InputStream istream) throws IOError {
@@ -548,8 +555,9 @@ namespace Turtlico {
                         if (c != str_mark[0]) prop = prop + c.to_string();
                     }
                     // Plugins
-                    if (props[0] == "plugin" && !enabled_plugins.contains(props[1])) {
-                        enabled_plugins.add(props[1]);
+                    if (props[0] == "plugin") {
+                        if (!enabled_plugins.contains(props[1]))
+                            enabled_plugins.add(props[1]);
                         continue;
                     }
                     else if (plugins_only) {
@@ -582,9 +590,15 @@ namespace Turtlico {
                         dialog.run(); dialog.destroy();
                     }
                 }
+                if (program[y].size == 0) {program.remove_at(y);}
 
             }  while (line != null);
             queue_draw();
+            // History
+            history.clear();
+            history_index = 0;
+            backup_program();
+            program_changed = false;
         }
 
         public void undo () {
@@ -606,6 +620,7 @@ namespace Turtlico {
         }
 
         void backup_program () {
+            program_changed = true;
             if (history_index > 0) {
                 for (int i = history.size - history_index; i < history.size; i++)
                     history.remove_at(i);
