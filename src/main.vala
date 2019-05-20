@@ -21,6 +21,9 @@ extern const string LOCALE_DIR;
 int main (string[] args) {
 	Intl.setlocale (LocaleCategory.ALL, "");
 	Intl.bind_textdomain_codeset ("turtlico", "UTF-8");
+
+	Gtk.Sourceinit();
+
 	#if WIN32
 	string cd = GLib.Environmet.get_current_dir();
 	string prefix = GLib.Path.get_driname(cd)

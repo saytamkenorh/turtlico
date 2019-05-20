@@ -87,7 +87,8 @@
 				{"id":"5_numi", "icon":"⌨#", "?": 'Number input' , "type": 5, "func": "numinput", "params": "'Number','Enter a number:'" },
 				{"id":"5_stri", "icon":"⌨\"", "?": 'String input' , "type": 5, "func": "textinput", "params": "'String','Enter a string:'" },
 				{"id":"2_.", "icon":".", "?": 'Dot (use to access an object property)', "type": 4, "c":"."},
-				{"id":"tc", "icon":"🔄", "?": 'Type conversion', "type": -1}
+				{"id":"tc", "icon":"🔄", "?": 'Type conversion', "type": -1},
+				{"id":"python", "icon":"r:python.png", "?": 'Direct Python code', "type": -1}
 			]
 		},
 		{

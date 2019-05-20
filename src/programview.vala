@@ -62,6 +62,10 @@ namespace Turtlico {
         Gtk.Revealer type_chooser_custom_type_rev;
         [GtkChild]
         Gtk.Entry type_chooser_custom_type_entry;
+        [GtkChild]
+        Gtk.SourceView python_view;
+        [GtkChild]
+        Gtk.Dialog python_code_dialog;
         // Render
         Gdk.RGBA color_cell;
         Gdk.RGBA color_text;
@@ -125,6 +129,12 @@ namespace Turtlico {
             drag_data_get.connect(on_drag_data_get);
             drag_end.connect((context)=>{Gtk.drag_set_icon_default(context);});
 
+            // PythonView
+            var language_manager = new Gtk.SourceLanguageManager();
+            Gtk.SourceLanguage python_language = language_manager.get_language("python3");
+            Gtk.SourceBuffer python_buffer = new Gtk.SourceBuffer.with_language(python_language);
+            python_view.buffer = python_buffer;
+
             // Events
             motion_notify_event.connect((event)=>{
                 mouse_x = (int)event.x;
@@ -145,7 +155,8 @@ namespace Turtlico {
                         if (program[cy][cx].id == "str" ||
                             program[cy][cx].id == "obj" ||
                             program[cy][cx].id == "int" ||
-                            program[cy][cx].id == "tc")
+                            program[cy][cx].id == "tc"  ||
+                            program[cy][cx].id == "python")
                         {
                             tooltip.set_text(program[cy][cx].data);
                             return true;
@@ -463,9 +474,10 @@ namespace Turtlico {
                         program[y][x] = program[y][x].set_data(str_chooser_dialog_entry.text);
                         queue_draw();
                     }
-                    if (program[y][x].id == "tc") {
+                    if (program[y][x].id == "tc")
                         icon_data_dialog_tc(x, y);
-                    }
+                    if (program[y][x].id == "python")
+                        icon_data_dialog_python(x, y);
                 }
             }
             return false;
@@ -489,6 +501,14 @@ namespace Turtlico {
                 }
             }
             program[y][x] = program[y][x].set_data(type);
+            queue_draw();
+        }
+
+        void icon_data_dialog_python(int x, int y) {
+            python_code_dialog.set_transient_for((Gtk.Window)get_toplevel());
+            python_code_dialog.run();
+            python_code_dialog.hide();
+            program[y][x] = program[y][x].set_data(python_view.buffer.text);
             queue_draw();
         }
 

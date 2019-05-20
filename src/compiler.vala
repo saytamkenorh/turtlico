@@ -188,6 +188,13 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                         }
                         continue;
                     }
+                    // Direct Python code
+                    if (program[y][x].id == "python") {
+                        foreach(string line in program[y][x].data.split("\n")) {
+                            output.add(indentation + line);
+                        }
+                        continue;
+                    }
 
                     if (program[y][x].id == "(") {param_level++;}
 			        if (program[y][x].id == ")") {param_level--;}

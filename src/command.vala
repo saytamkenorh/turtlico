@@ -39,9 +39,10 @@ namespace Turtlico {
             this._data = data;
             if (name.has_prefix("r:")) {
                 try {
+                    string str = name.substring(2);
                     this._pixbuf = new Gdk.Pixbuf.from_resource(
-                        "/com/orsan/Turtlico/icons/" + name.substring(2));
-                    this._name = null;
+                        "/com/orsan/Turtlico/icons/" + str);
+                    this._name = str;
                 }
                 catch {
                     this._pixbuf = null;
