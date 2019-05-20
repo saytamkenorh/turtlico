@@ -451,7 +451,7 @@ namespace Turtlico {
                             str = str.slice(0, end);
                         }
                         program[y][x] = program[y][x].set_data(str);
-                        queue_draw();
+                        queue_draw();backup_program();
                     }
                     if (program[y][x].id == "str" || program[y][x].id == "obj") {
                         str_chooser_dialog_entry.text = program[y][x].data;
@@ -472,12 +472,16 @@ namespace Turtlico {
                         str_chooser_dialog.run();
                         str_chooser_dialog.hide();
                         program[y][x] = program[y][x].set_data(str_chooser_dialog_entry.text);
-                        queue_draw();
+                        queue_draw();backup_program();
                     }
-                    if (program[y][x].id == "tc")
+                    if (program[y][x].id == "tc") {
                         icon_data_dialog_tc(x, y);
-                    if (program[y][x].id == "python")
+                        queue_draw();backup_program();
+                    }
+                    if (program[y][x].id == "python") {
                         icon_data_dialog_python(x, y);
+                        queue_draw();backup_program();
+                    }
                 }
             }
             return false;
@@ -506,6 +510,7 @@ namespace Turtlico {
 
         void icon_data_dialog_python(int x, int y) {
             python_code_dialog.set_transient_for((Gtk.Window)get_toplevel());
+            python_view.buffer.text = program[y][x].data;
             python_code_dialog.run();
             python_code_dialog.hide();
             program[y][x] = program[y][x].set_data(python_view.buffer.text);
@@ -524,7 +529,7 @@ namespace Turtlico {
                     continue;
                 for(int x = 0; x < program[y].size; x++) {
                     dostream.put_string(program[y][x].id + ",");
-                    dostream.put_string(str_mark + program[y][x].data + str_mark + ",");
+                    dostream.put_string(str_mark + program[y][x].data.replace("\n", "\\n") + str_mark + ",");
                     dostream.put_string(";");
                 }
                 dostream.put_string("\n");
@@ -557,7 +562,7 @@ namespace Turtlico {
                 for(int i = 0; i < line.length; i++){
                     if(line[i] == ';'){
                         if(!ingore){
-                            cmds.add(tuple);
+                            cmds.add(tuple.replace("\\n", "\n"));
                             tuple = "";
                             continue;
                         }

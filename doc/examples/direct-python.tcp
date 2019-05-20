@@ -1,3 +1,2 @@
 1_rep,,;:,,;nl,,;
-tab,,;python,forward(10)
-left(360/8),;nl,,;
+tab,,;python,forward(20)\nleft(360/8)\n,;
