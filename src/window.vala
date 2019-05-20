@@ -19,7 +19,7 @@
 namespace Turtlico {
 	enum CmdViewCols
     {
-        NAME,
+        PIXBUF,
         HELP,
         ID
     }
@@ -59,7 +59,7 @@ namespace Turtlico {
             Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
 
 			// cmd view
-			cmd_view.set_text_column(0);
+			cmd_view.pixbuf_column = 0;
             Gtk.drag_source_set(
                 cmd_view,                      // widget will be drag-able
                 Gdk.ModifierType.BUTTON1_MASK, // modifier that will start a drag
@@ -271,7 +271,7 @@ namespace Turtlico {
                 categories.foreach_element((array, index_, category_node)=>{
                     // Create widgets
                     var string_type = typeof(string);
-                    Gtk.ListStore ls = new Gtk.ListStore(3, string_type, string_type, string_type);
+                    Gtk.ListStore ls = new Gtk.ListStore(3, typeof(Gdk.Pixbuf), string_type, string_type);
                     var button = new Gtk.RadioButton(null);
                     button.label = category_node.get_object().get_string_member("icon");
                     button.can_focus = false;
@@ -296,8 +296,15 @@ namespace Turtlico {
                         programview.commands.add(c);
                         Gtk.TreeIter iter;
                         ls.append(out iter);
+                        var surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,
+                            ProgramView.cell_width,
+                            ProgramView.cell_height);
+                        var ctx = new Cairo.Context(surface);
+                        programview.draw_icon(ctx, 0, 0, c);
+                        var pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0,
+                            surface.get_width(), surface.get_height());
                         ls.set(iter,
-                               CmdViewCols.NAME, c.name,
+                               CmdViewCols.PIXBUF, pixbuf,
                                CmdViewCols.HELP, c.help,
                                CmdViewCols.ID, c.id);
                     });

@@ -20,6 +20,8 @@ namespace Turtlico {
     public class Command {
         private string _name;
         public string name {get { return _name;}}
+        private Gdk.Pixbuf _pixbuf;
+        public Gdk.Pixbuf pixbuf {get { return _pixbuf;}}
 
         private string _help;
         public string help {get {return _help;}}
@@ -35,6 +37,20 @@ namespace Turtlico {
             this._help = help;
             this._id = id;
             this._data = data;
+            if (name.has_prefix("r:")) {
+                try {
+                    this._pixbuf = new Gdk.Pixbuf.from_resource(
+                        "/com/orsan/Turtlico/icons/" + name.substring(2));
+                    this._name = null;
+                }
+                catch {
+                    this._pixbuf = null;
+                }
+            }
+            else if (pixbuf != null)
+                this._pixbuf = pixbuf;
+            else
+                this._pixbuf = null;
         }
 
         /*
@@ -54,7 +70,9 @@ namespace Turtlico {
          *
         */
         public Command set_data (string new_data) {
-            return new Command(this.name, this.help, this.id, new_data);
+            var c = new Command(this.name, this.help, this.id, new_data);
+            c._pixbuf = pixbuf;
+            return c;
         }
 
         /*

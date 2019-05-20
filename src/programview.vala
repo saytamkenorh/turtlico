@@ -243,6 +243,7 @@ namespace Turtlico {
         }
 
         public void draw_icon (Cairo.Context cr, int x, int y, Command c) {
+            // Background
             if (c.id == "nl" || c.id == "tab")
                 Gdk.cairo_set_source_rgba(cr, color_black);
             else if (c.id == "int")
@@ -260,6 +261,15 @@ namespace Turtlico {
             cr.rectangle(x, y, cell_width, cell_height);
             cr.fill();
 
+            // Pixbuf icons
+            if (c.pixbuf != null) {
+                Gdk.cairo_set_source_pixbuf(cr, c.pixbuf,
+                    x + cell_width / 2 - c.pixbuf.width / 2,
+                    y + cell_height / 2 - c.pixbuf.height / 2);
+                cr.paint();
+                return;
+            }
+            // Emoji icons
             if(c.id.length > 0 && (c.id[0] == '3' || c.id[0] == '2'))
                 Gdk.cairo_set_source_rgba(cr, color_editable);
             else

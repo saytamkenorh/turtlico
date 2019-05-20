@@ -22,6 +22,8 @@ turtlico_sources += gnome.compile_resources('turtlico-resources',
   c_name: 'turtlico'
 )
 
+subdir('icons')
+
 localedir = join_paths(get_option('prefix'), get_option('localedir'))
 
 add_project_arguments(['-DGETTEXT_PACKAGE="turtlico"',
