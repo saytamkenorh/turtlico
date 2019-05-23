@@ -40,7 +40,15 @@ namespace Turtlico {
         Gtk.Image delete_btn;
 
         public Compiler compiler;
-        File current_file = null;
+
+        private File _current_file = null;
+        File current_file {
+            get {return _current_file;}
+            set {
+                _current_file = value;
+                update_window_title();
+            }
+        }
 
         Settings settings = new Settings("com.orsan.Turtlico");
 
@@ -82,6 +90,7 @@ namespace Turtlico {
                     save_btn.sensitive = true;
                 else
                     save_btn.sensitive = false;
+                update_window_title();
             });
             programview.program_changed = false;
 
@@ -91,6 +100,7 @@ namespace Turtlico {
             load_settings("");
             settings.changed.connect(load_settings);
 
+			update_window_title();
 			show_all();
 			programview.grab_focus();
 		}
@@ -205,6 +215,7 @@ namespace Turtlico {
 
         [GtkCallback]
         void on_open_btn_clicked() {
+            if (check_file_save()) return;
             var dialog = new Gtk.FileChooserNative(_("Select file"), this,
                                                    Gtk.FileChooserAction.OPEN,
                                                    null, null);
@@ -272,8 +283,13 @@ namespace Turtlico {
                     // Create widgets
                     var string_type = typeof(string);
                     Gtk.ListStore ls = new Gtk.ListStore(3, typeof(Gdk.Pixbuf), string_type, string_type);
+                    string icon = category_node.get_object().get_string_member("icon");
                     var button = new Gtk.RadioButton(null);
-                    button.label = category_node.get_object().get_string_member("icon");
+                    if (icon.has_prefix("r:"))
+                        button.image = new Gtk.Image.from_resource(
+                            "/com/orsan/Turtlico/icons/" + icon.substring(2));
+                    else
+                        button.label = icon;
                     button.can_focus = false;
                     button.set_mode(false);
                     if(categories_box.get_children().length() > 0) {
@@ -371,6 +387,10 @@ namespace Turtlico {
         }
 
         public override bool delete_event (Gdk.EventAny event) {
+            return check_file_save();
+        }
+
+        private bool check_file_save () {
             // Program not changed (no confirm dialog)
             if (!programview.program_changed)
                 return false;
@@ -393,6 +413,17 @@ namespace Turtlico {
             else if (answer == Gtk.ResponseType.CANCEL)
                 return true;
             return false;
+        }
+
+        void update_window_title () {
+            string name = "";
+            if (programview.program_changed)
+                name = "*";
+            if (current_file == null)
+                name += _("Unnamed");
+            else
+                name += current_file.get_basename();
+            title = name + " - Turtlico";
         }
 	}
 }

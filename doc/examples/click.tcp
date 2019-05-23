@@ -1,9 +1,9 @@
 0_speed,,;int,0,;nl,,;
-3_def,,;obj,jdi,;(,,;),,;:,,;nl,,;
+3_def,,;obj,jdi,;:,,;nl,,;
 tab,,;0_go,,;nl,,;
-3_def,,;obj,vlevo,;(,,;),,;:,,;nl,,;
+3_def,,;obj,vlevo,;:,,;nl,,;
 tab,,;0_left,,;nl,,;
-3_def,,;obj,vpravo,;(,,;),,;:,,;nl,,;
+3_def,,;obj,vpravo,;:,,;nl,,;
 tab,,;0_right,,;nl,,;
 3_def,,;obj,klik,;(,,;obj,x,;sep,,;obj,y,;),,;:,,;nl,,;
 tab,,;0_pos,,;(,,;obj,x,;sep,,;obj,y,;),,;nl,,;

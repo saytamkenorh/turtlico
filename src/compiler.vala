@@ -144,7 +144,16 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     }
                     // Functions
                     if (program[y][x].id == "3_def") {
-                        output.add(indentation + "def "); continue;
+                        if (x + 2 < program[y].size &&
+                            program[y][x + 1].id == "obj" &&
+                            program[y][x + 2].id == ":")
+                        {
+                            output.add(indentation + "def " + program[y][x + 1].data + "()");
+                            x++; // Skip the int icon
+                        }
+                        else
+                            output.add(indentation + "def ");
+                        continue;
                     }
                     // Data types
                     if (program[y][x].id == "int") {
