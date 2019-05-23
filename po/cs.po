@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-09 19:00+0200\n"
+"POT-Creation-Date: 2019-05-23 17:45+0200\n"
 "PO-Revision-Date: 2018-05-31 16:17+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:38
+#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:48
 msgid "Turtlico"
 msgstr ""
 
@@ -33,75 +33,80 @@ msgstr "Povolit tmavý režim"
 msgid "If enabled, the app interface will use the dark theme."
 msgstr "Pokud je zapnuto, rozhraní aplikace použije tmavý motiv"
 
-#: src/window.ui:58
+#: src/window.ui:68
 msgid "Start your program"
 msgstr "Spustit program"
 
-#: src/window.ui:74
+#: src/window.ui:85
 msgid "Open program"
 msgstr "Otevřít program"
 
-#: src/window.ui:90
+#: src/window.ui:102
 msgid "Save"
 msgstr "Uložit"
 
-#: src/window.ui:106
+#: src/window.ui:119
 msgid "Save as"
 msgstr "Uložit jako"
 
-#: src/window.ui:122
+#: src/window.ui:136
 msgid "Undo\n"
 msgstr "Zpět\n"
 
-#: src/window.ui:139
+#: src/window.ui:153
 msgid "Redo"
 msgstr "Znovu"
 
-#: src/window.ui:155
+#: src/window.ui:169
 msgid "Application settings"
 msgstr "Nastavení aplikace"
 
-#: src/window.ui:172 src/program-settings.ui:9
+#: src/window.ui:186 src/program-settings.ui:9
 msgid "Project settings"
 msgstr "Nastavení projektu"
 
-#: src/window.ui:187
+#: src/window.ui:201
 msgid "Drop here items to delete them"
 msgstr "Sem přetáhněte příkazy ke smazání"
 
-#: src/programview.ui:43
+#: src/programview.ui:44
 msgid "Enter a number"
 msgstr "Zadejte číslo"
 
-#: src/programview.ui:66 src/programview.ui:167 src/programview.ui:234
+#: src/programview.ui:67 src/programview.ui:165 src/programview.ui:231
+#: src/programview.ui:298
 msgid "Done"
 msgstr "Hotovo"
 
-#: src/programview.ui:145
+#: src/programview.ui:146
+msgid "Edit Python code"
+msgstr ""
+
+#: src/programview.ui:209
 msgid "Enter a string"
 msgstr "Zadejte řetězec"
 
-#: src/programview.ui:211
+#: src/programview.ui:275
 msgid "Select a data type"
 msgstr "Vyberte datový typ"
 
-#: src/programview.ui:267
+#: src/programview.ui:331
 msgid "Integer"
 msgstr "Číslo (integer)"
 
-#: src/programview.ui:282
+#: src/programview.ui:346
 msgid "Float"
 msgstr "Desetinné číslo (float)"
 
-#: src/programview.ui:298 src/base.json:14
+#: src/programview.ui:362 src/base.json:14
 msgid "String"
 msgstr "Řetězec"
 
-#: src/programview.ui:314
+#: src/programview.ui:378
 msgid "Custom"
 msgstr "Jiný"
 
-#: src/programview.ui:344
+#: src/programview.ui:408
 msgid "Enter custom data type name"
 msgstr "Sem zadejte datový typ"
 
@@ -121,40 +126,64 @@ msgstr "Tmavý režim"
 msgid "About Turtlico"
 msgstr "O Turtlico"
 
-#: src/main.vala:38
+#: src/main.vala:41
 msgid "Writes compiled program to FILE"
 msgstr "Uloží zkompilovaný program do SOUBORU"
 
-#: src/main.vala:69
+#: src/main.vala:72
 #, c-format
 msgid "Cannot save the output file: %s\n"
 msgstr "Nepodařilo se uložit výsledný soubor: %s\n"
 
-#: src/window.vala:167
+#: src/window.vala:187
 msgid "Failed to save the program"
 msgstr "Nepodařilo se uložit program"
 
-#: src/window.vala:176 src/window.vala:198
+#: src/window.vala:196 src/window.vala:219
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/window.vala:182 src/window.vala:204
+#: src/window.vala:202 src/window.vala:225
 msgid "Turtlico project (*.tcp)"
 msgstr "Projekt Turtlico (*.tcp)"
 
-#: src/window.vala:244
+#: src/window.vala:265
 msgid "Failed to open the program"
 msgstr "Nepodařilo se otevřít program"
 
-#: src/programview.vala:564
+#: src/window.vala:402
+msgid "Would you like to save your changes before closing the program?"
+msgstr "Přereje si uložit změny před zavřením programu?"
+
+#: src/window.vala:403
+msgid "Otherwise the unsaved changes will be lost!"
+msgstr "Jinak budou neuložené změny ztraceny!"
+
+#: src/window.vala:405
+msgid "Yes"
+msgstr "Ano"
+
+#: src/window.vala:406
+msgid "No"
+msgstr "Ne"
+
+#: src/window.vala:407
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: src/window.vala:423
+msgid "Unnamed"
+msgstr "Bez názvu"
+
+#: src/programview.vala:607
 msgid "Failed to open the file. Error on line: "
 msgstr "Nepodařilo se načíst program. Chyba je na řádce: "
 
-#: src/programview.vala:579
+#: src/programview.vala:622
 msgid "The file to load contains an unkown command!"
 msgstr "Soubor obsahuje neznámý příkaz!"
 
-#: src/programview.vala:581
+#: src/programview.vala:624
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
@@ -164,11 +193,11 @@ msgstr ""
 "verzí programu.\n"
 "ID příkazu: "
 
-#: src/command.vala:83
+#: src/command.vala:102
 msgid "Failed to load command def file: "
 msgstr "Selhalo načtení souboru s definicemi příkazů: "
 
-#: src/program-settings.vala:69
+#: src/program-settings.vala:68
 msgid "Failed to load list of addinitional modules"
 msgstr "Selhalo načtení listu přídavných příkazů"
 
@@ -298,7 +327,7 @@ msgstr "Pi"
 
 #: src/base.json:43
 msgid "Get x coordinate"
-msgstr "Pozice Y"
+msgstr "Pozice X"
 
 #: src/base.json:44
 msgid "Get y coordinate"
@@ -361,130 +390,134 @@ msgid "Equals"
 msgstr "se rovná"
 
 #: src/base.json:65
-msgid "Repeat block of commands"
-msgstr "Opakovat blok příkazů"
-
-#: src/base.json:66
-msgid "For"
-msgstr "Pro"
-
-#: src/base.json:67
-msgid "in"
-msgstr "v"
-
-#: src/base.json:68
-msgid "Break"
-msgstr "Přerušit cyklus"
-
-#: src/base.json:69
-msgid "Continue"
-msgstr "Pokračovat"
-
-#: src/base.json:70
-msgid "Define a method"
-msgstr "Definice metody"
-
-#: src/base.json:71
-msgid "Return a value"
-msgstr "Vrátit hodnotu"
-
-#: src/base.json:72
-msgid "Object"
-msgstr "Objekt"
-
-#: src/base.json:73
-msgid "Assign value to a variable"
-msgstr "Přiřadit hodnotu do proměnné"
-
-#: src/base.json:74
-msgid "Plus"
-msgstr "Plus"
-
-#: src/base.json:75
-msgid "Minus"
-msgstr "Mínus"
-
-#: src/base.json:76
-msgid "Times"
-msgstr "Krát"
-
-#: src/base.json:77
-msgid "Divided"
-msgstr "Děleno"
-
-#: src/base.json:78
-msgid "Modulo"
-msgstr "Zbytek po dělení (modulo)"
-
-#: src/base.json:79
-msgid "Increase value by"
-msgstr "Zvýšit hodnotu proměnné o"
-
-#: src/base.json:80
-msgid "Decrease value by"
-msgstr "Snížit hodnotu proměnné o"
-
-#: src/base.json:81
 msgid "is less than"
 msgstr "je menší než"
 
-#: src/base.json:82
+#: src/base.json:66
 msgid "is greater than"
 msgstr "je větší než"
 
-#: src/base.json:83
-msgid "Connect a function to control mouse clicks"
-msgstr "Připojte funkci pro zachycení klikání myší"
+#: src/base.json:67
+msgid "Repeat block of commands"
+msgstr "Opakovat blok příkazů"
 
-#: src/base.json:84
-msgid "Connect a function that will be activated by pressing specified key"
-msgstr "Připojte funkci, která bude aktivována zadanou klávesou"
+#: src/base.json:68
+msgid "For"
+msgstr "Pro"
 
-#: src/base.json:85
-msgid "Call a function after n miliseconds"
-msgstr "Zavolat funkci po n milisekundách"
+#: src/base.json:69
+msgid "in"
+msgstr "v"
 
-#: src/base.json:86
-msgid "Random number"
-msgstr "Náhodné číslo"
+#: src/base.json:70
+msgid "Break"
+msgstr "Přerušit cyklus"
 
-#: src/base.json:87
-msgid "Number input"
-msgstr "Číselný vstup"
+#: src/base.json:71
+msgid "Continue"
+msgstr "Pokračovat"
 
-#: src/base.json:88
-msgid "String input"
-msgstr "Řetězcový vstup"
+#: src/base.json:72
+msgid "Define a method"
+msgstr "Definice metody"
 
-#: src/base.json:89
+#: src/base.json:73
+msgid "Return a value"
+msgstr "Vrátit hodnotu"
+
+#: src/base.json:74
+msgid "Object"
+msgstr "Objekt"
+
+#: src/base.json:75
+msgid "Assign value to a variable"
+msgstr "Přiřadit hodnotu do proměnné"
+
+#: src/base.json:76
+msgid "Increase value by"
+msgstr "Zvýšit hodnotu proměnné o"
+
+#: src/base.json:77
+msgid "Decrease value by"
+msgstr "Snížit hodnotu proměnné o"
+
+#: src/base.json:78
 msgid "Dot (use to access an object property)"
 msgstr "Tečka (přístup k vlastnostem objektu)"
 
-#: src/base.json:90
+#: src/base.json:79
 msgid "Type conversion"
 msgstr "Konverze typu"
 
-#: src/base.json:96
+#: src/base.json:80
+msgid "Direct Python code"
+msgstr ""
+
+#: src/base.json:81
+msgid "Random number"
+msgstr "Náhodné číslo"
+
+#: src/base.json:82
+msgid "Plus"
+msgstr "Plus"
+
+#: src/base.json:83
+msgid "Minus"
+msgstr "Mínus"
+
+#: src/base.json:84
+msgid "Times"
+msgstr "Krát"
+
+#: src/base.json:85
+msgid "Divided"
+msgstr "Děleno"
+
+#: src/base.json:86
+msgid "Modulo"
+msgstr "Zbytek po dělení (modulo)"
+
+#: src/base.json:87
+msgid "Connect a function to control mouse clicks"
+msgstr "Připojte funkci pro zachycení klikání myší"
+
+#: src/base.json:88
+msgid "Connect a function that will be activated by pressing specified key"
+msgstr "Připojte funkci, která bude aktivována zadanou klávesou"
+
+#: src/base.json:89
+msgid "Call a function after n miliseconds"
+msgstr "Zavolat funkci po n milisekundách"
+
+#: src/base.json:90
+msgid "Number input"
+msgstr "Číselný vstup"
+
+#: src/base.json:91
+msgid "String input"
+msgstr "Řetězcový vstup"
+
+#: src/base.json:97
 msgid "Read all lines"
 msgstr "Přečti všechny řádky ze souboru"
 
-#: src/base.json:97
+#: src/base.json:98
 msgid "Write lines"
 msgstr "Zapiš řádky do souboru"
 
-#: src/base.json:98
+#: src/base.json:99
 msgid "Open file dialog"
 msgstr "Otevře dialog pro výběr souboru"
 
-#: src/base.json:99
+#: src/base.json:100
 msgid "Check file exists"
 msgstr "Zjistit existenci souboru"
 
-#: src/base.json:100
+#: src/base.json:101
 msgid "Check directory exists"
 msgstr "Zjistit existenci složky"
 
-#: src/base.json:101
+#: src/base.json:102
 msgid "Delete file or directory"
 msgstr "Smaž soubor nebo složku"
 
