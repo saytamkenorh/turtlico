@@ -80,7 +80,7 @@ msgstr "Hotovo"
 
 #: src/programview.ui:146
 msgid "Edit Python code"
-msgstr ""
+msgstr "Upravit Python kód"
 
 #: src/programview.ui:209
 msgid "Enter a string"
@@ -451,7 +451,7 @@ msgstr "Konverze typu"
 
 #: src/base.json:80
 msgid "Direct Python code"
-msgstr ""
+msgstr "Přímý Python kód"
 
 #: src/base.json:81
 msgid "Random number"
