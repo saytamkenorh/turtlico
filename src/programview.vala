@@ -62,6 +62,10 @@ namespace Turtlico {
         Gtk.Revealer type_chooser_custom_type_rev;
         [GtkChild]
         Gtk.Entry type_chooser_custom_type_entry;
+        [GtkChild]
+        Gtk.SourceView python_view;
+        [GtkChild]
+        Gtk.Dialog python_code_dialog;
         // Render
         Gdk.RGBA color_cell;
         Gdk.RGBA color_text;
@@ -125,6 +129,12 @@ namespace Turtlico {
             drag_data_get.connect(on_drag_data_get);
             drag_end.connect((context)=>{Gtk.drag_set_icon_default(context);});
 
+            // PythonView
+            var language_manager = new Gtk.SourceLanguageManager();
+            Gtk.SourceLanguage python_language = language_manager.get_language("python3");
+            Gtk.SourceBuffer python_buffer = new Gtk.SourceBuffer.with_language(python_language);
+            python_view.buffer = python_buffer;
+
             // Events
             motion_notify_event.connect((event)=>{
                 mouse_x = (int)event.x;
@@ -145,7 +155,8 @@ namespace Turtlico {
                         if (program[cy][cx].id == "str" ||
                             program[cy][cx].id == "obj" ||
                             program[cy][cx].id == "int" ||
-                            program[cy][cx].id == "tc")
+                            program[cy][cx].id == "tc"  ||
+                            program[cy][cx].id == "python")
                         {
                             tooltip.set_text(program[cy][cx].data);
                             return true;
@@ -243,6 +254,7 @@ namespace Turtlico {
         }
 
         public void draw_icon (Cairo.Context cr, int x, int y, Command c) {
+            // Background
             if (c.id == "nl" || c.id == "tab")
                 Gdk.cairo_set_source_rgba(cr, color_black);
             else if (c.id == "int")
@@ -260,6 +272,15 @@ namespace Turtlico {
             cr.rectangle(x, y, cell_width, cell_height);
             cr.fill();
 
+            // Pixbuf icons
+            if (c.pixbuf != null) {
+                Gdk.cairo_set_source_pixbuf(cr, c.pixbuf,
+                    x + cell_width / 2 - c.pixbuf.width / 2,
+                    y + cell_height / 2 - c.pixbuf.height / 2);
+                cr.paint();
+                return;
+            }
+            // Emoji icons
             if(c.id.length > 0 && (c.id[0] == '3' || c.id[0] == '2'))
                 Gdk.cairo_set_source_rgba(cr, color_editable);
             else
@@ -430,7 +451,7 @@ namespace Turtlico {
                             str = str.slice(0, end);
                         }
                         program[y][x] = program[y][x].set_data(str);
-                        queue_draw();
+                        queue_draw();backup_program();
                     }
                     if (program[y][x].id == "str" || program[y][x].id == "obj") {
                         str_chooser_dialog_entry.text = program[y][x].data;
@@ -451,10 +472,15 @@ namespace Turtlico {
                         str_chooser_dialog.run();
                         str_chooser_dialog.hide();
                         program[y][x] = program[y][x].set_data(str_chooser_dialog_entry.text);
-                        queue_draw();
+                        queue_draw();backup_program();
                     }
                     if (program[y][x].id == "tc") {
                         icon_data_dialog_tc(x, y);
+                        queue_draw();backup_program();
+                    }
+                    if (program[y][x].id == "python") {
+                        icon_data_dialog_python(x, y);
+                        queue_draw();backup_program();
                     }
                 }
             }
@@ -482,6 +508,15 @@ namespace Turtlico {
             queue_draw();
         }
 
+        void icon_data_dialog_python(int x, int y) {
+            python_code_dialog.set_transient_for((Gtk.Window)get_toplevel());
+            python_view.buffer.text = program[y][x].data;
+            python_code_dialog.run();
+            python_code_dialog.hide();
+            program[y][x] = program[y][x].set_data(python_view.buffer.text);
+            queue_draw();
+        }
+
         [GtkCallback]
         void on_rb_custom_toggled(Gtk.ToggleButton btn) {
             type_chooser_custom_type_rev.set_reveal_child(btn.active);
@@ -494,7 +529,7 @@ namespace Turtlico {
                     continue;
                 for(int x = 0; x < program[y].size; x++) {
                     dostream.put_string(program[y][x].id + ",");
-                    dostream.put_string(str_mark + program[y][x].data + str_mark + ",");
+                    dostream.put_string(str_mark + program[y][x].data.replace("\n", "\\n") + str_mark + ",");
                     dostream.put_string(";");
                 }
                 dostream.put_string("\n");
@@ -527,7 +562,7 @@ namespace Turtlico {
                 for(int i = 0; i < line.length; i++){
                     if(line[i] == ';'){
                         if(!ingore){
-                            cmds.add(tuple);
+                            cmds.add(tuple.replace("\\n", "\n"));
                             tuple = "";
                             continue;
                         }

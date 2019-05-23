@@ -21,17 +21,16 @@ extern const string LOCALE_DIR;
 int main (string[] args) {
 	Intl.setlocale (LocaleCategory.ALL, "");
 	Intl.bind_textdomain_codeset ("turtlico", "UTF-8");
-	#if WIN32
-	string cd = GLib.Environmet.get_current_dir();
-	string prefix = GLib.Path.get_driname(cd)
-	string localedir = GLib.Path.build_path("/", prefix, "share", "locale")
+
+	Gtk.Sourceinit();
+
+	string cd = GLib.Environment.get_current_dir();
+	string prefix = GLib.Path.get_dirname(cd);
+	string localedir = GLib.Path.build_path("/", prefix, "share", "locale");
 	if (GLib.FileUtils.test(localedir, GLib.FileTest.IS_DIR))
 	    Intl.bindtextdomain("turtlico", localedir);
 	else
 	    Intl.bindtextdomain("turtlico", LOCALE_DIR);
-	#else
-	Intl.bindtextdomain("turtlico", LOCALE_DIR);
-    #endif
     Intl.textdomain ("turtlico");
 
 	var app = new Gtk.Application ("com.orsan.Turtlico", ApplicationFlags.HANDLES_OPEN | ApplicationFlags.HANDLES_COMMAND_LINE);

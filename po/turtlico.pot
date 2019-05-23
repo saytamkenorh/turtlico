@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-09 19:00+0200\n"
+"POT-Creation-Date: 2019-05-23 17:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:38
+#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:48
 msgid "Turtlico"
 msgstr ""
 
@@ -33,75 +33,80 @@ msgstr ""
 msgid "If enabled, the app interface will use the dark theme."
 msgstr ""
 
-#: src/window.ui:58
+#: src/window.ui:68
 msgid "Start your program"
 msgstr ""
 
-#: src/window.ui:74
+#: src/window.ui:85
 msgid "Open program"
 msgstr ""
 
-#: src/window.ui:90
+#: src/window.ui:102
 msgid "Save"
 msgstr ""
 
-#: src/window.ui:106
+#: src/window.ui:119
 msgid "Save as"
 msgstr ""
 
-#: src/window.ui:122
+#: src/window.ui:136
 msgid "Undo\n"
 msgstr ""
 
-#: src/window.ui:139
+#: src/window.ui:153
 msgid "Redo"
 msgstr ""
 
-#: src/window.ui:155
+#: src/window.ui:169
 msgid "Application settings"
 msgstr ""
 
-#: src/window.ui:172 src/program-settings.ui:9
+#: src/window.ui:186 src/program-settings.ui:9
 msgid "Project settings"
 msgstr ""
 
-#: src/window.ui:187
+#: src/window.ui:201
 msgid "Drop here items to delete them"
 msgstr ""
 
-#: src/programview.ui:43
+#: src/programview.ui:44
 msgid "Enter a number"
 msgstr ""
 
-#: src/programview.ui:66 src/programview.ui:167 src/programview.ui:234
+#: src/programview.ui:67 src/programview.ui:165 src/programview.ui:231
+#: src/programview.ui:298
 msgid "Done"
 msgstr ""
 
-#: src/programview.ui:145
+#: src/programview.ui:146
+msgid "Edit Python code"
+msgstr ""
+
+#: src/programview.ui:209
 msgid "Enter a string"
 msgstr ""
 
-#: src/programview.ui:211
+#: src/programview.ui:275
 msgid "Select a data type"
 msgstr ""
 
-#: src/programview.ui:267
+#: src/programview.ui:331
 msgid "Integer"
 msgstr ""
 
-#: src/programview.ui:282
+#: src/programview.ui:346
 msgid "Float"
 msgstr ""
 
-#: src/programview.ui:298 src/base.json:14
+#: src/programview.ui:362 src/base.json:14
 msgid "String"
 msgstr ""
 
-#: src/programview.ui:314
+#: src/programview.ui:378
 msgid "Custom"
 msgstr ""
 
-#: src/programview.ui:344
+#: src/programview.ui:408
 msgid "Enter custom data type name"
 msgstr ""
 
@@ -121,51 +126,75 @@ msgstr ""
 msgid "About Turtlico"
 msgstr ""
 
-#: src/main.vala:38
+#: src/main.vala:41
 msgid "Writes compiled program to FILE"
 msgstr ""
 
-#: src/main.vala:69
+#: src/main.vala:72
 #, c-format
 msgid "Cannot save the output file: %s\n"
 msgstr ""
 
-#: src/window.vala:167
+#: src/window.vala:187
 msgid "Failed to save the program"
 msgstr ""
 
-#: src/window.vala:176 src/window.vala:198
+#: src/window.vala:196 src/window.vala:219
 msgid "Select file"
 msgstr ""
 
-#: src/window.vala:182 src/window.vala:204
+#: src/window.vala:202 src/window.vala:225
 msgid "Turtlico project (*.tcp)"
 msgstr ""
 
-#: src/window.vala:244
+#: src/window.vala:265
 msgid "Failed to open the program"
 msgstr ""
 
-#: src/programview.vala:564
+#: src/window.vala:402
+msgid "Would you like to save your changes before closing the program?"
+msgstr ""
+
+#: src/window.vala:403
+msgid "Otherwise the unsaved changes will be lost!"
+msgstr ""
+
+#: src/window.vala:405
+msgid "Yes"
+msgstr ""
+
+#: src/window.vala:406
+msgid "No"
+msgstr ""
+
+#: src/window.vala:407
+msgid "Cancel"
+msgstr ""
+
+#: src/window.vala:423
+msgid "Unnamed"
+msgstr ""
+
+#: src/programview.vala:607
 msgid "Failed to open the file. Error on line: "
 msgstr ""
 
-#: src/programview.vala:579
+#: src/programview.vala:622
 msgid "The file to load contains an unkown command!"
 msgstr ""
 
-#: src/programview.vala:581
+#: src/programview.vala:624
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
 "Command ID: "
 msgstr ""
 
-#: src/command.vala:83
+#: src/command.vala:102
 msgid "Failed to load command def file: "
 msgstr ""
 
-#: src/program-settings.vala:69
+#: src/program-settings.vala:68
 msgid "Failed to load list of addinitional modules"
 msgstr ""
 
@@ -358,130 +387,134 @@ msgid "Equals"
 msgstr ""
 
 #: src/base.json:65
-msgid "Repeat block of commands"
-msgstr ""
-
-#: src/base.json:66
-msgid "For"
-msgstr ""
-
-#: src/base.json:67
-msgid "in"
-msgstr ""
-
-#: src/base.json:68
-msgid "Break"
-msgstr ""
-
-#: src/base.json:69
-msgid "Continue"
-msgstr ""
-
-#: src/base.json:70
-msgid "Define a method"
-msgstr ""
-
-#: src/base.json:71
-msgid "Return a value"
-msgstr ""
-
-#: src/base.json:72
-msgid "Object"
-msgstr ""
-
-#: src/base.json:73
-msgid "Assign value to a variable"
-msgstr ""
-
-#: src/base.json:74
-msgid "Plus"
-msgstr ""
-
-#: src/base.json:75
-msgid "Minus"
-msgstr ""
-
-#: src/base.json:76
-msgid "Times"
-msgstr ""
-
-#: src/base.json:77
-msgid "Divided"
-msgstr ""
-
-#: src/base.json:78
-msgid "Modulo"
-msgstr ""
-
-#: src/base.json:79
-msgid "Increase value by"
-msgstr ""
-
-#: src/base.json:80
-msgid "Decrease value by"
-msgstr ""
-
-#: src/base.json:81
 msgid "is less than"
 msgstr ""
 
-#: src/base.json:82
+#: src/base.json:66
 msgid "is greater than"
 msgstr ""
 
-#: src/base.json:83
-msgid "Connect a function to control mouse clicks"
+#: src/base.json:67
+msgid "Repeat block of commands"
 msgstr ""
 
-#: src/base.json:84
-msgid "Connect a function that will be activated by pressing specified key"
+#: src/base.json:68
+msgid "For"
 msgstr ""
 
-#: src/base.json:85
-msgid "Call a function after n miliseconds"
+#: src/base.json:69
+msgid "in"
 msgstr ""
 
-#: src/base.json:86
-msgid "Random number"
+#: src/base.json:70
+msgid "Break"
 msgstr ""
 
-#: src/base.json:87
-msgid "Number input"
+#: src/base.json:71
+msgid "Continue"
 msgstr ""
 
-#: src/base.json:88
-msgid "String input"
+#: src/base.json:72
+msgid "Define a method"
 msgstr ""
 
-#: src/base.json:89
+#: src/base.json:73
+msgid "Return a value"
+msgstr ""
+
+#: src/base.json:74
+msgid "Object"
+msgstr ""
+
+#: src/base.json:75
+msgid "Assign value to a variable"
+msgstr ""
+
+#: src/base.json:76
+msgid "Increase value by"
+msgstr ""
+
+#: src/base.json:77
+msgid "Decrease value by"
+msgstr ""
+
+#: src/base.json:78
 msgid "Dot (use to access an object property)"
 msgstr ""
 
-#: src/base.json:90
+#: src/base.json:79
 msgid "Type conversion"
 msgstr ""
 
-#: src/base.json:96
-msgid "Read all lines"
+#: src/base.json:80
+msgid "Direct Python code"
+msgstr ""
+
+#: src/base.json:81
+msgid "Random number"
+msgstr ""
+
+#: src/base.json:82
+msgid "Plus"
+msgstr ""
+
+#: src/base.json:83
+msgid "Minus"
+msgstr ""
+
+#: src/base.json:84
+msgid "Times"
+msgstr ""
+
+#: src/base.json:85
+msgid "Divided"
+msgstr ""
+
+#: src/base.json:86
+msgid "Modulo"
+msgstr ""
+
+#: src/base.json:87
+msgid "Connect a function to control mouse clicks"
+msgstr ""
+
+#: src/base.json:88
+msgid "Connect a function that will be activated by pressing specified key"
+msgstr ""
+
+#: src/base.json:89
+msgid "Call a function after n miliseconds"
+msgstr ""
+
+#: src/base.json:90
+msgid "Number input"
+msgstr ""
+
+#: src/base.json:91
+msgid "String input"
 msgstr ""
 
 #: src/base.json:97
-msgid "Write lines"
+msgid "Read all lines"
 msgstr ""
 
 #: src/base.json:98
-msgid "Open file dialog"
+msgid "Write lines"
 msgstr ""
 
 #: src/base.json:99
-msgid "Check file exists"
+msgid "Open file dialog"
 msgstr ""
 
 #: src/base.json:100
-msgid "Check directory exists"
+msgid "Check file exists"
 msgstr ""
 
 #: src/base.json:101
+msgid "Check directory exists"
+msgstr ""
+
+#: src/base.json:102
 msgid "Delete file or directory"
 msgstr ""
 

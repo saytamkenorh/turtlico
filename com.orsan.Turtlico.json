@@ -37,6 +37,16 @@
     ],
     "modules": [
         {
+            "name" : "gtksourceview",
+            "buildsystem": "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/gtksourceview.git"
+                }
+            ]
+	},
+        {
             "name" : "tcl8.6",
             "sources" : [
                 {

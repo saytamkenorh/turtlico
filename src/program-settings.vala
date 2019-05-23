@@ -45,7 +45,6 @@ namespace Turtlico {
                 var plugins_search_dirs = new Gee.ArrayList<string>.wrap(Environment.get_system_data_dirs());
                 plugins_search_dirs.add(Environment.get_user_data_dir());
                 foreach (var path in plugins_search_dirs) {
-                    debug(path);
                     path = path + "/turtlico/plugins";
                     if (FileUtils.test(path, FileTest.IS_DIR)) {
                         Dir dir = Dir.open (path, 0);

@@ -13,6 +13,7 @@ turtlico_deps = [
   dependency('gtk+-3.0', version: '>= 3.22'),
   dependency('gee-0.8', version: '>= 0.18'),
   dependency('json-glib-1.0', version: '>= 1.0'),
+  dependency('gtksourceview-4', version: '>= 4.0'),
 ]
 
 gnome = import('gnome')
@@ -21,6 +22,8 @@ turtlico_sources += gnome.compile_resources('turtlico-resources',
   'turtlico.gresource.xml',
   c_name: 'turtlico'
 )
+
+subdir('icons')
 
 localedir = join_paths(get_option('prefix'), get_option('localedir'))
 
