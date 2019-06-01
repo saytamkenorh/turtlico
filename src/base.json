@@ -5,6 +5,7 @@
 			"commands": [
 				{"id":"nl", "icon":"⏎", "?": 'New line (Enter)', "type": -1 },
 				{"id":"tab", "icon":"·", "?": 'Tab', "type": -1 },
+				{"id":"#", "icon":"#", "?": 'Comment', "type": -1 },
 				{"id":"0_go", "icon":"🐢", "?": 'Go forward', "type": 0, "func": "forward", "params": "30" },
 				{"id":"0_left", "icon":"↺", "?": 'Turn left', "type": 0, "func": "left", "params": "90" },
 				{"id":"0_right", "icon":"↻", "?": 'Turn right', "type": 0, "func": "right", "params": "90" },

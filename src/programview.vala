@@ -75,6 +75,7 @@ namespace Turtlico {
         Gdk.RGBA color_string;
         Gdk.RGBA color_object;
         Gdk.RGBA color_type_conversion;
+        Gdk.RGBA color_comment;
         Pango.FontDescription font = new Pango.FontDescription();
         Pango.FontDescription small_font = new Pango.FontDescription();
 
@@ -100,6 +101,7 @@ namespace Turtlico {
             color_string.parse("rgb(255, 220, 0)");
             color_object.parse("rgb(200, 200, 200)");
             color_type_conversion.parse("rgb(255, 140, 0)");
+            color_comment.parse("rgb(255, 233, 140)");
             color_cell = style_context.get_color(Gtk.StateFlags.ACTIVE);
             font.set_weight(Pango.Weight.BOLD);
             font.set_size(15 * Pango.SCALE);
@@ -152,10 +154,7 @@ namespace Turtlico {
                     int cy = y / cell_height;
                     if(cy < program.size && cx < program[cy].size) {
                         // Command found
-                        if (program[cy][cx].id == "str" ||
-                            program[cy][cx].id == "obj" ||
-                            program[cy][cx].id == "int" ||
-                            program[cy][cx].id == "tc"  ||
+                        if (program[cy][cx].id == "tc" ||
                             program[cy][cx].id == "python")
                         {
                             tooltip.set_text(program[cy][cx].data);
@@ -178,8 +177,8 @@ namespace Turtlico {
                 string id = data[0];
                 try {
                     Command c = find_command_by_id(id);
-                    x = x / cell_width;
                     y = y / cell_height;
+                    x = mouse_to_program_x(x / cell_width, y);
                     // Icon dropped under the last line
                     if (y >= program.size) {
                         var new_line = new Gee.ArrayList<Turtlico.Command>();
@@ -238,22 +237,26 @@ namespace Turtlico {
             color_cell = style_context.get_color(state);
 
             int width = 0;
+            int x;
             for (int line = 0; line < program.size; line++) {
+                x = 0;
                 for (int command = 0; command < program[line].size; command++) {
                     if (program[line][command].id == "int" && program[line][command].data == "") {
                         program[line][command] = program[line][command].set_data("0");
                     }
-                    draw_icon(cr, command * cell_width, line * cell_height,
+                    x += draw_icon(cr, x * cell_width, line * cell_height,
                               program[line][command]);
                 }
-                if (program[line].size * cell_width > width)
+                if (x > width)
                     width = (program[line].size + 2) * cell_width;
             }
             set_size_request(width, (program.size + 2) * cell_height);
             return true;
         }
 
-        public void draw_icon (Cairo.Context cr, int x, int y, Command c) {
+        public int draw_icon (Cairo.Context cr, int x, int y, Command c) {
+            // Size by the length of data
+            int width = (c.data.length / 7 + 1);
             // Background
             if (c.id == "nl" || c.id == "tab")
                 Gdk.cairo_set_source_rgba(cr, color_black);
@@ -265,11 +268,13 @@ namespace Turtlico {
                 Gdk.cairo_set_source_rgba(cr, color_object);
             else if (c.id == "tc")
                 Gdk.cairo_set_source_rgba(cr, color_type_conversion);
+            else if (c.id == "#")
+                Gdk.cairo_set_source_rgba(cr, color_comment);
             else if ((c.id.length > 0) && (c.id[0] == '1'))
                 Gdk.cairo_set_source_rgba(cr, color_cycle);
             else
                 Gdk.cairo_set_source_rgba(cr, color_cell);
-            cr.rectangle(x, y, cell_width, cell_height);
+            cr.rectangle(x, y, cell_width * width, cell_height);
             cr.fill();
 
             // Pixbuf icons
@@ -278,8 +283,9 @@ namespace Turtlico {
                     x + cell_width / 2 - c.pixbuf.width / 2,
                     y + cell_height / 2 - c.pixbuf.height / 2);
                 cr.paint();
-                return;
+                return 1;
             }
+
             // Emoji icons
             if(c.id.length > 0 && (c.id[0] == '3' || c.id[0] == '2'))
                 Gdk.cairo_set_source_rgba(cr, color_editable);
@@ -294,60 +300,58 @@ namespace Turtlico {
                 else {
                     type_layout = create_pango_layout(c.data);
                 }
-                cr.move_to(x + cell_width / 2, y + cell_height - 15);
+                cr.move_to(x, y + cell_height - 15);
                 type_layout.set_alignment(Pango.Alignment.CENTER);
-                type_layout.set_width(cell_width);
-                type_layout.set_height(cell_height);
+                type_layout.set_width(cell_width * Pango.SCALE);
                 Pango.cairo_show_layout(cr, type_layout);
                 type_layout.set_font_description(small_font);
-                cr.move_to(x + cell_width / 2, y + 1);
+                cr.move_to(x, y + 1);
             }
             else
-                cr.move_to(x + cell_width / 2, y + 5);
+                cr.move_to(x, y + 5);
 
             Pango.Layout layout;
-            if (c.id == "int" || c.id== "str" || c.id == "obj") {
-                if (c.data.length > 7) {
-                    layout = create_pango_layout(c.data.substring(0, 4) + "...");
-                }
-                else {
-                    layout = create_pango_layout(c.data);
-                }
-                layout.set_justify(true);
+            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#") {
+                layout = create_pango_layout(c.data);
                 layout.set_font_description(small_font);
+                if (c.id == "#" || c.id== "str")
+                    Gdk.cairo_set_source_rgba(cr, color_black);
             }
             else {
                 layout = create_pango_layout(c.name);
                 layout.set_font_description(font);
             }
             layout.set_alignment(Pango.Alignment.CENTER);
-            layout.set_width(cell_width);
-            layout.set_height(cell_height);
+            layout.set_width(cell_width * width * Pango.SCALE);
+            layout.set_justify(false);
             Pango.cairo_show_layout(cr, layout);
-
+            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#")
+                return width;
+            else
+                return 1;
         }
 
         void on_drag_begin(Gdk.DragContext context) {
-            var surface = new Cairo.ImageSurface(Cairo.Format.RGB24,
-                                             cell_width, cell_height);
-            var ctx = new Cairo.Context(surface);
-            int x = mouse_x / cell_width;
             int y = mouse_y / cell_height;
-            if(y < program.size && x < program[y].size) {
-                draw_icon(ctx, 0, 0, program[y][x]);
-            }
-            else {
+            int x = mouse_to_program_x(mouse_x / cell_width, y);
+            if (!(y < program.size && x < program[y].size)) {
                 return;
             }
-            var pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0, cell_width, cell_height);
+            int icon_width = cell_width * (program[y][x].data.length / 7 + 1);
+            var surface = new Cairo.ImageSurface(Cairo.Format.RGB24,
+                icon_width, cell_height);
+            var ctx = new Cairo.Context(surface);
+            draw_icon(ctx, 0, 0, program[y][x]);
+            var pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0,
+                icon_width, cell_height);
             // Does not work when copying items
             // Gtk.drag_source_set_icon_pixbuf(this, pixbuf);
             Gtk.drag_set_icon_pixbuf(context, pixbuf, cell_width / 2, cell_height / 2);
         }
 
         void on_drag_data_get(Gdk.DragContext context, Gtk.SelectionData selection_data, uint info, uint time_) {
-            int x = mouse_x / cell_width;
             int y = mouse_y / cell_height;
+            int x = mouse_to_program_x(mouse_x / cell_width, y);
             if(y < program.size && x < program[y].size){
                 selection_data.set_text(program[y][x].id + ";" + program[y][x].data, -1);
                 if (context.get_selected_action() == Gdk.DragAction.MOVE) {
@@ -394,8 +398,8 @@ namespace Turtlico {
         bool on_button_press_event(Gdk.EventButton event) {
             grab_focus();
             if (event.button == 3) {
-                int x = mouse_x / cell_width;
                 int y = mouse_y / cell_height;
+                int x = mouse_to_program_x(mouse_x / cell_width, y);
                 if(y < program.size && x < program[y].size) {
                     var targets = Gtk.drag_dest_get_target_list(this);
                     Gtk.drag_begin_with_coordinates(this, targets, Gdk.DragAction.COPY,
@@ -409,8 +413,8 @@ namespace Turtlico {
             var modifiers = Gtk.accelerator_get_default_mod_mask();
 
             if (key_event.keyval == Gdk.Key.Delete) {
-                int x = mouse_x / cell_width;
                 int y = mouse_y / cell_height;
+                int x = mouse_to_program_x(mouse_x / cell_width, y);
                 if(y < program.size && x < program[y].size) {
                     if(program[y][x].id != "nl") {
                         program[y].remove_at(x);
@@ -426,9 +430,11 @@ namespace Turtlico {
                 (key_event.state & modifiers) == Gdk.ModifierType.CONTROL_MASK)
                 redo();
             if (key_event.keyval == Gdk.Key.F2) {
-                int x = mouse_x / cell_width;
                 int y = mouse_y / cell_height;
-                if (y < program.size && x < program[y].size) {
+                if (y >= program.size)
+                    return false;
+                int x = mouse_to_program_x(mouse_x / cell_width, y);
+                if (x < program[y].size) {
                     if (program[y][x].id == "int") {
                         num_chooser_dialog_spin_button.set_value(double.parse(program[y][x].data));
                         num_chooser_dialog_spin_button.grab_focus();
@@ -453,10 +459,10 @@ namespace Turtlico {
                         program[y][x] = program[y][x].set_data(str);
                         queue_draw();backup_program();
                     }
-                    if (program[y][x].id == "str" || program[y][x].id == "obj") {
+                    if (program[y][x].id == "str" || program[y][x].id == "obj" || program[y][x].id == "#") {
                         str_chooser_dialog_entry.text = program[y][x].data;
                         str_chooser_dialog_entry.grab_focus();
-                        if(program[y][x].id == "str") {
+                        if(program[y][x].id != "obj") {
                             str_chooser_dialog_entry.input_purpose = Gtk.InputPurpose.FREE_FORM;
                             #if TURTLICO_EMOJI_HINT
                             str_chooser_dialog_entry.input_hints = Gtk.InputHints.EMOJI;
@@ -679,6 +685,18 @@ namespace Turtlico {
                 }
                 l2.add(l);
             }
+        }
+
+        int mouse_to_program_x (int x, int y) {
+            if (program.size == 0 || y >= program.size)
+                return x;
+            int offset = 0;
+            for (int i = 0; i < x && i < program[y].size; i++)
+                offset += (program[y][i].data.length / 7);
+            debug(offset.to_string());
+            int result = x - offset;
+            if (result < 0) result = 0;
+            return result;
         }
     }
 }
