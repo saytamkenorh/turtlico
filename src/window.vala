@@ -164,8 +164,13 @@ namespace Turtlico {
                     GLib.Process.spawn_command_line_async("python3w '" + path + "'");
                 }
                 else {
+                    debug(path);
                     GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
+                    #if TURTLICO_FLATPAK
+                    GLib.Process.spawn_command_line_async("flatpak-spawn --host python3 '" + path + "'");
+                    #else
                     GLib.Process.spawn_command_line_async("python3 '" + path + "'");
+                    #endif
                 }
             }
             catch (Error e) {
@@ -193,9 +198,16 @@ namespace Turtlico {
 
         [GtkCallback]
         void on_save_as_btn_clicked() {
+            #if TURTLICO_FLATPAK
+            var dialog = new Gtk.FileChooserDialog(_("Select file"), this,
+                                                   Gtk.FileChooserAction.SAVE,
+                                                   _("Save"), Gtk.ResponseType.ACCEPT,
+                                                   _("Cancel"), Gtk.ResponseType.CANCEL);
+            #else
             var dialog = new Gtk.FileChooserNative(_("Select file"), this,
                                                    Gtk.FileChooserAction.SAVE,
                                                    null, null);
+            #endif
             dialog.modal = true;
             var filter = new Gtk.FileFilter();
             filter.add_pattern("*.tcp");
@@ -211,14 +223,24 @@ namespace Turtlico {
                 if (file != null)
                     on_save_btn_clicked();
             }
+            #if TURTLICO_FLATPAK
+                dialog.destroy();
+            #endif
         }
 
         [GtkCallback]
         void on_open_btn_clicked() {
             if (check_file_save()) return;
+            #if TURTLICO_FLATPAK
+            var dialog = new Gtk.FileChooserDialog(_("Select file"), this,
+                                                   Gtk.FileChooserAction.OPEN,
+                                                   _("Open"), Gtk.ResponseType.ACCEPT,
+                                                   _("Cancel"), Gtk.ResponseType.CANCEL);
+            #else
             var dialog = new Gtk.FileChooserNative(_("Select file"), this,
                                                    Gtk.FileChooserAction.OPEN,
                                                    null, null);
+            #endif
             dialog.modal = true;
             var filter = new Gtk.FileFilter();
             filter.add_pattern("*.tcp");
@@ -231,6 +253,9 @@ namespace Turtlico {
                     return;
                 open_file(file);
             }
+            #if TURTLICO_FLATPAK
+                dialog.destroy();
+            #endif
         }
 
         [GtkCallback]

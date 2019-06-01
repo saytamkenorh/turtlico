@@ -32,7 +32,11 @@ add_project_arguments(['-DGETTEXT_PACKAGE="turtlico"',
   '-DTURTLICO_VERSION="' + meson.project_version() + '"'], language: 'c')
 
 if turtlico_deps[1].version() > '3.22.20'
-	add_project_arguments(['-D', 'TURTLICO_EMOJI_HINT'], language: 'vala')
+   add_project_arguments(['-D', 'TURTLICO_EMOJI_HINT'], language: 'vala')
+endif
+
+if get_option('flatpak')
+   add_project_arguments(['-D', 'TURTLICO_FLATPAK'], language: 'vala')
 endif
 
 turtlico_executable = executable('turtlico', turtlico_sources,

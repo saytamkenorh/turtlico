@@ -693,7 +693,6 @@ namespace Turtlico {
             int offset = 0;
             for (int i = 0; i < x && i < program[y].size; i++)
                 offset += (program[y][i].data.length / 7);
-            debug(offset.to_string());
             int result = x - offset;
             if (result < 0) result = 0;
             return result;
