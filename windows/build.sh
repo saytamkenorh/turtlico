@@ -1,8 +1,8 @@
-pacman -Syu
-pacman -Su
+pacman -Syu --noconfirm
+pacman -Su --noconfirm
 pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-vala \
 mingw-w64-x86_64-meson mingw-w64-x86_64-gtk3 mingw-w64-x86_64-gettext mingw-w64-x86_64-desktop-file-utils \
-mingw-w64-x86_64-libgee --needed
+mingw-w64-x86_64-libgee mingw-w64-x86_64-gtksourceview4 --needed --noconfirm
 srcdir=$(pwd)/$line
 rm -rf ./build
 
@@ -12,9 +12,9 @@ if grep -q appstream_file "../data/meson.build"; then
   sed -i -e '18,32d' ../data/meson.build
 fi
 
-pacman -R mingw-w64-x86_64-turtlico
+pacman -R mingw-w64-x86_64-turtlico --noconfirm
 MINGW_INSTALLS=mingw64 makepkg-mingw -sCf
-pacman -U "$srcdir"*.tar.xz --force
+pacman -U "$srcdir"*.tar.xz --force --noconfirm
 
 echo Bundling runtime. This will take a while.
 rm -rf ./output
