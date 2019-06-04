@@ -138,8 +138,7 @@
                 <property name="can_focus">True</property>
                 <property name="focus_on_click">False</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Undo
-</property>
+                <property name="tooltip_text" translatable="yes">Undo</property>
                 <property name="image">image8</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_undo_btn_clicked" swapped="no"/>

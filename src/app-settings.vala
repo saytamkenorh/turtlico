@@ -30,7 +30,11 @@ namespace Turtlico {
 
         public AppSettings () {
            about_dialog.set_transient_for(this);
+           #if TURTLICO_FLATPAK
+           about_dialog.set_logo_icon_name("com.orsan.Turtlico");
+           #else
            about_dialog.set_logo(null);
+           #endif
            about_dialog.version = TURTLICO_VERSION;
 
            dark_mode_switch.active = settings.get_boolean("dark-mode");

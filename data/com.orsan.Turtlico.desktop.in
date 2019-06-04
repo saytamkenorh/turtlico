@@ -6,3 +6,4 @@ Type=Application
 Categories=GTK;Development;
 StartupNotify=true
 Icon=com.orsan.Turtlico
+MimeType=application/x-turtlico-project;

@@ -260,11 +260,55 @@ namespace Turtlico {
 
         [GtkCallback]
         void on_settings_btn_clicked() {
+            var previous_state = new Gee.ArrayList<string>.wrap(programview.enabled_plugins.to_array());
             var program_settings = new ProgramSettings(ref programview.enabled_plugins);
             program_settings.set_transient_for(this);
             program_settings.show_all();
             program_settings.delete_event.connect(()=>{
                 load_commands();
+                int remove_missing = -1;
+                // Check for missing commands
+                for (int y = 0; y < programview.program.size; y++)
+                {
+                    for (int x = 0; x < programview.program[y].size; x++)
+                    {
+                        bool found = false;
+                        foreach(Command c in programview.commands) {
+                            if (c.id == programview.program[y][x].id) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            if (remove_missing < 0) {
+                                var dialog = new Gtk.MessageDialog(this,
+                                    Gtk.DialogFlags.MODAL,
+                                    Gtk.MessageType.WARNING,
+                                    Gtk.ButtonsType.YES_NO,
+                                        _("Would you really like to apply these changes?"));
+                                dialog.secondary_text = _("The program contains commands that are only available from a plugin. Unavailable commands will be removed.");
+                                var answer = dialog.run();
+                                dialog.destroy();
+                                if (answer == Gtk.ResponseType.YES) {
+                                    remove_missing = 1;
+                                    programview.backup_clear();
+                                }
+                                else {
+                                    programview.enabled_plugins = previous_state;
+                                    load_commands();
+                                    y = programview.program.size;
+                                    break;
+                                }
+                            }
+                            if (remove_missing == 1) {
+                                programview.program[y].remove_at(x);
+                                x--;
+                            }
+                        }
+                    }
+                    if (remove_missing == 1)
+                        programview.backup_program();
+                }
                 return false;
             });
         }

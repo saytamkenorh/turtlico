@@ -660,7 +660,7 @@ namespace Turtlico {
             queue_draw();
         }
 
-        void backup_program () {
+        public void backup_program () {
             program_changed = true;
             if (history_index > 0) {
                 for (int i = history.size - history_index; i < history.size; i++)
@@ -672,6 +672,13 @@ namespace Turtlico {
             history.add(undo);
             while (history.size > history_buffer_size)
                 history.remove_at(0);
+        }
+
+        public void backup_clear (bool save_current_state = true) {
+            history.clear();
+            history_index = 0;
+            if (save_current_state)
+                backup_program();
         }
 
         void copy_list(ArrayList<ArrayList<Command>> l1,

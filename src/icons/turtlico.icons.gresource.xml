@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/com/orsan/Turtlico/icons">
+    <file>0_bf.png</file>
+    <file>0_ef.png</file>
+    <file>3_r.png</file>
     <file>python.png</file>
     <file>raspberrypi.png</file>
   </gresource>
