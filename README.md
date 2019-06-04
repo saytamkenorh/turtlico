@@ -17,8 +17,10 @@ Or clone this repository and build the program yourself:
 	meson ./ ./build --prefix /usr/local
 	cd ./build
 	ninja && sudo ninja install
-**Linux AppImage notes:**
-If you are using the AppImage version of Turtlico, you will need to install python3-tk (if you haven't done yet):
+**Linux notes:**
+
+If you are using the Linux version of Turtlico, you will need to install python3-tk (if you haven't done yet):
+
 *Ubuntu and other Debian-based distros:*
 
     sudo apt install python3-tk
@@ -27,10 +29,13 @@ If you are using the AppImage version of Turtlico, you will need to install pyth
     sudo dnf install python3-tk
 If you find issues with emoji rendering, make sure you have installed an emoji font.
 Try running one of the following commands to fix that:
+
 *Ubuntu and Debian (buster and newer)*
 
 	sudo apt install fonts-noto-color-emoji
 *Raspbian/Debian (stretch and older)*
 	
 	sudo apt install fonts-symbola
-
+*Arch/Manjaro*
+	
+	sudo pacman -S noto-fonts-emoji
