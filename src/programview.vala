@@ -80,6 +80,7 @@ namespace Turtlico {
         Pango.FontDescription small_font = new Pango.FontDescription();
 
         protected static string str_mark = ((char)31).to_string(); //Unit separator
+        public string resource_dir = "";
 
         public ProgramView () {
             // Props
@@ -173,7 +174,34 @@ namespace Turtlico {
         void on_drag_data_received (Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint info, uint time) {
             int length = selection_data.get_length();
             if(length > 0 && selection_data.get_format() == 8) {
-                string[] data = selection_data.get_text().split(";");
+                string[] data;
+                if(selection_data.get_text().has_prefix("file://")) {
+                    try {
+                        string path = selection_data.get_text().split("\r\n")[0];
+                        File input = File.new_for_uri(path);
+                        if (resource_dir == "") {
+                            throw new FileError.ACCES(_("Please save the project first."));
+                        }
+                        File dest = File.new_for_path(
+                            Path.build_filename(resource_dir, input.get_basename()));
+                        if (!dest.query_exists())
+                            input.copy(dest, FileCopyFlags.NONE);
+                        data = {"5_img", "./" + dest.get_basename()};
+                    }
+                    catch (Error e) {
+                        var dialog = new Gtk.MessageDialog((Gtk.Window)get_toplevel(),
+                                                            Gtk.DialogFlags.MODAL,
+                                                            Gtk.MessageType.ERROR,
+                                                            Gtk.ButtonsType.OK, "");
+                        dialog.text = _("Cannot insert the image");
+                        dialog.secondary_text = e.message;
+                        dialog.run(); dialog.destroy();
+                        return;
+                    }
+                }
+                else {
+                    data = selection_data.get_text().split(";");
+                }
                 string id = data[0];
                 try {
                     Command c = find_command_by_id(id);
@@ -207,7 +235,7 @@ namespace Turtlico {
                     }
                     else {
                         if (data.length >= 2)
-                            c = c.set_data(data[1]);
+                            c = c.set_data(data[1], resource_dir);
                         program[y].insert(x, c);
                     }
                     backup_program();
@@ -216,7 +244,7 @@ namespace Turtlico {
                     if (c.id == "tc") {
                         icon_data_dialog_tc(x, y);
                     }
-                    else if (c.id == "int") { c = c.set_data("0"); }
+                    else if (c.id == "int") { c = c.set_data("0", resource_dir); }
                     return;
                 }
                 catch (FileError e) {}
@@ -242,7 +270,7 @@ namespace Turtlico {
                 x = 0;
                 for (int command = 0; command < program[line].size; command++) {
                     if (program[line][command].id == "int" && program[line][command].data == "") {
-                        program[line][command] = program[line][command].set_data("0");
+                        program[line][command] = program[line][command].set_data("0", resource_dir);
                     }
                     x += draw_icon(cr, x * cell_width, line * cell_height,
                               program[line][command]);
@@ -283,7 +311,8 @@ namespace Turtlico {
                     x + cell_width / 2 - c.pixbuf.width / 2,
                     y + cell_height / 2 - c.pixbuf.height / 2);
                 cr.paint();
-                return 1;
+                if (c.id != "5_img")
+                    return 1;
             }
 
             // Emoji icons
@@ -311,10 +340,10 @@ namespace Turtlico {
                 cr.move_to(x, y + 5);
 
             Pango.Layout layout;
-            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#") {
+            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img") {
                 layout = create_pango_layout(c.data);
                 layout.set_font_description(small_font);
-                if (c.id == "#" || c.id== "str")
+                if (c.id == "#" || c.id== "str" || c.id == "5_img")
                     Gdk.cairo_set_source_rgba(cr, color_black);
             }
             else {
@@ -325,7 +354,7 @@ namespace Turtlico {
             layout.set_width(cell_width * width * Pango.SCALE);
             layout.set_justify(false);
             Pango.cairo_show_layout(cr, layout);
-            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#")
+            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img")
                 return width;
             else
                 return 1;
@@ -456,10 +485,11 @@ namespace Turtlico {
                             var end = str.index_of_nth_char(index);
                             str = str.slice(0, end);
                         }
-                        program[y][x] = program[y][x].set_data(str);
+                        program[y][x] = program[y][x].set_data(str, resource_dir);
                         queue_draw();backup_program();
                     }
-                    if (program[y][x].id == "str" || program[y][x].id == "obj" || program[y][x].id == "#") {
+                    if (program[y][x].id == "str" || program[y][x].id == "obj"
+                        || program[y][x].id == "#" || program[y][x].id == "5_img") {
                         str_chooser_dialog_entry.text = program[y][x].data;
                         str_chooser_dialog_entry.grab_focus();
                         if(program[y][x].id != "obj") {
@@ -477,7 +507,7 @@ namespace Turtlico {
                         str_chooser_dialog.set_transient_for((Gtk.Window)get_toplevel());
                         str_chooser_dialog.run();
                         str_chooser_dialog.hide();
-                        program[y][x] = program[y][x].set_data(str_chooser_dialog_entry.text);
+                        program[y][x] = program[y][x].set_data(str_chooser_dialog_entry.text, resource_dir);
                         queue_draw();backup_program();
                     }
                     if (program[y][x].id == "tc") {
@@ -510,7 +540,7 @@ namespace Turtlico {
                     }
                 }
             }
-            program[y][x] = program[y][x].set_data(type);
+            program[y][x] = program[y][x].set_data(type, resource_dir);
             queue_draw();
         }
 
@@ -519,7 +549,7 @@ namespace Turtlico {
             python_view.buffer.text = program[y][x].data;
             python_code_dialog.run();
             python_code_dialog.hide();
-            program[y][x] = program[y][x].set_data(python_view.buffer.text);
+            program[y][x] = program[y][x].set_data(python_view.buffer.text, resource_dir);
             queue_draw();
         }
 
@@ -616,7 +646,7 @@ namespace Turtlico {
                     try {
                         Command c = find_command_by_id(props[0]);
                         // Set data only if necessary
-                        if (props[1] != "") c = c.set_data(props[1]);
+                        if (props[1] != "") c = c.set_data(props[1], resource_dir);
 
                         program[y].add(c);
                     }

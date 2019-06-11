@@ -88,6 +88,8 @@ namespace Turtlico {
             output = new Gee.ArrayList<string>();
             output.add("""#!/usr/bin/python3
 from turtle import *
+from tempfile import NamedTemporaryFile
+from PIL import Image
 import math, random, os, time
 color('black');speed(1);title('Turtle');colormode(255)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -251,7 +253,10 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
             // Can check next icon
             bool check_next_icon = x + 1 < program[y].size;
             string parsed = "";
-            if (check_next_icon && program[y][x + 1].id == "(") {
+            if (f.id == "5_img") {
+                parsed = indentation + f.function + "('" + program[y][x].data + "')";
+            }
+            else if (check_next_icon && program[y][x + 1].id == "(") {
                 parsed = indentation + f.function;
             }
             else if (check_next_icon && (program[y][x + 1].id == "int" || program[y][x+1].id == "obj")){

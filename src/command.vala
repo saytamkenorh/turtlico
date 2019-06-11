@@ -70,9 +70,30 @@ namespace Turtlico {
          * Return a copy of this with changed data property.
          *
         */
-        public Command set_data (string new_data) {
+        public Command set_data (string new_data, string resource_dir) {
             var c = new Command(this.name, this.help, this.id, new_data);
-            c._pixbuf = pixbuf;
+            if (this.id == "5_img") {
+                if (new_data.has_suffix(".png") ||
+                    new_data.has_suffix(".bmp") ||
+                    new_data.has_suffix(".gif"))
+                {
+                    try {
+                        string path = new_data;
+                        if (path.has_prefix("./")) {
+                            path = Path.build_filename(resource_dir, path.substring(2));
+                        }
+                        var pb = new Gdk.Pixbuf.from_file(path);
+                        var pb_scaled = pb.scale_simple(30,
+                            (int)(((float)pb.height / (float)pb.width * 30).abs()),
+                            Gdk.InterpType.BILINEAR);
+                        c._pixbuf = pb_scaled;
+                    } catch (Error e) {c._pixbuf = null; debug(e.message);}
+                }
+                else
+                    c._pixbuf = null;
+            }
+            else
+                c._pixbuf = pixbuf;
             return c;
         }
 

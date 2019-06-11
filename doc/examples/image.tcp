@@ -1,5 +1,5 @@
-0_rs,,;str,./image.gif,;nl,,;
-0_ds,,;str,./image.gif,;nl,,;
+nl,,;
+0_ds,,;(,,;5_img,./image.gif,;),,;nl,,;
 0_pu,,;0_speed,,;int,5,;nl,,;
 obj,t2,;2_assign,,;5_newt,,;nl,,;
 0_left,,;0_go,,;int,200,;0_right,,;nl,,;

@@ -39,6 +39,7 @@
     "modules": [
         {
             "name" : "gtksourceview",
+            "builddir": true,
             "buildsystem": "meson",
             "sources" : [
                 {

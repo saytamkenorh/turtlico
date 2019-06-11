@@ -46,6 +46,7 @@ namespace Turtlico {
             get {return _current_file;}
             set {
                 _current_file = value;
+                programview.resource_dir = Path.get_dirname(current_file.get_path());
                 update_window_title();
             }
         }
@@ -323,12 +324,12 @@ namespace Turtlico {
         public void open_file (File file) {
             try {
                 var stream = file.read();
+                current_file = file;
                 programview.load_from_stream_(stream, true);
                 load_commands();
                 stream = file.read();
                 programview.load_from_stream_(stream, false);
                 stream.close();
-                current_file = file;
             }
             catch (Error e) {
                 msg(_("Failed to open the program"), e.message, Gtk.MessageType.ERROR);

@@ -13,6 +13,7 @@
 				{"id":"0_speed", "icon":"⏩", "?": 'Speed' ,"type": 0, "func": "speed", "params": "1" },
 				{"id":"int", "icon":"🔢", "?": 'Number', "type": -1 },
 				{"id":"str", "icon":"🔤", "?": 'String', "type": -1 },
+				{"id":"0_len", "icon":"len", "?": 'Length of (string, list etc)', "type": 0, "func": "len", "params": "" },
 				{"id":"0_pos", "icon":"🚩", "?": 'Set position' ,"type": 0, "func": "setposition", "params": "0, 0" },
 				{"id":"0_penc", "icon":"🖌", "?": 'Set pen color' ,"type": 0, "func": "color", "params": "'black'" },
 				{"id":"0_pu", "icon":"✐", "?": 'Pull the pen up – no drawing when moving.' ,"type": 0, "func": "penup", "params": "" },
@@ -27,9 +28,10 @@
 				{"id":"0_bf", "icon":"r:0_bf.png", "?": 'Begin fill' , "type": 0, "func": "begin_fill", "params": "" },
 				{"id":"0_ef", "icon":"r:0_ef.png", "?": 'End fill - fill the drawen shape' , "type": 0, "func": "end_fill", "params": "" },
 				{"id":"0_cs", "icon":"💧", "?": 'Clear screen' , "type": 0, "func": "clear", "params": "" },
-				{"id":"0_rs", "icon":"🌄", "?": 'Register a shape or an image' , "type": 0, "func": "addshape", "params": "" },
+				{"id":"5_img", "icon":"🖼", "?": 'Image' , "type": 0, "func": "tcf_get_image", "params": "" },
 				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "" },
 				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
+				{"id":"0_plcimg", "icon":"r:0_plcimg.png", "?": 'Place image at the position of the turtle' , "type": 0, "func": "tcf_place_img", "params": "" },
 				{"id":"0_sleep", "icon":"💤", "?": 'Sleep n seconds(freezes window)' , "type": 0, "func": "time.sleep", "params": "1" }
 			]
 		},
@@ -59,19 +61,24 @@
 				{"id":"[", "icon":"[", "?": 'Left square bracket', "type": 4, "c":"["},
 				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":","},
 				{"id":"]", "icon":"]", "?": 'Right square bracket', "type": 4, "c":"]"},
-				{"id":":", "icon":":", "?": 'Block of commands start', "type": 4, "c":":"},
+				{"id":"2_del", "icon":"del", "?": 'Delete an object', "type": 3, "c":"del "},
+				{"id":"0_apnd", "icon":"r:0_apnd.png", "?": 'Append an item', "type": 0, "func": "append", "params": "" },
+				{"id":"0_ins", "icon":"r:0_ins.png", "?": 'Insert an item', "type": 0, "func": "insert", "params": "" },
+				{"id":"0_clr", "icon":"r:0_clr.png", "?": 'Clear list', "type": 0, "func": "clear", "params": "" },
+				{"id":"0_index", "icon":"r:0_index.png", "?": 'Returns the index of the first element with the specified value', "type": 0, "func": "index", "params": "" },
 				{"id":"if", "icon":"❔if", "?": 'If condition do something', "type": 3, "c":"if"},
 				{"id":"else", "icon":"else", "?": 'Else', "type": 3, "c":"else"},
+				{"id":":", "icon":":", "?": 'Block of commands start', "type": 4, "c":":"},
 				{"id":"==", "icon":"==", "?": 'Equals', "type": 4, "c":"=="},
 				{"id":"<", "icon":"<", "?": 'is less than', "type": 4, "c":"<"},
 				{"id":">", "icon":">", "?": 'is greater than', "type": 4, "c":">"},
+				{"id":"3_def", "icon":"def", "?": 'Define a method', "type": -1},
+				{"id":"3_r", "icon":"r:3_r.png", "?": 'Return a value', "type": 3, "c":"return"},
 				{"id":"1_rep", "icon":"🔂", "?": 'Repeat block of commands', "type": -1},
 				{"id":"1_for", "icon":"for", "?": 'For', "type": -1},
 				{"id":"in", "icon":"in", "?": 'in', "type": 4, "c":" in "},
 				{"id":"3_b", "icon":"🛑", "?": 'Break', "type": 3, "c":"break"},
 				{"id":"3_c", "icon":"↦", "?": 'Continue', "type": 3, "c":"continue"},
-				{"id":"3_def", "icon":"def", "?": 'Define a method', "type": -1},
-				{"id":"3_r", "icon":"r:3_r.png", "?": 'Return a value', "type": 3, "c":"return"},
 				{"id":"obj", "icon":"🆔", "?": 'Object', "type": -1},
 				{"id":"2_assign", "icon":"=", "?": 'Assign value to a variable', "type": 4, "c":"="},
 				{"id":"2_+=", "icon":"↖", "?": 'Increase value by', "type": 4, "c":"+="},
@@ -79,12 +86,12 @@
 				{"id":"2_.", "icon":".", "?": 'Dot (use to access an object property)', "type": 4, "c":"."},
 				{"id":"tc", "icon":"🔄", "?": 'Type conversion', "type": -1},
 				{"id":"python", "icon":"r:python.png", "?": 'Direct Python code', "type": -1},
-				{"id":"5_rand", "icon":"🎲", "?": 'Random number' , "type": 5, "func": "random.randint", "params": "1, 100" },
-				{"id":"+", "icon":"➕", "?": 'Plus', "type": 4, "c":"+"},
-				{"id":"-", "icon":"➖", "?": 'Minus', "type": 4, "c":"-"},
-				{"id":"*", "icon":"❌", "?": 'Times', "type": 4, "c":"*"},
-				{"id":"/", "icon":"➗", "?": 'Divided', "type": 4, "c":"/"},
+				{"id":"+", "icon":"+", "?": 'Plus', "type": 4, "c":"+"},
+				{"id":"-", "icon":"-", "?": 'Minus', "type": 4, "c":"-"},
+				{"id":"*", "icon":"*", "?": 'Multiply', "type": 4, "c":"*"},
+				{"id":"/", "icon":"/", "?": 'Divide', "type": 4, "c":"/"},
 				{"id":"%", "icon":"%", "?": 'Modulo', "type": 4, "c":"%"},
+				{"id":"5_rand", "icon":"🎲", "?": 'Random number' , "type": 5, "func": "random.randint", "params": "1, 100" },
 				{"id":"0_emc", "icon":"👇", "?": 'Connect a function to control mouse clicks' , "type": 0, "func": "onscreenclick", "params": "" },
 				{"id":"0_ekey", "icon":"⌨", "?": 'Connect a function that will be activated by pressing specified key' , "type": 0, "func": "onkey", "params": "" },
 				{"id":"0_tmr", "icon":"⌚", "?": 'Call a function after n miliseconds' , "type": 0, "func": "ontimer", "params": "" },
@@ -140,6 +147,31 @@
 		import shutil\
 		shutil.rmtree(path)\
 	else: raise Exception('File or direcotry {} does not exists!'.format(path))"
+		},
+		{
+			"id": "tcf_place_img",
+			"code": "def tcf_place_img(image, t=None):\
+	turt = Turtle()\
+	turt.shape(image)\
+	if t != None:\
+		turt.setpos(t.pos())\
+	else:\
+		turt.setpos(pos())\
+	return turt"
+		},
+		{
+			"id": "tcf_get_image",
+			"code": "def tcf_get_image(path):\
+	if not path in getshapes():\
+		if not path.endswith('.gif'):\
+			p = Image.open(path)\
+			output = NamedTemporaryFile(suffix='.gif')\
+			p.save(output, 'GIF')\
+			register_shape(output.name)\
+			return output.name\
+		else:\
+			register_shape(path)\
+	return path"
 		}
 	]
 }
