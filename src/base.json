@@ -52,7 +52,9 @@
 				{"id":"5_rad", "icon":"rad", "?": 'Convert angle from degrees to radians.', "type": 5, "func": "math.radians", "params": ""},
 				{"id":"5_deg", "icon":"deg", "?": 'Convert angle from radians to degrees.', "type": 5, "func": "math.degrees", "params": ""},
 				{"id":"5_rnd", "icon":"rnd", "?": 'Round a number', "type": 5, "func": "round", "params": ""},
-				{"id":"4_color", "icon":"🎨", "?": 'Color (property)' , "type": 4, "c":"color"}
+				{"id":"4_color", "icon":"🎨", "?": 'Color (property)' , "type": 4, "c":"color"},
+				{"id":"true", "icon":"r:true.png", "?": 'True' , "type": 4, "c":"True"},
+				{"id":"false", "icon":"r:false.png", "?": 'False' , "type": 4, "c":"False"}
 			]
 		},
 		{
@@ -70,12 +72,17 @@
 				{"id":"else", "icon":"else", "?": 'Else', "type": 3, "c":"else"},
 				{"id":":", "icon":":", "?": 'Block of commands start', "type": 4, "c":":"},
 				{"id":"==", "icon":"==", "?": 'Equals', "type": 4, "c":"=="},
+				{"id":"!=", "icon":"!=", "?": 'Not equals', "type": 4, "c":"!="},
 				{"id":"<", "icon":"<", "?": 'is less than', "type": 4, "c":"<"},
 				{"id":">", "icon":">", "?": 'is greater than', "type": 4, "c":">"},
+				{"id":"&", "icon":"and", "?": 'and', "type": 4, "c":" and "},
+				{"id":"||", "icon":"or", "?": 'or', "type": 4, "c":" or "},
+				{"id":"!", "icon":"not", "?": 'or', "type": 4, "c":" not "},
 				{"id":"3_def", "icon":"def", "?": 'Define a method', "type": -1},
 				{"id":"3_r", "icon":"r:3_r.png", "?": 'Return a value', "type": 3, "c":"return"},
 				{"id":"1_rep", "icon":"🔂", "?": 'Repeat block of commands', "type": -1},
 				{"id":"1_for", "icon":"for", "?": 'For', "type": -1},
+				{"id":"1_while", "icon":"r:1_while.png", "?": 'Repeat while the condition is true', "type": -1},
 				{"id":"in", "icon":"in", "?": 'in', "type": 4, "c":" in "},
 				{"id":"3_b", "icon":"🛑", "?": 'Break', "type": 3, "c":"break"},
 				{"id":"3_c", "icon":"↦", "?": 'Continue', "type": 3, "c":"continue"},

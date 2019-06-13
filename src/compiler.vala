@@ -144,6 +144,9 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     if (program[y][x].id == "1_for") {
                         output.add(indentation + "for "); continue;
                     }
+                    if (program[y][x].id == "1_while") {
+                        output.add(indentation + "while "); continue;
+                    }
                     // Functions
                     if (program[y][x].id == "3_def") {
                         if (x + 2 < program[y].size &&
