@@ -25,6 +25,8 @@ namespace Turtlico {
         Gtk.AboutDialog about_dialog;
         [GtkChild]
         Gtk.Switch dark_mode_switch;
+        [GtkChild]
+        Gtk.Switch debug_data_switch;
 
         Settings settings = new Settings("com.orsan.Turtlico");
 
@@ -38,6 +40,7 @@ namespace Turtlico {
            about_dialog.version = TURTLICO_VERSION;
 
            dark_mode_switch.active = settings.get_boolean("dark-mode");
+           debug_data_switch.active = settings.get_boolean("debug-data");
         }
 
         [GtkCallback]
@@ -49,6 +52,12 @@ namespace Turtlico {
         [GtkCallback]
         bool on_dark_mode_switch_state_set(Gtk.Switch sw, bool state) {
             settings.set_boolean("dark-mode", state);
+            return false;
+        }
+
+        [GtkCallback]
+        bool on_debug_data_switch_state_set(Gtk.Switch sw, bool state) {
+            settings.set_boolean("debug-data", state);
             return false;
         }
 	}

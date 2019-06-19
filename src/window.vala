@@ -144,7 +144,8 @@ namespace Turtlico {
 		[GtkCallback]
 		void on_run_btn_clicked() {
             try {
-                string output = compiler.compile(programview.program);
+                string output = compiler.compile(programview.program,
+                    settings.get_boolean("debug-data"));
                 string path;
                 if (current_file != null && !current_file.get_path().has_prefix("/run/user"))
                     path = current_file.get_path() + ".py";
@@ -161,18 +162,64 @@ namespace Turtlico {
                     written += dos.write (data[written:data.length]);
                 }
                 // RUN
-                if (GLib.FileUtils.test("C:\\Windows", GLib.FileTest.IS_DIR)){
-                    GLib.Process.spawn_command_line_async("python3w '" + path + "'");
-                }
-                else {
-                    debug(path);
-                    GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
-                    #if TURTLICO_FLATPAK
-                    GLib.Process.spawn_command_line_async("flatpak-spawn --host python3 '" + path + "'");
-                    #else
-                    GLib.Process.spawn_command_line_async("python3 '" + path + "'");
-                    #endif
-                }
+                var t = new Thread<int>("Debugger thread", ()=>{
+                    string stdout = "";
+                    string stderr = "";
+                    int status = 0;
+                    try {
+                        if (GLib.FileUtils.test("C:\\Windows", GLib.FileTest.IS_DIR)){
+                            GLib.Process.spawn_command_line_sync("python3w '" + path + "'",
+                                out stdout, out stderr, out status);
+                        }
+                        else {
+                            debug(path);
+                            GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
+                            #if TURTLICO_FLATPAK
+                            GLib.Process.spawn_command_line_sync("flatpak-spawn --host python3 '" + path + "'",
+                                out stdout, out stderr, out status);
+                            #else
+                            GLib.Process.spawn_command_line_sync("python3 '" + path + "'",
+                                out stdout, out stderr, out status);
+                            #endif
+                        }
+                    }
+                    catch (Error e) {
+                        string error_msg = e.message;
+                        Idle.add(()=>{
+                            msg(error_msg, "", Gtk.MessageType.ERROR);
+                            return false;
+                        });
+                    }
+                    debug(_("stdout of child process:\n") + stdout);
+                    debug(_("stderr of child process:\n") + stderr);
+                    Idle.add(()=>{
+                        // Show error dialog
+                        if (status != 0 && stderr != "") {
+                            string[] err_lines = stderr.split("\n");
+                            string error = err_lines[err_lines.length - 2];
+                            if (error == "turtle.Terminator")
+                                return false;
+                            // Extracts line
+                            if (settings.get_boolean("debug-data")) {
+                                Gee.ArrayList<string> words =
+                                    new Gee.ArrayList<string>.wrap(stderr.split(" "));
+                                int i = words.index_of("line");
+                                int code_line = int.parse(words[i + 1].replace(",", ""));
+                                code_line--; // Python indexes lines from 1
+                                int line = compiler.out_line_to_src_line(programview.program, code_line);
+                                line++; // We show user line numbers indexed from 1
+                                error += "\n" + _("Error occurred at line ") + line.to_string();
+                            }
+
+                            msg(_("Program crashed"),
+                                error,
+                                Gtk.MessageType.ERROR);
+                        }
+                        return false;
+                    });
+                    return 0;
+                });
+
             }
             catch (Error e) {
                 msg(e.message, "", Gtk.MessageType.ERROR);

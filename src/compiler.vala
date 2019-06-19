@@ -84,7 +84,18 @@ namespace Turtlico {
             }
         }
 
-        public string compile(Gee.ArrayList<Gee.ArrayList<Command>> program) {
+        public int out_line_to_src_line (
+            Gee.ArrayList<Gee.ArrayList<Command>> program, int i)
+        {
+            string[] src = compile(program).split("\n");
+            while (i > 0 && !src[i].has_prefix("# Line: "))
+                i--;
+            return int.parse(src[i].replace("# Line: ", ""));
+        }
+
+        public string compile(Gee.ArrayList<Gee.ArrayList<Command>> program,
+            bool write_line_hints = true)
+        {
             output = new Gee.ArrayList<string>();
             output.add("""#!/usr/bin/python3
 from turtle import *
@@ -93,7 +104,8 @@ from PIL import Image
 import math, random, os, time
 color('black');speed(1);title('Turtle');colormode(255)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-# Generated code""");
+# Generated code
+""");
             modules_to_load = new Gee.LinkedList<string>();
             // Plugins
             foreach(string plugin in enabled_plugins) {
@@ -104,6 +116,10 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                 string indentation = "";
                 bool increase_indent = true;
                 uint param_level = 0;
+                if (write_line_hints) {
+                    output.add("# Line: " + y.to_string());
+                    output.add("");
+                }
                 for(int x = 0; x < program[y].size; x++) {
                     out_line = output.size - 1;
                     // Functions
@@ -238,7 +254,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
             output.add("listen();done()");
             string ret = string.joinv("\n", output.to_array());
-            debug("\n" + ret);
+            debug(_("Generated code:\n") + ret);
             return ret;
         }
 

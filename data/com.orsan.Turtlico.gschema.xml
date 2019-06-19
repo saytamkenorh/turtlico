@@ -8,6 +8,13 @@
            If enabled, the app interface will use the dark theme.
         </description>
     </key>
+    <key name="debug-data" type="b">
+      <default>true</default>
+      <summary>Write debug data to output files</summary>
+      <description>
+           If enabled, Turtlico writes to output files marks to help track errors.
+        </description>
+    </key>
   </schema>
 </schemalist>
 

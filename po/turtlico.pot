@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-13 18:01+0200\n"
+"POT-Creation-Date: 2019-06-19 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,14 @@ msgstr ""
 msgid "If enabled, the app interface will use the dark theme."
 msgstr ""
 
+#: data/com.orsan.Turtlico.gschema.xml:13
+msgid "Write debug data to output files"
+msgstr ""
+
+#: data/com.orsan.Turtlico.gschema.xml:14
+msgid "If enabled, Turtlico writes to output files marks to help track errors."
+msgstr ""
+
 #: src/window.ui:69
 msgid "Start your program"
 msgstr ""
@@ -41,7 +49,7 @@ msgstr ""
 msgid "Open program"
 msgstr ""
 
-#: src/window.ui:105 src/window.vala:205
+#: src/window.ui:105 src/window.vala:252
 msgid "Save"
 msgstr ""
 
@@ -118,11 +126,17 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/app-settings.ui:31
+#: src/app-settings.ui:32
 msgid "Dark mode"
 msgstr ""
 
-#: src/app-settings.ui:76
+#: src/app-settings.ui:60
+msgid ""
+"Write debug data to output files\n"
+"(this enables error line tracking)"
+msgstr ""
+
+#: src/app-settings.ui:96
 msgid "About Turtlico"
 msgstr ""
 
@@ -136,57 +150,75 @@ msgid "Cannot save the output file: %s\n"
 msgstr ""
 
 #: src/window.vala:193
+msgid "stdout of child process:\n"
+msgstr ""
+
+#: src/window.vala:194
+msgid "stderr of child process:\n"
+msgstr ""
+
+#. Python indexes lines from 1
+#. We show user line numbers indexed from 1
+#: src/window.vala:211
+msgid "Error occurred at line "
+msgstr ""
+
+#: src/window.vala:214
+msgid "Program crashed"
+msgstr ""
+
+#: src/window.vala:240
 msgid "Failed to save the program"
 msgstr ""
 
-#: src/window.vala:203 src/window.vala:208 src/window.vala:236
-#: src/window.vala:241
+#: src/window.vala:250 src/window.vala:255 src/window.vala:283
+#: src/window.vala:288
 msgid "Select file"
 msgstr ""
 
-#: src/window.vala:206 src/window.vala:239 src/window.vala:477
+#: src/window.vala:253 src/window.vala:286 src/window.vala:524
 msgid "Cancel"
 msgstr ""
 
-#: src/window.vala:215 src/window.vala:248
+#: src/window.vala:262 src/window.vala:295
 msgid "Turtlico project (*.tcp)"
 msgstr ""
 
-#: src/window.vala:238
+#: src/window.vala:285
 msgid "Open"
 msgstr ""
 
-#: src/window.vala:289
+#: src/window.vala:336
 msgid "Would you really like to apply these changes?"
 msgstr ""
 
-#: src/window.vala:290
+#: src/window.vala:337
 msgid ""
 "The program contains commands that are only available from a plugin. "
 "Unavailable commands will be removed."
 msgstr ""
 
-#: src/window.vala:335
+#: src/window.vala:382
 msgid "Failed to open the program"
 msgstr ""
 
-#: src/window.vala:472
+#: src/window.vala:519
 msgid "Would you like to save your changes before closing the program?"
 msgstr ""
 
-#: src/window.vala:473
+#: src/window.vala:520
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr ""
 
-#: src/window.vala:475
+#: src/window.vala:522
 msgid "Yes"
 msgstr ""
 
-#: src/window.vala:476
+#: src/window.vala:523
 msgid "No"
 msgstr ""
 
-#: src/window.vala:493
+#: src/window.vala:540
 msgid "Unnamed"
 msgstr ""
 
@@ -211,6 +243,10 @@ msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
 "Command ID: "
+msgstr ""
+
+#: src/compiler.vala:257
+msgid "Generated code:\n"
 msgstr ""
 
 #: src/command.vala:123

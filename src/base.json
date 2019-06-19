@@ -153,7 +153,7 @@
 	elif os.path.isdir(path):\
 		import shutil\
 		shutil.rmtree(path)\
-	else: raise Exception('File or direcotry {} does not exists!'.format(path))"
+	else: raise Exception('File or directory {} does not exist!'.format(path))"
 		},
 		{
 			"id": "tcf_place_img",
