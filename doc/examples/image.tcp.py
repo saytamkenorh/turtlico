@@ -6,6 +6,7 @@ import math, random, os, time
 color('black');speed(1);title('Turtle');colormode(255)
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Generated code
+
 def tcf_get_image(path):
 	if not path in getshapes():
 		if not path.endswith('.gif'):
