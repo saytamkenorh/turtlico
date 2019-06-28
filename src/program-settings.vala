@@ -16,15 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+using Gee;
+
 namespace Turtlico {
 	[GtkTemplate (ui = "/com/orsan/Turtlico/program-settings.ui")]
 	class ProgramSettings : Gtk.Window {
 	    [GtkChild]
 	    Gtk.Box plugins_box;
+	    [GtkChild]
+	    Gtk.Label all_icons_count_label;
+	    [GtkChild]
+	    Gtk.Label icons_count_label;
 
 	    public Gee.ArrayList<string> plugins_active;
 
-	    public ProgramSettings (ref Gee.ArrayList<string> plugins_active) {
+	    public ProgramSettings (ref Gee.ArrayList<string> plugins_active,
+	        ArrayList<ArrayList<Command>> program) {
             this.plugins_active = plugins_active;
             // Add plugins
             try {
@@ -69,6 +76,19 @@ namespace Turtlico {
                 dialog.run();
                 dialog.destroy();
             }
+            // Stats
+            int icons_all = 0;
+            int icons = 0;
+            foreach (var line in program) {
+                foreach (var c in line) {
+                    icons_all++;
+                    if (c.id != "nl" && c.id != "tab" && c.id != "#") {
+                        icons++;
+                    }
+                }
+            }
+            all_icons_count_label.label = _("Count of icons: ") + icons_all.to_string();
+            icons_count_label.label = _("Count of icons (without formatting icons): ") + icons.to_string();
 	    }
 
 	    void add_plugin(string name, string file) {

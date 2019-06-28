@@ -264,6 +264,8 @@ namespace Turtlico {
             var state = style_context.get_state();
             color_cell = style_context.get_color(state);
 
+            Gdk.Rectangle rect;
+            Gdk.cairo_get_clip_rectangle(cr, out rect);
             int width = 0;
             int x;
             for (int line = 0; line < program.size; line++) {
@@ -272,13 +274,23 @@ namespace Turtlico {
                     if (program[line][command].id == "int" && program[line][command].data == "") {
                         program[line][command] = program[line][command].set_data("0", resource_dir);
                     }
-                    x += draw_icon(cr, x * cell_width, line * cell_height,
-                              program[line][command]);
+                    if (line >= rect.y / cell_height && line <= (rect.y + rect.height) / cell_height) {
+                        x += draw_icon(cr, x * cell_width, line * cell_height,
+                                  program[line][command]);
+                    }
+                    else {
+                        Command c = program[line][command];
+                        if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img") {
+                            x+=(c.data.length / 7 + 1);
+                        }
+                        else {x++;}
+                    }
                 }
                 if (x > width)
-                    width = (program[line].size + 2) * cell_width;
+                    width = x;
             }
-            set_size_request(width, (program.size + 2) * cell_height);
+            set_size_request((width + 1) * cell_width,
+                (program.size + 2) * cell_height);
             return true;
         }
 
@@ -727,10 +739,19 @@ namespace Turtlico {
         int mouse_to_program_x (int x, int y) {
             if (program.size == 0 || y >= program.size)
                 return x;
-            int offset = 0;
-            for (int i = 0; i < x && i < program[y].size; i++)
-                offset += (program[y][i].data.length / 7);
-            int result = x - offset;
+            int result = 0;
+            int i = 0;
+            while (i < x && result < program[y].size) {
+                for (int iterator = 0;
+                    iterator < (program[y][result].data.length / 7) && i < x && result < program[y].size;
+                    iterator++)
+                {
+                    i++;
+                }
+                if (i >= x) break;
+                result++;
+                i++;
+            }
             if (result < 0) result = 0;
             return result;
         }

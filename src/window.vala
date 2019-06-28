@@ -309,7 +309,8 @@ namespace Turtlico {
         [GtkCallback]
         void on_settings_btn_clicked() {
             var previous_state = new Gee.ArrayList<string>.wrap(programview.enabled_plugins.to_array());
-            var program_settings = new ProgramSettings(ref programview.enabled_plugins);
+            var program_settings = new ProgramSettings(ref programview.enabled_plugins,
+                programview.program);
             program_settings.set_transient_for(this);
             program_settings.show_all();
             program_settings.delete_event.connect(()=>{
