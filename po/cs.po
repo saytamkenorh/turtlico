@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-19 14:58+0200\n"
+"POT-Creation-Date: 2019-06-30 20:53+0200\n"
 "PO-Revision-Date: 2018-05-31 16:17+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -39,10 +39,12 @@ msgstr "Zapisovat data ladění do výstupních souborů"
 
 #: data/com.orsan.Turtlico.gschema.xml:14
 msgid "If enabled, Turtlico writes to output files marks to help track errors."
-msgstr "Pokud povoleno, Turtlico zapisuje do výstupních souborů značky, které pomáhají sledovat chyby."
+msgstr ""
+"Pokud povoleno, Turtlico zapisuje do výstupních souborů značky, které "
+"pomáhají sledovat chyby."
 
 #: src/window.ui:69
-msgid "Start your program"
+msgid "Run program"
 msgstr "Spustit program"
 
 #: src/window.ui:87
@@ -74,7 +76,7 @@ msgid "Project settings"
 msgstr "Nastavení projektu"
 
 #: src/window.ui:208
-msgid "Drop here items to delete them"
+msgid "Drop items here to delete them"
 msgstr "Sem přetáhněte příkazy ke smazání"
 
 #: src/programview.ui:44
@@ -95,7 +97,7 @@ msgid "Enter a string"
 msgstr "Zadejte řetězec"
 
 #: src/programview.ui:275
-msgid "Select a data type"
+msgid "Select data type"
 msgstr "Vyberte datový typ"
 
 #: src/programview.ui:331
@@ -115,12 +117,16 @@ msgid "Custom"
 msgstr "Jiný"
 
 #: src/programview.ui:408
-msgid "Enter custom data type name"
+msgid "Enter name of your custom data type"
 msgstr "Sem zadejte datový typ"
 
 #: src/program-settings.ui:28
-msgid "Addinitional commands"
+msgid "Additional commands"
 msgstr "Přídavné příkazy (doplňky)"
+
+#: src/program-settings.ui:59
+msgid "Statistics"
+msgstr "Statistiky"
 
 #: src/app-settings.ui:9
 msgid "Settings"
@@ -133,7 +139,7 @@ msgstr "Tmavý režim"
 #: src/app-settings.ui:60
 msgid ""
 "Write debug data to output files\n"
-"(this enables error line tracking)"
+"(this allows us to find on which line the error happened)"
 msgstr ""
 "Zapisovat informace pro ladění do výstupních souborů\n"
 "(pomáhá vysledovat řádku s chybou)"
@@ -153,11 +159,11 @@ msgstr "Nepodařilo se uložit výsledný soubor: %s\n"
 
 #: src/window.vala:193
 msgid "stdout of child process:\n"
-msgstr ""
+msgstr "stdout podprocesu:\n"
 
 #: src/window.vala:194
 msgid "stderr of child process:\n"
-msgstr ""
+msgstr "stderr podprocesu:\\"
 
 #. Python indexes lines from 1
 #. We show user line numbers indexed from 1
@@ -178,7 +184,7 @@ msgstr "Nepodařilo se uložit program"
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/window.vala:253 src/window.vala:286 src/window.vala:524
+#: src/window.vala:253 src/window.vala:286 src/window.vala:525
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -190,11 +196,11 @@ msgstr "Projekt Turtlico (*.tcp)"
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/window.vala:336
+#: src/window.vala:337
 msgid "Would you really like to apply these changes?"
 msgstr "Opravdu chcete aplikovat tyto změny?"
 
-#: src/window.vala:337
+#: src/window.vala:338
 msgid ""
 "The program contains commands that are only available from a plugin. "
 "Unavailable commands will be removed."
@@ -202,27 +208,27 @@ msgstr ""
 "Program obsahuje příkazy, které jsou dostupné pouze z přídavného modulu. "
 "Nedostupné příkazy budou odstraněny."
 
-#: src/window.vala:382
+#: src/window.vala:383
 msgid "Failed to open the program"
 msgstr "Nepodařilo se otevřít program"
 
-#: src/window.vala:519
+#: src/window.vala:520
 msgid "Would you like to save your changes before closing the program?"
 msgstr "Přereje si uložit změny před zavřením programu?"
 
-#: src/window.vala:520
+#: src/window.vala:521
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr "Jinak budou neuložené změny ztraceny!"
 
-#: src/window.vala:522
+#: src/window.vala:523
 msgid "Yes"
 msgstr "Ano"
 
-#: src/window.vala:523
+#: src/window.vala:524
 msgid "No"
 msgstr "Ne"
 
-#: src/window.vala:540
+#: src/window.vala:541
 msgid "Unnamed"
 msgstr "Bez názvu"
 
@@ -234,15 +240,15 @@ msgstr "Nejdříve prosím uložze projekt."
 msgid "Cannot insert the image"
 msgstr "Nelze vložit obrázek"
 
-#: src/programview.vala:643
+#: src/programview.vala:655
 msgid "Failed to open the file. Error on line: "
 msgstr "Nepodařilo se načíst program. Chyba je na řádce: "
 
-#: src/programview.vala:658
+#: src/programview.vala:670
 msgid "The file to load contains an unkown command!"
 msgstr "Soubor obsahuje neznámý příkaz!"
 
-#: src/programview.vala:660
+#: src/programview.vala:672
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
@@ -260,9 +266,17 @@ msgstr "Vygenerovaný kód:\n"
 msgid "Failed to load command def file: "
 msgstr "Selhalo načtení souboru s definicemi příkazů: "
 
-#: src/program-settings.vala:68
-msgid "Failed to load list of addinitional modules"
+#: src/program-settings.vala:75
+msgid "Failed to load list of additional modules"
 msgstr "Selhalo načtení listu přídavných příkazů"
+
+#: src/program-settings.vala:90
+msgid "Icon count: "
+msgstr "Počet ikon:"
+
+#: src/program-settings.vala:91
+msgid "Icon count without whitespace and comments: "
+msgstr "Počet ikon bez bílých znaků a komentářů: "
 
 #: src/base.json:6
 msgid "New line (Enter)"
@@ -313,11 +327,11 @@ msgid "Set pen color"
 msgstr "Nastav barvu"
 
 #: src/base.json:19
-msgid "Pull the pen up – no drawing when moving."
+msgid "Lift the pen up – no drawing when moving."
 msgstr "Zvednout pero - nekreslit při pohybu"
 
 #: src/base.json:20
-msgid "Pull the pen down – drawing when moving."
+msgid "Put the pen down – drawing when moving."
 msgstr "Položit pero - kreslit při pohybu"
 
 #: src/base.json:21
@@ -345,15 +359,15 @@ msgid "Show turtle"
 msgstr "Zviditelnit želvu"
 
 #: src/base.json:27
-msgid "Write a text"
-msgstr "Napiš text"
+msgid "Write text on screen"
+msgstr "Napiš text na obrazovku"
 
 #: src/base.json:28
 msgid "Begin fill"
 msgstr "Začátek vyplněného obrazce"
 
 #: src/base.json:29
-msgid "End fill - fill the drawen shape"
+msgid "End fill - fill the drawn shape"
 msgstr "Konec vyplněného obrazce"
 
 #: src/base.json:30
@@ -397,8 +411,8 @@ msgid "South"
 msgstr "Jih"
 
 #: src/base.json:45
-msgid "Pi"
-msgstr "Pi"
+msgid "Pi (3.14)"
+msgstr "Pi (3.14)"
 
 #: src/base.json:46
 msgid "Get x coordinate"
@@ -409,19 +423,19 @@ msgid "Get y coordinate"
 msgstr "Pozice Y"
 
 #: src/base.json:48
-msgid "Sinus"
-msgstr "Sínus"
+msgid "Sine"
+msgstr "Sinus"
 
 #: src/base.json:49
-msgid "Cosinus"
-msgstr "Cosínus"
+msgid "Cosine"
+msgstr "Cosinus"
 
 #: src/base.json:50
 msgid "Tangent"
 msgstr "Tangens"
 
 #: src/base.json:51
-msgid "Absolute avlue"
+msgid "Absolute value"
 msgstr "Absolutní hodnota"
 
 #: src/base.json:52
@@ -461,11 +475,11 @@ msgid "Delete an object"
 msgstr "Smazat objekt"
 
 #: src/base.json:67
-msgid "Append an item"
+msgid "Append an item to a list"
 msgstr "Přidat položku"
 
 #: src/base.json:68
-msgid "Insert an item"
+msgid "Insert an item to a list"
 msgstr "Vložit položku"
 
 #: src/base.json:69
@@ -473,19 +487,19 @@ msgid "Clear list"
 msgstr "Vymazat list"
 
 #: src/base.json:70
-msgid "Returns the index of the first element with the specified value"
-msgstr "Vrátí index první pložky se specifikovanou hodnotou."
+msgid "Finds index of the first occurence of an item in a list"
+msgstr "Najde index posledního výskytu položky v listu"
 
 #: src/base.json:71
-msgid "If condition do something"
-msgstr "Když podmínka tak"
+msgid "If statement"
+msgstr "Když"
 
 #: src/base.json:72
 msgid "Else"
 msgstr "Jinak"
 
 #: src/base.json:73
-msgid "Block of commands start"
+msgid "Begin block of commands"
 msgstr "Začátek bloku příkazů"
 
 #: src/base.json:74
@@ -508,9 +522,13 @@ msgstr "je větší než"
 msgid "and"
 msgstr "a zároveň"
 
-#: src/base.json:79 src/base.json:80
+#: src/base.json:79
 msgid "or"
 msgstr "nebo"
+
+#: src/base.json:80
+msgid "negation"
+msgstr "negace"
 
 #: src/base.json:81
 msgid "Define a method"
@@ -525,24 +543,24 @@ msgid "Repeat block of commands"
 msgstr "Opakovat blok příkazů"
 
 #: src/base.json:84
-msgid "For"
-msgstr "Pro"
+msgid "For loop"
+msgstr "Cyklus For"
 
 #: src/base.json:85
 msgid "Repeat while the condition is true"
 msgstr "Opakovat dokud je podmínka pravdivá"
 
 #: src/base.json:86
-msgid "in"
-msgstr "v"
+msgid "is item in a list?"
+msgstr "je položka v listu?"
 
 #: src/base.json:87
-msgid "Break"
+msgid "Break out of a loop"
 msgstr "Přerušit cyklus"
 
 #: src/base.json:88
-msgid "Continue"
-msgstr "Pokračovat"
+msgid "Continue with next iteration of a loop"
+msgstr "Pokračovat další iterací cyklu (continue)"
 
 #: src/base.json:89
 msgid "Object"
@@ -561,7 +579,7 @@ msgid "Decrease value by"
 msgstr "Snížit hodnotu proměnné o"
 
 #: src/base.json:93
-msgid "Dot (use to access an object property)"
+msgid "Dot (use to access properties of an object)"
 msgstr "Tečka (přístup k vlastnostem objektu)"
 
 #: src/base.json:94
@@ -597,12 +615,12 @@ msgid "Random number"
 msgstr "Náhodné číslo"
 
 #: src/base.json:102
-msgid "Connect a function to control mouse clicks"
+msgid "Connect a function to handle mouse clicks"
 msgstr "Připojte funkci pro zachycení klikání myší"
 
 #: src/base.json:103
-msgid "Connect a function that will be activated by pressing specified key"
-msgstr "Připojte funkci, která bude aktivována zadanou klávesou"
+msgid "Connect a function to handle key presses"
+msgstr "Připojte funkci pro zachycení stisků specifikované klávesy"
 
 #: src/base.json:104
 msgid "Call a function after n miliseconds"
@@ -617,11 +635,11 @@ msgid "String input"
 msgstr "Řetězcový vstup"
 
 #: src/base.json:112
-msgid "Read all lines"
+msgid "Read all lines of a file"
 msgstr "Přečti všechny řádky ze souboru"
 
 #: src/base.json:113
-msgid "Write lines"
+msgid "Write lines to a file"
 msgstr "Zapiš řádky do souboru"
 
 #: src/base.json:114
@@ -678,10 +696,10 @@ msgstr "Hodnota (vstup i výstup)"
 
 #: src/rpi.json:16
 msgid ""
-"Connect a function that is called when the device value changes to active"
+"Connect a function that is called when the device state changes to active"
 msgstr "Připojte funkci, která bude aktivována, když se zařízení zapne"
 
 #: src/rpi.json:17
 msgid ""
-"Connect a function that is called when the device value changes to inactive"
+"Connect a function that is called when the device state changes to inactive"
 msgstr "Připojte funkci, která bude aktivována, když se zařízení vypne"

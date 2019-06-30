@@ -72,7 +72,7 @@ namespace Turtlico {
                 var dialog = new Gtk.MessageDialog(this, Gtk.DialogFlags.MODAL,
                     Gtk.MessageType.ERROR,
                     Gtk.ButtonsType.OK,
-                    _("Failed to load list of addinitional modules"));
+                    _("Failed to load list of additional modules"));
                 dialog.run();
                 dialog.destroy();
             }
@@ -87,8 +87,8 @@ namespace Turtlico {
                     }
                 }
             }
-            all_icons_count_label.label = _("Count of icons: ") + icons_all.to_string();
-            icons_count_label.label = _("Count of icons (without formatting icons): ") + icons.to_string();
+            all_icons_count_label.label = _("Icon count: ") + icons_all.to_string();
+            icons_count_label.label = _("Icon count without whitespace and comments: ") + icons.to_string();
 	    }
 
 	    void add_plugin(string name, string file) {

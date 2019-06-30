@@ -66,7 +66,7 @@
                 <property name="can_focus">False</property>
                 <property name="focus_on_click">False</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Start your program</property>
+                <property name="tooltip_text" translatable="yes">Run program</property>
                 <property name="image">image1</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_run_btn_clicked" swapped="no"/>
@@ -205,7 +205,7 @@
               <object class="GtkImage" id="delete_btn">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Drop here items to delete them</property>
+                <property name="tooltip_text" translatable="yes">Drop items here to delete them</property>
                 <property name="pixel_size">16</property>
                 <property name="icon_name">user-trash</property>
                 <property name="icon_size">2</property>

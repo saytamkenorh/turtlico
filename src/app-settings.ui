@@ -58,7 +58,7 @@
                 <property name="valign">start</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Write debug data to output files
-(this enables error line tracking)</property>
+(this allows us to find on which line the error happened)</property>
                 <property name="justify">center</property>
               </object>
               <packing>
