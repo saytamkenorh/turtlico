@@ -163,7 +163,7 @@ msgstr "stdout podprocesu:\n"
 
 #: src/window.vala:194
 msgid "stderr of child process:\n"
-msgstr "stderr podprocesu:\\"
+msgstr "stderr podprocesu:\n"
 
 #. Python indexes lines from 1
 #. We show user line numbers indexed from 1

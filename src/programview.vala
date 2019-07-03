@@ -26,6 +26,11 @@ namespace Turtlico {
         { "STRING",     0, DnDTarget.STRING },
         { "text/plain", 0, DnDTarget.STRING },
     };
+    private enum SelectionPhase {
+        NOTHING_SELECTED,
+        SELECT_END,
+        BLOCK_SELECTED
+    }
 
     [GtkTemplate (ui = "/com/orsan/Turtlico/programview.ui")]
     public class ProgramView : Gtk.DrawingArea {
@@ -42,6 +47,10 @@ namespace Turtlico {
             get { return _program_changed; }
             set { _program_changed = value; }
         }
+        // Selection
+        private Gdk.Point selection_start;
+        private Gdk.Point selection_end;
+        private int selection_phase = SelectionPhase.NOTHING_SELECTED;
         // Used in drag_data_get
         int mouse_x;
         int mouse_y;
@@ -80,6 +89,7 @@ namespace Turtlico {
         Pango.FontDescription small_font = new Pango.FontDescription();
 
         protected static string str_mark = ((char)31).to_string(); //Unit separator
+        protected static string str_mark_utf8 = "~";
         public string resource_dir = "";
 
         public ProgramView () {
@@ -121,16 +131,10 @@ namespace Turtlico {
                 | Gdk.DragAction.MOVE           // what to do with data after dropped
             );
             drag_data_received.connect(on_drag_data_received);
-
-            Gtk.drag_source_set (
-                this,                          // widget will be drag-able
-                Gdk.ModifierType.BUTTON1_MASK, // modifier that will start a drag
-                target_list,                   // lists of target to support
-                Gdk.DragAction.MOVE            // what to do with data after dropped
-            );
             drag_begin.connect(on_drag_begin);
             drag_data_get.connect(on_drag_data_get);
             drag_end.connect((context)=>{Gtk.drag_set_icon_default(context);});
+            set_drag_source_active(true);
 
             // PythonView
             var language_manager = new Gtk.SourceLanguageManager();
@@ -142,9 +146,18 @@ namespace Turtlico {
             motion_notify_event.connect((event)=>{
                 mouse_x = (int)event.x;
                 mouse_y = (int)event.y;
+                if (selection_phase == SelectionPhase.SELECT_END) {
+                    selection_end.y = int.min(mouse_y / cell_height, program.size - 1);
+                    selection_end.x = int.min(
+                        mouse_to_program_x(mouse_x / cell_width, selection_end.y),
+                        program[selection_end.y].size - 1
+                    );
+                    queue_draw();
+                }
                 return false;
             });
             button_press_event.connect(on_button_press_event);
+            button_release_event.connect(on_button_release_event);
             key_press_event.connect(on_key_press_event);
 
             // Tooltip
@@ -153,7 +166,7 @@ namespace Turtlico {
                     // Get command pos
                     int cx = x / cell_width;
                     int cy = y / cell_height;
-                    if(cy < program.size && cx < program[cy].size) {
+                    if (cy < program.size && cx < program[cy].size) {
                         // Command found
                         if (program[cy][cx].id == "tc" ||
                             program[cy][cx].id == "python")
@@ -171,10 +184,24 @@ namespace Turtlico {
             program_changed = false;
         }
 
+        void set_drag_source_active (bool active) {
+            if (active) {
+                Gtk.drag_source_set (
+                    this,                          // widget will be drag-able
+                    Gdk.ModifierType.BUTTON1_MASK, // modifier that will start a drag
+                    target_list,                   // lists of target to support
+                    Gdk.DragAction.MOVE            // what to do with data after dropped
+                );
+            }
+            else {
+                Gtk.drag_source_unset(this);
+            }
+        }
+
         void on_drag_data_received (Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint info, uint time) {
             int length = selection_data.get_length();
             if(length > 0 && selection_data.get_format() == 8) {
-                string[] data;
+                var data = new Gee.ArrayList<Gee.ArrayList<string>>();
                 if(selection_data.get_text().has_prefix("file://")) {
                     try {
                         string path = selection_data.get_text().split("\r\n")[0];
@@ -186,7 +213,7 @@ namespace Turtlico {
                             Path.build_filename(resource_dir, input.get_basename()));
                         if (!dest.query_exists())
                             input.copy(dest, FileCopyFlags.NONE);
-                        data = {"5_img", "./" + dest.get_basename()};
+                        data.add(new Gee.ArrayList<string>.wrap({"5_img", "./" + dest.get_basename()}));
                     }
                     catch (Error e) {
                         var dialog = new Gtk.MessageDialog((Gtk.Window)get_toplevel(),
@@ -200,54 +227,81 @@ namespace Turtlico {
                     }
                 }
                 else {
-                    data = selection_data.get_text().split(";");
+                    var commands = selection_data.get_text().split(str_mark_utf8);
+                    foreach (var c in commands) {
+                        debug(c);
+                        data.add(new Gee.ArrayList<string>.wrap(c.split(";")));
+                    }
                 }
-                string id = data[0];
-                try {
-                    Command c = find_command_by_id(id);
-                    y = y / cell_height;
-                    x = mouse_to_program_x(x / cell_width, y);
-                    // Icon dropped under the last line
-                    if (y >= program.size) {
-                        var new_line = new Gee.ArrayList<Turtlico.Command>();
-                        new_line.add(commands[0]);
-                        y = program.size; program.add(new_line);
-                        if (c.id == "nl") { program_changed = true; return; }
+                y = y / cell_height;
+                x = mouse_to_program_x(x / cell_width, y);
+                for (int index = data.size - 1; index >= 0; index--) {
+                    Gee.ArrayList<string> cmd = data[index];
+                    if (cmd.size < 1) {
+                        data.remove_at(index);
+                        continue;
                     }
-                    // Icon dropped beyond the end of the line
-                    if (x >= program[y].size) {
-                        x = program[y].size;
-                        if (program[y][program[y].size - 1].id == "nl") {
-                            x--;
+                    string id = cmd[0];
+                    try {
+                        Command c = find_command_by_id(id);
+                        // Icon dropped under the last line
+                        if (y >= program.size) {
+                            var new_line = new Gee.ArrayList<Turtlico.Command>();
+                            new_line.add(commands[0]);
+                            y = program.size; program.add(new_line);
+                            if (c.id == "nl") { program_changed = true; continue; }
                         }
-                    }
-                    // Split lines
-                    if (c.id == "nl") {
-                        var new_line = new Gee.ArrayList<Turtlico.Command>();
-                        new_line.add(commands[0]);
-                        program.insert(y + 1, new_line);
-                        // Get commands beyond the dropped new line
-                        var beyond = new Gee.ArrayList<Command>.wrap(program[y].slice(x, program[y].size - 1).to_array());
-                        program[y + 1].insert_all(0, beyond);
-                        for (int i = 0; i < program[y + 1].size - 1; i++) {
-                            program[y].remove_at(x);
+                        // Icon dropped beyond the end of the line
+                        if (x >= program[y].size) {
+                            x = program[y].size;
+                            if (program[y][program[y].size - 1].id == "nl") {
+                                x--;
+                            }
                         }
+                        // Split lines
+                        if (c.id == "nl") {
+                            var new_line = new Gee.ArrayList<Turtlico.Command>();
+                            new_line.add(commands[0]);
+                            program.insert(y + 1, new_line);
+                            // Get commands beyond the dropped new line
+                            var beyond = new Gee.ArrayList<Command>.wrap(program[y].slice(x, program[y].size - 1).to_array());
+                            program[y + 1].insert_all(0, beyond);
+                            for (int i = 0; i < program[y + 1].size - 1; i++) {
+                                program[y].remove_at(x);
+                            }
+                        }
+                        else {
+                            if (cmd.size >= 2)
+                                c = c.set_data(cmd[1], resource_dir);
+                            program[y].insert(x, c);
+                        }
+                        backup_program();
+                        queue_draw();
+                        Gtk.drag_finish(context, true, false, time);
+                        if (c.id == "tc") {
+                            icon_data_dialog_tc(x, y);
+                        }
+                        else if (c.id == "int") { c = c.set_data("0", resource_dir); }
+                        continue;
                     }
-                    else {
-                        if (data.length >= 2)
-                            c = c.set_data(data[1], resource_dir);
-                        program[y].insert(x, c);
-                    }
-                    backup_program();
-                    queue_draw();
-                    Gtk.drag_finish(context, true, false, time);
-                    if (c.id == "tc") {
-                        icon_data_dialog_tc(x, y);
-                    }
-                    else if (c.id == "int") { c = c.set_data("0", resource_dir); }
-                    return;
+                    catch (FileError e) {}
                 }
-                catch (FileError e) {}
+                // Select inserted block
+                if (data.size > 2) {
+                    selection_start.x = x;
+                    selection_start.y = y;
+                    int n = 1;
+                    while (n < data.size) {
+                        x++;
+                        if (x > program[y].size) {
+                            y++;
+                            x = 0;
+                        }
+                        n++;
+                    }
+                    selection_end.x = x;
+                    selection_end.y = y;
+                }
             }
             Gtk.drag_finish(context, false, false, time);
         }
@@ -268,12 +322,15 @@ namespace Turtlico {
             Gdk.cairo_get_clip_rectangle(cr, out rect);
             int width = 0;
             int x;
+            int original_x;
+            bool selected = false;
             for (int line = 0; line < program.size; line++) {
                 x = 0;
                 for (int command = 0; command < program[line].size; command++) {
                     if (program[line][command].id == "int" && program[line][command].data == "") {
                         program[line][command] = program[line][command].set_data("0", resource_dir);
                     }
+                    original_x = x;
                     if (line >= rect.y / cell_height && line <= (rect.y + rect.height) / cell_height) {
                         x += draw_icon(cr, x * cell_width, line * cell_height,
                                   program[line][command]);
@@ -285,6 +342,25 @@ namespace Turtlico {
                         }
                         else {x++;}
                     }
+                    // Selection
+                    bool on_selection_point = (line == selection_start.y && command == selection_start.x) ||
+                        (line == selection_end.y && command == selection_end.x);
+                    if (on_selection_point && !selected) {
+                        selected = true;
+                        on_selection_point = false;
+                    }
+                    if (selection_phase != SelectionPhase.NOTHING_SELECTED && selected)
+                    {
+                        cr.set_source_rgba(0, 0, 0, 0.5);
+                        cr.rectangle(original_x * cell_width, line * cell_height,
+                            cell_width * (x - original_x), cell_height);
+                        cr.fill();
+                    }
+                    if (selected && selection_start.x == selection_end.x &&
+                        selection_start.y == selection_end.y)
+                        selected = false;
+                    if (on_selection_point && selected)
+                        selected = false;
                 }
                 if (x > width)
                     width = x;
@@ -297,6 +373,8 @@ namespace Turtlico {
         public int draw_icon (Cairo.Context cr, int x, int y, Command c) {
             // Size by the length of data
             int width = (c.data.length / 7 + 1);
+            if (c.id == "python")
+                width = 1;
             // Background
             if (c.id == "nl" || c.id == "tab")
                 Gdk.cairo_set_source_rgba(cr, color_black);
@@ -373,18 +451,40 @@ namespace Turtlico {
         }
 
         void on_drag_begin(Gdk.DragContext context) {
-            int y = mouse_y / cell_height;
-            int x = mouse_to_program_x(mouse_x / cell_width, y);
-            if (!(y < program.size && x < program[y].size)) {
-                return;
+            if (selection_phase == SelectionPhase.NOTHING_SELECTED) {
+                int y = mouse_y / cell_height;
+                int x = mouse_to_program_x(mouse_x / cell_width, y);
+                if (!(y < program.size && x < program[y].size)) {
+                    return;
+                }
+                selection_start.x = x; selection_end.x = x;
+                selection_start.y = y; selection_end.y = y;
             }
-            int icon_width = cell_width * (program[y][x].data.length / 7 + 1);
+            // Get height
+            int height = (selection_end.y - selection_start.y + 1) * cell_height;
+            int width;
+            get_size_request(out width, null);
+            // Draw commands
             var surface = new Cairo.ImageSurface(Cairo.Format.RGB24,
-                icon_width, cell_height);
+                width, height);
             var ctx = new Cairo.Context(surface);
-            draw_icon(ctx, 0, 0, program[y][x]);
+            width = 0;
+            int x = 0;
+            int y = -1;
+            selection_foreach((p)=>{
+                if (p.y > y) {
+                    x = 0;
+                    y = p.y;
+                }
+                x += draw_icon(ctx, x * cell_width, (p.y - selection_start.y) * cell_height, program[p.y][p.x]);
+                if (x > width)
+                    width = x;
+            });
+            width = width * cell_width;
+            debug("v");
+
             var pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0,
-                icon_width, cell_height);
+                width, height);
             // Does not work when copying items
             // Gtk.drag_source_set_icon_pixbuf(this, pixbuf);
             Gtk.drag_set_icon_pixbuf(context, pixbuf, cell_width / 2, cell_height / 2);
@@ -393,8 +493,12 @@ namespace Turtlico {
         void on_drag_data_get(Gdk.DragContext context, Gtk.SelectionData selection_data, uint info, uint time_) {
             int y = mouse_y / cell_height;
             int x = mouse_to_program_x(mouse_x / cell_width, y);
-            if(y < program.size && x < program[y].size){
-                selection_data.set_text(program[y][x].id + ";" + program[y][x].data, -1);
+            if (y < program.size && x < program[y].size) {
+                string data = "";
+                selection_foreach((p)=>{
+                    data += program[p.y][p.x].id + ";" + program[p.y][p.x].data + str_mark_utf8;
+                });
+                selection_data.set_text(data, -1);
                 if (context.get_selected_action() == Gdk.DragAction.MOVE) {
                     if (program[y][x].id == "nl") {
                         // New line
@@ -409,10 +513,7 @@ namespace Turtlico {
                     }
                     else {
                         // Anyting else
-                        program[y].remove_at(x);
-                        if (program[y].size == 0) {
-                            program.remove_at(y);
-                        }
+                        selection_delete();
                     }
                     backup_program();
                     queue_draw();
@@ -421,10 +522,7 @@ namespace Turtlico {
         }
 
         public override void size_allocate (Gtk.Allocation allocation) {
-            // The base method will save the allocation and move/resize the
-            // widget's GDK window if the widget is already realized.
             base.size_allocate (allocation);
-            // Move/resize other realized windows if necessary
         }
 
         public Command find_command_by_id(string id) throws GLib.FileError {
@@ -438,6 +536,28 @@ namespace Turtlico {
 
         bool on_button_press_event(Gdk.EventButton event) {
             grab_focus();
+            var modifiers = Gtk.accelerator_get_default_mod_mask();
+            // Selection
+            if (event.button == 1){
+                if ((event.state & modifiers) == Gdk.ModifierType.SHIFT_MASK
+                    && selection_phase == SelectionPhase.NOTHING_SELECTED)
+                {
+                    set_drag_source_active(false);
+                    int y = mouse_y / cell_height;
+                    int x = mouse_to_program_x(mouse_x / cell_width, y);
+                    if(y < program.size && x < program[y].size) {
+                        selection_phase = SelectionPhase.SELECT_END;
+                        selection_start.x = x;
+                        selection_start.y = y;
+                    }
+                }
+                else {
+                    selection_phase = SelectionPhase.NOTHING_SELECTED;
+                    set_drag_source_active(true);
+                    queue_draw();
+                }
+            }
+            // Copy icon
             if (event.button == 3) {
                 int y = mouse_y / cell_height;
                 int x = mouse_to_program_x(mouse_x / cell_width, y);
@@ -450,19 +570,45 @@ namespace Turtlico {
             return false;
         }
 
+        bool on_button_release_event(Gdk.EventButton event) {
+            if (event.button == 1) {
+                if (selection_phase == SelectionPhase.SELECT_END) {
+                    selection_phase = SelectionPhase.BLOCK_SELECTED;
+                    // Swap selection end and start if needed
+                    bool do_swap = false;
+                    if (selection_end.y < selection_start.y)
+                        do_swap = true;
+                    if (selection_end.y == selection_start.y && selection_start.x > selection_end.x)
+                        do_swap = true;
+                    if (do_swap) {
+                        var end = selection_end;
+                        selection_end = selection_start;
+                        selection_start = end;
+                    }
+                }
+            }
+            return false;
+        }
+
         bool on_key_press_event(Gdk.EventKey key_event) {
             var modifiers = Gtk.accelerator_get_default_mod_mask();
 
             if (key_event.keyval == Gdk.Key.Delete) {
-                int y = mouse_y / cell_height;
-                int x = mouse_to_program_x(mouse_x / cell_width, y);
-                if(y < program.size && x < program[y].size) {
-                    if(program[y][x].id != "nl") {
-                        program[y].remove_at(x);
-                        backup_program();
-                        queue_draw();
+                if (selection_phase == SelectionPhase.BLOCK_SELECTED) {
+                    selection_delete();
+                    backup_program();
+                }
+                else {
+                    int y = mouse_y / cell_height;
+                    int x = mouse_to_program_x(mouse_x / cell_width, y);
+                    if(y < program.size && x < program[y].size) {
+                        if(program[y][x].id != "nl") {
+                            program[y].remove_at(x);
+                            backup_program();
+                        }
                     }
                 }
+                queue_draw();
             }
             if (key_event.keyval == Gdk.Key.z &&
                 (key_event.state & modifiers) == Gdk.ModifierType.CONTROL_MASK)
@@ -754,6 +900,50 @@ namespace Turtlico {
             }
             if (result < 0) result = 0;
             return result;
+        }
+
+        void selection_foreach (Func<Gdk.Point?> func) {
+            for (int line = selection_start.y; line <= selection_end.y; line++) {
+                for (int command = 0; command < program[line].size; command++) {
+                    if (line == selection_start.y && command < selection_start.x)
+                        continue;
+                    if (line == selection_end.y && command > selection_end.x)
+                        return;
+                    Gdk.Point point = Gdk.Point();
+                    point.x = command;
+                    point.y = line;
+                    func(point);
+                }
+            }
+        }
+
+        void selection_delete () {
+            for (int line = selection_start.y; line <= selection_end.y; line++) {
+                for (int command = 0; command < program[line].size; command++) {
+                    if (line == selection_start.y && command < selection_start.x)
+                        continue;
+                    if (line == selection_end.y && command > selection_end.x)
+                        continue;
+                    if (program[line][command].id == "nl" && program[line].size > 1)
+                        continue;
+                    program[line].remove_at(command);
+                    command--;
+                    if (line == selection_end.y)
+                        selection_end.x--;
+                }
+            }
+            fix_blank_lines();
+
+            selection_phase = SelectionPhase.NOTHING_SELECTED;
+        }
+
+        void fix_blank_lines () {
+            for (int line = 0; line < program.size; line++) {
+                if (program[line].size == 0) {
+                    program.remove_at(line);
+                    line--;
+                }
+            }
         }
     }
 }
