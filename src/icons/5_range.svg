@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="50"
+   height="50"
+   viewBox="0 0 13.229166 13.229167"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   sodipodi:docname="5_range.svg"
+   inkscape:export-filename="/home/matyas/Projects/turtlico/src/icons/5_range.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="7.9195959"
+     inkscape:cx="22.112493"
+     inkscape:cy="14.001778"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1300"
+     inkscape:window-height="704"
+     inkscape:window-x="66"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Vrstva 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-283.77082)">
+    <rect
+       style="opacity:0.97000002;fill:#000080;fill-opacity:1;stroke:none;stroke-width:0.83038145;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect815"
+       width="1.5846974"
+       height="1.5846974"
+       x="3.0496993"
+       y="292.29858" />
+    <rect
+       style="opacity:0.97000002;fill:#000080;fill-opacity:1;stroke:none;stroke-width:0.83038145;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect815-3"
+       width="1.5846974"
+       height="1.5846974"
+       x="5.8221831"
+       y="292.29858" />
+    <rect
+       style="opacity:0.97000002;fill:#000080;fill-opacity:1;stroke:none;stroke-width:0.83038145;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect815-6"
+       width="1.5846974"
+       height="1.5846974"
+       x="8.5946674"
+       y="292.29858" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot838"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.26458333,0,0,0.26458333,0,283.77082)"><flowRegion
+         id="flowRegion840"><rect
+           id="rect842"
+           width="64.285713"
+           height="43.214287"
+           x="-22.321428"
+           y="13.571428" /></flowRegion><flowPara
+         id="flowPara844">[[]</flowPara></flowRoot>    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.93194056px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.17329851"
+       x="0.28545302"
+       y="293.08612"
+       id="text848"><tspan
+         sodipodi:role="line"
+         id="tspan846"
+         x="0.28545302"
+         y="293.08612"
+         style="stroke-width:0.17329851">[</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.93132067px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.17328301"
+       x="10.239331"
+       y="293.08621"
+       id="text848-7"><tspan
+         sodipodi:role="line"
+         id="tspan846-5"
+         x="10.239331"
+         y="293.08621"
+         style="stroke-width:0.17328301">]</tspan></text>
+  </g>
+</svg>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-30 20:53+0200\n"
+"POT-Creation-Date: 2019-07-05 14:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -226,23 +226,23 @@ msgstr ""
 msgid "Unnamed"
 msgstr ""
 
-#: src/programview.vala:183
+#: src/programview.vala:212
 msgid "Please save the project first."
 msgstr ""
 
-#: src/programview.vala:196
+#: src/programview.vala:225
 msgid "Cannot insert the image"
 msgstr ""
 
-#: src/programview.vala:655
+#: src/programview.vala:815
 msgid "Failed to open the file. Error on line: "
 msgstr ""
 
-#: src/programview.vala:670
+#: src/programview.vala:830
 msgid "The file to load contains an unkown command!"
 msgstr ""
 
-#: src/programview.vala:672
+#: src/programview.vala:832
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
@@ -333,7 +333,7 @@ msgstr ""
 msgid "Left parenthesis"
 msgstr ""
 
-#: src/base.json:23 src/base.json:64
+#: src/base.json:23 src/base.json:65
 msgid "Argument separator (Comma)"
 msgstr ""
 
@@ -382,203 +382,205 @@ msgid "Place image at the position of the turtle"
 msgstr ""
 
 #: src/base.json:35
-msgid "Sleep n seconds(freezes window)"
+msgid "Sleep n seconds (freezes window)"
 msgstr ""
 
-#: src/base.json:41
-msgid "East"
+#: src/base.json:36
+msgid ""
+"Connect a function to handle collision (in circle collider of specified "
+"radius) between two turtles"
 msgstr ""
 
 #: src/base.json:42
-msgid "North"
+msgid "East"
 msgstr ""
 
 #: src/base.json:43
-msgid "West"
+msgid "North"
 msgstr ""
 
 #: src/base.json:44
-msgid "South"
+msgid "West"
 msgstr ""
 
 #: src/base.json:45
-msgid "Pi (3.14)"
+msgid "South"
 msgstr ""
 
 #: src/base.json:46
-msgid "Get x coordinate"
+msgid "Pi (3.14)"
 msgstr ""
 
 #: src/base.json:47
-msgid "Get y coordinate"
+msgid "Get x coordinate"
 msgstr ""
 
 #: src/base.json:48
-msgid "Sine"
+msgid "Get y coordinate"
 msgstr ""
 
 #: src/base.json:49
-msgid "Cosine"
+msgid "Sine"
 msgstr ""
 
 #: src/base.json:50
-msgid "Tangent"
+msgid "Cosine"
 msgstr ""
 
 #: src/base.json:51
-msgid "Absolute value"
+msgid "Tangent"
 msgstr ""
 
 #: src/base.json:52
-msgid "Convert angle from degrees to radians."
+msgid "Absolute value"
 msgstr ""
 
 #: src/base.json:53
-msgid "Convert angle from radians to degrees."
+msgid "Convert angle from degrees to radians."
 msgstr ""
 
 #: src/base.json:54
-msgid "Round a number"
+msgid "Convert angle from radians to degrees."
 msgstr ""
 
 #: src/base.json:55
-msgid "Color (property)"
+msgid "Round a number"
 msgstr ""
 
 #: src/base.json:56
-msgid "True"
+msgid "Color (property)"
 msgstr ""
 
 #: src/base.json:57
+msgid "True"
+msgstr ""
+
+#: src/base.json:58
 msgid "False"
 msgstr ""
 
-#: src/base.json:63
+#: src/base.json:64
 msgid "Left square bracket"
 msgstr ""
 
-#: src/base.json:65
+#: src/base.json:66
 msgid "Right square bracket"
 msgstr ""
 
-#: src/base.json:66
+#: src/base.json:67
 msgid "Delete an object"
 msgstr ""
 
-#: src/base.json:67
+#: src/base.json:68
 msgid "Append an item to a list"
 msgstr ""
 
-#: src/base.json:68
+#: src/base.json:69
 msgid "Insert an item to a list"
 msgstr ""
 
-#: src/base.json:69
+#: src/base.json:70
 msgid "Clear list"
 msgstr ""
 
-#: src/base.json:70
+#: src/base.json:71
 msgid "Finds index of the first occurence of an item in a list"
 msgstr ""
 
-#: src/base.json:71
+#: src/base.json:72
 msgid "If statement"
 msgstr ""
 
-#: src/base.json:72
+#: src/base.json:73
 msgid "Else"
 msgstr ""
 
-#: src/base.json:73
+#: src/base.json:74
 msgid "Begin block of commands"
 msgstr ""
 
-#: src/base.json:74
+#: src/base.json:75
 msgid "Equals"
 msgstr ""
 
-#: src/base.json:75
+#: src/base.json:76
 msgid "Not equals"
 msgstr ""
 
-#: src/base.json:76
+#: src/base.json:77
 msgid "is less than"
 msgstr ""
 
-#: src/base.json:77
+#: src/base.json:78
 msgid "is greater than"
 msgstr ""
 
-#: src/base.json:78
+#: src/base.json:79
 msgid "and"
 msgstr ""
 
-#: src/base.json:79
+#: src/base.json:80
 msgid "or"
 msgstr ""
 
-#: src/base.json:80
+#: src/base.json:81
 msgid "negation"
 msgstr ""
 
-#: src/base.json:81
+#: src/base.json:82
 msgid "Define a method"
 msgstr ""
 
-#: src/base.json:82
+#: src/base.json:83
 msgid "Return a value"
 msgstr ""
 
-#: src/base.json:83
+#: src/base.json:84
 msgid "Repeat block of commands"
 msgstr ""
 
-#: src/base.json:84
+#: src/base.json:85
 msgid "For loop"
 msgstr ""
 
-#: src/base.json:85
-msgid "Repeat while the condition is true"
-msgstr ""
-
 #: src/base.json:86
-msgid "is item in a list?"
+msgid "Is item in a list? / For all items in a collection."
 msgstr ""
 
 #: src/base.json:87
-msgid "Break out of a loop"
+msgid "Repeat while the condition is true"
 msgstr ""
 
 #: src/base.json:88
-msgid "Continue with next iteration of a loop"
+msgid "Break out of a loop"
 msgstr ""
 
 #: src/base.json:89
-msgid "Object"
+msgid "Continue with next iteration of a loop"
 msgstr ""
 
 #: src/base.json:90
-msgid "Assign value to a variable"
+msgid "Object"
 msgstr ""
 
 #: src/base.json:91
-msgid "Increase value by"
+msgid "Assign value to a variable"
 msgstr ""
 
 #: src/base.json:92
-msgid "Decrease value by"
+msgid "Increase value by"
 msgstr ""
 
 #: src/base.json:93
-msgid "Dot (use to access properties of an object)"
+msgid "Decrease value by"
 msgstr ""
 
 #: src/base.json:94
-msgid "Type conversion"
+msgid "Dot (use to access properties of an object)"
 msgstr ""
 
 #: src/base.json:95
-msgid "Direct Python code"
+msgid "Type conversion"
 msgstr ""
 
 #: src/base.json:96
@@ -602,50 +604,58 @@ msgid "Modulo"
 msgstr ""
 
 #: src/base.json:101
-msgid "Random number"
+msgid "Direct Python code"
 msgstr ""
 
 #: src/base.json:102
-msgid "Connect a function to handle mouse clicks"
+msgid "Random number"
 msgstr ""
 
 #: src/base.json:103
-msgid "Connect a function to handle key presses"
+msgid "Return list of numbers in specified range"
 msgstr ""
 
 #: src/base.json:104
-msgid "Call a function after n miliseconds"
+msgid "Connect a function to handle mouse clicks"
 msgstr ""
 
 #: src/base.json:105
-msgid "Number input"
+msgid "Connect a function to handle key presses"
 msgstr ""
 
 #: src/base.json:106
+msgid "Call a function after n miliseconds"
+msgstr ""
+
+#: src/base.json:107
+msgid "Number input"
+msgstr ""
+
+#: src/base.json:108
 msgid "String input"
 msgstr ""
 
-#: src/base.json:112
+#: src/base.json:114
 msgid "Read all lines of a file"
 msgstr ""
 
-#: src/base.json:113
+#: src/base.json:115
 msgid "Write lines to a file"
 msgstr ""
 
-#: src/base.json:114
+#: src/base.json:116
 msgid "Open file dialog"
 msgstr ""
 
-#: src/base.json:115
+#: src/base.json:117
 msgid "Check file exists"
 msgstr ""
 
-#: src/base.json:116
+#: src/base.json:118
 msgid "Check directory exists"
 msgstr ""
 
-#: src/base.json:117
+#: src/base.json:119
 msgid "Delete file or directory"
 msgstr ""
 

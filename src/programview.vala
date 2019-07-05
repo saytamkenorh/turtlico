@@ -26,7 +26,7 @@ namespace Turtlico {
         { "STRING",     0, DnDTarget.STRING },
         { "text/plain", 0, DnDTarget.STRING },
     };
-    private enum SelectionPhase {
+    public enum SelectionPhase {
         NOTHING_SELECTED,
         SELECT_END,
         BLOCK_SELECTED
@@ -50,7 +50,7 @@ namespace Turtlico {
         // Selection
         private Gdk.Point selection_start;
         private Gdk.Point selection_end;
-        private int selection_phase = SelectionPhase.NOTHING_SELECTED;
+        public SelectionPhase selection_phase = SelectionPhase.NOTHING_SELECTED;
         // Used in drag_data_get
         int mouse_x;
         int mouse_y;
@@ -110,7 +110,7 @@ namespace Turtlico {
             color_editable.parse("rgb(0, 0, 128)");
             color_cycle.parse("rgb(200, 0, 0)");
             color_string.parse("rgb(255, 220, 0)");
-            color_object.parse("rgb(200, 200, 200)");
+            color_object.parse("rgb(100, 100, 100)");
             color_type_conversion.parse("rgb(255, 140, 0)");
             color_comment.parse("rgb(255, 233, 140)");
             color_cell = style_context.get_color(Gtk.StateFlags.ACTIVE);
@@ -199,6 +199,8 @@ namespace Turtlico {
         }
 
         void on_drag_data_received (Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint info, uint time) {
+            mouse_x = x;
+            mouse_y = y;
             int length = selection_data.get_length();
             if(length > 0 && selection_data.get_format() == 8) {
                 var data = new Gee.ArrayList<Gee.ArrayList<string>>();
@@ -229,7 +231,6 @@ namespace Turtlico {
                 else {
                     var commands = selection_data.get_text().split(str_mark_utf8);
                     foreach (var c in commands) {
-                        debug(c);
                         data.add(new Gee.ArrayList<string>.wrap(c.split(";")));
                     }
                 }
@@ -286,22 +287,8 @@ namespace Turtlico {
                     }
                     catch (FileError e) {}
                 }
-                // Select inserted block
-                if (data.size > 2) {
-                    selection_start.x = x;
-                    selection_start.y = y;
-                    int n = 1;
-                    while (n < data.size) {
-                        x++;
-                        if (x > program[y].size) {
-                            y++;
-                            x = 0;
-                        }
-                        n++;
-                    }
-                    selection_end.x = x;
-                    selection_end.y = y;
-                }
+                selection_phase = SelectionPhase.NOTHING_SELECTED;
+                set_drag_source_active(true);
             }
             Gtk.drag_finish(context, false, false, time);
         }
@@ -481,7 +468,6 @@ namespace Turtlico {
                     width = x;
             });
             width = width * cell_width;
-            debug("v");
 
             var pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0,
                 width, height);
@@ -495,12 +481,14 @@ namespace Turtlico {
             int x = mouse_to_program_x(mouse_x / cell_width, y);
             if (y < program.size && x < program[y].size) {
                 string data = "";
+                int command_count = 0;
                 selection_foreach((p)=>{
                     data += program[p.y][p.x].id + ";" + program[p.y][p.x].data + str_mark_utf8;
+                    command_count++;
                 });
                 selection_data.set_text(data, -1);
                 if (context.get_selected_action() == Gdk.DragAction.MOVE) {
-                    if (program[y][x].id == "nl") {
+                    if (program[y][x].id == "nl" && command_count == 1) {
                         // New line
                         if(y + 1 < program.size) {
                             program[y].add_all(program[y+1]);
@@ -515,6 +503,8 @@ namespace Turtlico {
                         // Anyting else
                         selection_delete();
                     }
+                    selection_phase = SelectionPhase.NOTHING_SELECTED;
+                    set_drag_source_active(true);
                     backup_program();
                     queue_draw();
                 }
@@ -538,22 +528,46 @@ namespace Turtlico {
             grab_focus();
             var modifiers = Gtk.accelerator_get_default_mod_mask();
             // Selection
-            if (event.button == 1){
+            if (event.button == 1) {
                 if ((event.state & modifiers) == Gdk.ModifierType.SHIFT_MASK
                     && selection_phase == SelectionPhase.NOTHING_SELECTED)
                 {
-                    set_drag_source_active(false);
                     int y = mouse_y / cell_height;
                     int x = mouse_to_program_x(mouse_x / cell_width, y);
                     if(y < program.size && x < program[y].size) {
+                        set_drag_source_active(false);
                         selection_phase = SelectionPhase.SELECT_END;
                         selection_start.x = x;
                         selection_start.y = y;
                     }
                 }
+                else if (selection_phase == SelectionPhase.BLOCK_SELECTED) {
+                    int y = mouse_y / cell_height;
+                    int x = mouse_to_program_x(mouse_x / cell_width, y);
+                    if (y < program.size && x < program[y].size) {
+                        var targets = Gtk.drag_dest_get_target_list(this);
+                        Gtk.drag_begin_with_coordinates(this, targets, Gdk.DragAction.MOVE,
+                           Gdk.ModifierType.BUTTON1_MASK, event, (int)event.x, (int)event.y);
+                    }
+                    else {
+                        selection_phase = SelectionPhase.NOTHING_SELECTED;
+                        set_drag_source_active(true);
+                        queue_draw();
+                    }
+                }
                 else {
-                    selection_phase = SelectionPhase.NOTHING_SELECTED;
-                    set_drag_source_active(true);
+                    var targets = Gtk.drag_dest_get_target_list(this);
+                    int y = mouse_y / cell_height;
+                    int x = mouse_to_program_x(mouse_x / cell_width, y);
+                    if (y < program.size && x < program[y].size) {
+                        set_drag_source_active(true);
+                        Gtk.drag_begin_with_coordinates(this, targets, Gdk.DragAction.MOVE,
+                               Gdk.ModifierType.BUTTON1_MASK, event, (int)event.x, (int)event.y);
+                    }
+                    else {
+                        selection_phase = SelectionPhase.NOTHING_SELECTED;
+                        set_drag_source_active(false);
+                    }
                     queue_draw();
                 }
             }
@@ -564,7 +578,7 @@ namespace Turtlico {
                 if(y < program.size && x < program[y].size) {
                     var targets = Gtk.drag_dest_get_target_list(this);
                     Gtk.drag_begin_with_coordinates(this, targets, Gdk.DragAction.COPY,
-                       Gdk.ModifierType.BUTTON1_MASK, event, (int)event.x, (int)event.y);
+                       Gdk.ModifierType.BUTTON3_MASK, event, (int)event.x, (int)event.y);
                 }
             }
             return false;

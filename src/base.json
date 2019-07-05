@@ -20,7 +20,7 @@
 				{"id":"0_pd", "icon":"✎", "?": 'Put the pen down – drawing when moving.' ,"type": 0, "func": "pendown", "params": "" },
 				{"id":"0_pp", "icon":"🖊", "?": 'Pen properties' ,"type": 0, "func": "pen", "params": "" },
 				{"id":"(", "icon":"(", "?": 'Left parenthesis', "type": 4, "c":"(" },
-				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":"," },
+				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":", " },
 				{"id":")", "icon":")", "?": 'Right parenthesis', "type": 4,  "c":")" },
 				{"id":"0_ht", "icon":"🔅", "?": 'Hide turtle' , "type": 0, "func": "hideturtle", "params": "" },
 				{"id":"0_st", "icon":"🔆", "?": 'Show turtle' , "type": 0, "func": "showturtle", "params": "" },
@@ -32,7 +32,8 @@
 				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "" },
 				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
 				{"id":"0_plcimg", "icon":"r:0_plcimg.png", "?": 'Place image at the position of the turtle' , "type": 0, "func": "tcf_place_img", "params": "" },
-				{"id":"0_sleep", "icon":"💤", "?": 'Sleep n seconds(freezes window)' , "type": 0, "func": "time.sleep", "params": "1" }
+				{"id":"0_sleep", "icon":"💤", "?": 'Sleep n seconds (freezes window)' , "type": 0, "func": "time.sleep", "params": "1" },
+				{"id":"0_collision", "icon":"r:0_collision.png", "?": 'Connect a function to handle collision between two turtles', "type": 0, "func": "tcf_collision", "params": "" }
 			]
 		},
 		{
@@ -61,7 +62,7 @@
 			"icon" : "⚙",
 			"commands" : [
 				{"id":"[", "icon":"[", "?": 'Left square bracket', "type": 4, "c":"["},
-				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":","},
+				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":", "},
 				{"id":"]", "icon":"]", "?": 'Right square bracket', "type": 4, "c":"]"},
 				{"id":"2_del", "icon":"del", "?": 'Delete an object', "type": 3, "c":"del "},
 				{"id":"0_apnd", "icon":"r:0_apnd.png", "?": 'Append an item to a list', "type": 0, "func": "append", "params": "" },
@@ -82,7 +83,7 @@
 				{"id":"3_r", "icon":"r:3_r.png", "?": 'Return a value', "type": 3, "c":"return"},
 				{"id":"1_rep", "icon":"🔂", "?": 'Repeat block of commands', "type": -1},
 				{"id":"1_for", "icon":"for", "?": 'For loop', "type": -1},
-				{"id":"in", "icon":"in", "?": 'Is item in a list? / For all items in collection.', "type": 4, "c":" in "},
+				{"id":"in", "icon":"in", "?": 'Is item in a list? / For all items in a collection.', "type": 4, "c":" in "},
 				{"id":"1_while", "icon":"r:1_while.png", "?": 'Repeat while the condition is true', "type": -1},
 				{"id":"3_b", "icon":"🛑", "?": 'Break out of a loop', "type": 3, "c":"break"},
 				{"id":"3_c", "icon":"↦", "?": 'Continue with next iteration of a loop', "type": 3, "c":"continue"},
@@ -92,13 +93,14 @@
 				{"id":"2_-=", "icon":"↙", "?": 'Decrease value by', "type": 4, "c":"-="},
 				{"id":"2_.", "icon":".", "?": 'Dot (use to access properties of an object)', "type": 4, "c":"."},
 				{"id":"tc", "icon":"🔄", "?": 'Type conversion', "type": -1},
-				{"id":"python", "icon":"r:python.png", "?": 'Direct Python code', "type": -1},
 				{"id":"+", "icon":"+", "?": 'Plus', "type": 4, "c":"+"},
 				{"id":"-", "icon":"-", "?": 'Minus', "type": 4, "c":"-"},
 				{"id":"*", "icon":"*", "?": 'Multiply', "type": 4, "c":"*"},
 				{"id":"/", "icon":"/", "?": 'Divide', "type": 4, "c":"/"},
 				{"id":"%", "icon":"%", "?": 'Modulo', "type": 4, "c":"%"},
+				{"id":"python", "icon":"r:python.png", "?": 'Direct Python code', "type": -1},
 				{"id":"5_rand", "icon":"🎲", "?": 'Random number' , "type": 5, "func": "random.randint", "params": "1, 100" },
+				{"id":"5_range", "icon":"r:5_range.png", "?": 'Return list of numbers in specified range' , "type": 5, "func": "range", "params": "1, 10" },
 				{"id":"0_emc", "icon":"👇", "?": 'Connect a function to handle mouse clicks' , "type": 0, "func": "onscreenclick", "params": "" },
 				{"id":"0_ekey", "icon":"⌨", "?": 'Connect a function to handle key presses' , "type": 0, "func": "onkey", "params": "" },
 				{"id":"0_tmr", "icon":"⌚", "?": 'Call a function after n miliseconds' , "type": 0, "func": "ontimer", "params": "" },
@@ -179,6 +181,18 @@
 		else:\
 			register_shape(path)\
 	return path"
+		},
+		{
+			"id": "tcf_collision",
+			"code": "tcf_collisions=[]\
+def check():\
+	for c in tcf_collisions:\
+		if c[0].distance(c[1].xcor(), c[1].ycor()) < c[3]:\
+			c[2]()\
+	ontimer(check, 50)\
+check()\
+def tcf_collision(a, b, callback, collider_size=10):\
+	tcf_collisions.append((a, b, callback, collider_size))"
 		}
 	]
 }
