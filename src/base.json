@@ -27,13 +27,17 @@
 				{"id":"0_wr", "icon":"✍", "?": 'Write text on screen' , "type": 0, "func": "write", "params": "" },
 				{"id":"0_bf", "icon":"r:0_bf.png", "?": 'Begin fill' , "type": 0, "func": "begin_fill", "params": "" },
 				{"id":"0_ef", "icon":"r:0_ef.png", "?": 'End fill - fill the drawn shape' , "type": 0, "func": "end_fill", "params": "" },
-				{"id":"0_cs", "icon":"💧", "?": 'Clear screen' , "type": 0, "func": "clear", "params": "" },
+				{"id":"0_cs", "icon":"r:0_cs.png", "?": 'Clear screen' , "type": 0, "func": "clear", "params": "" },
+				{"id":"5_screen_c", "icon":"r:5_screen_c.png", "?": 'Get or set the color of the screen' , "type": 5, "func": "bgcolor", "params": "#ffffff" },
+				{"id":"5_screen_i", "icon":"r:5_screen_i.png", "?": 'Get or set the background picture of the screen' , "type": 5, "func": "bgpic", "params": "nopic" },
 				{"id":"5_img", "icon":"🖼", "?": 'Image' , "type": 0, "func": "tcf_get_image", "params": "" },
 				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "" },
 				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
+				{"id":"5_gett", "icon":"r:5_gett.png", "?": 'Get the predefined turtle object' , "type": 5, "func": "getturtle", "params": "" },
 				{"id":"0_plcimg", "icon":"r:0_plcimg.png", "?": 'Place image at the position of the turtle' , "type": 0, "func": "tcf_place_img", "params": "" },
 				{"id":"0_sleep", "icon":"💤", "?": 'Sleep n seconds (freezes window)' , "type": 0, "func": "time.sleep", "params": "1" },
 				{"id":"0_collision", "icon":"r:0_collision.png", "?": 'Connect a function to handle collision (in circle collider of specified radius) between two turtles', "type": 0, "func": "tcf_collision", "params": "" },
+				{"id":"tcf_collision_rect", "icon":"r:0_collision_rect.png", "?": 'Connect a function to handle collision (in rectangle collider of specified size) between two turtles', "type": 0, "func": "tcf_collision_rect", "params": "" },
 				{"id":"0_exit", "icon":"r:0_exit.png", "?": 'Exit the program', "type": 0, "func": "sys.exit", "params": "0" }
 			]
 		},
@@ -56,6 +60,7 @@
 				{"id":"5_deg", "icon":"deg", "?": 'Convert angle from radians to degrees.', "type": 5, "func": "math.degrees", "params": ""},
 				{"id":"5_rnd", "icon":"rnd", "?": 'Round a number', "type": 5, "func": "round", "params": ""},
 				{"id":"4_color", "icon":"🎨", "?": 'Color (property)' , "type": 4, "c":"color"},
+				{"id":"4_font", "icon":"Aa", "?": 'Font (property)' , "type": 4, "c":"font"},
 				{"id":"true", "icon":"r:true.png", "?": 'True' , "type": 4, "c":"True"},
 				{"id":"false", "icon":"r:false.png", "?": 'False' , "type": 4, "c":"False"}
 			]
@@ -191,15 +196,40 @@ def check():\
 	for c in tcf_collisions:\
 		if not (c[0].isvisible() and c[1].isvisible()):\
 			continue\
-		if c[0].distance(c[1].xcor(), c[1].ycor()) < c[3]:\
-			if c[4] != None:\
-				c[2](c[4])\
+		if c[0].distance(c[1].xcor(), c[1].ycor()) < c[3] + c [4]:\
+			if c[5] != None:\
+				c[2](c[5])\
 			else:\
 				c[2]()\
 	ontimer(check, 50)\
 check()\
-def tcf_collision(a, b, callback, collider_size=10, user_data=None):\
-	tcf_collisions.append((a, b, callback, collider_size, user_data))"
+def tcf_collision(a, b, callback, collider_size_1=10, collider_size_2=10, user_data=None):\
+	tcf_collisions.append((a, b, callback, collider_size_1, collider_size_2, user_data))"
+		},
+		{
+			"id": "tcf_collision_rect",
+			"code": "tcf_collisions_rect=[]\
+def check_rect():\
+	for c in tcf_collisions_rect:\
+		if not (c[0].isvisible() and c[1].isvisible()):\
+			continue\
+		f_top_right_x = c[0].xcor()+c[3][0]/2\
+		f_top_right_y = c[0].ycor()+c[3][1]/2\
+		f_bottom_left_x = c[0].xcor()-c[3][0]/2\
+		f_bottom_left_y = c[0].ycor()-c[3][1]/2\
+		s_top_right_x = c[1].xcor()+c[4][0]/2\
+		s_top_right_y = c[1].ycor()+c[4][1]/2\
+		s_bottom_left_x = c[1].xcor()-c[4][0]/2\
+		s_bottom_left_y = c[1].ycor()-c[4][1]/2\
+		if not (f_top_right_x < s_bottom_left_x or f_bottom_left_x > s_top_right_x or f_top_right_y < s_bottom_left_y or f_bottom_left_y > s_top_right_y):\
+			if c[5] != None:\
+				c[2](c[5])\
+			else:\
+				c[2]()\
+	ontimer(check_rect, 50)\
+check_rect()\
+def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2=(15, 15), user_data=None):\
+	tcf_collisions_rect.append((a, b, callback, collider_size_1, collider_size_2, user_data))"
 		}
 	]
 }

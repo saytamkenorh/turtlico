@@ -101,8 +101,8 @@ namespace Turtlico {
 from turtle import *
 from tempfile import NamedTemporaryFile
 from PIL import Image
-import math, random, os, time
-color('black');speed(1);title('Turtle');colormode(255)
+import math, random, os, time, sys
+color('black');speed(1);title('Turtle');colormode(255);shape('turtle')
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Generated code
 """);

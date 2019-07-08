@@ -3,9 +3,14 @@
   <gresource prefix="/com/orsan/Turtlico/icons">
     <file>0_bf.png</file>
     <file>0_ef.png</file>
+    <file>0_cs.png</file>
+    <file>5_screen_c.png</file>
+    <file>5_screen_i.png</file>
     <file>3_r.png</file>
+    <file>5_gett.png</file>
     <file>0_plcimg.png</file>
     <file>0_collision.png</file>
+    <file>0_collision_rect.png</file>
     <file>0_exit.png</file>
     <file>true.png</file>
     <file>false.png</file>

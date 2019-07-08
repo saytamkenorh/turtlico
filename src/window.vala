@@ -38,6 +38,8 @@ namespace Turtlico {
         Gtk.Button save_btn;
         [GtkChild]
         Gtk.Image delete_btn;
+        [GtkChild]
+        Gtk.Label status_label;
 
         public Compiler compiler;
 
@@ -94,6 +96,17 @@ namespace Turtlico {
                 update_window_title();
             });
             programview.program_changed = false;
+            programview.motion_notify_event.connect((event)=>{
+                int x = (int)event.x / ProgramView.cell_width;
+                int y = (int)event.y / ProgramView.cell_height;
+                if (programview.program.size > y && programview.program[y].size > x) {
+                    status_label.label = x.to_string() + ":" +  (y + 1).to_string() + " " + programview.program[y][x].help;
+                }
+                else {
+                    status_label.label = "";
+                }
+                return false;
+            });
 
             // Load commands database
             load_commands();
@@ -242,6 +255,7 @@ namespace Turtlico {
             }
             else
                 on_save_as_btn_clicked();
+            status_label.label = _("Program saved.");
         }
 
         [GtkCallback]
@@ -274,6 +288,7 @@ namespace Turtlico {
             #if TURTLICO_FLATPAK
                 dialog.destroy();
             #endif
+            status_label.label = _("Program saved.");
         }
 
         [GtkCallback]

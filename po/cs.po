@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-05 14:43+0200\n"
+"POT-Creation-Date: 2019-07-08 11:04+0200\n"
 "PO-Revision-Date: 2018-05-31 16:17+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -51,7 +51,7 @@ msgstr "Spustit program"
 msgid "Open program"
 msgstr "Otevřít program"
 
-#: src/window.ui:105 src/window.vala:252
+#: src/window.ui:105 src/window.vala:266
 msgid "Save"
 msgstr "Uložit"
 
@@ -157,50 +157,54 @@ msgstr "Uloží zkompilovaný program do SOUBORU"
 msgid "Cannot save the output file: %s\n"
 msgstr "Nepodařilo se uložit výsledný soubor: %s\n"
 
-#: src/window.vala:193
+#: src/window.vala:206
 msgid "stdout of child process:\n"
 msgstr "stdout podprocesu:\n"
 
-#: src/window.vala:194
+#: src/window.vala:207
 msgid "stderr of child process:\n"
 msgstr "stderr podprocesu:\n"
 
 #. Python indexes lines from 1
 #. We show user line numbers indexed from 1
-#: src/window.vala:211
+#: src/window.vala:224
 msgid "Error occurred at line "
 msgstr "Chyba se vyskytla na řádku "
 
-#: src/window.vala:214
+#: src/window.vala:227
 msgid "Program crashed"
 msgstr "Program selhal"
 
-#: src/window.vala:240
+#: src/window.vala:253
 msgid "Failed to save the program"
 msgstr "Nepodařilo se uložit program"
 
-#: src/window.vala:250 src/window.vala:255 src/window.vala:283
-#: src/window.vala:288
+#: src/window.vala:258 src/window.vala:291
+msgid "Program saved."
+msgstr "Program uložen."
+
+#: src/window.vala:264 src/window.vala:269 src/window.vala:298
+#: src/window.vala:303
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/window.vala:253 src/window.vala:286 src/window.vala:525
+#: src/window.vala:267 src/window.vala:301 src/window.vala:540
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/window.vala:262 src/window.vala:295
+#: src/window.vala:276 src/window.vala:310
 msgid "Turtlico project (*.tcp)"
 msgstr "Projekt Turtlico (*.tcp)"
 
-#: src/window.vala:285
+#: src/window.vala:300
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/window.vala:337
+#: src/window.vala:352
 msgid "Would you really like to apply these changes?"
 msgstr "Opravdu chcete aplikovat tyto změny?"
 
-#: src/window.vala:338
+#: src/window.vala:353
 msgid ""
 "The program contains commands that are only available from a plugin. "
 "Unavailable commands will be removed."
@@ -208,27 +212,27 @@ msgstr ""
 "Program obsahuje příkazy, které jsou dostupné pouze z přídavného modulu. "
 "Nedostupné příkazy budou odstraněny."
 
-#: src/window.vala:383
+#: src/window.vala:398
 msgid "Failed to open the program"
 msgstr "Nepodařilo se otevřít program"
 
-#: src/window.vala:520
+#: src/window.vala:535
 msgid "Would you like to save your changes before closing the program?"
 msgstr "Přereje si uložit změny před zavřením programu?"
 
-#: src/window.vala:521
+#: src/window.vala:536
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr "Jinak budou neuložené změny ztraceny!"
 
-#: src/window.vala:523
+#: src/window.vala:538
 msgid "Yes"
 msgstr "Ano"
 
-#: src/window.vala:524
+#: src/window.vala:539
 msgid "No"
 msgstr "Ne"
 
-#: src/window.vala:541
+#: src/window.vala:556
 msgid "Unnamed"
 msgstr "Bez názvu"
 
@@ -342,7 +346,7 @@ msgstr "Vlastnosi pera"
 msgid "Left parenthesis"
 msgstr "Levá závorka"
 
-#: src/base.json:23 src/base.json:65
+#: src/base.json:23 src/base.json:72
 msgid "Argument separator (Comma)"
 msgstr "Oddělovač argumentů (čárka)"
 
@@ -375,297 +379,330 @@ msgid "Clear screen"
 msgstr "Smaž obrazovku"
 
 #: src/base.json:31
+msgid "Get or set the color of the screen"
+msgstr "Získat nebo nastavit barvu obrazovky"
+
+#: src/base.json:32
+msgid "Get or set the background picture of the screen"
+msgstr "Získat nebo nastavit obrázek pozadí obrazovky"
+
+#: src/base.json:33
 msgid "Image"
 msgstr "Obrázek"
 
-#: src/base.json:32
+#: src/base.json:34
 msgid "Set turtle shape"
 msgstr "Nastav vzhled želvy"
 
-#: src/base.json:33
+#: src/base.json:35
 msgid "Create new turtle"
 msgstr "Vytvořit novou želvu"
 
-#: src/base.json:34
+#: src/base.json:36
+msgid "Get the predefined turtle object"
+msgstr ""
+
+#: src/base.json:37
 msgid "Place image at the position of the turtle"
 msgstr "Vyčarovat obrázek na pozici želvy"
 
-#: src/base.json:35
+#: src/base.json:38
 msgid "Sleep n seconds (freezes window)"
 msgstr "Spi n sekund (zmrazí okno)"
 
-#: src/base.json:36
+#: src/base.json:39
 msgid ""
 "Connect a function to handle collision (in circle collider of specified "
 "radius) between two turtles"
 msgstr ""
-"Připojit funkci pro detekování kolize (v kruhovém collideru se zadaným poloměrem) mezi dvěma želvami."
+"Připojit funkci pro detekování kolize (v kruhovém collideru se zadaným "
+"poloměrem) mezi dvěma želvami."
 
-#: src/base.json:42
+#: src/base.json:40
+msgid ""
+"Connect a function to handle collision (in rectangle collider of specified "
+"size) between two turtles"
+msgstr ""
+"Připojit funkci pro detekování kolize (v obdélníkovém collideru se zadanými "
+"rozměry) mezi dvěma želvami."
+
+#: src/base.json:41
+msgid "Exit the program"
+msgstr "Ukončit program"
+
+#: src/base.json:47
 msgid "East"
 msgstr "Východ"
 
-#: src/base.json:43
+#: src/base.json:48
 msgid "North"
 msgstr "Sever"
 
-#: src/base.json:44
+#: src/base.json:49
 msgid "West"
 msgstr "Západ"
 
-#: src/base.json:45
+#: src/base.json:50
 msgid "South"
 msgstr "Jih"
 
-#: src/base.json:46
+#: src/base.json:51
 msgid "Pi (3.14)"
 msgstr "Pi (3.14)"
 
-#: src/base.json:47
+#: src/base.json:52
 msgid "Get x coordinate"
 msgstr "Pozice X"
 
-#: src/base.json:48
+#: src/base.json:53
 msgid "Get y coordinate"
 msgstr "Pozice Y"
 
-#: src/base.json:49
+#: src/base.json:54
+msgid "Return True if turtle is shown."
+msgstr "Vrátí pravdu (True), pokud se želva viditelná."
+
+#: src/base.json:55
 msgid "Sine"
 msgstr "Sinus"
 
-#: src/base.json:50
+#: src/base.json:56
 msgid "Cosine"
 msgstr "Cosinus"
 
-#: src/base.json:51
+#: src/base.json:57
 msgid "Tangent"
 msgstr "Tangens"
 
-#: src/base.json:52
+#: src/base.json:58
 msgid "Absolute value"
 msgstr "Absolutní hodnota"
 
-#: src/base.json:53
+#: src/base.json:59
 msgid "Convert angle from degrees to radians."
 msgstr "Převede úhel ze stupňů na radiány."
 
-#: src/base.json:54
+#: src/base.json:60
 msgid "Convert angle from radians to degrees."
 msgstr "Převede úhel z radiánů na stupně"
 
-#: src/base.json:55
+#: src/base.json:61
 msgid "Round a number"
 msgstr "Zaokrouhlit číslo"
 
-#: src/base.json:56
+#: src/base.json:62
 msgid "Color (property)"
 msgstr "Barva (vlastnost)"
 
-#: src/base.json:57
-msgid "True"
-msgstr "Pravda"
+#: src/base.json:63
+msgid "Font (property)"
+msgstr "Písmo (vlastnost)"
 
-#: src/base.json:58
+#: src/base.json:64
+msgid "True"
+msgstr "True (Pravda)"
+
+#: src/base.json:65
 msgid "False"
 msgstr "Nepravda"
 
-#: src/base.json:64
+#: src/base.json:71
 msgid "Left square bracket"
 msgstr "Levá hranatá závorka"
 
-#: src/base.json:66
+#: src/base.json:73
 msgid "Right square bracket"
 msgstr "Pravá hranatá závorka"
 
-#: src/base.json:67
+#: src/base.json:74
 msgid "Delete an object"
 msgstr "Smazat objekt"
 
-#: src/base.json:68
+#: src/base.json:75
 msgid "Append an item to a list"
 msgstr "Přidat položku"
 
-#: src/base.json:69
+#: src/base.json:76
 msgid "Insert an item to a list"
 msgstr "Vložit položku"
 
-#: src/base.json:70
+#: src/base.json:77
 msgid "Clear list"
 msgstr "Vymazat list"
 
-#: src/base.json:71
+#: src/base.json:78
 msgid "Finds index of the first occurence of an item in a list"
 msgstr "Najde index posledního výskytu položky v listu"
 
-#: src/base.json:72
+#: src/base.json:79
 msgid "If statement"
 msgstr "Když"
 
-#: src/base.json:73
+#: src/base.json:80
 msgid "Else"
 msgstr "Jinak"
 
-#: src/base.json:74
+#: src/base.json:81
 msgid "Begin block of commands"
 msgstr "Začátek bloku příkazů"
 
-#: src/base.json:75
+#: src/base.json:82
 msgid "Equals"
 msgstr "se rovná"
 
-#: src/base.json:76
+#: src/base.json:83
 msgid "Not equals"
 msgstr "se nerovná"
 
-#: src/base.json:77
+#: src/base.json:84
 msgid "is less than"
 msgstr "je menší než"
 
-#: src/base.json:78
+#: src/base.json:85
 msgid "is greater than"
 msgstr "je větší než"
 
-#: src/base.json:79
+#: src/base.json:86
 msgid "and"
 msgstr "a zároveň"
 
-#: src/base.json:80
+#: src/base.json:87
 msgid "or"
 msgstr "nebo"
 
-#: src/base.json:81
+#: src/base.json:88
 msgid "negation"
 msgstr "negace"
 
-#: src/base.json:82
+#: src/base.json:89
 msgid "Define a method"
 msgstr "Definice metody"
 
-#: src/base.json:83
+#: src/base.json:90
 msgid "Return a value"
 msgstr "Vrátit hodnotu"
 
-#: src/base.json:84
+#: src/base.json:91
 msgid "Repeat block of commands"
 msgstr "Opakovat blok příkazů"
 
-#: src/base.json:85
+#: src/base.json:92
 msgid "For loop"
 msgstr "Cyklus For"
 
-#: src/base.json:86
+#: src/base.json:93
 msgid "Is item in a list? / For all items in a collection."
 msgstr ""
 
-#: src/base.json:87
+#: src/base.json:94
 msgid "Repeat while the condition is true"
 msgstr "Opakovat dokud je podmínka pravdivá"
 
-#: src/base.json:88
+#: src/base.json:95
 msgid "Break out of a loop"
 msgstr "Přerušit cyklus"
 
-#: src/base.json:89
+#: src/base.json:96
 msgid "Continue with next iteration of a loop"
 msgstr "Pokračovat další iterací cyklu (continue)"
 
-#: src/base.json:90
+#: src/base.json:97
 msgid "Object"
 msgstr "Objekt"
 
-#: src/base.json:91
+#: src/base.json:98
 msgid "Assign value to a variable"
 msgstr "Přiřadit hodnotu do proměnné"
 
-#: src/base.json:92
+#: src/base.json:99
 msgid "Increase value by"
 msgstr "Zvýšit hodnotu proměnné o"
 
-#: src/base.json:93
+#: src/base.json:100
 msgid "Decrease value by"
 msgstr "Snížit hodnotu proměnné o"
 
-#: src/base.json:94
+#: src/base.json:101
 msgid "Dot (use to access properties of an object)"
 msgstr "Tečka (přístup k vlastnostem objektu)"
 
-#: src/base.json:95
+#: src/base.json:102
 msgid "Type conversion"
 msgstr "Konverze typu"
 
-#: src/base.json:96
+#: src/base.json:103
 msgid "Plus"
 msgstr "Plus"
 
-#: src/base.json:97
+#: src/base.json:104
 msgid "Minus"
 msgstr "Mínus"
 
-#: src/base.json:98
+#: src/base.json:105
 msgid "Multiply"
 msgstr "Krát"
 
-#: src/base.json:99
+#: src/base.json:106
 msgid "Divide"
 msgstr "Děleno"
 
-#: src/base.json:100
+#: src/base.json:107
 msgid "Modulo"
 msgstr "Zbytek po dělení (modulo)"
 
-#: src/base.json:101
+#: src/base.json:108
 msgid "Direct Python code"
 msgstr "Přímý Python kód"
 
-#: src/base.json:102
+#: src/base.json:109
 msgid "Random number"
 msgstr "Náhodné číslo"
 
-#: src/base.json:103
+#: src/base.json:110
 msgid "Return list of numbers in specified range"
 msgstr ""
 
-#: src/base.json:104
+#: src/base.json:111
 msgid "Connect a function to handle mouse clicks"
 msgstr "Připojte funkci pro zachycení klikání myší"
 
-#: src/base.json:105
+#: src/base.json:112
 msgid "Connect a function to handle key presses"
 msgstr "Připojte funkci pro zachycení stisků specifikované klávesy"
 
-#: src/base.json:106
+#: src/base.json:113
 msgid "Call a function after n miliseconds"
 msgstr "Zavolat funkci po n milisekundách"
 
-#: src/base.json:107
+#: src/base.json:114
 msgid "Number input"
 msgstr "Číselný vstup"
 
-#: src/base.json:108
+#: src/base.json:115
 msgid "String input"
 msgstr "Řetězcový vstup"
 
-#: src/base.json:114
+#: src/base.json:121
 msgid "Read all lines of a file"
 msgstr "Přečti všechny řádky ze souboru"
 
-#: src/base.json:115
+#: src/base.json:122
 msgid "Write lines to a file"
 msgstr "Zapiš řádky do souboru"
 
-#: src/base.json:116
+#: src/base.json:123
 msgid "Open file dialog"
 msgstr "Otevře dialog pro výběr souboru"
 
-#: src/base.json:117
+#: src/base.json:124
 msgid "Check file exists"
 msgstr "Zjistit existenci souboru"
 
-#: src/base.json:118
+#: src/base.json:125
 msgid "Check directory exists"
 msgstr "Zjistit existenci složky"
 
-#: src/base.json:119
+#: src/base.json:126
 msgid "Delete file or directory"
 msgstr "Smaž soubor nebo složku"
 
@@ -714,6 +751,3 @@ msgstr "Připojte funkci, která bude aktivována, když se zařízení zapne"
 msgid ""
 "Connect a function that is called when the device state changes to inactive"
 msgstr "Připojte funkci, která bude aktivována, když se zařízení vypne"
-
-#~ msgid "is item in a list?"
-#~ msgstr "je položka v listu?"
