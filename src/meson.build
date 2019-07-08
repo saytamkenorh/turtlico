@@ -2,6 +2,7 @@ turtlico_sources = [
   'main.vala',
   'window.vala',
   'programview.vala',
+  'programbuffer.vala',
   'command.vala',
   'compiler.vala',
   'program-settings.vala',

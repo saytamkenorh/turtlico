@@ -60,7 +60,7 @@ int main (string[] args) {
 	            var file = cmdline.create_file_for_arg(path.get_string());
 	            var iostream = file.create_readwrite(FileCreateFlags.NONE);
 	            var dos = new DataOutputStream(iostream.output_stream);
-                dos.put_string(win.compiler.compile(win.programview.program));
+                dos.put_string(win.compiler.compile(win.programview.buffer.program));
                 iostream.close();
                 win.destroy();
             }

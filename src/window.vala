@@ -48,7 +48,7 @@ namespace Turtlico {
             get {return _current_file;}
             set {
                 _current_file = value;
-                programview.resource_dir = Path.get_dirname(current_file.get_path());
+                programview.buffer.resource_dir = Path.get_dirname(current_file.get_path());
                 update_window_title();
             }
         }
@@ -88,19 +88,19 @@ namespace Turtlico {
             // ProgramView
             programview = new ProgramView();
             icons_scrolled_window.add(programview);
-            programview.notify["program-changed"].connect(()=>{
-                if (programview.program_changed)
+            programview.buffer.notify["program-changed"].connect(()=>{
+                if (programview.buffer.program_changed)
                     save_btn.sensitive = true;
                 else
                     save_btn.sensitive = false;
                 update_window_title();
             });
-            programview.program_changed = false;
+            programview.buffer.program_changed = false;
             programview.motion_notify_event.connect((event)=>{
                 int x = (int)event.x / ProgramView.cell_width;
                 int y = (int)event.y / ProgramView.cell_height;
-                if (programview.program.size > y && programview.program[y].size > x) {
-                    status_label.label = x.to_string() + ":" +  (y + 1).to_string() + " " + programview.program[y][x].help;
+                if (programview.buffer.program.size > y && programview.buffer.program[y].size > x) {
+                    status_label.label = (x + 1).to_string() + ":" +  (y + 1).to_string() + " " + programview.buffer.program[y][x].help;
                 }
                 else {
                     status_label.label = "";
@@ -132,7 +132,7 @@ namespace Turtlico {
             string t;
             cmd_view.get_model().get(selected_iter, CmdViewCols.ID, out t);
             try {
-                programview.draw_icon(ctx, 0, 0, programview.find_command_by_id(t));
+                programview.draw_icon(ctx, 0, 0, programview.buffer.find_command_by_id(t));
             }
             catch {}
             var pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0, ProgramView.cell_width, ProgramView.cell_height);
@@ -157,7 +157,7 @@ namespace Turtlico {
 		[GtkCallback]
 		void on_run_btn_clicked() {
             try {
-                string output = compiler.compile(programview.program,
+                string output = compiler.compile(programview.buffer.program,
                     settings.get_boolean("debug-data"));
                 string path;
                 if (current_file != null && !current_file.get_path().has_prefix("/run/user"))
@@ -219,7 +219,7 @@ namespace Turtlico {
                                 int i = words.index_of("line");
                                 int code_line = int.parse(words[i + 1].replace(",", ""));
                                 code_line--; // Python indexes lines from 1
-                                int line = compiler.out_line_to_src_line(programview.program, code_line);
+                                int line = compiler.out_line_to_src_line(programview.buffer.program, code_line);
                                 line++; // We show user line numbers indexed from 1
                                 error += "\n" + _("Error occurred at line ") + line.to_string();
                             }
@@ -246,7 +246,7 @@ namespace Turtlico {
                     if (current_file.query_exists())
                             current_file.delete();
                     var ostream = current_file.create_readwrite(FileCreateFlags.NONE);
-                    programview.save_to_stream(ostream.output_stream);
+                    programview.buffer.save_to_stream(ostream.output_stream);
                     ostream.close();
                 }
                 catch (Error e) {
@@ -323,22 +323,22 @@ namespace Turtlico {
 
         [GtkCallback]
         void on_settings_btn_clicked() {
-            var previous_state = new Gee.ArrayList<string>.wrap(programview.enabled_plugins.to_array());
-            var program_settings = new ProgramSettings(ref programview.enabled_plugins,
-                programview.program);
+            var previous_state = new Gee.ArrayList<string>.wrap(programview.buffer.enabled_plugins.to_array());
+            var program_settings = new ProgramSettings(ref programview.buffer.enabled_plugins,
+                programview.buffer.program);
             program_settings.set_transient_for(this);
             program_settings.show_all();
             program_settings.delete_event.connect(()=>{
                 load_commands();
                 int remove_missing = -1;
                 // Check for missing commands
-                for (int y = 0; y < programview.program.size; y++)
+                for (int y = 0; y < programview.buffer.program.size; y++)
                 {
-                    for (int x = 0; x < programview.program[y].size; x++)
+                    for (int x = 0; x < programview.buffer.program[y].size; x++)
                     {
                         bool found = false;
-                        foreach(Command c in programview.commands) {
-                            if (c.id == programview.program[y][x].id) {
+                        foreach(Command c in programview.buffer.commands) {
+                            if (c.id == programview.buffer.program[y][x].id) {
                                 found = true;
                                 break;
                             }
@@ -355,23 +355,23 @@ namespace Turtlico {
                                 dialog.destroy();
                                 if (answer == Gtk.ResponseType.YES) {
                                     remove_missing = 1;
-                                    programview.backup_clear();
+                                    programview.buffer.backup_clear();
                                 }
                                 else {
-                                    programview.enabled_plugins = previous_state;
+                                    programview.buffer.enabled_plugins = previous_state;
                                     load_commands();
-                                    y = programview.program.size;
+                                    y = programview.buffer.program.size;
                                     break;
                                 }
                             }
                             if (remove_missing == 1) {
-                                programview.program[y].remove_at(x);
+                                programview.buffer.program[y].remove_at(x);
                                 x--;
                             }
                         }
                     }
                     if (remove_missing == 1)
-                        programview.backup_program();
+                        programview.buffer.backup_program();
                 }
                 return false;
             });
@@ -388,10 +388,10 @@ namespace Turtlico {
             try {
                 var stream = file.read();
                 current_file = file;
-                programview.load_from_stream_(stream, true);
+                programview.buffer.load_from_stream_(stream, true);
                 load_commands();
                 stream = file.read();
-                programview.load_from_stream_(stream, false);
+                programview.buffer.load_from_stream_(stream, false);
                 stream.close();
             }
             catch (Error e) {
@@ -402,11 +402,11 @@ namespace Turtlico {
         void load_commands () {
             // Clear
             categories_box.get_children().foreach((w)=>{categories_box.remove(w);});
-            programview.commands.clear();
+            programview.buffer.commands.clear();
             // Compiler
-            compiler =  new Compiler(programview.enabled_plugins.to_array());
+            compiler =  new Compiler(programview.buffer.enabled_plugins.to_array());
             // Load from JSON
-            var parsers = Command.create_parsers(programview.enabled_plugins.to_array());
+            var parsers = Command.create_parsers(programview.buffer.enabled_plugins.to_array());
             foreach(Json.Parser parser in parsers) {
                 // Get the root node:
 		        Json.Node node = parser.get_root ();
@@ -442,7 +442,7 @@ namespace Turtlico {
                                                 _(command.get_string_member("?")),
                                                 command.get_string_member("id"), "");
                         //debug(command.get_string_member("icon"));
-                        programview.commands.add(c);
+                        programview.buffer.commands.add(c);
                         Gtk.TreeIter iter;
                         ls.append(out iter);
                         var surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,
@@ -486,12 +486,12 @@ namespace Turtlico {
 
         [GtkCallback]
         void on_undo_btn_clicked () {
-            programview.undo();
+            programview.buffer.undo();
         }
 
         [GtkCallback]
         void on_redo_btn_clicked () {
-            programview.redo();
+            programview.buffer.redo();
         }
 
         [GtkCallback]
@@ -525,7 +525,7 @@ namespace Turtlico {
 
         private bool check_file_save () {
             // Program not changed (no confirm dialog)
-            if (!programview.program_changed)
+            if (!programview.buffer.program_changed)
                 return false;
             // Program changed (show a confirm dialog)
             var dialog = new Gtk.MessageDialog(this,
@@ -550,7 +550,7 @@ namespace Turtlico {
 
         void update_window_title () {
             string name = "";
-            if (programview.program_changed)
+            if (programview.buffer.program_changed)
                 name = "*";
             if (current_file == null)
                 name += _("Unnamed");
