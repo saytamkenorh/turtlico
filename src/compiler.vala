@@ -235,6 +235,14 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                             break;
                         }
                     }
+                    if (program[y][x].id == "4_font") {
+                        var font = program[y][x].data.split(";");
+                        string family = font[0];
+                        string size = font[1];
+                        string fonttype = font[2];
+                        string weight = font[3];
+                        output[out_line] = output[out_line] + @" = ('$family', $size, '$fonttype', '$weight')";
+                    }
                     // Keywords
                     foreach (var f in keywords) {
                         if(program[y][x].id == f.id) {

@@ -75,6 +75,8 @@ namespace Turtlico {
         Gtk.SourceView python_view;
         [GtkChild]
         Gtk.Dialog python_code_dialog;
+        [GtkChild]
+        Gtk.FontChooserDialog font_dialog;
         // Render
         Gdk.RGBA color_cell;
         Gdk.RGBA color_text;
@@ -324,7 +326,7 @@ namespace Turtlico {
                     }
                     else {
                         Command c = program[line][command];
-                        if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img") {
+                        if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img" || c.id == "4_font") {
                             x+=(c.data.length / 7 + 1);
                         }
                         else {x++;}
@@ -417,7 +419,7 @@ namespace Turtlico {
                 cr.move_to(x, y + 5);
 
             Pango.Layout layout;
-            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img") {
+            if ((c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img" || c.id == "4_font") && c.data != "") {
                 layout = create_pango_layout(c.data);
                 layout.set_font_description(small_font);
                 if (c.id == "#" || c.id== "str" || c.id == "5_img")
@@ -431,7 +433,7 @@ namespace Turtlico {
             layout.set_width(cell_width * width * Pango.SCALE);
             layout.set_justify(false);
             Pango.cairo_show_layout(cr, layout);
-            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img")
+            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img" || c.id == "4_font")
                 return width;
             else
                 return 1;
@@ -690,6 +692,10 @@ namespace Turtlico {
                         icon_data_dialog_python(x, y);
                         queue_draw();backup_program();
                     }
+                    if (program[y][x].id == "4_font") {
+                        icon_data_dialog_font(x, y);
+                        queue_draw();backup_program();
+                    }
                 }
             }
             return false;
@@ -722,6 +728,42 @@ namespace Turtlico {
             python_code_dialog.run();
             python_code_dialog.hide();
             program[y][x] = program[y][x].set_data(python_view.buffer.text, resource_dir);
+            queue_draw();
+        }
+
+        void icon_data_dialog_font(int x, int y) {
+            font_dialog.set_transient_for((Gtk.Window)get_toplevel());
+            if (program[y][x].data != "") {
+                var description = new Pango.FontDescription();
+                var items = program[y][x].data.split(";");
+                description.set_family(items[0]);
+                description.set_size(int.parse(items[1]) * Pango.SCALE);
+                switch(items[2]) {
+                    case "italic":
+                        description.set_style(Pango.Style.ITALIC); break;
+                    case "normal":
+                        description.set_style(Pango.Style.NORMAL); break;
+                }
+                if(items[3] == "bold")
+                    description.set_weight(Pango.Weight.BOLD);
+                font_dialog.font_desc = description;
+            }
+            font_dialog.run();
+            font_dialog.hide();
+            var font_desc = font_dialog.font_desc;
+            string data = font_desc.get_family() + ";" +
+                (font_desc.get_size() / Pango.SCALE).to_string() + ";";
+            switch(font_desc.get_style()) {
+                case Pango.Style.ITALIC:
+                    data += "italic"; break;
+                case Pango.Style.NORMAL:
+                    data += "normal"; break;
+            }
+            if (font_desc.get_weight() == Pango.Weight.BOLD)
+                data += ";bold";
+            else
+                data += ";normal";
+            program[y][x] = program[y][x].set_data(data, resource_dir);
             queue_draw();
         }
 

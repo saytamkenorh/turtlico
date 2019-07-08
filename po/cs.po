@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-08 11:04+0200\n"
+"POT-Creation-Date: 2019-07-08 12:37+0200\n"
 "PO-Revision-Date: 2018-05-31 16:17+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -83,40 +83,40 @@ msgstr "Sem přetáhněte příkazy ke smazání"
 msgid "Enter a number"
 msgstr "Zadejte číslo"
 
-#: src/programview.ui:67 src/programview.ui:165 src/programview.ui:231
-#: src/programview.ui:298
+#: src/programview.ui:67 src/programview.ui:194 src/programview.ui:260
+#: src/programview.ui:327
 msgid "Done"
 msgstr "Hotovo"
 
-#: src/programview.ui:146
+#: src/programview.ui:175
 msgid "Edit Python code"
 msgstr "Upravit Python kód"
 
-#: src/programview.ui:209
+#: src/programview.ui:238
 msgid "Enter a string"
 msgstr "Zadejte řetězec"
 
-#: src/programview.ui:275
+#: src/programview.ui:304
 msgid "Select data type"
 msgstr "Vyberte datový typ"
 
-#: src/programview.ui:331
+#: src/programview.ui:360
 msgid "Integer"
 msgstr "Číslo (integer)"
 
-#: src/programview.ui:346
+#: src/programview.ui:375
 msgid "Float"
 msgstr "Desetinné číslo (float)"
 
-#: src/programview.ui:362 src/base.json:15
+#: src/programview.ui:391 src/base.json:15
 msgid "String"
 msgstr "Řetězec"
 
-#: src/programview.ui:378
+#: src/programview.ui:407
 msgid "Custom"
 msgstr "Jiný"
 
-#: src/programview.ui:408
+#: src/programview.ui:437
 msgid "Enter name of your custom data type"
 msgstr "Sem zadejte datový typ"
 
@@ -179,9 +179,9 @@ msgstr "Program selhal"
 msgid "Failed to save the program"
 msgstr "Nepodařilo se uložit program"
 
-#: src/window.vala:258 src/window.vala:291
-msgid "Program saved."
-msgstr "Program uložen."
+#: src/window.vala:258
+msgid "Project saved."
+msgstr "Projekt uložen."
 
 #: src/window.vala:264 src/window.vala:269 src/window.vala:298
 #: src/window.vala:303
@@ -195,6 +195,10 @@ msgstr "Zrušit"
 #: src/window.vala:276 src/window.vala:310
 msgid "Turtlico project (*.tcp)"
 msgstr "Projekt Turtlico (*.tcp)"
+
+#: src/window.vala:291
+msgid "Program saved."
+msgstr "Program uložen."
 
 #: src/window.vala:300
 msgid "Open"
@@ -236,23 +240,23 @@ msgstr "Ne"
 msgid "Unnamed"
 msgstr "Bez názvu"
 
-#: src/programview.vala:212
+#: src/programview.vala:214
 msgid "Please save the project first."
 msgstr "Nejdříve prosím uložze projekt."
 
-#: src/programview.vala:225
+#: src/programview.vala:227
 msgid "Cannot insert the image"
 msgstr "Nelze vložit obrázek"
 
-#: src/programview.vala:815
+#: src/programview.vala:857
 msgid "Failed to open the file. Error on line: "
 msgstr "Nepodařilo se načíst program. Chyba je na řádce: "
 
-#: src/programview.vala:830
+#: src/programview.vala:872
 msgid "The file to load contains an unkown command!"
 msgstr "Soubor obsahuje neznámý příkaz!"
 
-#: src/programview.vala:832
+#: src/programview.vala:874
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
@@ -262,7 +266,7 @@ msgstr ""
 "verzí programu.\n"
 "ID příkazu: "
 
-#: src/compiler.vala:257
+#: src/compiler.vala:265
 msgid "Generated code:\n"
 msgstr "Vygenerovaný kód:\n"
 
@@ -400,7 +404,7 @@ msgstr "Vytvořit novou želvu"
 
 #: src/base.json:36
 msgid "Get the predefined turtle object"
-msgstr ""
+msgstr "Získat objekt předdefinované želvy"
 
 #: src/base.json:37
 msgid "Place image at the position of the turtle"
@@ -592,7 +596,7 @@ msgstr "Cyklus For"
 
 #: src/base.json:93
 msgid "Is item in a list? / For all items in a collection."
-msgstr ""
+msgstr "Je položka v listu? / Pro všechny položky v kolekci."
 
 #: src/base.json:94
 msgid "Repeat while the condition is true"
@@ -660,7 +664,7 @@ msgstr "Náhodné číslo"
 
 #: src/base.json:110
 msgid "Return list of numbers in specified range"
-msgstr ""
+msgstr "Vrátí list čísel v zadaném rozsahu"
 
 #: src/base.json:111
 msgid "Connect a function to handle mouse clicks"

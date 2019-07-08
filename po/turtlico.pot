@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-08 11:04+0200\n"
+"POT-Creation-Date: 2019-07-08 12:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,40 +81,40 @@ msgstr ""
 msgid "Enter a number"
 msgstr ""
 
-#: src/programview.ui:67 src/programview.ui:165 src/programview.ui:231
-#: src/programview.ui:298
+#: src/programview.ui:67 src/programview.ui:194 src/programview.ui:260
+#: src/programview.ui:327
 msgid "Done"
 msgstr ""
 
-#: src/programview.ui:146
+#: src/programview.ui:175
 msgid "Edit Python code"
 msgstr ""
 
-#: src/programview.ui:209
+#: src/programview.ui:238
 msgid "Enter a string"
 msgstr ""
 
-#: src/programview.ui:275
+#: src/programview.ui:304
 msgid "Select data type"
 msgstr ""
 
-#: src/programview.ui:331
+#: src/programview.ui:360
 msgid "Integer"
 msgstr ""
 
-#: src/programview.ui:346
+#: src/programview.ui:375
 msgid "Float"
 msgstr ""
 
-#: src/programview.ui:362 src/base.json:15
+#: src/programview.ui:391 src/base.json:15
 msgid "String"
 msgstr ""
 
-#: src/programview.ui:378
+#: src/programview.ui:407
 msgid "Custom"
 msgstr ""
 
-#: src/programview.ui:408
+#: src/programview.ui:437
 msgid "Enter name of your custom data type"
 msgstr ""
 
@@ -175,8 +175,8 @@ msgstr ""
 msgid "Failed to save the program"
 msgstr ""
 
-#: src/window.vala:258 src/window.vala:291
-msgid "Program saved."
+#: src/window.vala:258
+msgid "Project saved."
 msgstr ""
 
 #: src/window.vala:264 src/window.vala:269 src/window.vala:298
@@ -190,6 +190,10 @@ msgstr ""
 
 #: src/window.vala:276 src/window.vala:310
 msgid "Turtlico project (*.tcp)"
+msgstr ""
+
+#: src/window.vala:291
+msgid "Program saved."
 msgstr ""
 
 #: src/window.vala:300
@@ -230,30 +234,30 @@ msgstr ""
 msgid "Unnamed"
 msgstr ""
 
-#: src/programview.vala:212
+#: src/programview.vala:214
 msgid "Please save the project first."
 msgstr ""
 
-#: src/programview.vala:225
+#: src/programview.vala:227
 msgid "Cannot insert the image"
 msgstr ""
 
-#: src/programview.vala:815
+#: src/programview.vala:857
 msgid "Failed to open the file. Error on line: "
 msgstr ""
 
-#: src/programview.vala:830
+#: src/programview.vala:872
 msgid "The file to load contains an unkown command!"
 msgstr ""
 
-#: src/programview.vala:832
+#: src/programview.vala:874
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
 "Command ID: "
 msgstr ""
 
-#: src/compiler.vala:257
+#: src/compiler.vala:265
 msgid "Generated code:\n"
 msgstr ""
 

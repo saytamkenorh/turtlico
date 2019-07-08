@@ -255,7 +255,7 @@ namespace Turtlico {
             }
             else
                 on_save_as_btn_clicked();
-            status_label.label = _("Program saved.");
+            status_label.label = _("Project saved.");
         }
 
         [GtkCallback]
