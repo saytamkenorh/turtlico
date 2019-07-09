@@ -175,24 +175,24 @@ namespace Turtlico {
                     written += dos.write (data[written:data.length]);
                 }
                 // RUN
-                var t = new Thread<int>("Debugger thread", ()=>{
-                    string stdout = "";
-                    string stderr = "";
+                var t = new GLib.Thread<int>("Debugger thread", ()=>{
+                    string _stdout = "";
+                    string _stderr = "";
                     int status = 0;
                     try {
                         if (GLib.FileUtils.test("C:\\Windows", GLib.FileTest.IS_DIR)){
                             GLib.Process.spawn_command_line_sync("python3w '" + path + "'",
-                                out stdout, out stderr, out status);
+                                out _stdout, out _stderr, out status);
                         }
                         else {
                             debug(path);
                             GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
                             #if TURTLICO_FLATPAK
                             GLib.Process.spawn_command_line_sync("flatpak-spawn --host python3 '" + path + "'",
-                                out stdout, out stderr, out status);
+                                out _stdout, _out stderr, out status);
                             #else
                             GLib.Process.spawn_command_line_sync("python3 '" + path + "'",
-                                out stdout, out stderr, out status);
+                                out _stdout, out _stderr, out status);
                             #endif
                         }
                     }
@@ -203,19 +203,18 @@ namespace Turtlico {
                             return false;
                         });
                     }
-                    debug(_("stdout of child process:\n") + stdout);
-                    debug(_("stderr of child process:\n") + stderr);
+                    debug(_("stdout of child process:\n") + _stdout);
+                    debug(_("stderr of child process:\n") + _stderr);
                     Idle.add(()=>{
                         // Show error dialog
-                        if (status != 0 && stderr != "") {
-                            string[] err_lines = stderr.split("\n");
+                        if (status != 0 && _stderr != "") {
+                            string[] err_lines = _stderr.split("\n");
                             string error = err_lines[err_lines.length - 2];
                             if (error == "turtle.Terminator")
                                 return false;
                             // Extracts line
                             if (settings.get_boolean("debug-data")) {
-                                Gee.ArrayList<string> words =
-                                    new Gee.ArrayList<string>.wrap(stderr.split(" "));
+                                Gee.ArrayList<string> words = new Gee.ArrayList<string>.wrap(_stderr.split(" "));
                                 int i = words.index_of("line");
                                 int code_line = int.parse(words[i + 1].replace(",", ""));
                                 code_line--; // Python indexes lines from 1
