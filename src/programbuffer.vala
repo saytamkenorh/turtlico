@@ -21,6 +21,12 @@
 using Gee;
 
 namespace Turtlico {
+    public enum SelectionPhase {
+        NOTHING_SELECTED,
+        SELECT_END,
+        BLOCK_SELECTED
+    }
+
     public class ProgramBuffer : Object {
         public ArrayList<Command> commands = new ArrayList<Command>();
         public ArrayList<ArrayList<Command>> program  = new ArrayList<ArrayList<Command>>();
@@ -44,7 +50,8 @@ namespace Turtlico {
         public Gdk.Point selection_end;
         public SelectionPhase selection_phase = SelectionPhase.NOTHING_SELECTED;
 
-        protected static string str_mark = ((char)31).to_string(); //Unit separator
+        public static string str_mark = ((char)31).to_string(); //Unit separator
+        public static string str_mark_utf8 = "~";
 
         public signal void redraw_required();
 
@@ -240,6 +247,18 @@ namespace Turtlico {
             fix_blank_lines();
 
             selection_phase = SelectionPhase.NOTHING_SELECTED;
+            redraw_required();
+        }
+
+        public string selection_to_string (out int command_count) {
+            string data = "";
+            int c = 0;
+            selection_foreach((p)=>{
+                data += program[p.y][p.x].id + ";" + program[p.y][p.x].data + str_mark_utf8;
+                c++;
+            });
+            command_count = c;
+            return data;
         }
 
         public Command find_command_by_id(string id) throws GLib.FileError {

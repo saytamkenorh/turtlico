@@ -26,11 +26,6 @@ namespace Turtlico {
         { "STRING",     0, DnDTarget.STRING },
         { "text/plain", 0, DnDTarget.STRING },
     };
-    public enum SelectionPhase {
-        NOTHING_SELECTED,
-        SELECT_END,
-        BLOCK_SELECTED
-    }
 
     [GtkTemplate (ui = "/com/orsan/Turtlico/programview.ui")]
     public class ProgramView : Gtk.DrawingArea {
@@ -47,6 +42,8 @@ namespace Turtlico {
             }
         }
         private ProgramBuffer _buffer;
+        private bool drag_source_clipboard = false;
+        private string drag_source_clipboard_text = "";
         // Used in drag_data_get
         int mouse_x;
         int mouse_y;
@@ -85,8 +82,6 @@ namespace Turtlico {
         Gdk.RGBA color_comment;
         Pango.FontDescription font = new Pango.FontDescription();
         Pango.FontDescription small_font = new Pango.FontDescription();
-
-        protected static string str_mark_utf8 = "~";
 
         public ProgramView () {
             // Props
@@ -130,7 +125,7 @@ namespace Turtlico {
             drag_data_received.connect(on_drag_data_received);
             drag_begin.connect(on_drag_begin);
             drag_data_get.connect(on_drag_data_get);
-            drag_end.connect((context)=>{Gtk.drag_set_icon_default(context);});
+            drag_end.connect((context)=>{Gtk.drag_set_icon_default(context); drag_source_clipboard = false;});
             set_drag_source_active(true);
 
             // PythonView
@@ -226,7 +221,7 @@ namespace Turtlico {
                     }
                 }
                 else {
-                    var commands = selection_data.get_text().split(str_mark_utf8);
+                    var commands = selection_data.get_text().split(ProgramBuffer.str_mark_utf8);
                     foreach (var c in commands) {
                         data.add(new Gee.ArrayList<string>.wrap(c.split(";")));
                     }
@@ -435,6 +430,44 @@ namespace Turtlico {
         }
 
         void on_drag_begin(Gdk.DragContext context) {
+            if (drag_source_clipboard) {
+                int width = 0;
+                int height = 1;
+
+                var data = new Gee.ArrayList<Gee.ArrayList<string>>();
+                var commands = drag_source_clipboard_text.split(ProgramBuffer.str_mark_utf8);
+                foreach (var c in commands) {
+                    data.add(new Gee.ArrayList<string>.wrap(c.split(";")));
+                }
+
+                var surface = new Cairo.ImageSurface(Cairo.Format.RGB24,
+                    data.size * cell_width, data.size * cell_height);
+                var ctx = new Cairo.Context(surface);
+                int x = 0;
+                for (int i = 0; i < data.size; i++) {
+                    if (data[i].size == 0)
+                        continue;
+                    if (i > 0 && data[i - 1][0] == "nl") {
+                        x = 0;
+                        height++;
+                    }
+                    try {
+                        Command c = buffer.find_command_by_id(data[i][0]);
+                        if(data[i].size >= 2)
+                            c = c.set_data(data[i][1], buffer.resource_dir);
+                        x += draw_icon(ctx, x * cell_width, (height - 1) * cell_height, c);
+                        if (x > width)
+                            width = x;
+                    }
+                    catch {}
+                }
+                if (!(width > 0 && height > 0))
+                    return;
+                var pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0,
+                    width * cell_width, height * cell_height);
+                Gtk.drag_set_icon_pixbuf(context, pixbuf, cell_width / 2, cell_height / 2);
+                return;
+            }
             if (buffer.selection_phase == SelectionPhase.NOTHING_SELECTED) {
                 int y = mouse_y / cell_height;
                 int x = mouse_to_program_x(mouse_x / cell_width, y);
@@ -474,15 +507,15 @@ namespace Turtlico {
         }
 
         void on_drag_data_get(Gdk.DragContext context, Gtk.SelectionData selection_data, uint info, uint time_) {
+            if (drag_source_clipboard) {
+                selection_data.set_text(drag_source_clipboard_text, -1);
+                return;
+            }
             int y = mouse_y / cell_height;
             int x = mouse_to_program_x(mouse_x / cell_width, y);
             if (y < buffer.program.size && x < buffer.program[y].size) {
-                string data = "";
-                int command_count = 0;
-                buffer.selection_foreach((p)=>{
-                    data += buffer.program[p.y][p.x].id + ";" + buffer.program[p.y][p.x].data + str_mark_utf8;
-                    command_count++;
-                });
+                int command_count;
+                string data = buffer.selection_to_string(out command_count);
                 selection_data.set_text(data, -1);
                 if (context.get_selected_action() == Gdk.DragAction.MOVE) {
                     if (buffer.program[y][x].id == "nl" && command_count == 1) {
@@ -683,6 +716,31 @@ namespace Turtlico {
                         queue_draw();buffer.backup_program();
                     }
                 }
+            }
+            if ((key_event.keyval == Gdk.Key.c || key_event.keyval == Gdk.Key.x) &&
+                (key_event.state & modifiers) == Gdk.ModifierType.CONTROL_MASK &&
+                buffer.selection_phase == SelectionPhase.BLOCK_SELECTED)
+            {
+                var clipboard = get_clipboard(Gdk.SELECTION_CLIPBOARD);
+                int command_count;
+                clipboard.set_text(buffer.selection_to_string(out command_count), -1);
+                if (key_event.keyval == Gdk.Key.x) {
+                    buffer.selection_delete();
+                }
+            }
+            if (key_event.keyval == Gdk.Key.v &&
+                (key_event.state & modifiers) == Gdk.ModifierType.CONTROL_MASK)
+            {
+                var clipboard = get_clipboard(Gdk.SELECTION_CLIPBOARD);
+                string data = clipboard.wait_for_text();
+                if (data == null || !data.contains(";"))
+                    return false;
+                buffer.selection_phase = SelectionPhase.NOTHING_SELECTED;
+                var targets = Gtk.drag_dest_get_target_list(this);
+                drag_source_clipboard = true;
+                drag_source_clipboard_text = data;
+                Gtk.drag_begin_with_coordinates(this, targets, Gdk.DragAction.COPY,
+                               Gdk.ModifierType.BUTTON1_MASK, key_event, -1, -1);
             }
             return false;
         }
