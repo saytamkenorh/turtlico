@@ -189,7 +189,7 @@ namespace Turtlico {
                             GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
                             #if TURTLICO_FLATPAK
                             GLib.Process.spawn_command_line_sync("flatpak-spawn --host python3 '" + path + "'",
-                                out _stdout, _out stderr, out status);
+                                out _stdout, out _stderr, out status);
                             #else
                             GLib.Process.spawn_command_line_sync("python3 '" + path + "'",
                                 out _stdout, out _stderr, out status);
