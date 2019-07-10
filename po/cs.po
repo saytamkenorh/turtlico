@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-08 12:37+0200\n"
+"POT-Creation-Date: 2019-07-10 16:02+0200\n"
 "PO-Revision-Date: 2018-05-31 16:17+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -51,7 +51,7 @@ msgstr "Spustit program"
 msgid "Open program"
 msgstr "Otevřít program"
 
-#: src/window.ui:105 src/window.vala:266
+#: src/window.ui:105 src/window.vala:278
 msgid "Save"
 msgstr "Uložit"
 
@@ -83,40 +83,40 @@ msgstr "Sem přetáhněte příkazy ke smazání"
 msgid "Enter a number"
 msgstr "Zadejte číslo"
 
-#: src/programview.ui:67 src/programview.ui:194 src/programview.ui:260
-#: src/programview.ui:327
+#: src/programview.ui:67 src/programview.ui:223 src/programview.ui:289
+#: src/programview.ui:356
 msgid "Done"
 msgstr "Hotovo"
 
-#: src/programview.ui:175
+#: src/programview.ui:204
 msgid "Edit Python code"
 msgstr "Upravit Python kód"
 
-#: src/programview.ui:238
+#: src/programview.ui:267
 msgid "Enter a string"
 msgstr "Zadejte řetězec"
 
-#: src/programview.ui:304
+#: src/programview.ui:333
 msgid "Select data type"
 msgstr "Vyberte datový typ"
 
-#: src/programview.ui:360
+#: src/programview.ui:389
 msgid "Integer"
 msgstr "Číslo (integer)"
 
-#: src/programview.ui:375
+#: src/programview.ui:404
 msgid "Float"
 msgstr "Desetinné číslo (float)"
 
-#: src/programview.ui:391 src/base.json:15
+#: src/programview.ui:420 src/base.json:15
 msgid "String"
 msgstr "Řetězec"
 
-#: src/programview.ui:407
+#: src/programview.ui:436
 msgid "Custom"
 msgstr "Jiný"
 
-#: src/programview.ui:437
+#: src/programview.ui:466
 msgid "Enter name of your custom data type"
 msgstr "Sem zadejte datový typ"
 
@@ -165,50 +165,49 @@ msgstr "stdout podprocesu:\n"
 msgid "stderr of child process:\n"
 msgstr "stderr podprocesu:\n"
 
-#. Python indexes lines from 1
-#. We show user line numbers indexed from 1
-#: src/window.vala:224
+#. We show line numbers indexed from 1 to user
+#: src/window.vala:235
 msgid "Error occurred at line "
 msgstr "Chyba se vyskytla na řádku "
 
-#: src/window.vala:227
+#: src/window.vala:239
 msgid "Program crashed"
 msgstr "Program selhal"
 
-#: src/window.vala:253
+#: src/window.vala:265
 msgid "Failed to save the program"
 msgstr "Nepodařilo se uložit program"
 
-#: src/window.vala:258
+#: src/window.vala:270
 msgid "Project saved."
 msgstr "Projekt uložen."
 
-#: src/window.vala:264 src/window.vala:269 src/window.vala:298
-#: src/window.vala:303
+#: src/window.vala:276 src/window.vala:281 src/window.vala:310
+#: src/window.vala:315
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/window.vala:267 src/window.vala:301 src/window.vala:540
+#: src/window.vala:279 src/window.vala:313 src/window.vala:552
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/window.vala:276 src/window.vala:310
+#: src/window.vala:288 src/window.vala:322
 msgid "Turtlico project (*.tcp)"
 msgstr "Projekt Turtlico (*.tcp)"
 
-#: src/window.vala:291
+#: src/window.vala:303
 msgid "Program saved."
 msgstr "Program uložen."
 
-#: src/window.vala:300
+#: src/window.vala:312
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/window.vala:352
+#: src/window.vala:364
 msgid "Would you really like to apply these changes?"
 msgstr "Opravdu chcete aplikovat tyto změny?"
 
-#: src/window.vala:353
+#: src/window.vala:365
 msgid ""
 "The program contains commands that are only available from a plugin. "
 "Unavailable commands will be removed."
@@ -216,57 +215,39 @@ msgstr ""
 "Program obsahuje příkazy, které jsou dostupné pouze z přídavného modulu. "
 "Nedostupné příkazy budou odstraněny."
 
-#: src/window.vala:398
+#: src/window.vala:410
 msgid "Failed to open the program"
 msgstr "Nepodařilo se otevřít program"
 
-#: src/window.vala:535
+#: src/window.vala:547
 msgid "Would you like to save your changes before closing the program?"
 msgstr "Přereje si uložit změny před zavřením programu?"
 
-#: src/window.vala:536
+#: src/window.vala:548
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr "Jinak budou neuložené změny ztraceny!"
 
-#: src/window.vala:538
+#: src/window.vala:550
 msgid "Yes"
 msgstr "Ano"
 
-#: src/window.vala:539
+#: src/window.vala:551
 msgid "No"
 msgstr "Ne"
 
-#: src/window.vala:556
+#: src/window.vala:568
 msgid "Unnamed"
 msgstr "Bez názvu"
 
-#: src/programview.vala:214
+#: src/programview.vala:206
 msgid "Please save the project first."
 msgstr "Nejdříve prosím uložze projekt."
 
-#: src/programview.vala:227
+#: src/programview.vala:219
 msgid "Cannot insert the image"
 msgstr "Nelze vložit obrázek"
 
-#: src/programview.vala:857
-msgid "Failed to open the file. Error on line: "
-msgstr "Nepodařilo se načíst program. Chyba je na řádce: "
-
-#: src/programview.vala:872
-msgid "The file to load contains an unkown command!"
-msgstr "Soubor obsahuje neznámý příkaz!"
-
-#: src/programview.vala:874
-msgid ""
-"This might be because of the file was damaged or created by a newer version "
-"of this program.\n"
-"Command ID: "
-msgstr ""
-"Toto může být způsobeno tím, že soubor byl poškozen nebo vytvořen novější "
-"verzí programu.\n"
-"ID příkazu: "
-
-#: src/compiler.vala:265
+#: src/compiler.vala:282
 msgid "Generated code:\n"
 msgstr "Vygenerovaný kód:\n"
 
@@ -495,12 +476,12 @@ msgid "Round a number"
 msgstr "Zaokrouhlit číslo"
 
 #: src/base.json:62
-msgid "Color (property)"
-msgstr "Barva (vlastnost)"
+msgid "Color (property or editable)"
+msgstr "Barva (vlastnost nebo upravitelná hodnota)"
 
 #: src/base.json:63
-msgid "Font (property)"
-msgstr "Písmo (vlastnost)"
+msgid "Font (property or editable)"
+msgstr "Písmo (vlastnost nebo upravitelná hodnota)"
 
 #: src/base.json:64
 msgid "True"
@@ -755,3 +736,18 @@ msgstr "Připojte funkci, která bude aktivována, když se zařízení zapne"
 msgid ""
 "Connect a function that is called when the device state changes to inactive"
 msgstr "Připojte funkci, která bude aktivována, když se zařízení vypne"
+
+#~ msgid "Failed to open the file. Error on line: "
+#~ msgstr "Nepodařilo se načíst program. Chyba je na řádce: "
+
+#~ msgid "The file to load contains an unkown command!"
+#~ msgstr "Soubor obsahuje neznámý příkaz!"
+
+#~ msgid ""
+#~ "This might be because of the file was damaged or created by a newer "
+#~ "version of this program.\n"
+#~ "Command ID: "
+#~ msgstr ""
+#~ "Toto může být způsobeno tím, že soubor byl poškozen nebo vytvořen novější "
+#~ "verzí programu.\n"
+#~ "ID příkazu: "

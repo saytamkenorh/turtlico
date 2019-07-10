@@ -88,9 +88,12 @@ namespace Turtlico {
             Gee.ArrayList<Gee.ArrayList<Command>> program, int i)
         {
             string[] src = compile(program).split("\n");
-            while (i > 0 && !src[i].has_prefix("# Line: "))
-                i--;
-            return int.parse(src[i].replace("# Line: ", ""));
+            if (i < src.length) {
+                while (i > 0 && !src[i].has_prefix("# Line: "))
+                    i--;
+                return int.parse(src[i].replace("# Line: ", ""));
+            }
+            return -1;
         }
 
         public string compile(Gee.ArrayList<Gee.ArrayList<Command>> program,
@@ -235,14 +238,28 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                             break;
                         }
                     }
+                    if (program[y][x].id == "4_color") {
+                        if (param_level == 0)
+                	        output.add(indentation + "color" + program[y][x].data.substring(3)); // Change turtle color
+                        else if(program[y][x].data == "")
+                            output[out_line] = output[out_line] + "color";
+                        else {
+                	        output[out_line] =
+                                output[out_line] + program[y][x].data.substring(3); // Remove 'rgb'
+                        }
+                        break;
+                    }
                     if (program[y][x].id == "4_font") {
                         var font = program[y][x].data.split(";");
-                        string family = font[0];
-                        string size = font[1];
-                        string fonttype = font[2];
-                        string weight = font[3];
-                        output[out_line] = output[out_line] + @" = ('$family', $size, '$fonttype', '$weight')";
+                        if (font.length >= 4) {
+                            string family = font[0];
+                            string size = font[1];
+                            string fonttype = font[2];
+                            string weight = font[3];
+                            output[out_line] = output[out_line] + @" = ('$family', $size, '$fonttype', '$weight')";
+                        }
                     }
+
                     // Keywords
                     foreach (var f in keywords) {
                         if(program[y][x].id == f.id) {
@@ -295,7 +312,12 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                 skip_next_command = true;
             }
             else if (check_next_icon && program[y][x + 1].id[0] == '4') {
-                parsed = indentation + f.function + "(" + program[y][x+1].id.substring(2) + ")";
+                if (program[y][x + 1].id == "4_color" && program[y][x + 1].data != "") {
+                    parsed = indentation + f.function + "(" + program[y][x+1].data.substring(3) + ")";
+                }
+                else {
+                    parsed = indentation + f.function + "(" + program[y][x+1].id.substring(2) + ")";
+                }
                 skip_next_command = true;
             }
             else {
@@ -303,7 +325,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
             }
             // Return functions
             if(program[y][x].id[0] == '5' || (x > 0 && program[y][x - 1].id == "2_."))
-                output[out_line] = output[out_line] + parsed;
+                output[out_line] = output[out_line] + parsed.replace("\t", "");
             else output.add(parsed);
             if(skip_next_command) x++;
         }

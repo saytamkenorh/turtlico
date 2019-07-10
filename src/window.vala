@@ -216,12 +216,24 @@ namespace Turtlico {
                             if (settings.get_boolean("debug-data")) {
                                 Gee.ArrayList<string> words =
                                     new Gee.ArrayList<string>.wrap(stderr.split(" "));
-                                int i = words.index_of("line");
+                                int i = 0;
+                                bool search_for_line = false;
+                                for (int index = 0; index < words.size; index ++) {
+                                    if (words[index].contains(path))
+                                        search_for_line = true;
+                                    if (search_for_line && words[index] == "line") {
+                                        i = index;
+                                        break;
+                                    }
+                                }
                                 int code_line = int.parse(words[i + 1].replace(",", ""));
+                                debug(words[i + 1]);
                                 code_line--; // Python indexes lines from 1
                                 int line = compiler.out_line_to_src_line(programview.buffer.program, code_line);
-                                line++; // We show user line numbers indexed from 1
-                                error += "\n" + _("Error occurred at line ") + line.to_string();
+                                if (line >= 0) {
+                                    line++; // We show line numbers indexed from 1 to user
+                                    error += "\n" + _("Error occurred at line ") + line.to_string();
+                                }
                             }
 
                             msg(_("Program crashed"),

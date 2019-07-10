@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-08 12:37+0200\n"
+"POT-Creation-Date: 2019-07-10 16:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 msgid "Open program"
 msgstr ""
 
-#: src/window.ui:105 src/window.vala:266
+#: src/window.ui:105 src/window.vala:278
 msgid "Save"
 msgstr ""
 
@@ -81,40 +81,40 @@ msgstr ""
 msgid "Enter a number"
 msgstr ""
 
-#: src/programview.ui:67 src/programview.ui:194 src/programview.ui:260
-#: src/programview.ui:327
+#: src/programview.ui:67 src/programview.ui:223 src/programview.ui:289
+#: src/programview.ui:356
 msgid "Done"
 msgstr ""
 
-#: src/programview.ui:175
+#: src/programview.ui:204
 msgid "Edit Python code"
 msgstr ""
 
-#: src/programview.ui:238
+#: src/programview.ui:267
 msgid "Enter a string"
 msgstr ""
 
-#: src/programview.ui:304
+#: src/programview.ui:333
 msgid "Select data type"
 msgstr ""
 
-#: src/programview.ui:360
+#: src/programview.ui:389
 msgid "Integer"
 msgstr ""
 
-#: src/programview.ui:375
+#: src/programview.ui:404
 msgid "Float"
 msgstr ""
 
-#: src/programview.ui:391 src/base.json:15
+#: src/programview.ui:420 src/base.json:15
 msgid "String"
 msgstr ""
 
-#: src/programview.ui:407
+#: src/programview.ui:436
 msgid "Custom"
 msgstr ""
 
-#: src/programview.ui:437
+#: src/programview.ui:466
 msgid "Enter name of your custom data type"
 msgstr ""
 
@@ -161,103 +161,87 @@ msgstr ""
 msgid "stderr of child process:\n"
 msgstr ""
 
-#. Python indexes lines from 1
-#. We show user line numbers indexed from 1
-#: src/window.vala:224
+#. We show line numbers indexed from 1 to user
+#: src/window.vala:235
 msgid "Error occurred at line "
 msgstr ""
 
-#: src/window.vala:227
+#: src/window.vala:239
 msgid "Program crashed"
 msgstr ""
 
-#: src/window.vala:253
+#: src/window.vala:265
 msgid "Failed to save the program"
 msgstr ""
 
-#: src/window.vala:258
+#: src/window.vala:270
 msgid "Project saved."
 msgstr ""
 
-#: src/window.vala:264 src/window.vala:269 src/window.vala:298
-#: src/window.vala:303
+#: src/window.vala:276 src/window.vala:281 src/window.vala:310
+#: src/window.vala:315
 msgid "Select file"
 msgstr ""
 
-#: src/window.vala:267 src/window.vala:301 src/window.vala:540
+#: src/window.vala:279 src/window.vala:313 src/window.vala:552
 msgid "Cancel"
 msgstr ""
 
-#: src/window.vala:276 src/window.vala:310
+#: src/window.vala:288 src/window.vala:322
 msgid "Turtlico project (*.tcp)"
 msgstr ""
 
-#: src/window.vala:291
+#: src/window.vala:303
 msgid "Program saved."
 msgstr ""
 
-#: src/window.vala:300
+#: src/window.vala:312
 msgid "Open"
 msgstr ""
 
-#: src/window.vala:352
+#: src/window.vala:364
 msgid "Would you really like to apply these changes?"
 msgstr ""
 
-#: src/window.vala:353
+#: src/window.vala:365
 msgid ""
 "The program contains commands that are only available from a plugin. "
 "Unavailable commands will be removed."
 msgstr ""
 
-#: src/window.vala:398
+#: src/window.vala:410
 msgid "Failed to open the program"
 msgstr ""
 
-#: src/window.vala:535
+#: src/window.vala:547
 msgid "Would you like to save your changes before closing the program?"
 msgstr ""
 
-#: src/window.vala:536
+#: src/window.vala:548
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr ""
 
-#: src/window.vala:538
+#: src/window.vala:550
 msgid "Yes"
 msgstr ""
 
-#: src/window.vala:539
+#: src/window.vala:551
 msgid "No"
 msgstr ""
 
-#: src/window.vala:556
+#: src/window.vala:568
 msgid "Unnamed"
 msgstr ""
 
-#: src/programview.vala:214
+#: src/programview.vala:206
 msgid "Please save the project first."
 msgstr ""
 
-#: src/programview.vala:227
+#: src/programview.vala:219
 msgid "Cannot insert the image"
 msgstr ""
 
-#: src/programview.vala:857
-msgid "Failed to open the file. Error on line: "
-msgstr ""
-
-#: src/programview.vala:872
-msgid "The file to load contains an unkown command!"
-msgstr ""
-
-#: src/programview.vala:874
-msgid ""
-"This might be because of the file was damaged or created by a newer version "
-"of this program.\n"
-"Command ID: "
-msgstr ""
-
-#: src/compiler.vala:265
+#: src/compiler.vala:282
 msgid "Generated code:\n"
 msgstr ""
 
@@ -482,11 +466,11 @@ msgid "Round a number"
 msgstr ""
 
 #: src/base.json:62
-msgid "Color (property)"
+msgid "Color (property or editable)"
 msgstr ""
 
 #: src/base.json:63
-msgid "Font (property)"
+msgid "Font (property or editable)"
 msgstr ""
 
 #: src/base.json:64

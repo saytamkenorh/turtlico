@@ -31,7 +31,7 @@
 				{"id":"5_screen_c", "icon":"r:5_screen_c.png", "?": 'Get or set the color of the screen' , "type": 5, "func": "bgcolor", "params": "#ffffff" },
 				{"id":"5_screen_i", "icon":"r:5_screen_i.png", "?": 'Get or set the background picture of the screen' , "type": 5, "func": "bgpic", "params": "nopic" },
 				{"id":"5_img", "icon":"🖼", "?": 'Image' , "type": 0, "func": "tcf_get_image", "params": "" },
-				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "" },
+				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "'turtle'" },
 				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
 				{"id":"5_gett", "icon":"r:5_gett.png", "?": 'Get the predefined turtle object' , "type": 5, "func": "getturtle", "params": "" },
 				{"id":"0_plcimg", "icon":"r:0_plcimg.png", "?": 'Place image at the position of the turtle' , "type": 0, "func": "tcf_place_img", "params": "" },
@@ -59,8 +59,8 @@
 				{"id":"5_rad", "icon":"rad", "?": 'Convert angle from degrees to radians.', "type": 5, "func": "math.radians", "params": ""},
 				{"id":"5_deg", "icon":"deg", "?": 'Convert angle from radians to degrees.', "type": 5, "func": "math.degrees", "params": ""},
 				{"id":"5_rnd", "icon":"rnd", "?": 'Round a number', "type": 5, "func": "round", "params": ""},
-				{"id":"4_color", "icon":"🎨", "?": 'Color (property)' , "type": 4, "c":"color"},
-				{"id":"4_font", "icon":"Aa", "?": 'Font (property)' , "type": 4, "c":"font"},
+				{"id":"4_color", "icon":"🎨", "?": 'Color (property or editable)' , "type": -1, "c":"color"},
+				{"id":"4_font", "icon":"Aa", "?": 'Font (property or editable)' , "type": 4, "c":"font"},
 				{"id":"true", "icon":"r:true.png", "?": 'True' , "type": 4, "c":"True"},
 				{"id":"false", "icon":"r:false.png", "?": 'False' , "type": 4, "c":"False"}
 			]

@@ -70,6 +70,8 @@ namespace Turtlico {
         Gtk.Dialog python_code_dialog;
         [GtkChild]
         Gtk.FontChooserDialog font_dialog;
+        [GtkChild]
+        Gtk.ColorChooserDialog color_dialog;
         // Render
         Gdk.RGBA color_cell;
         Gdk.RGBA color_text;
@@ -352,7 +354,7 @@ namespace Turtlico {
         public int draw_icon (Cairo.Context cr, int x, int y, Command c) {
             // Size by the length of data
             int width = (c.data.length / 7 + 1);
-            if (c.id == "python")
+            if (c.id == "python" || c.id == "4_color" )
                 width = 1;
             // Background
             if (c.id == "nl" || c.id == "tab")
@@ -417,6 +419,12 @@ namespace Turtlico {
             }
             else {
                 layout = create_pango_layout(c.name);
+                if (c.id == "4_color" && c.data != "") {
+                    layout = create_pango_layout("⬤");
+                    Gdk.RGBA color = Gdk.RGBA();
+                    color.parse(c.data);
+                    Gdk.cairo_set_source_rgba(cr, color);
+                }
                 layout.set_font_description(font);
             }
             layout.set_alignment(Pango.Alignment.CENTER);
@@ -711,6 +719,10 @@ namespace Turtlico {
                         icon_data_dialog_python(x, y);
                         queue_draw();buffer.backup_program();
                     }
+                    if (buffer.program[y][x].id == "4_color") {
+                        icon_data_dialog_color(x, y);
+                        queue_draw();buffer.backup_program();
+                    }
                     if (buffer.program[y][x].id == "4_font") {
                         icon_data_dialog_font(x, y);
                         queue_draw();buffer.backup_program();
@@ -726,6 +738,7 @@ namespace Turtlico {
                 clipboard.set_text(buffer.selection_to_string(out command_count), -1);
                 if (key_event.keyval == Gdk.Key.x) {
                     buffer.selection_delete();
+                    buffer.backup_program();
                 }
             }
             if (key_event.keyval == Gdk.Key.v &&
@@ -772,6 +785,14 @@ namespace Turtlico {
             python_code_dialog.run();
             python_code_dialog.hide();
             buffer.program[y][x] = buffer.program[y][x].set_data(python_view.buffer.text, buffer.resource_dir);
+            queue_draw();
+        }
+
+        void icon_data_dialog_color(int x, int y) {
+            color_dialog.set_transient_for((Gtk.Window)get_toplevel());
+            color_dialog.run();
+            color_dialog.hide();
+            buffer.program[y][x] = buffer.program[y][x].set_data(color_dialog.rgba.to_string(), buffer.resource_dir);
             queue_draw();
         }
 
@@ -822,11 +843,13 @@ namespace Turtlico {
             int result = 0;
             int i = 0;
             while (i < x && result < buffer.program[y].size) {
-                for (int iterator = 0;
-                    iterator < (buffer.program[y][result].data.length / 7) && i < x && result < buffer.program[y].size;
-                    iterator++)
-                {
-                    i++;
+                if (buffer.program[y][result].id != "python" && buffer.program[y][result].id != "4_color") {
+                    for (int iterator = 0;
+                        iterator < (buffer.program[y][result].data.length / 7) && i < x && result < buffer.program[y].size;
+                        iterator++)
+                    {
+                        i++;
+                    }
                 }
                 if (i >= x) break;
                 result++;
