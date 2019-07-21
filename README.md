@@ -1,7 +1,7 @@
 ## Turtlico
 Turtlico is a programming tool for learning programming basics.<br>
 It uses Python turtle so you can imagine a robotic turtle which is controled by your program.<br>
-It also supports cycles, methods and many more. Turtlico also has a plugin for programming Raspberry Pi GPIO.
+It also supports cycles, methods and many more. Turtlico also has a plugin for programming Raspberry Pi GPIO and a multimedia plugin.
 
 ## License
 This program comes with ABSOLUTELY NO WARRANTY;
@@ -19,18 +19,23 @@ Or clone this repository and build the program yourself:
 	ninja && sudo ninja install
 **Linux notes:**
 
-If you are using the Linux version of Turtlico, you will need to install python3-tk (if you haven't done yet):
+If you are using the Linux version of Turtlico, you will need to install python3-tk and GStreamer (required for the multimedia plugin):
 
-*Ubuntu and other Debian-based distros:*
+*Ubuntu and the other Debian-based distros:*
 
-    sudo apt install python3-tk
+    sudo apt install python3-tk gir1.2-gstreamer-1.0
+*Arch/Manjaro*
+
+	sudo pacman -S python tk gst-python
 *Fedora:*
 
-    sudo dnf install python3-tk
+    sudo dnf install python3-tk gstreamer-python
+These packages are required for running programs created in Turtlico.
+
 If you find issues with emoji rendering, make sure you have installed an emoji font.
 Try running one of the following commands to fix that:
 
-*Ubuntu and Debian (buster and newer)*
+*Ubuntu and Raspbian/Debian (buster and newer)*
 
 	sudo apt install fonts-noto-color-emoji
 *Raspbian/Debian (stretch and older)*
@@ -39,3 +44,6 @@ Try running one of the following commands to fix that:
 *Arch/Manjaro*
 	
 	sudo pacman -S noto-fonts-emoji
+*Fedora*
+
+	sudo dnf install google-noto-emoji-color-fonts

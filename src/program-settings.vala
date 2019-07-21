@@ -73,6 +73,7 @@ namespace Turtlico {
                     Gtk.MessageType.ERROR,
                     Gtk.ButtonsType.OK,
                     _("Failed to load list of additional modules"));
+                dialog.secondary_text = e.message;
                 dialog.run();
                 dialog.destroy();
             }

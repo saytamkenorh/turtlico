@@ -37,6 +37,7 @@ namespace Turtlico {
         Gee.LinkedList<string> modules_to_load;
         string[] enabled_plugins;
         int out_line;
+        uint param_level = 0;
 
         public Compiler (string[] enabled_plugins) {
             this.enabled_plugins = enabled_plugins;
@@ -118,7 +119,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
             for(int y = 0; y < program.size; y++) {
                 string indentation = "";
                 bool increase_indent = true;
-                uint param_level = 0;
+                param_level = 0;
                 if (write_line_hints) {
                     output.add("# Line: " + y.to_string());
                     output.add("");
@@ -324,8 +325,13 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                 parsed = indentation + f.function + "(" + f.default_params + ")";
             }
             // Return functions
-            if(program[y][x].id[0] == '5' || (x > 0 && program[y][x - 1].id == "2_."))
-                output[out_line] = output[out_line] + parsed.replace("\t", "");
+            bool after_dot = x > 0 && program[y][x - 1].id == "2_.";
+            if(program[y][x].id[0] == '5' || after_dot) {
+                if (param_level > 0 || after_dot)
+                    output[out_line] = output[out_line] + parsed.replace("\t", "");
+                else
+                    output[out_line] = output[out_line] + parsed;
+        	}
             else output.add(parsed);
             if(skip_next_command) x++;
         }

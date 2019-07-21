@@ -22,7 +22,10 @@
     <file>python.png</file>
     <file>5_range.png</file>
     <file>raspberrypi.png</file>
+    <file>0_rpion.png</file>
+    <file>0_rpioff.png</file>
     <file>0_rpievent.png</file>
     <file>0_rpieventoff.png</file>
+    <file>multimedia.png</file>
   </gresource>
 </gresources>

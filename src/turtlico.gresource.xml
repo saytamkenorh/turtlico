@@ -9,5 +9,6 @@
     <file>app-settings.ui</file>
     <file>base.json</file>
     <file>rpi.json</file>
+    <file>mm.json</file>
   </gresource>
 </gresources>
