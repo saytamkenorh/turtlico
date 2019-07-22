@@ -40,6 +40,8 @@ namespace Turtlico {
         Gtk.Image delete_btn;
         [GtkChild]
         Gtk.Label status_label;
+        [GtkChild]
+        Gtk.Image run_btn_image;
 
         public Compiler compiler;
 
@@ -54,6 +56,19 @@ namespace Turtlico {
         }
 
         Settings settings = new Settings("com.orsan.Turtlico");
+
+        bool _debug_running = false;
+        private bool debug_running {
+            get {return _debug_running;}
+            set {
+                _debug_running = value;
+                if (value)
+                    run_btn_image.set_from_icon_name("media-playback-stop", Gtk.IconSize.BUTTON);
+                else
+                    run_btn_image.set_from_icon_name("media-playback-start", Gtk.IconSize.BUTTON);
+            }
+        }
+        Cancellable debug_cancellable = new Cancellable();
 
 		public Window (Gtk.Application app) {
 			Object (application: app);
@@ -156,6 +171,12 @@ namespace Turtlico {
 
 		[GtkCallback]
 		void on_run_btn_clicked() {
+            if (debug_running) {
+                debug_cancellable.cancel();
+                return;
+            }
+            debug_cancellable.reset();
+            debug_running = true;
             try {
                 string output = compiler.compile(programview.buffer.program,
                     settings.get_boolean("debug-data"));
@@ -175,25 +196,55 @@ namespace Turtlico {
                     written += dos.write (data[written:data.length]);
                 }
                 // RUN
-                var t = new GLib.Thread<int>("Debugger thread", ()=>{
+                new GLib.Thread<int>(null, ()=>{
                     string _stdout = "";
                     string _stderr = "";
                     int status = 0;
+                    Subprocess subprocess = null;
                     try {
-                        if (GLib.FileUtils.test("C:\\Windows", GLib.FileTest.IS_DIR)){
-                            GLib.Process.spawn_command_line_sync("python3w '" + path + "'",
-                                out _stdout, out _stderr, out status);
+                        var argv = new Gee.LinkedList<string>();
+                        if (GLib.FileUtils.test("C:\\Windows", GLib.FileTest.IS_DIR)) {
+                            argv.add("python3w");
                         }
                         else {
-                            debug(path);
                             GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
-                            #if TURTLICO_FLATPAK
-                            GLib.Process.spawn_command_line_sync("flatpak-spawn --host python3 '" + path + "'",
-                                out _stdout, out _stderr, out status);
-                            #else
-                            GLib.Process.spawn_command_line_sync("python3 '" + path + "'",
-                                out _stdout, out _stderr, out status);
-                            #endif
+#if TURTLICO_FLATPAK
+                            argv.add_all_array({"flatpak-spawn", "--host", "python3"});
+#else
+                            argv.add("python3");
+#endif
+                        }
+                        argv.add(path);
+                        var launcher = new SubprocessLauncher(GLib.SubprocessFlags.STDERR_PIPE | GLib.SubprocessFlags.STDOUT_PIPE);
+                        launcher.setenv("G_MESSAGES_DEBUG", "all", true);
+                        subprocess = launcher.spawnv(argv.to_array());
+                        subprocess.wait(debug_cancellable);
+                        var dis = new DataInputStream (subprocess.get_stdout_pipe());
+                        _stdout = dis.read_upto("\0", 1, null);
+                        dis.close();
+                        dis = new DataInputStream (subprocess.get_stderr_pipe());
+                        _stderr = dis.read_upto("\0", 1, null);
+                        dis.close();
+                        status = subprocess.get_status();
+                    }
+                    catch (IOError e) {
+                        if (subprocess != null) {
+                            subprocess.force_exit();
+#if TURTLICO_FLATPAK
+                            try {
+                                if (_stdout == "") {
+                                    var dis = new DataInputStream (subprocess.get_stdout_pipe());
+                                    _stdout = dis.read_line(); // We need just the PID
+                                }
+                                string pid_msg = "child_pid: ";
+                                int pid_index = _stdout.index_of(pid_msg);
+                                if (pid_index >= 0) {
+                                    int pid_index_start = pid_index + pid_msg.length;
+                                    string pid = _stdout.substring(pid_index_start);
+                                    GLib.Process.spawn_command_line_async("flatpak-spawn --host kill -SIGKILL " + pid);
+                                }
+                            } catch {}
+#endif
                         }
                     }
                     catch (Error e) {
@@ -206,6 +257,7 @@ namespace Turtlico {
                     debug(_("stdout of child process:\n") + _stdout);
                     debug(_("stderr of child process:\n") + _stderr);
                     Idle.add(()=>{
+                        debug_running = false;
                         // Show error dialog
                         if (status != 0 && _stderr != "") {
                             string[] err_lines = _stderr.split("\n");
