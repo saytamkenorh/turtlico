@@ -185,7 +185,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                         output[out_line] = output[out_line] + program[y][x].data;
                         continue;
                     }
-                    if (program[y][x].id == "str") {
+                    if (program[y][x].id == "str" || program[y][x].id == "key") {
                         output[out_line] = output[out_line] + "'" + program[y][x].data + "'";
                         continue;
                     }

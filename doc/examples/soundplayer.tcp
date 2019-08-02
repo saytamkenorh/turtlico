@@ -44,8 +44,8 @@ tab,,;tab,,;tab,,;obj,dt,;2_.,,;0_pos,,;(,,;int,250,;sep,,;int
 tab,,;tab,,;tab,,;obj,dt,;2_.,,;0_wr,,;(,,;5_rnd,,;(,,;5_mm_ef_s_dur,,;obj,f,;),,;),,;nl,,;
 tab,,;0_tmr,,;(,,;obj,update_ui,;sep,,;int,100,;),,;nl,,;
 obj,update_ui,;(,,;),,;nl,,;
-0_ekey,,;(,,;obj,on_space,;sep,,;str,space,;),,;nl,,;
-0_ekey,,;(,,;obj,seek_backward,;sep,,;str,Left,;),,;nl,,;
-0_ekey,,;(,,;obj,seek_forward,;sep,,;str,Right,;),,;nl,,;
+0_ekey,,;(,,;obj,on_space,;sep,,;key,space,;),,;nl,,;
+0_ekey,,;(,,;obj,seek_backward,;sep,,;key,Left,;),,;nl,,;
+0_ekey,,;(,,;obj,seek_forward,;sep,,;key,Right,;),,;nl,,;
 nl,,;
 plugin,r:/com/orsan/Turtlico/mm.json,;

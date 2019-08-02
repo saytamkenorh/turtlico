@@ -62,6 +62,7 @@
 				{"id":"5_rnd", "icon":"rnd", "?": 'Round a number', "type": 5, "func": "round", "params": ""},
 				{"id":"4_color", "icon":"🎨", "?": 'Color (property or editable)' , "type": -1, "c":"color"},
 				{"id":"4_font", "icon":"Aa", "?": 'Font (property or editable)' , "type": 4, "c":"font"},
+				{"id":"key", "icon":"r:key.png", "?": 'Key', "type": -1},
 				{"id":"true", "icon":"r:true.png", "?": 'True' , "type": 4, "c":"True"},
 				{"id":"false", "icon":"r:false.png", "?": 'False' , "type": 4, "c":"False"}
 			]

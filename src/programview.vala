@@ -72,6 +72,10 @@ namespace Turtlico {
         Gtk.FontChooserDialog font_dialog;
         [GtkChild]
         Gtk.ColorChooserDialog color_dialog;
+        [GtkChild]
+        Gtk.Dialog key_dialog;
+        [GtkChild]
+        Gtk.Label key_dialog_label;
         // Render
         Gdk.RGBA color_cell;
         Gdk.RGBA color_text;
@@ -354,7 +358,7 @@ namespace Turtlico {
         public int draw_icon (Cairo.Context cr, int x, int y, Command c) {
             // Size by the length of data
             int width = (c.data.length / 7 + 1);
-            if (c.id == "python" || c.id == "4_color" )
+            if (c.id == "python" || c.id == "4_color")
                 width = 1;
             // Background
             if (c.id == "nl" || c.id == "tab")
@@ -379,10 +383,10 @@ namespace Turtlico {
             // Pixbuf icons
             if (c.pixbuf != null) {
                 Gdk.cairo_set_source_pixbuf(cr, c.pixbuf,
-                    x + cell_width / 2 - c.pixbuf.width / 2,
+                    x + cell_width * width / 2 - c.pixbuf.width / 2,
                     y + cell_height / 2 - c.pixbuf.height / 2);
                 cr.paint();
-                if (c.id != "5_img")
+                if (c.id != "5_img" && c.id != "key")
                     return 1;
             }
 
@@ -391,33 +395,28 @@ namespace Turtlico {
                 Gdk.cairo_set_source_rgba(cr, color_editable);
             else
                 Gdk.cairo_set_source_rgba(cr, color_text);
-            // Type conversion command (draw data type)
-            if (c.id == "tc") {
+            // Small description under icon
+            if (c.id == "tc" || c.id == "key") {
                 Pango.Layout type_layout;
-                if (c.data.length > 7) {
-                    type_layout = create_pango_layout(c.data.substring(0, 4) + "...");
-                }
-                else {
-                    type_layout = create_pango_layout(c.data);
-                }
-                cr.move_to(x, y + cell_height - 15);
+                type_layout = create_pango_layout(c.data);
+                cr.move_to(x, y + cell_height - 19);
                 type_layout.set_alignment(Pango.Alignment.CENTER);
-                type_layout.set_width(cell_width * Pango.SCALE);
-                Pango.cairo_show_layout(cr, type_layout);
+                type_layout.set_width(cell_width * width * Pango.SCALE);
                 type_layout.set_font_description(small_font);
+                Pango.cairo_show_layout(cr, type_layout);
                 cr.move_to(x, y + 1);
             }
             else
                 cr.move_to(x, y + 5);
 
-            Pango.Layout layout;
+            Pango.Layout layout = null;
             if ((c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img" || c.id == "4_font") && c.data != "") {
                 layout = create_pango_layout(c.data);
                 layout.set_font_description(small_font);
                 if (c.id == "#" || c.id== "str" || c.id == "5_img")
                     Gdk.cairo_set_source_rgba(cr, color_black);
             }
-            else {
+            else if (!c.name.has_suffix(".png")) {
                 layout = create_pango_layout(c.name);
                 if (c.id == "4_color" && c.data != "") {
                     layout = create_pango_layout("⬤");
@@ -427,11 +426,15 @@ namespace Turtlico {
                 }
                 layout.set_font_description(font);
             }
-            layout.set_alignment(Pango.Alignment.CENTER);
-            layout.set_width(cell_width * width * Pango.SCALE);
-            layout.set_justify(false);
-            Pango.cairo_show_layout(cr, layout);
-            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img" || c.id == "4_font")
+            if (layout != null) {
+                layout.set_alignment(Pango.Alignment.CENTER);
+                layout.set_width(cell_width * width * Pango.SCALE);
+                layout.set_justify(false);
+                Pango.cairo_show_layout(cr, layout);
+            }
+            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" ||
+                    c.id == "5_img" || c.id == "4_font" || c.id == "tc" ||
+                    c.id == "key")
                 return width;
             else
                 return 1;
@@ -727,6 +730,10 @@ namespace Turtlico {
                         icon_data_dialog_font(x, y);
                         queue_draw();buffer.backup_program();
                     }
+                    if (buffer.program[y][x].id == "key") {
+                        icon_data_dialog_key(x, y);
+                        queue_draw();buffer.backup_program();
+                    }
                 }
             }
             if ((key_event.keyval == Gdk.Key.c || key_event.keyval == Gdk.Key.x) &&
@@ -777,6 +784,11 @@ namespace Turtlico {
             }
             buffer.program[y][x] = buffer.program[y][x].set_data(type, buffer.resource_dir);
             queue_draw();
+        }
+
+        [GtkCallback]
+        void on_rb_custom_toggled(Gtk.ToggleButton btn) {
+            type_chooser_custom_type_rev.set_reveal_child(btn.active);
         }
 
         void icon_data_dialog_python(int x, int y) {
@@ -832,9 +844,19 @@ namespace Turtlico {
             queue_draw();
         }
 
+        void icon_data_dialog_key(int x, int y) {
+            key_dialog.set_transient_for((Gtk.Window)get_toplevel());
+            key_dialog_label.label = buffer.program[y][x].data;
+            key_dialog.run();
+            key_dialog.hide();
+            buffer.program[y][x] = buffer.program[y][x].set_data(key_dialog_label.label, buffer.resource_dir);
+        }
+
         [GtkCallback]
-        void on_rb_custom_toggled(Gtk.ToggleButton btn) {
-            type_chooser_custom_type_rev.set_reveal_child(btn.active);
+        bool on_key_dialog_key_press_event(Gdk.EventKey key_event) {
+            if (key_event.keyval == Gdk.Key.ISO_Level3_Shift) key_dialog_label.label = "Alt_R";
+            else key_dialog_label.label = Gdk.keyval_name(key_event.keyval);
+            return false;
         }
 
         int mouse_to_program_x (int x, int y) {
