@@ -27,6 +27,12 @@
     <file>0_rpioff.png</file>
     <file>0_rpievent.png</file>
     <file>0_rpieventoff.png</file>
+    <file>5_fileis.png</file>
+    <file>5_diris.png</file>
+    <file>open_file.png</file>
+    <file>5_subfiles.png</file>
+    <file>5_subdirs.png</file>
+    <file>5_dirname.png</file>
     <file>multimedia.png</file>
   </gresource>
 </gresources>

@@ -143,7 +143,7 @@ namespace Turtlico {
             // Events
             motion_notify_event.connect((event)=>{
                 mouse_x = (int)event.x;
-                mouse_y = (int)event.y;
+                mouse_y = int.max((int)event.y, 0);
                 if (buffer.selection_phase == SelectionPhase.SELECT_END) {
                     buffer.selection_end.y = int.min(mouse_y / cell_height, buffer.program.size - 1);
                     buffer.selection_end.x = int.min(

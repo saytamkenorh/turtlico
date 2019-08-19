@@ -114,7 +114,7 @@ namespace Turtlico {
             programview.motion_notify_event.connect((event)=>{
                 int x = (int)event.x / ProgramView.cell_width;
                 int y = (int)event.y / ProgramView.cell_height;
-                if (programview.buffer.program.size > y && programview.buffer.program[y].size > x) {
+                if (x >= 0 && y >= 0 && programview.buffer.program.size > y && programview.buffer.program[y].size > x) {
                     status_label.label = (x + 1).to_string() + ":" +  (y + 1).to_string() + " " + programview.buffer.program[y][x].help;
                 }
                 else {

@@ -132,18 +132,18 @@ namespace Turtlico {
                 if (data_read == 0) continue;
                 // Separate line into individual commands with data
                 Gee.LinkedList<string> cmds = new Gee.LinkedList<string>();
-                bool ingore = false;
+                bool ignore = false;
                 string tuple = "";
                 for(int i = 0; i < line.length; i++){
                     if(line[i] == ';'){
-                        if(!ingore){
+                        if(!ignore){
                             cmds.add(tuple.replace("\\n", "\n"));
                             tuple = "";
                             continue;
                         }
                     }
                     else if(line[i] == str_mark[0]){
-                        ingore = !ingore;
+                        ignore = !ignore;
                     }
                     tuple = tuple + line[i].to_string();
                 }
@@ -153,16 +153,19 @@ namespace Turtlico {
                 foreach (string cmd in cmds) {
                     // Properties (id, data)
                     Gee.LinkedList<string> props = new Gee.LinkedList<string>();
-                    bool ignore = false;
+                    ignore = false;
                     string prop = "";
                     foreach (char c in cmd.to_utf8()) {
-                        if (c == ',') {
+                        debug(ignore.to_string() + " " + c.to_string());
+                        if (!ignore && c == ',') {
                             props.add(prop);
                             prop = "";
                             continue;
                         }
-                        else if (c == str_mark[0]) ingore = !ignore;
-                        if (c != str_mark[0]) prop = prop + c.to_string();
+                        if (c == str_mark[0])
+                            ignore = !ignore;
+                        else
+                            prop = prop + c.to_string();
                     }
                     // Plugins
                     if (props[0] == "plugin") {

@@ -97,16 +97,17 @@
 				{"id":"3_b", "icon":"🛑", "?": 'Break out of a loop', "type": 3, "c":"break"},
 				{"id":"3_c", "icon":"↦", "?": 'Continue with next iteration of a loop', "type": 3, "c":"continue"},
 				{"id":"obj", "icon":"🆔", "?": 'Object', "type": -1},
+				{"id":"3_global", "icon":"Glob", "?": 'Use variable as a global one', "type": 3, "c":"global"},
 				{"id":"2_assign", "icon":"=", "?": 'Assign value to a variable', "type": 4, "c":"="},
 				{"id":"2_+=", "icon":"↖", "?": 'Increase value by', "type": 4, "c":"+="},
 				{"id":"2_-=", "icon":"↙", "?": 'Decrease value by', "type": 4, "c":"-="},
 				{"id":"2_.", "icon":".", "?": 'Dot (use to access properties of an object)', "type": 4, "c":"."},
-				{"id":"tc", "icon":"🔄", "?": 'Type conversion', "type": -1},
 				{"id":"+", "icon":"+", "?": 'Plus', "type": 4, "c":"+"},
 				{"id":"-", "icon":"-", "?": 'Minus', "type": 4, "c":"-"},
 				{"id":"*", "icon":"*", "?": 'Multiply', "type": 4, "c":"*"},
 				{"id":"/", "icon":"/", "?": 'Divide', "type": 4, "c":"/"},
 				{"id":"%", "icon":"%", "?": 'Modulo', "type": 4, "c":"%"},
+				{"id":"tc", "icon":"🔄", "?": 'Type conversion', "type": -1},
 				{"id":"python", "icon":"r:python.png", "?": 'Direct Python code', "type": -1},
 				{"id":"5_rand", "icon":"🎲", "?": 'Random number' , "type": 5, "func": "random.randint", "params": "1, 100" },
 				{"id":"5_range", "icon":"r:5_range.png", "?": 'Return list of numbers in specified range' , "type": 5, "func": "range", "params": "1, 10" },
@@ -122,10 +123,13 @@
 			"commands" : [
 				{"id":"5_readlines", "icon":"📤", "?": 'Read all lines of a file' , "type": 5, "func": "tcf_readlines", "params": "" },
 				{"id":"0_writelines", "icon":"📥", "?": 'Write lines to a file' , "type": 0, "func": "tcf_writelines", "params": "" },
-				{"id":"5_filediag", "icon":"📂", "?": 'Open file dialog' , "type": 5, "func": "tcf_filedialog", "params": "" },
-				{"id":"5_fileis", "icon":"💾", "?": 'Check file exists' , "type": 5, "func": "os.path.isfile", "params": "" },
-				{"id":"5_diris", "icon":"📁", "?": 'Check directory exists' , "type": 5, "func": "os.path.isdir", "params": "" },
-				{"id":"0_filedirdel", "icon":"␡", "?": 'Delete file or directory' , "type": 0, "func": "tcf_filedirdel", "params": "" }
+				{"id":"5_filediag", "icon":"r:open_file.png", "?": 'Open file dialog' , "type": 5, "func": "tcf_filedialog", "params": "" },
+				{"id":"5_fileis", "icon":"r:5_fileis.png", "?": 'Check file exists' , "type": 5, "func": "os.path.isfile", "params": "" },
+				{"id":"5_diris", "icon":"r:5_diris.png", "?": 'Check directory exists' , "type": 5, "func": "os.path.isdir", "params": "" },
+				{"id":"0_filedirdel", "icon":"␡", "?": 'Delete file or directory' , "type": 0, "func": "tcf_filedirdel", "params": "" },
+				{"id":"5_subfiles", "icon":"r:5_subfiles.png", "?": 'Get files in DIRECTORY' , "type": 5, "func": "tcf_subfiles", "params": "" },
+				{"id":"5_subdirs", "icon":"r:5_subdirs.png", "?": 'Get subdirs in DIRECTORY' , "type": 5, "func": "tcf_subdirs", "params": "" },
+				{"id":"5_dirname", "icon":"r:5_dirname.png", "?": 'Get parrent directory / the directory the item is located in' , "type": 5, "func": "os.path.dirname", "params": "" }
 			]
 		}
 	],
@@ -232,6 +236,26 @@ def check_rect():\
 check_rect()\
 def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2=(15, 15), user_data=None):\
 	tcf_collisions_rect.append((a, b, callback, collider_size_1, collider_size_2, user_data))"
+		},
+		{
+			"id": "tcf_subfiles",
+			"code": "def tcf_subfiles(path):\
+	result = []\
+	for entry in os.scandir(path):\
+		if entry.is_file():\
+			result.append(entry.path)\
+	result.sort()\
+	return result"
+		},
+		{
+			"id": "tcf_subdirs",
+			"code": "def tcf_subdirs(path):\
+	result = []\
+	for entry in os.scandir(path):\
+		if entry.is_dir():\
+			result.append(entry.path)\
+	result.sort()\
+	return result"
 		}
 	]
 }
