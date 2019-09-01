@@ -132,6 +132,10 @@ namespace Turtlico {
 			update_window_title();
 			show_all();
 			programview.grab_focus();
+
+#if LINUX
+			linux_check_deps(this);
+#endif
 		}
 
 		[GtkCallback]
@@ -203,17 +207,16 @@ namespace Turtlico {
                     Subprocess subprocess = null;
                     try {
                         var argv = new Gee.LinkedList<string>();
-                        if (GLib.FileUtils.test("C:\\Windows", GLib.FileTest.IS_DIR)) {
+#if WINDOWS
                             argv.add("python3w");
-                        }
-                        else {
+#else
                             GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
 #if TURTLICO_FLATPAK
                             argv.add_all_array({"flatpak-spawn", "--host", "python3"});
 #else
                             argv.add("python3");
 #endif
-                        }
+#endif
                         argv.add(path);
                         var launcher = new SubprocessLauncher(GLib.SubprocessFlags.STDERR_PIPE | GLib.SubprocessFlags.STDOUT_PIPE);
                         launcher.setenv("G_MESSAGES_DEBUG", "all", true);

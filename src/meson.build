@@ -7,6 +7,7 @@ turtlico_sources = [
   'compiler.vala',
   'program-settings.vala',
   'app-settings.vala',
+  'package-service.vala',
 ]
 
 if build_machine.system() == 'windows'
@@ -43,6 +44,14 @@ endif
 
 if get_option('flatpak')
    add_project_arguments(['-D', 'TURTLICO_FLATPAK'], language: 'vala')
+endif
+
+if target_machine.system() == 'windows'
+   add_project_arguments(['-D', 'WINDOWS'], language: 'vala')
+endif
+
+if target_machine.system() == 'linux'
+   add_project_arguments(['-D', 'LINUX'], language: 'vala')
 endif
 
 turtlico_executable = executable('turtlico', turtlico_sources,
