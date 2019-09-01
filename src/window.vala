@@ -115,7 +115,7 @@ namespace Turtlico {
                 int x = (int)event.x / ProgramView.cell_width;
                 int y = (int)event.y / ProgramView.cell_height;
                 if (x >= 0 && y >= 0 && programview.buffer.program.size > y && programview.buffer.program[y].size > x) {
-                    status_label.label = (x + 1).to_string() + ":" +  (y + 1).to_string() + " " + programview.buffer.program[y][x].help;
+                    status_label.label = (x + 1).to_string() + ":" +  (y + 1).to_string() + " " + programview.buffer.program[y][x].draw_params.help;
                 }
                 else {
                     status_label.label = "";
@@ -466,6 +466,9 @@ namespace Turtlico {
             // Clear
             categories_box.get_children().foreach((w)=>{categories_box.remove(w);});
             programview.buffer.commands.clear();
+            // Get default icon color
+            var programview_bg_color = programview.get_style_context().get_color(Gtk.StateFlags.ACTIVE).to_string();
+            var programview_fg_color = "rgb(255, 255, 255)";
             // Compiler
             compiler =  new Compiler(programview.buffer.enabled_plugins.to_array());
             // Load from JSON
@@ -501,9 +504,29 @@ namespace Turtlico {
                     commands.foreach_element((array, index_, command_node)=>{
                         // Parse one command
                         Json.Object command = command_node.get_object();
+
+                        bool draw_data = command.has_member("data-draw") ? command.get_boolean_member("data-draw") : false;
+
+                        Gdk.RGBA data_color = Gdk.RGBA();
+                        data_color.parse(command.has_member("data-color") ? command.get_string_member("data-color") : "#ffffff");
+
+                        Gdk.RGBA bg_color = Gdk.RGBA();
+                        bg_color.parse(command.has_member("bg-color") ? command.get_string_member(
+                            "bg-color") : programview_bg_color);
+
+                        Gdk.RGBA fg_color = Gdk.RGBA();
+                        fg_color.parse(command.has_member("fg-color") ? command.get_string_member(
+                            "fg-color") : programview_fg_color);
+
+                        bool data_only = command.has_member("data-only") ? command.get_boolean_member("data-only") : true;
+
+                        var draw_params = new DrawParams(
+                            draw_data, data_color, bg_color, fg_color, data_only,
+                            _(command.get_string_member("?")));
+
                         Command c = new Command(command.get_string_member("icon"),
-                                                _(command.get_string_member("?")),
-                                                command.get_string_member("id"), "");
+                                                command.get_string_member("id"), "",
+                                                draw_params);
                         //debug(command.get_string_member("icon"));
                         programview.buffer.commands.add(c);
                         Gtk.TreeIter iter;
@@ -517,7 +540,7 @@ namespace Turtlico {
                             surface.get_width(), surface.get_height());
                         ls.set(iter,
                                CmdViewCols.PIXBUF, pixbuf,
-                               CmdViewCols.HELP, c.help,
+                               CmdViewCols.HELP, c.draw_params.help,
                                CmdViewCols.ID, c.id);
                     });
                 });

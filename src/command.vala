@@ -23,20 +23,20 @@ namespace Turtlico {
         private Gdk.Pixbuf _pixbuf;
         public Gdk.Pixbuf pixbuf {get { return _pixbuf;}}
 
-        private string _help;
-        public string help {get {return _help;}}
-
         private string _id;
         public string id {get {return _id;}}
 
         private string _data;
         public string data {get {return _data;}}
 
-        public Command (string name, string help, string id, string data) {
+        private DrawParams _draw_params;
+        public DrawParams draw_params {get {return _draw_params;}}
+
+        public Command (string name, string id, string data, DrawParams draw_params) {
             this._name = name;
-            this._help = help;
             this._id = id;
             this._data = data;
+            this._draw_params = draw_params;
             if (name.has_prefix("r:")) {
                 try {
                     string str = name.substring(2);
@@ -55,23 +55,11 @@ namespace Turtlico {
         }
 
         /*
-         * Return a copy of this with optionally changed values
-         *
-        */
-        public Command copy (string new_name = "", string new_help = "",
-                            string new_id = "", string new_data = "") {
-            return new Command(new_name == "" ? new_name : this.name,
-                               new_help == "" ? new_help : this.help,
-                               new_id == "" ? new_id : this.id,
-                               new_data == "" ? new_data : this.data);
-        }
-
-        /*
          * Return a copy of this with changed data property.
          *
         */
         public Command set_data (string new_data, string resource_dir) {
-            var c = new Command(this.name, this.help, this.id, new_data);
+            var c = new Command(this.name, this.id, new_data, this.draw_params);
             if (this.id == "5_img") {
                 if (new_data.has_suffix(".png") ||
                     new_data.has_suffix(".bmp") ||
@@ -124,6 +112,30 @@ namespace Turtlico {
                 }
             }
             return parsers.to_array();
+        }
+    }
+
+    public class DrawParams {
+        public bool data_draw;
+        public Gdk.RGBA data_color;
+        public Gdk.RGBA bg_color;
+        public Gdk.RGBA fg_color;
+        public bool data_only;
+
+        public string help;
+
+        public DrawParams (
+            bool data_draw,
+            Gdk.RGBA data_color, Gdk.RGBA bg_color, Gdk.RGBA fg_color,
+            bool data_only,
+            string help)
+        {
+            this.data_draw = data_draw;
+            this.data_color = data_color;
+            this.bg_color = bg_color;
+            this.fg_color = fg_color;
+            this.data_only = data_only;
+            this.help = help;
         }
     }
 }

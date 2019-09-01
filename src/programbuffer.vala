@@ -156,7 +156,6 @@ namespace Turtlico {
                     ignore = false;
                     string prop = "";
                     foreach (char c in cmd.to_utf8()) {
-                        debug(ignore.to_string() + " " + c.to_string());
                         if (!ignore && c == ',') {
                             props.add(prop);
                             prop = "";

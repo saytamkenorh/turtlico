@@ -77,15 +77,6 @@ namespace Turtlico {
         [GtkChild]
         Gtk.Label key_dialog_label;
         // Render
-        Gdk.RGBA color_cell;
-        Gdk.RGBA color_text;
-        Gdk.RGBA color_black;
-        Gdk.RGBA color_editable;
-        Gdk.RGBA color_cycle;
-        Gdk.RGBA color_string;
-        Gdk.RGBA color_object;
-        Gdk.RGBA color_type_conversion;
-        Gdk.RGBA color_comment;
         Pango.FontDescription font = new Pango.FontDescription();
         Pango.FontDescription small_font = new Pango.FontDescription();
 
@@ -103,15 +94,6 @@ namespace Turtlico {
             css_provider.load_from_resource("/com/orsan/Turtlico/programview.css");
             style_context.add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             // Render
-            color_text.parse("rgb(255, 255, 255)");
-            color_black.parse("rgb(0, 0, 0)");
-            color_editable.parse("rgb(0, 0, 128)");
-            color_cycle.parse("rgb(200, 0, 0)");
-            color_string.parse("rgb(255, 220, 0)");
-            color_object.parse("rgb(100, 100, 100)");
-            color_type_conversion.parse("rgb(255, 140, 0)");
-            color_comment.parse("rgb(255, 233, 140)");
-            color_cell = style_context.get_color(Gtk.StateFlags.ACTIVE);
             font.set_weight(Pango.Weight.BOLD);
             font.set_size(15 * Pango.SCALE);
             small_font.set_family("Monospace");
@@ -300,9 +282,6 @@ namespace Turtlico {
             style_context.render_background(cr, allocation.x, allocation.y,
                                             allocation.width, allocation.height);
             // Foreground
-            var state = style_context.get_state();
-            color_cell = style_context.get_color(state);
-
             Gdk.Rectangle rect;
             Gdk.cairo_get_clip_rectangle(cr, out rect);
             int width = 0;
@@ -361,22 +340,7 @@ namespace Turtlico {
             if (c.id == "python" || c.id == "4_color")
                 width = 1;
             // Background
-            if (c.id == "nl" || c.id == "tab")
-                Gdk.cairo_set_source_rgba(cr, color_black);
-            else if (c.id == "int")
-                Gdk.cairo_set_source_rgba(cr, color_editable);
-            else if (c.id == "str")
-                Gdk.cairo_set_source_rgba(cr, color_string);
-            else if (c.id == "obj")
-                Gdk.cairo_set_source_rgba(cr, color_object);
-            else if (c.id == "tc")
-                Gdk.cairo_set_source_rgba(cr, color_type_conversion);
-            else if (c.id == "#")
-                Gdk.cairo_set_source_rgba(cr, color_comment);
-            else if ((c.id.length > 0) && (c.id[0] == '1'))
-                Gdk.cairo_set_source_rgba(cr, color_cycle);
-            else
-                Gdk.cairo_set_source_rgba(cr, color_cell);
+            Gdk.cairo_set_source_rgba(cr, c.draw_params.bg_color);
             cr.rectangle(x, y, cell_width * width, cell_height);
             cr.fill();
 
@@ -386,58 +350,49 @@ namespace Turtlico {
                     x + cell_width * width / 2 - c.pixbuf.width / 2,
                     y + cell_height / 2 - c.pixbuf.height / 2);
                 cr.paint();
-                if (c.id != "5_img" && c.id != "key")
+                if (!c.draw_params.data_draw)
                     return 1;
             }
 
-            // Emoji icons
-            if(c.id.length > 0 && (c.id[0] == '3' || c.id[0] == '2'))
-                Gdk.cairo_set_source_rgba(cr, color_editable);
-            else
-                Gdk.cairo_set_source_rgba(cr, color_text);
-            // Small description under icon
-            if (c.id == "tc" || c.id == "key") {
-                Pango.Layout type_layout;
-                type_layout = create_pango_layout(c.data);
-                cr.move_to(x, y + cell_height - 19);
-                type_layout.set_alignment(Pango.Alignment.CENTER);
-                type_layout.set_width(cell_width * width * Pango.SCALE);
-                type_layout.set_font_description(small_font);
-                Pango.cairo_show_layout(cr, type_layout);
-                cr.move_to(x, y + 1);
-            }
-            else
-                cr.move_to(x, y + 5);
+            cr.move_to(x, y + 5); // Center of the icon
+            Gdk.cairo_set_source_rgba(cr, c.draw_params.fg_color); // Foreground color
 
-            Pango.Layout layout = null;
-            if ((c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" || c.id == "5_img" || c.id == "4_font") && c.data != "") {
-                layout = create_pango_layout(c.data);
-                layout.set_font_description(small_font);
-                if (c.id == "#" || c.id== "str" || c.id == "5_img")
-                    Gdk.cairo_set_source_rgba(cr, color_black);
-            }
-            else if (!c.name.has_suffix(".png")) {
-                layout = create_pango_layout(c.name);
-                if (c.id == "4_color" && c.data != "") {
-                    layout = create_pango_layout("⬤");
-                    Gdk.RGBA color = Gdk.RGBA();
-                    color.parse(c.data);
-                    Gdk.cairo_set_source_rgba(cr, color);
+            // Draw emoji icon
+            if (!c.name.has_suffix(".png")) {
+                if (c.data == "" || (c.draw_params.data_draw && !c.draw_params.data_only) || c.id == "4_color") {
+                    string text;
+                    if (c.id == "4_color" && c.data != "") {
+                        text = "⬤";
+                        Gdk.RGBA color = Gdk.RGBA();
+                        color.parse(c.data);
+                        Gdk.cairo_set_source_rgba(cr, color);
+                    }
+                    else text = c.name;
+                    var layout = draw_icon_new_layout(text, font, width);
+                    Pango.cairo_show_layout(cr, layout);
                 }
-                layout.set_font_description(font);
             }
-            if (layout != null) {
-                layout.set_alignment(Pango.Alignment.CENTER);
-                layout.set_width(cell_width * width * Pango.SCALE);
-                layout.set_justify(false);
-                Pango.cairo_show_layout(cr, layout);
+            // Draw data
+            if (c.draw_params.data_draw && c.data != "") {
+                if (!c.draw_params.data_only)
+                    cr.move_to(x, cell_height - 15); // Draw data under the icon if we draw both
+                Pango.Layout data_layout = draw_icon_new_layout(c.data, small_font, width);
+                Gdk.cairo_set_source_rgba(cr, c.draw_params.data_color);
+                Pango.cairo_show_layout(cr, data_layout);
             }
-            if (c.id == "int" || c.id== "str" || c.id == "obj" || c.id == "#" ||
-                    c.id == "5_img" || c.id == "4_font" || c.id == "tc" ||
-                    c.id == "key")
+            if (c.draw_params.data_draw)
                 return width;
             else
                 return 1;
+        }
+
+        Pango.Layout draw_icon_new_layout (string text, Pango.FontDescription font, int icon_width) {
+            Pango.Layout layout = create_pango_layout(text);
+            layout.set_font_description(font);
+            layout.set_alignment(Pango.Alignment.CENTER);
+            layout.set_width(cell_width * icon_width * Pango.SCALE);
+            layout.set_justify(false);
+            return layout;
         }
 
         void on_drag_begin(Gdk.DragContext context) {
