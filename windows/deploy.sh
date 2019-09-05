@@ -28,7 +28,12 @@ do
   tar -xf /var/cache/pacman/pkg/$pkg-any.pkg.tar.xz
   # more fine-grained control is possible here
 done
-tar -xf /var/cache/pacman/pkg/mingw-w64-x86_64-adwaita*-any.pkg.tar.xz
+
+extra_pkgs="adwaita python3-pillow gstreamer gst-python python3-gobject gobject-introspection-runtime lcms2 libjpeg libtiff openjpeg2 python3-olefile zstd"
+for pkg in $extra_pkgs
+do
+  tar -xf /var/cache/pacman/pkg/mingw-w64-x86_64-$pkg*-any.pkg.tar.xz
+done
 
 cp -r $PWD/mingw64/bin $2
 cp -r $PWD/mingw64/share $2
