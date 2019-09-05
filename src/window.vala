@@ -265,7 +265,7 @@ namespace Turtlico {
                         if (status != 0 && _stderr != "") {
                             string[] err_lines = _stderr.split("\n");
                             string error = err_lines[err_lines.length - 2];
-                            if (error == "turtle.Terminator")
+                            if (_stderr.contains("turtle.Terminator"))
                                 return false;
                             // Extracts line
                             if (settings.get_boolean("debug-data")) {
