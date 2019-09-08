@@ -12,6 +12,7 @@ src/compiler.vala
 src/command.vala
 src/program-settings.vala
 src/app-settings.vala
+src/package-service.vala
 src/base.json
 src/rpi.json
 src/mm.json
