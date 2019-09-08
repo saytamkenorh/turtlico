@@ -17,7 +17,7 @@
  */
 
 namespace Turtlico {
-    private const string update_server = "https://turtlico.tk/";
+    private const string update_server = "http://turtlico.tk/";
     private const string[] linux_deps_tools = {"apt", "pacman", "dnf"};
 
     public void linux_check_deps(Gtk.Window win) {
@@ -108,7 +108,7 @@ namespace Turtlico {
                     }
                 }
                 catch (Error e) {
-                    warning(_("Unable to check for updates"));
+                    warning(_("Unable to check for updates") + e.message);
                 }
             });
         } catch (Error e) {}
@@ -124,34 +124,49 @@ namespace Turtlico {
         var answer = dialog.run();
         dialog.destroy();
 
-        var pwin = new Gtk.Window();
-        var progress_bar = new Gtk.ProgressBar();
-        pwin.add(progress_bar);
-        pwin.set_transient_for(win);
-        pwin.show_all();
-
         if (answer == Gtk.ResponseType.YES) {
+            var pwin = new Gtk.Window();
+            var progress_bar = new Gtk.ProgressBar(); progress_bar.set_valign(Gtk.Align.CENTER);
+	    progress_bar.set_text(_("Downloading update installer..."));
+            progress_bar.show_text = true;
+            pwin.add(progress_bar);
+            pwin.set_transient_for(win);
+            pwin.deletable = false;
+            pwin.resizable = false;
+	    pwin.set_size_request(300, 50);
+	    pwin.set_title("Turtlico");
+            pwin.show_all();
             new GLib.Thread<int>(null, ()=>{
                 try {
                     var remote = File.new_for_uri(update_server + "turtlico-windows.exe");
-                    var local = File.new_tmp("turtlico-windows-XXXXXX.exe", null);
+                    string path = Path.build_filename(GLib.Environment.get_tmp_dir() , "turtlico-windows.exe").replace("\\", "/");
+                    var local = File.new_for_path(path);
                     remote.copy(local, FileCopyFlags.OVERWRITE, null, (current, total)=>{
                         Idle.add(()=>{
-                            progress_bar.set_fraction(current / total);
+                            progress_bar.pulse();
                             return false;
                         });
                     });
-                    GLib.Process.spawn_command_line_sync(local.get_path() + " /SILENT");
-                    Process.exit(0);
+                    win.hide(); pwin.hide();
+                    Process.spawn_command_line_sync(path + " /SILENT");
+                    Idle.add(()=>{
+                        new Gtk.MessageDialog(null,
+                            Gtk.DialogFlags.MODAL,
+                            Gtk.MessageType.INFO,
+                            Gtk.ButtonsType.OK,
+                            _("Please start the app again to apply the updates")).run();
+                        Process.exit(0);
+                        return false;
+                    });
                 } catch (Error e) {
                     string err_str = e.message;
                     Idle.add(()=>{
-                        pwin.destroy()
+                        pwin.destroy();
                         var err_dialog = new Gtk.MessageDialog(win,
-                                    Gtk.DialogFlags.MODAL,
-                                    Gtk.MessageType.QUESTION,
-                                    Gtk.ButtonsType.YES_NO,
-                                    _("Update failed"));
+                            Gtk.DialogFlags.MODAL,
+                            Gtk.MessageType.ERROR,
+                            Gtk.ButtonsType.OK,
+                            _("Update failed"));
                         err_dialog.secondary_text = err_str;
                         err_dialog.run();
                         err_dialog.destroy();

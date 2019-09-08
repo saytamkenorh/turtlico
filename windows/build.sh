@@ -28,16 +28,32 @@ gdk-pixbuf-query-loaders > "$srcdir/output/lib/gdk-pixbuf-2.0/2.10.0/loaders.cac
 # Useless Adwaita icons
 rm -rf "$srcdir/output/share/icons/Adwaita/cursors"
 rm -rf "$srcdir/output/share/icons/Adwaita/"*/apps
+rm -rf "$srcdir/output/share/icons/Adwaita/"*/categories
+rm -rf "$srcdir/output/share/icons/Adwaita/"*/devices
+rm -rf "$srcdir/output/share/icons/Adwaita/"*/emblems
+rm -rf "$srcdir/output/share/icons/Adwaita/"*/emotes
+rm -rf "$srcdir/output/share/icons/Adwaita/"*/status
+rm -rf "$srcdir/output/share/icons/Adwaita/"*/legacy/face*
 # Sizes that are not used often
 rm -rf "$srcdir/output/share/icons/Adwaita/256x256"
 rm -rf "$srcdir/output/share/icons/Adwaita/512x512"
 # Other useless stuff
 rm -rf "$srcdir/output/bin/gtk3-"*
 find "$srcdir/output/bin" -not -name "g*.exe" -name "*.exe" -not -name "*python*" -not -name "update*.exe" -exec rm -f {} \;
+rm -rf "$srcdir/output/share/aclocal"
+rm -rf "$srcdir/output/share/applications"
+rm -rf "$srcdir/output/share/bash-completion"
 rm -rf "$srcdir/output/share/doc"
-rm -rf "$srcdir/output/share/man"
+rm -rf "$srcdir/output/share/gdb"
+rm -rf "$srcdir/output/share/gdb"
+rm -rf "$srcdir/output/share/graphite2"
 rm -rf "$srcdir/output/share/gir-1.0"
 rm -rf "$srcdir/output/share/gtk-doc"
+rm -rf "$srcdir/output/share/installed-tests"
+rm -rf "$srcdir/output/share/info"
+rm -rf "$srcdir/output/share/man"
+rm -rf "$srcdir/output/share/mime"
+rm -rf "$srcdir/output/share/vala"
 rm -rf "$srcdir/output/lib/cmake"
 rm -rf "$srcdir/output/lib/python2.7"
 rm -rf "$srcdir/output/lib/python3.7/test"
