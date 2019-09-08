@@ -136,6 +136,9 @@ namespace Turtlico {
 #if LINUX
 			linux_check_deps(this);
 #endif
+#if WINDOWS
+			windows_check_updates(this);
+#endif
 		}
 
 		[GtkCallback]

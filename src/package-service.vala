@@ -17,6 +17,7 @@
  */
 
 namespace Turtlico {
+    private const string update_server = "https://turtlico.tk/";
     private const string[] linux_deps_tools = {"apt", "pacman", "dnf"};
 
     public void linux_check_deps(Gtk.Window win) {
@@ -91,5 +92,74 @@ namespace Turtlico {
             }
             return 0;
         });
+    }
+
+    public void windows_check_updates(Gtk.Window win) {
+        var parser = new Json.Parser();
+        var findex = File.new_for_uri(update_server + "builds.json");
+        try {
+            parser.load_from_stream_async.begin(findex.read(), null, (obj, result)=>{
+                try {
+                    parser.load_from_stream_async.end(result);
+                    Json.Node node = parser.get_root();
+                    string remote_ver = node.get_object().get_string_member("version");
+                    if (remote_ver != TURTLICO_VERSION) {
+                        download_update(win);
+                    }
+                }
+                catch (Error e) {
+                    warning(_("Unable to check for updates"));
+                }
+            });
+        } catch (Error e) {}
+    }
+
+    private void download_update(Gtk.Window win) {
+        var dialog = new Gtk.MessageDialog(win,
+                                Gtk.DialogFlags.MODAL,
+                                Gtk.MessageType.QUESTION,
+                                Gtk.ButtonsType.YES_NO,
+                                _("Turtlico update available"));
+        dialog.secondary_text = _("Would you like to install it now?");
+        var answer = dialog.run();
+        dialog.destroy();
+
+        var pwin = new Gtk.Window();
+        var progress_bar = new Gtk.ProgressBar();
+        pwin.add(progress_bar);
+        pwin.set_transient_for(win);
+        pwin.show_all();
+
+        if (answer == Gtk.ResponseType.YES) {
+            new GLib.Thread<int>(null, ()=>{
+                try {
+                    var remote = File.new_for_uri(update_server + "turtlico-windows.exe");
+                    var local = File.new_tmp("turtlico-windows-XXXXXX.exe", null);
+                    remote.copy(local, FileCopyFlags.OVERWRITE, null, (current, total)=>{
+                        Idle.add(()=>{
+                            progress_bar.set_fraction(current / total);
+                            return false;
+                        });
+                    });
+                    GLib.Process.spawn_command_line_sync(local.get_path() + " /SILENT");
+                    Process.exit(0);
+                } catch (Error e) {
+                    string err_str = e.message;
+                    Idle.add(()=>{
+                        pwin.destroy()
+                        var err_dialog = new Gtk.MessageDialog(win,
+                                    Gtk.DialogFlags.MODAL,
+                                    Gtk.MessageType.QUESTION,
+                                    Gtk.ButtonsType.YES_NO,
+                                    _("Update failed"));
+                        err_dialog.secondary_text = err_str;
+                        err_dialog.run();
+                        err_dialog.destroy();
+                        return false;
+                    });
+                }
+                return 0;
+            });
+        }
     }
 }
