@@ -2,7 +2,7 @@ pacman -Syu --noconfirm
 pacman -Su --noconfirm
 pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-vala \
 mingw-w64-x86_64-meson mingw-w64-x86_64-gtk3 mingw-w64-x86_64-gettext mingw-w64-x86_64-desktop-file-utils \
-mingw-w64-x86_64-libgee mingw-w64-x86_64-gtksourceview4 --needed --noconfirm
+mingw-w64-x86_64-libgee mingw-w64-x86_64-gtksourceview4 mingw-w64-x86_64-gst-python mingw-w64-x86_64-python3-pillow --needed --noconfirm
 srcdir=$(pwd)/$line
 rm -rf ./build
 
@@ -38,8 +38,11 @@ rm -rf "$srcdir/output/share/doc"
 rm -rf "$srcdir/output/share/man"
 rm -rf "$srcdir/output/share/gir-1.0"
 rm -rf "$srcdir/output/share/gtk-doc"
+rm -rf "$srcdir/output/lib/cmake"
+rm -rf "$srcdir/output/lib/python2.7"
 rm -rf "$srcdir/output/lib/python3.7/test"
-rm -rf "$srcdir/output/lib/girepository-1.0"
+rm -rf "$srcdir/output/lib/pkgconfig"
+#rm -rf "$srcdir/output/lib/girepository-1.0"
 find "$srcdir/output/lib/python3.7" -name "*.pyc" -exec rm -f {} \;
 find "$srcdir/output/lib" -name "*.a" -exec rm -f {} \;
 find "$srcdir/output/share/locale/"* -maxdepth 0 -not -name "cs" -not -name "en*" -exec rm -rf {} \;

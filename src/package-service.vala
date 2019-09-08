@@ -41,7 +41,7 @@ namespace Turtlico {
 #if TURTLICO_FLATPAK
                             Process.spawn_command_line_sync("flatpak-spawn --host which " + c, out _stdout, out _stderr, out exit_status);
 #else
-                            Process.spawn_command_line_sync("which " + c, out _stdout, out _stder, out exit_status);
+                            Process.spawn_command_line_sync("which " + c, out _stdout, out _stderr, out exit_status);
 #endif
                             if (exit_status == 0) {
                                 tool = c;

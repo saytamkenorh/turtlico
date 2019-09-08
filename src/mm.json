@@ -20,7 +20,7 @@
 			"code": "import gi\
 gi.require_version('Gst', '1.0')\
 from gi.repository import Gst\
-Gst.init()"
+Gst.init(sys.argv)"
 		},
 		{
 			"id": "tcf_mm_play_sound",
