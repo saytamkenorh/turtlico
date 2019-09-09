@@ -156,7 +156,6 @@ namespace Turtlico {
                             Gtk.ButtonsType.OK,
                             _("Please start the app again to apply the updates")).run();
                         Process.exit(0);
-                        return false;
                     });
                 } catch (Error e) {
                     string err_str = e.message;
