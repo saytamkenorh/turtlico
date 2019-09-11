@@ -1,6 +1,6 @@
 /* linux-setup.vala
  *
- * Copyright 2019 matyas5 <hronekmatyas@gmail.com>
+ * Copyright 2019 matyas5
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

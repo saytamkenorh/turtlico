@@ -221,9 +221,23 @@ namespace Turtlico {
 #endif
 #endif
                         argv.add(path);
-                        var launcher = new SubprocessLauncher(GLib.SubprocessFlags.STDERR_PIPE | GLib.SubprocessFlags.STDOUT_PIPE);
-                        launcher.setenv("G_MESSAGES_DEBUG", "all", true);
-                        subprocess = launcher.spawnv(argv.to_array());
+                        
+                        bool use_launcher = true;
+#if WINDOWS
+                        if(!Win32.check_windows_version(10, 0, 0, Win32.OSType.ANY))
+                        {
+                            use_launcher = false; // spawnv causes SEGFAULT on Windows 8 and older
+                        }
+#endif
+                        if (use_launcher) {
+                            var launcher = new SubprocessLauncher(SubprocessFlags.STDERR_PIPE | SubprocessFlags.STDOUT_PIPE);
+                            launcher.setenv("G_MESSAGES_DEBUG", "all", true);
+                            subprocess = launcher.spawnv(argv.to_array());
+                        }
+                        else {
+                            subprocess = new Subprocess(SubprocessFlags.STDERR_PIPE | SubprocessFlags.STDOUT_PIPE, "python3w", path);
+                        }
+                        
                         subprocess.wait(debug_cancellable);
                         var dis = new DataInputStream (subprocess.get_stdout_pipe());
                         _stdout = dis.read_upto("\0", 1, null);
