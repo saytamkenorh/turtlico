@@ -69,7 +69,6 @@ namespace Turtlico {
                     run_btn_image.set_from_icon_name("media-playback-start", Gtk.IconSize.BUTTON);
             }
         }
-        Cancellable debug_cancellable = new Cancellable();
 
 		public Window (Gtk.Application app) {
 			Object (application: app);
@@ -127,8 +126,8 @@ namespace Turtlico {
             debugger.on_error.connect((title, message)=>{
                 msg(title, message, Gtk.MessageType.ERROR);
             });
-            debugger.notify["debug_running"].connect(()=>{
-                string icon_name = "media-playback-" + (debugger.debug_running ? "start" : "stop");
+            debugger.notify["debug-running"].connect(()=>{
+                string icon_name = "media-playback-" + (debugger.debug_running ? "stop" : "start");
                 run_btn_image.set_from_icon_name(
                      icon_name, Gtk.IconSize.BUTTON);
             });
