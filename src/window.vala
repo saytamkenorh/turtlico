@@ -43,7 +43,8 @@ namespace Turtlico {
         [GtkChild]
         Gtk.Image run_btn_image;
 
-        public Compiler compiler;
+        public Compiler compiler; // Initialized in load_commands
+        Debugger debugger = new Debugger();
 
         private File _current_file = null;
         File current_file {
@@ -122,6 +123,15 @@ namespace Turtlico {
                 }
                 return false;
             });
+            // Debugger
+            debugger.on_error.connect((title, message)=>{
+                msg(title, message, Gtk.MessageType.ERROR);
+            });
+            debugger.notify["debug_running"].connect(()=>{
+                string icon_name = "media-playback-" + (debugger.debug_running ? "start" : "stop");
+                run_btn_image.set_from_icon_name(
+                     icon_name, Gtk.IconSize.BUTTON);
+            });
 
             // Load commands database
             load_commands();
@@ -178,134 +188,11 @@ namespace Turtlico {
 
 		[GtkCallback]
 		void on_run_btn_clicked() {
-            if (debug_running) {
-                debug_cancellable.cancel();
+            if (debugger.debug_running) {
+                debugger.stop();
                 return;
             }
-            debug_cancellable.reset();
-            debug_running = true;
-            try {
-                string output = compiler.compile(programview.buffer.program,
-                    settings.get_boolean("debug-data"));
-                string path;
-                if (current_file != null && !current_file.get_path().has_prefix("/run/user"))
-                    path = current_file.get_path() + ".py";
-                else
-                    path = Path.build_filename(Environment.get_user_cache_dir(), "turtlico_output.py");
-                // Save generated program
-                var file = File.new_for_path (path);
-                if (file.query_exists ()) {file.delete ();}
-                var dos = new DataOutputStream (file.create (FileCreateFlags.NONE));
-                uint8[] data = output.data;
-                long written = 0;
-                while (written < data.length) {
-                    // sum of the bytes of 'data' that already have been written to the stream
-                    written += dos.write (data[written:data.length]);
-                }
-                // RUN
-                new GLib.Thread<int>(null, ()=>{
-                    string _stdout = "";
-                    string _stderr = "";
-                    int status = 0;
-                    Subprocess subprocess = null;
-                    try {
-                        var argv = new Gee.LinkedList<string>();
-#if WINDOWS
-                            argv.add("python3w");
-#else
-                            GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
-#if TURTLICO_FLATPAK
-                            argv.add_all_array({"flatpak-spawn", "--host", "python3"});
-#else
-                            argv.add("python3");
-#endif
-#endif
-                        argv.add(path);
-                        var launcher = new SubprocessLauncher(GLib.SubprocessFlags.STDERR_PIPE | GLib.SubprocessFlags.STDOUT_PIPE);
-                        launcher.setenv("G_MESSAGES_DEBUG", "all", true);
-                        subprocess = launcher.spawnv(argv.to_array());
-                        subprocess.wait(debug_cancellable);
-                        var dis = new DataInputStream (subprocess.get_stdout_pipe());
-                        _stdout = dis.read_upto("\0", 1, null);
-                        dis.close();
-                        dis = new DataInputStream (subprocess.get_stderr_pipe());
-                        _stderr = dis.read_upto("\0", 1, null);
-                        dis.close();
-                        status = subprocess.get_status();
-                    }
-                    catch (IOError e) {
-                        if (subprocess != null) {
-                            subprocess.force_exit();
-#if TURTLICO_FLATPAK
-                            try {
-                                if (_stdout == "") {
-                                    var dis = new DataInputStream (subprocess.get_stdout_pipe());
-                                    _stdout = dis.read_line(); // We need just the PID
-                                }
-                                string pid_msg = "child_pid: ";
-                                int pid_index = _stdout.index_of(pid_msg);
-                                if (pid_index >= 0) {
-                                    int pid_index_start = pid_index + pid_msg.length;
-                                    string pid = _stdout.substring(pid_index_start);
-                                    GLib.Process.spawn_command_line_async("flatpak-spawn --host kill -SIGKILL " + pid);
-                                }
-                            } catch {}
-#endif
-                        }
-                    }
-                    catch (Error e) {
-                        string error_msg = e.message;
-                        Idle.add(()=>{
-                            msg(error_msg, "", Gtk.MessageType.ERROR);
-                            return false;
-                        });
-                    }
-                    debug(_("stdout of child process:\n") + _stdout);
-                    debug(_("stderr of child process:\n") + _stderr);
-                    Idle.add(()=>{
-                        debug_running = false;
-                        // Show error dialog
-                        if (status != 0 && _stderr != "") {
-                            string[] err_lines = _stderr.split("\n");
-                            string error = err_lines[err_lines.length - 2];
-                            if (_stderr.contains("turtle.Terminator"))
-                                return false;
-                            // Extracts line
-                            if (settings.get_boolean("debug-data")) {
-                                Gee.ArrayList<string> words = new Gee.ArrayList<string>.wrap(_stderr.split(" "));
-                                int i = 0;
-                                bool search_for_line = false;
-                                for (int index = 0; index < words.size; index ++) {
-                                    if (words[index].contains(path))
-                                        search_for_line = true;
-                                    if (search_for_line && words[index] == "line") {
-                                        i = index;
-                                        break;
-                                    }
-                                }
-                                int code_line = int.parse(words[i + 1].replace(",", ""));
-                                debug(words[i + 1]);
-                                code_line--; // Python indexes lines from 1
-                                int line = compiler.out_line_to_src_line(programview.buffer.program, code_line);
-                                if (line >= 0) {
-                                    line++; // We show line numbers indexed from 1 to user
-                                    error += "\n" + _("Error occurred at line ") + line.to_string();
-                                }
-                            }
-
-                            msg(_("Program crashed"),
-                                error,
-                                Gtk.MessageType.ERROR);
-                        }
-                        return false;
-                    });
-                    return 0;
-                });
-
-            }
-            catch (Error e) {
-                msg(e.message, "", Gtk.MessageType.ERROR);
-            }
+            debugger.start(compiler, programview.buffer, current_file);
 		}
 
         [GtkCallback]

@@ -5,6 +5,7 @@ turtlico_sources = [
   'programbuffer.vala',
   'command.vala',
   'compiler.vala',
+  'debugger.vala',
   'program-settings.vala',
   'app-settings.vala',
   'package-service.vala',
