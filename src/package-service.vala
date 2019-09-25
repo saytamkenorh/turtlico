@@ -148,15 +148,8 @@ namespace Turtlico {
                         });
                     });
                     win.hide(); pwin.hide();
-                    Process.spawn_command_line_sync(path + " /SILENT");
-                    Idle.add(()=>{
-                        new Gtk.MessageDialog(null,
-                            Gtk.DialogFlags.MODAL,
-                            Gtk.MessageType.INFO,
-                            Gtk.ButtonsType.OK,
-                            _("Please start the app again to apply the updates")).run();
-                        Process.exit(0);
-                    });
+                    Process.spawn_command_line_async(path + " /SILENT");
+                    Process.exit(0);
                 } catch (Error e) {
                     string err_str = e.message;
                     Idle.add(()=>{

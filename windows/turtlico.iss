@@ -30,6 +30,7 @@ OutputBaseFilename=turtlico-setup
 SetupIconFile=S:\Projects\turtlico\src\turtlico.ico
 Compression=lzma
 SolidCompression=yes
+CloseApplications=force
 WizardStyle=modern
 
 [Languages]
@@ -51,5 +52,5 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall
 
