@@ -151,14 +151,24 @@
 		},
 		{
 			"id": "tcf_filedialog",
-			"code": "def tcf_filedialog(text = 'Choose a file', filter = '*'):\
-	from subprocess import Popen, PIPE\
-	my_env=os.environ.copy()\
-	my_env['G_MESSAGES_DEBUG']=''\
-	proc = Popen(['zenity', '--file-selection', '--title', text,\
-                 '--file-filter', filter], stdout=PIPE, env=my_env)\
-	(output, err) = proc.communicate(); proc.wait()\
-	output = output.decode().replace('\\n', ''); return output"
+			"code": "def tcf_filedialog(text = 'Choose a file', filter = 'All files | *'):\
+	if sys.platform.startswith('linux'):\
+		from subprocess import Popen, PIPE\
+		my_env=os.environ.copy()\
+		my_env['G_MESSAGES_DEBUG']=''\
+		proc = Popen(['zenity', '--file-selection', '--title', text,\
+                	 '--file-filter', filter], stdout=PIPE, env=my_env)\
+		(output, err) = proc.communicate(); proc.wait()\
+		output = output.decode().replace('\\n', ''); return output\
+	else:\
+		f = filter.split(' | ')\
+		if len(f) == 2:\
+			filetypes = ((f[0], f[1]),)\
+		elif len(f) == 1:\
+			filetypes = (('Files', f[0]),)\
+		from tkinter import filedialog\
+		path = filedialog.askopenfile(title=text, filetypes=filetypes)\
+		return path.name"
 		},
 		{
 			"id": "tcf_filedirdel",

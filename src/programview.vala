@@ -375,7 +375,7 @@ namespace Turtlico {
             // Draw data
             if (c.draw_params.data_draw && c.data != "") {
                 if (!c.draw_params.data_only)
-                    cr.move_to(x, cell_height - 15); // Draw data under the icon if we draw both
+                    cr.move_to(x, y + cell_height - 15); // Draw data under the icon if we draw both
                 Pango.Layout data_layout = draw_icon_new_layout(c.data, small_font, width);
                 Gdk.cairo_set_source_rgba(cr, c.draw_params.data_color);
                 Pango.cairo_show_layout(cr, data_layout);
