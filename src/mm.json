@@ -27,7 +27,9 @@ Gst.init(sys.argv)"
 			"code": "def tcf_mm_play_sound(file, volume=1.0):\
 	if type(file) == str:\
 		pl = Gst.ElementFactory.make('playbin', None)\
-		pl.set_property('uri','file://' + os.path.abspath(file))\
+		if Gst.uri_is_valid(file): uri = file\
+		else: uri = Gst.filename_to_uri(file)\
+		pl.set_property('uri', uri)\
 		pl.set_property('volume', volume)\
 		pl.set_state(Gst.State.PLAYING)\
 	else:\
@@ -38,7 +40,9 @@ Gst.init(sys.argv)"
 			"id": "tcf_mm_player",
 			"code": "def tcf_mm_player(file):\
 	pl = Gst.ElementFactory.make('playbin', None)\
-	pl.set_property('uri','file://' + os.path.abspath(file))\
+	if Gst.uri_is_valid(file): uri = file\
+	else: uri = Gst.filename_to_uri(file)\
+	pl.set_property('uri', uri)\
 	return pl"
 		},
 		{
