@@ -58,18 +58,6 @@ namespace Turtlico {
 
         Settings settings = new Settings("com.orsan.Turtlico");
 
-        bool _debug_running = false;
-        private bool debug_running {
-            get {return _debug_running;}
-            set {
-                _debug_running = value;
-                if (value)
-                    run_btn_image.set_from_icon_name("media-playback-stop", Gtk.IconSize.BUTTON);
-                else
-                    run_btn_image.set_from_icon_name("media-playback-start", Gtk.IconSize.BUTTON);
-            }
-        }
-
 		public Window (Gtk.Application app) {
 			Object (application: app);
             string icon_file = Path.build_filename(Path.get_dirname(Environment.get_current_dir()), "share/icons/hicolor/256x256/apps/com.orsan.Turtlico.png");

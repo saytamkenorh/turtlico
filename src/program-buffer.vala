@@ -189,8 +189,8 @@ namespace Turtlico {
                         program[y].add(c);
                     }
                     catch (FileError e) {
-                        string message = ("The file to load contains an unkown command!\n");
-                        message += ("This might be because of the file was damaged or created by a newer version of this program.\nCommand ID: ") + props[0];
+                        string message = _("The file to load contains an unkown command!\n");
+                        message += _("This might be because of the file was damaged or created by a newer version of this program.\nCommand ID: ") + props[0];
                         throw new IOError.INVALID_DATA(message);
                     }
                 }

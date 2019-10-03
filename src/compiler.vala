@@ -248,7 +248,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                 	        output[out_line] =
                                 output[out_line] + program[y][x].data.substring(3); // Remove 'rgb'
                         }
-                        break;
+                        continue;
                     }
                     if (program[y][x].id == "4_font") {
                         var font = program[y][x].data.split(";");
