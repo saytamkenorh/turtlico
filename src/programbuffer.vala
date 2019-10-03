@@ -58,13 +58,14 @@ namespace Turtlico {
         public ProgramBuffer () {
         }
 
-                public void undo () {
+        public void undo () {
             if (history.size - history_index - 2 < 0)
                 return;
             var h = history[history.size - history_index - 2];
             copy_list(h, ref program);
             redraw_required();
             history_index++;
+            program_changed = true;
         }
 
         public void redo() {
@@ -74,6 +75,7 @@ namespace Turtlico {
             var h = history[history.size - history_index - 1];
             copy_list(h, ref program);
             redraw_required();
+            program_changed = true;
         }
 
         public void backup_program () {
