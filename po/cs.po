@@ -2,16 +2,16 @@
 # Copyright (C) 2018 THE turtlico'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the turtlico package.
 # Automatically generated, 2018.
-# Matyáš Hronek <orka770@seznam.cz>, 2019.
+# Matyáš Hronek <>, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-08 17:38+0200\n"
-"PO-Revision-Date: 2019-09-08 17:47+0200\n"
-"Last-Translator: Matyáš Hronek <orka770@seznam.cz>\n"
-"Language-Team: Czech <orka770@seznam.cz>\n"
+"POT-Creation-Date: 2019-10-03 18:24+0200\n"
+"PO-Revision-Date: 2019-10-03 18:25+0200\n"
+"Last-Translator: Matyáš Hronek <>\n"
+"Language-Team: Czech <>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -53,7 +53,7 @@ msgstr "Spustit program"
 msgid "Open program"
 msgstr "Otevřít program"
 
-#: src/window.ui:105 src/window.vala:335
+#: src/window.ui:105 src/window.vala:209
 msgid "Save"
 msgstr "Uložit"
 
@@ -130,11 +130,11 @@ msgstr "Jiný"
 msgid "Enter name of your custom data type"
 msgstr "Sem zadejte datový typ"
 
-#: src/program-settings.ui:28
+#: src/program-settings.ui:29
 msgid "Additional commands"
 msgstr "Přídavné příkazy (doplňky)"
 
-#: src/program-settings.ui:59
+#: src/program-settings.ui:61
 msgid "Statistics"
 msgstr "Statistiky"
 
@@ -167,57 +167,40 @@ msgstr "Uloží zkompilovaný program do SOUBORU"
 msgid "Cannot save the output file: %s\n"
 msgstr "Nepodařilo se uložit výsledný soubor: %s\n"
 
-#: src/window.vala:263
-msgid "stdout of child process:\n"
-msgstr "stdout podprocesu:\n"
-
-#: src/window.vala:264
-msgid "stderr of child process:\n"
-msgstr "stderr podprocesu:\n"
-
-#. We show line numbers indexed from 1 to user
-#: src/window.vala:292
-msgid "Error occurred at line "
-msgstr "Chyba se vyskytla na řádku "
-
-#: src/window.vala:296
-msgid "Program crashed"
-msgstr "Program selhal"
-
-#: src/window.vala:322
+#: src/window.vala:196
 msgid "Failed to save the program"
 msgstr "Nepodařilo se uložit program"
 
-#: src/window.vala:327
+#: src/window.vala:201
 msgid "Project saved."
 msgstr "Projekt uložen."
 
-#: src/window.vala:333 src/window.vala:338 src/window.vala:367
-#: src/window.vala:372
+#: src/window.vala:207 src/window.vala:212 src/window.vala:241
+#: src/window.vala:246
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/window.vala:336 src/window.vala:370 src/window.vala:632
+#: src/window.vala:210 src/window.vala:244 src/window.vala:506
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/window.vala:345 src/window.vala:379
+#: src/window.vala:219 src/window.vala:253
 msgid "Turtlico project (*.tcp)"
 msgstr "Projekt Turtlico (*.tcp)"
 
-#: src/window.vala:360
+#: src/window.vala:234
 msgid "Program saved."
 msgstr "Program uložen."
 
-#: src/window.vala:369
+#: src/window.vala:243
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/window.vala:421
+#: src/window.vala:295
 msgid "Would you really like to apply these changes?"
 msgstr "Opravdu chcete aplikovat tyto změny?"
 
-#: src/window.vala:422
+#: src/window.vala:296
 msgid ""
 "The program contains commands that are only available from a plugin. "
 "Unavailable commands will be removed."
@@ -225,57 +208,54 @@ msgstr ""
 "Program obsahuje příkazy, které jsou dostupné pouze z přídavného modulu. "
 "Nedostupné příkazy budou odstraněny."
 
-#: src/window.vala:467
+#: src/window.vala:341
 msgid "Failed to open the program"
 msgstr "Nepodařilo se otevřít program"
 
-#: src/window.vala:627
+#: src/window.vala:501
 msgid "Would you like to save your changes before closing the program?"
 msgstr "Přereje si uložit změny před zavřením programu?"
 
-#: src/window.vala:628
+#: src/window.vala:502
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr "Jinak budou neuložené změny ztraceny!"
 
-#: src/window.vala:630
+#: src/window.vala:504
 msgid "Yes"
 msgstr "Ano"
 
-#: src/window.vala:631
+#: src/window.vala:505
 msgid "No"
 msgstr "Ne"
 
-#: src/window.vala:648
+#: src/window.vala:522
 msgid "Unnamed"
 msgstr "Bez názvu"
-
-#: src/programview.vala:192
-msgid "Please save the project first."
-msgstr "Nejdříve prosím uložze projekt."
-
-#: src/programview.vala:205
-msgid "Cannot insert the image"
-msgstr "Nelze vložit obrázek"
-
-#: src/compiler.vala:283
-msgid "Generated code:\n"
-msgstr "Vygenerovaný kód:\n"
 
 #: src/command.vala:111
 msgid "Failed to load command def file: "
 msgstr "Selhalo načtení souboru s definicemi příkazů: "
 
-#: src/program-settings.vala:75
-msgid "Failed to load list of additional modules"
-msgstr "Selhalo načtení listu přídavných příkazů"
+#: src/compiler.vala:283
+msgid "Generated code:\n"
+msgstr "Vygenerovaný kód:\n"
 
-#: src/program-settings.vala:91
-msgid "Icon count: "
-msgstr "Počet ikon: "
+#: src/debugger.vala:129
+msgid "stdout of child process:\n"
+msgstr "stdout podprocesu:\n"
 
-#: src/program-settings.vala:92
-msgid "Icon count without whitespace and comments: "
-msgstr "Počet ikon bez bílých znaků a komentářů: "
+#: src/debugger.vala:130
+msgid "stderr of child process:\n"
+msgstr "stderr podprocesu:\n"
+
+#. We show line numbers indexed from 1 to user
+#: src/debugger.vala:158
+msgid "Error occurred at line "
+msgstr "Chyba se vyskytla na řádku "
+
+#: src/debugger.vala:162
+msgid "Program crashed"
+msgstr "Program selhal"
 
 #: src/package-service.vala:59
 msgid ""
@@ -305,13 +285,48 @@ msgstr "Přejete si jí nainstalovat nyní?"
 msgid "Downloading update installer..."
 msgstr "Stahují aktualizační soubor..."
 
-#: src/package-service.vala:157
-msgid "Please start the app again to apply the updates"
-msgstr "Prosím, spusťte aplikace znovu, aby se projevily změny"
-
-#: src/package-service.vala:169
+#: src/package-service.vala:161
 msgid "Update failed"
 msgstr "Aktualizace selhala"
+
+#. Add command
+#: src/program-buffer.vala:182
+msgid "Failed to open the file. Error on line: "
+msgstr "Nepodařilo se načíst program. Chyba je na řádce: "
+
+#: src/program-buffer.vala:192
+msgid "The file to load contains an unkown command!\n"
+msgstr "Soubor obsahuje neznámý příkaz!\n"
+
+#: src/program-buffer.vala:193
+msgid ""
+"This might be because of the file was damaged or created by a newer version "
+"of this program.\n"
+"Command ID: "
+msgstr ""
+"Toto může být způsobeno tím, že soubor byl poškozen nebo vytvořen novější "
+"verzí programu.\n"
+"ID příkazu: "
+
+#: src/program-settings.vala:75
+msgid "Failed to load list of additional modules"
+msgstr "Selhalo načtení listu přídavných příkazů"
+
+#: src/program-settings.vala:91
+msgid "Icon count: "
+msgstr "Počet ikon: "
+
+#: src/program-settings.vala:92
+msgid "Icon count without whitespace and comments: "
+msgstr "Počet ikon bez bílých znaků a komentářů: "
+
+#: src/programview.vala:192
+msgid "Please save the project first."
+msgstr "Nejdříve prosím uložze projekt."
+
+#: src/programview.vala:205
+msgid "Cannot insert the image"
+msgstr "Nelze vložit obrázek"
 
 #: src/base.json:6
 msgid "New line (Enter)"
@@ -838,18 +853,3 @@ msgid ""
 msgstr ""
 "Získat délku média otevřeného v přehrávači. (vratí nulu, pokud je délka "
 "neznámá)"
-
-#~ msgid "Failed to open the file. Error on line: "
-#~ msgstr "Nepodařilo se načíst program. Chyba je na řádce: "
-
-#~ msgid "The file to load contains an unkown command!"
-#~ msgstr "Soubor obsahuje neznámý příkaz!"
-
-#~ msgid ""
-#~ "This might be because of the file was damaged or created by a newer "
-#~ "version of this program.\n"
-#~ "Command ID: "
-#~ msgstr ""
-#~ "Toto může být způsobeno tím, že soubor byl poškozen nebo vytvořen novější "
-#~ "verzí programu.\n"
-#~ "ID příkazu: "

@@ -7,12 +7,14 @@ src/program-settings.ui
 src/app-settings.ui
 src/main.vala
 src/window.vala
-src/programview.vala
-src/compiler.vala
 src/command.vala
-src/program-settings.vala
+src/compiler.vala
+src/debugger.vala
 src/app-settings.vala
 src/package-service.vala
+src/program-buffer.vala
+src/program-settings.vala
+src/programview.vala
 src/base.json
 src/rpi.json
 src/mm.json

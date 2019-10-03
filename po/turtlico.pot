@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-08 17:38+0200\n"
+"POT-Creation-Date: 2019-10-03 18:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 msgid "Open program"
 msgstr ""
 
-#: src/window.ui:105 src/window.vala:335
+#: src/window.ui:105 src/window.vala:209
 msgid "Save"
 msgstr ""
 
@@ -126,11 +126,11 @@ msgstr ""
 msgid "Enter name of your custom data type"
 msgstr ""
 
-#: src/program-settings.ui:28
+#: src/program-settings.ui:29
 msgid "Additional commands"
 msgstr ""
 
-#: src/program-settings.ui:59
+#: src/program-settings.ui:61
 msgid "Statistics"
 msgstr ""
 
@@ -161,112 +161,92 @@ msgstr ""
 msgid "Cannot save the output file: %s\n"
 msgstr ""
 
-#: src/window.vala:263
-msgid "stdout of child process:\n"
-msgstr ""
-
-#: src/window.vala:264
-msgid "stderr of child process:\n"
-msgstr ""
-
-#. We show line numbers indexed from 1 to user
-#: src/window.vala:292
-msgid "Error occurred at line "
-msgstr ""
-
-#: src/window.vala:296
-msgid "Program crashed"
-msgstr ""
-
-#: src/window.vala:322
+#: src/window.vala:196
 msgid "Failed to save the program"
 msgstr ""
 
-#: src/window.vala:327
+#: src/window.vala:201
 msgid "Project saved."
 msgstr ""
 
-#: src/window.vala:333 src/window.vala:338 src/window.vala:367
-#: src/window.vala:372
+#: src/window.vala:207 src/window.vala:212 src/window.vala:241
+#: src/window.vala:246
 msgid "Select file"
 msgstr ""
 
-#: src/window.vala:336 src/window.vala:370 src/window.vala:632
+#: src/window.vala:210 src/window.vala:244 src/window.vala:506
 msgid "Cancel"
 msgstr ""
 
-#: src/window.vala:345 src/window.vala:379
+#: src/window.vala:219 src/window.vala:253
 msgid "Turtlico project (*.tcp)"
 msgstr ""
 
-#: src/window.vala:360
+#: src/window.vala:234
 msgid "Program saved."
 msgstr ""
 
-#: src/window.vala:369
+#: src/window.vala:243
 msgid "Open"
 msgstr ""
 
-#: src/window.vala:421
+#: src/window.vala:295
 msgid "Would you really like to apply these changes?"
 msgstr ""
 
-#: src/window.vala:422
+#: src/window.vala:296
 msgid ""
 "The program contains commands that are only available from a plugin. "
 "Unavailable commands will be removed."
 msgstr ""
 
-#: src/window.vala:467
+#: src/window.vala:341
 msgid "Failed to open the program"
 msgstr ""
 
-#: src/window.vala:627
+#: src/window.vala:501
 msgid "Would you like to save your changes before closing the program?"
 msgstr ""
 
-#: src/window.vala:628
+#: src/window.vala:502
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr ""
 
-#: src/window.vala:630
+#: src/window.vala:504
 msgid "Yes"
 msgstr ""
 
-#: src/window.vala:631
+#: src/window.vala:505
 msgid "No"
 msgstr ""
 
-#: src/window.vala:648
+#: src/window.vala:522
 msgid "Unnamed"
-msgstr ""
-
-#: src/programview.vala:192
-msgid "Please save the project first."
-msgstr ""
-
-#: src/programview.vala:205
-msgid "Cannot insert the image"
-msgstr ""
-
-#: src/compiler.vala:283
-msgid "Generated code:\n"
 msgstr ""
 
 #: src/command.vala:111
 msgid "Failed to load command def file: "
 msgstr ""
 
-#: src/program-settings.vala:75
-msgid "Failed to load list of additional modules"
+#: src/compiler.vala:283
+msgid "Generated code:\n"
 msgstr ""
 
-#: src/program-settings.vala:91
-msgid "Icon count: "
+#: src/debugger.vala:129
+msgid "stdout of child process:\n"
 msgstr ""
 
-#: src/program-settings.vala:92
-msgid "Icon count without whitespace and comments: "
+#: src/debugger.vala:130
+msgid "stderr of child process:\n"
+msgstr ""
+
+#. We show line numbers indexed from 1 to user
+#: src/debugger.vala:158
+msgid "Error occurred at line "
+msgstr ""
+
+#: src/debugger.vala:162
+msgid "Program crashed"
 msgstr ""
 
 #: src/package-service.vala:59
@@ -295,12 +275,44 @@ msgstr ""
 msgid "Downloading update installer..."
 msgstr ""
 
-#: src/package-service.vala:157
-msgid "Please start the app again to apply the updates"
+#: src/package-service.vala:161
+msgid "Update failed"
 msgstr ""
 
-#: src/package-service.vala:169
-msgid "Update failed"
+#. Add command
+#: src/program-buffer.vala:182
+msgid "Failed to open the file. Error on line: "
+msgstr ""
+
+#: src/program-buffer.vala:192
+msgid "The file to load contains an unkown command!\n"
+msgstr ""
+
+#: src/program-buffer.vala:193
+msgid ""
+"This might be because of the file was damaged or created by a newer version "
+"of this program.\n"
+"Command ID: "
+msgstr ""
+
+#: src/program-settings.vala:75
+msgid "Failed to load list of additional modules"
+msgstr ""
+
+#: src/program-settings.vala:91
+msgid "Icon count: "
+msgstr ""
+
+#: src/program-settings.vala:92
+msgid "Icon count without whitespace and comments: "
+msgstr ""
+
+#: src/programview.vala:192
+msgid "Please save the project first."
+msgstr ""
+
+#: src/programview.vala:205
+msgid "Cannot insert the image"
 msgstr ""
 
 #: src/base.json:6
