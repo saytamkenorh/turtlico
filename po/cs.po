@@ -2,15 +2,15 @@
 # Copyright (C) 2018 THE turtlico'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the turtlico package.
 # Automatically generated, 2018.
-# Matyáš Hronek <>, 2019.
+# matyas5 <>, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-03 18:24+0200\n"
-"PO-Revision-Date: 2019-10-03 18:25+0200\n"
-"Last-Translator: Matyáš Hronek <>\n"
+"POT-Creation-Date: 2019-10-08 19:26+0200\n"
+"PO-Revision-Date: 2019-10-08 19:29+0200\n"
+"Last-Translator: matyas5 <>\n"
 "Language-Team: Czech <>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -53,7 +53,7 @@ msgstr "Spustit program"
 msgid "Open program"
 msgstr "Otevřít program"
 
-#: src/window.ui:105 src/window.vala:209
+#: src/window.ui:105 src/window.vala:220
 msgid "Save"
 msgstr "Uložit"
 
@@ -167,40 +167,40 @@ msgstr "Uloží zkompilovaný program do SOUBORU"
 msgid "Cannot save the output file: %s\n"
 msgstr "Nepodařilo se uložit výsledný soubor: %s\n"
 
-#: src/window.vala:196
+#: src/window.vala:207
 msgid "Failed to save the program"
 msgstr "Nepodařilo se uložit program"
 
-#: src/window.vala:201
+#: src/window.vala:212
 msgid "Project saved."
 msgstr "Projekt uložen."
 
-#: src/window.vala:207 src/window.vala:212 src/window.vala:241
-#: src/window.vala:246
+#: src/window.vala:218 src/window.vala:223 src/window.vala:252
+#: src/window.vala:257
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/window.vala:210 src/window.vala:244 src/window.vala:506
+#: src/window.vala:221 src/window.vala:255 src/window.vala:517
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/window.vala:219 src/window.vala:253
+#: src/window.vala:230 src/window.vala:264
 msgid "Turtlico project (*.tcp)"
 msgstr "Projekt Turtlico (*.tcp)"
 
-#: src/window.vala:234
+#: src/window.vala:245
 msgid "Program saved."
 msgstr "Program uložen."
 
-#: src/window.vala:243
+#: src/window.vala:254
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/window.vala:295
+#: src/window.vala:306
 msgid "Would you really like to apply these changes?"
 msgstr "Opravdu chcete aplikovat tyto změny?"
 
-#: src/window.vala:296
+#: src/window.vala:307
 msgid ""
 "The program contains commands that are only available from a plugin. "
 "Unavailable commands will be removed."
@@ -208,27 +208,27 @@ msgstr ""
 "Program obsahuje příkazy, které jsou dostupné pouze z přídavného modulu. "
 "Nedostupné příkazy budou odstraněny."
 
-#: src/window.vala:341
+#: src/window.vala:352
 msgid "Failed to open the program"
 msgstr "Nepodařilo se otevřít program"
 
-#: src/window.vala:501
+#: src/window.vala:512
 msgid "Would you like to save your changes before closing the program?"
 msgstr "Přereje si uložit změny před zavřením programu?"
 
-#: src/window.vala:502
+#: src/window.vala:513
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr "Jinak budou neuložené změny ztraceny!"
 
-#: src/window.vala:504
+#: src/window.vala:515
 msgid "Yes"
 msgstr "Ano"
 
-#: src/window.vala:505
+#: src/window.vala:516
 msgid "No"
 msgstr "Ne"
 
-#: src/window.vala:522
+#: src/window.vala:533
 msgid "Unnamed"
 msgstr "Bez názvu"
 
@@ -749,8 +749,8 @@ msgid "Write lines to a file"
 msgstr "Zapiš řádky do souboru"
 
 #: src/base.json:126
-msgid "Open file dialog"
-msgstr "Otevře dialog pro výběr souboru"
+msgid "File dialog"
+msgstr "Otevře dialog pro výběr/uložení souboru"
 
 #: src/base.json:127
 msgid "Check file exists"
@@ -773,8 +773,12 @@ msgid "Get subdirs in DIRECTORY"
 msgstr "Získat podsložky ve SLOŽCE"
 
 #: src/base.json:132
-msgid "Get parrent directory / the directory the item is located in"
+msgid "Get parent directory / the directory the item is located in"
 msgstr "Získat nadřazený adresář / adresář ve kterém se položka nachází"
+
+#: src/base.json:133
+msgid "Get file name from path"
+msgstr "Získat název souboru z cesty"
 
 #: src/rpi.json:7
 msgid "Connect LED"
