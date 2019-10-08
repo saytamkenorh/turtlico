@@ -80,8 +80,15 @@ namespace Turtlico {
                 target_list,                   // lists of target to support
                 Gdk.DragAction.COPY            // what to do with data after dropped
             );
+            Gtk.drag_dest_set (
+                cmd_view,                       // widget that will accept a drop
+                Gtk.DestDefaults.ALL,           // default actions for dest on DnD
+                target_list,                    // lists of target to support
+                Gdk.DragAction.COPY
+                | Gdk.DragAction.MOVE           // what to do with data after dropped
+            );
             // delete btn
-             Gtk.drag_dest_set (
+            Gtk.drag_dest_set (
                 delete_btn,                     // widget that will accept a drop
                 Gtk.DestDefaults.ALL,           // default actions for dest on DnD
                 target_list,                    // lists of target to support
@@ -108,6 +115,10 @@ namespace Turtlico {
                 else {
                     status_label.label = "";
                 }
+                return false;
+            });
+            programview.leave_notify_event.connect((event)=>{
+                status_label.label = "";
                 return false;
             });
             // Debugger

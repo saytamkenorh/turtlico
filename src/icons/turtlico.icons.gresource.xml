@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/com/orsan/Turtlico/icons">
+    <file>0_ht.png</file>
+    <file>0_st.png</file>
     <file>0_bf.png</file>
     <file>0_ef.png</file>
     <file>0_cs.png</file>
@@ -33,6 +35,7 @@
     <file>5_subfiles.png</file>
     <file>5_subdirs.png</file>
     <file>5_dirname.png</file>
+    <file>5_basename.png</file>
     <file>multimedia.png</file>
   </gresource>
 </gresources>

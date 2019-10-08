@@ -22,14 +22,14 @@
 				{"id":"(", "icon":"(", "?": 'Left parenthesis', "type": 4, "c":"(" },
 				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":", " },
 				{"id":")", "icon":")", "?": 'Right parenthesis', "type": 4,  "c":")" },
-				{"id":"0_ht", "icon":"🔅", "?": 'Hide turtle' , "type": 0, "func": "hideturtle", "params": "" },
-				{"id":"0_st", "icon":"🔆", "?": 'Show turtle' , "type": 0, "func": "showturtle", "params": "" },
+				{"id":"0_ht", "icon":"r:0_ht.png", "?": 'Hide turtle' , "type": 0, "func": "hideturtle", "params": "" },
+				{"id":"0_st", "icon":"r:0_st.png", "?": 'Show turtle' , "type": 0, "func": "showturtle", "params": "" },
 				{"id":"0_wr", "icon":"✍", "?": 'Write text on screen' , "type": 0, "func": "write", "params": "" },
 				{"id":"0_bf", "icon":"r:0_bf.png", "?": 'Begin fill' , "type": 0, "func": "begin_fill", "params": "" },
 				{"id":"0_ef", "icon":"r:0_ef.png", "?": 'End fill - fill the drawn shape' , "type": 0, "func": "end_fill", "params": "" },
 				{"id":"0_cs", "icon":"r:0_cs.png", "?": 'Clear turtle screen' , "type": 0, "func": "clear", "params": "" },
-				{"id":"5_screen_c", "icon":"r:5_screen_c.png", "?": 'Get or set the color of the screen' , "type": 5, "func": "bgcolor", "params": "#ffffff" },
-				{"id":"5_screen_i", "icon":"r:5_screen_i.png", "?": 'Get or set the background picture of the screen' , "type": 5, "func": "bgpic", "params": "nopic" },
+				{"id":"5_screen_c", "icon":"r:5_screen_c.png", "?": 'Get or set the color of the screen' , "type": 5, "func": "bgcolor", "params": "" },
+				{"id":"5_screen_i", "icon":"r:5_screen_i.png", "?": 'Get or set the background picture of the screen' , "type": 5, "func": "bgpic", "params": "" },
 				{"id":"5_img", "icon":"🖼", "?": 'Image' , "type": 0, "func": "tcf_get_image", "params": "", "data-draw": true, "data-color": "#000000" },
 				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "'turtle'" },
 				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
@@ -123,13 +123,14 @@
 			"commands" : [
 				{"id":"5_readlines", "icon":"📤", "?": 'Read all lines of a file' , "type": 5, "func": "tcf_readlines", "params": "" },
 				{"id":"0_writelines", "icon":"📥", "?": 'Write lines to a file' , "type": 0, "func": "tcf_writelines", "params": "" },
-				{"id":"5_filediag", "icon":"r:open_file.png", "?": 'Open file dialog' , "type": 5, "func": "tcf_filedialog", "params": "" },
+				{"id":"5_filediag", "icon":"r:open_file.png", "?": 'File dialog' , "type": 5, "func": "tcf_filedialog", "params": "" },
 				{"id":"5_fileis", "icon":"r:5_fileis.png", "?": 'Check file exists' , "type": 5, "func": "os.path.isfile", "params": "" },
 				{"id":"5_diris", "icon":"r:5_diris.png", "?": 'Check directory exists' , "type": 5, "func": "os.path.isdir", "params": "" },
 				{"id":"0_filedirdel", "icon":"␡", "?": 'Delete file or directory' , "type": 0, "func": "tcf_filedirdel", "params": "" },
 				{"id":"5_subfiles", "icon":"r:5_subfiles.png", "?": 'Get files in DIRECTORY' , "type": 5, "func": "tcf_subfiles", "params": "" },
 				{"id":"5_subdirs", "icon":"r:5_subdirs.png", "?": 'Get subdirs in DIRECTORY' , "type": 5, "func": "tcf_subdirs", "params": "" },
-				{"id":"5_dirname", "icon":"r:5_dirname.png", "?": 'Get parrent directory / the directory the item is located in' , "type": 5, "func": "os.path.dirname", "params": "" }
+				{"id":"5_dirname", "icon":"r:5_dirname.png", "?": 'Get parent directory / the directory the item is located in' , "type": 5, "func": "os.path.dirname", "params": "" },
+				{"id":"5_basename", "icon":"r:5_basename.png", "?": 'Get file name from path' , "type": 5, "func": "os.path.basename", "params": "" }
 			]
 		}
 	],
@@ -151,13 +152,15 @@
 		},
 		{
 			"id": "tcf_filedialog",
-			"code": "def tcf_filedialog(text = 'Choose a file', filter = 'All files | *'):\
+			"code": "def tcf_filedialog(text = 'Choose a file', filter = 'All files | *', save = False):\
 	if sys.platform.startswith('linux'):\
 		from subprocess import Popen, PIPE\
 		my_env=os.environ.copy()\
 		my_env['G_MESSAGES_DEBUG']=''\
+		if save: save = '--save'\
+		else: save = ''\
 		proc = Popen(['zenity', '--file-selection', '--title', text,\
-                	 '--file-filter', filter], stdout=PIPE, env=my_env)\
+                	 '--file-filter', filter, save], stdout=PIPE, env=my_env)\
 		(output, err) = proc.communicate(); proc.wait()\
 		output = output.decode().replace('\\n', ''); return output\
 	else:\
@@ -167,8 +170,12 @@
 		elif len(f) == 1:\
 			filetypes = (('Files', f[0]),)\
 		from tkinter import filedialog\
-		path = filedialog.askopenfile(title=text, filetypes=filetypes)\
-		return path.name"
+		if save:\
+			path = filedialog.asksaveasfilename(title=text, filetypes=filetypes)\
+			return path\
+		else:\
+			path = filedialog.askopenfile(title=text, filetypes=filetypes)\
+			return path.name"
 		},
 		{
 			"id": "tcf_filedirdel",
