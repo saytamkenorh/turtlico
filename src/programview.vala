@@ -814,7 +814,7 @@ namespace Turtlico {
             return false;
         }
 
-        int mouse_to_program_x (int x, int y) {
+        public int mouse_to_program_x (int x, int y) {
             if (buffer.program.size == 0 || y >= buffer.program.size)
                 return x;
             int result = 0;
