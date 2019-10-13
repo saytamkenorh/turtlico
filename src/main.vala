@@ -33,6 +33,10 @@ int main (string[] args) {
 	    Intl.bindtextdomain("turtlico", LOCALE_DIR);
     Intl.textdomain ("turtlico");
 
+#if WINDOWS
+	Environment.set_variable("GTK_CSD", "0", true);
+#endif
+	
 	var app = new Gtk.Application ("com.orsan.Turtlico", ApplicationFlags.HANDLES_OPEN | ApplicationFlags.HANDLES_COMMAND_LINE);
 	app.add_main_option("compile", 'c', 0, OptionArg.STRING, _("Writes compiled program to FILE"), "");
 	app.activate.connect (() => {
