@@ -1,8 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
 	<id>com.orsan.Turtlico.desktop</id>
+  <name>Turtlico</name>
+  <summary>The easy programming tool</summary>
+  <description>
+    <p>
+	    Turtlico is a tool for learning programming basics. You can create programs with icons.
+    </p>
+	</description>
+
+  <url type="homepage">https://turtlico.tk</url>
+  <screenshots>
+		<screenshot width="836" height="448" type="default">
+      <image>https://turtlico.tk/ss-2.png</image>
+      <caption>The Turtlico main window</caption>
+    </screenshot>
+	​</screenshots>
+  <launchable type="desktop-id">com.orsan.Turtlico.desktop</launchable>
+
+  <releases>
+    <release version="0.1" date="2019-09-17">
+      <description>
+        <p>
+          Initial release.
+        </p>
+      </description>
+    </release>
+  </releases>
+
 	<metadata_license>CC0-1.0</metadata_license>
 	<project_license>GPL-3.0-or-later</project_license>
-	<description>
-	</description>
+  <content_rating type="oars-1.1" />
 </component>

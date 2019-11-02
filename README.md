@@ -10,7 +10,7 @@ under certain conditions; see [COPYING](./COPYING) for details.
 
 ## Downloads
 Turtlico supports Windows and Linux. <br>
-**[Download the latest release](https://gitlab.com/matyas5/turtlico/tags)**
+**[Download the latest release](https://turtlico.tk/#downloads)**
 
 Or clone this repository and build the program yourself:
 	
@@ -19,31 +19,6 @@ Or clone this repository and build the program yourself:
 	ninja && sudo ninja install
 **Linux notes:**
 
-If you are using the Linux version of Turtlico, you will need to install python3-tk and GStreamer (required for the multimedia plugin):
+If you would like to use the Linux version of Turtlico, you will need to install [Flatpak](https://flatpak.org/) and add the [Flathub](https://flathub.org/about) remote.
 
-*Ubuntu and the other Debian-based distros:*
-
-    sudo apt install python3-tk gir1.2-gstreamer-1.0
-*Arch/Manjaro*
-
-	sudo pacman -S python tk gst-python
-*Fedora:*
-
-    sudo dnf install python3-tk gstreamer-python
-These packages are required for running programs created in Turtlico.
-
-If you find issues with emoji rendering, make sure you have installed an emoji font.
-Try running one of the following commands to fix that:
-
-*Ubuntu and Raspbian/Debian (buster and newer)*
-
-	sudo apt install fonts-noto-color-emoji
-*Raspbian/Debian (stretch and older)*
-	
-	sudo apt install fonts-symbola
-*Arch/Manjaro*
-	
-	sudo pacman -S noto-fonts-emoji
-*Fedora*
-
-	sudo dnf install google-noto-emoji-color-fonts
+So please follow **[these instructions](https://flatpak.org/setup)** before installing Turtlico.
