@@ -77,7 +77,11 @@
 				{"id":"0_apnd", "icon":"r:0_apnd.png", "?": 'Append an item to a list', "type": 0, "func": "append", "params": "" },
 				{"id":"0_ins", "icon":"r:0_ins.png", "?": 'Insert an item to a list', "type": 0, "func": "insert", "params": "" },
 				{"id":"0_clr", "icon":"r:0_clr.png", "?": 'Clear list', "type": 0, "func": "clear", "params": "" },
-				{"id":"0_index", "icon":"r:0_index.png", "?": 'Finds index of the first occurence of an item in a list', "type": 0, "func": "index", "params": "" },
+				{"id":"5_index", "icon":"r:5_index.png", "?": 'Finds index of the occurence of an item in a list or in a string (list, item, start, direction)', "type": 0, "func": "tcf_index", "params": "" },
+				{"id":"0_slo", "icon":"ab", "?": 'Converts a string into lower case', "type": 0, "func": "lower", "params": "" },
+				{"id":"0_sup", "icon":"AB", "?": 'Converts a string into upper case', "type": 0, "func": "upper", "params": "" },
+				{"id":"0_sspl", "icon":"r:0_sspl.png", "?": 'Splits the string at the specified separator, and returns a list', "type": 0, "func": "split", "params": "'\\n'" },
+				{"id":"0_srep", "icon":"r:0_srep.png", "?": 'Replaces a specified phrase with another specified phrase', "type": 0, "func": "replace", "params": "" },
 				{"id":"if", "icon":"❔if", "?": 'If statement', "type": 3, "c":"if"},
 				{"id":"else", "icon":"else", "?": 'Else', "type": 3, "c":"else"},
 				{"id":":", "icon":":", "?": 'Begin block of commands', "type": 4, "c":":"},
@@ -115,7 +119,9 @@
 				{"id":"0_ekey", "icon":"⌨", "?": 'Connect a function to handle key presses' , "type": 0, "func": "onkey", "params": "" },
 				{"id":"0_tmr", "icon":"⌚", "?": 'Call a function after n miliseconds' , "type": 0, "func": "ontimer", "params": "" },
 				{"id":"5_numi", "icon":"⌨#", "?": 'Number input' , "type": 5, "func": "numinput", "params": "'Number','Enter a number:'" },
-				{"id":"5_stri", "icon":"⌨\"", "?": 'String input' , "type": 5, "func": "textinput", "params": "'String','Enter a string:'" }
+				{"id":"5_stri", "icon":"⌨\"", "?": 'String input' , "type": 5, "func": "textinput", "params": "'String','Enter a string:'" },
+				{"id":"5_ord", "icon":"a→#", "?": 'Converts a character to an int value' , "type": 5, "func": "ord", "params": "" },
+				{"id":"5_chr", "icon":"#→a", "?": 'Converts an int value to a character' , "type": 5, "func": "chr", "params": "" }
 			]
 		},
 		{
@@ -273,6 +279,17 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 			result.append(entry.path)\
 	result.sort()\
 	return result"
+		},
+		{
+			"id": "tcf_index",
+			"code": "def tcf_index(list, item, start=0, direction=1):\
+	if direction == 0: raise Exception('Direction can not bet zero.')\
+	if direction < 0: end = 0\
+	if direction >0: end = len(list)\
+	for i in range(start, end, direction):\
+		if list[i] == item:\
+			return i\
+	return -1"
 		}
 	]
 }
