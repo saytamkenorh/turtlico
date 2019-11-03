@@ -86,6 +86,8 @@ namespace Turtlico {
         Gtk.MenuItem popup_menu_copy;
         [GtkChild]
         Gtk.MenuItem popup_menu_cut;
+        [GtkChild]
+        Gtk.SeparatorMenuItem popup_menu_sep;
         // Render
         Pango.FontDescription font = new Pango.FontDescription();
         Pango.FontDescription small_font = new Pango.FontDescription();
@@ -599,6 +601,7 @@ namespace Turtlico {
                 popup_menu_edit.visible = icon_at_pointer;
                 popup_menu_copy.visible = icon_at_pointer && selection;
                 popup_menu_cut.visible = icon_at_pointer && selection;
+                popup_menu_sep.visible = icon_at_pointer;
                 popup_menu_widget.popup_at_pointer(null);
             }
             return false;
