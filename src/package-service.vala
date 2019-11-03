@@ -1,4 +1,4 @@
-/* linux-setup.vala
+/* package-service.vala
  *
  * Copyright 2019 matyas5
  *
