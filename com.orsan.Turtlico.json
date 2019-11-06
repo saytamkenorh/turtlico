@@ -9,8 +9,6 @@
         "--share=ipc",
         "--socket=x11",
         "--socket=wayland",
-        "--filesystem=xdg-run/dconf",
-        "--filesystem=~/.config/dconf:ro",
         "--filesystem=host",
         "--talk-name=ca.desrt.dconf",
         "--talk-name=org.freedesktop.Flatpak",
