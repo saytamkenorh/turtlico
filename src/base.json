@@ -39,6 +39,7 @@
 				{"id":"0_collision", "icon":"r:0_collision.png", "?": 'Connect a function to handle collision (in circle collider of specified radius) between two turtles', "type": 0, "func": "tcf_collision", "params": "" },
 				{"id":"tcf_collision_rect", "icon":"r:0_collision_rect.png", "?": 'Connect a function to handle collision (in rectangle collider of specified size) between two turtles', "type": 0, "func": "tcf_collision_rect", "params": "" },
 				{"id":"0_undo", "icon":"↶", "?": 'Undo the last turtle action', "type": 0, "func": "undo", "params": "" },
+				{"id":"0_circle", "icon":"◯", "?": 'Circle' , "type": 0, "func": "circle", "params": "" },
 				{"id":"0_exit", "icon":"r:0_exit.png", "?": 'Exit the program', "type": 0, "func": "sys.exit", "params": "0" }
 			]
 		},
