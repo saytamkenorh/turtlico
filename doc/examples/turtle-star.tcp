@@ -1,6 +1,6 @@
 0_bf,,;nl,,;
 0_speed,,;int,0,;nl,,;
-0_penc,,;(,,;str,red,;sep,,;str,yellow,;),,;nl,,;
+0_penc,,;(,,;4_color,rgb(204,0,0),;sep,,;4_color,rgb(252,233,79),;),,;nl,,;
 1_rep,,;:,,;nl,,;
 tab,,;0_go,,;int,200,;nl,,;
 tab,,;0_left,,;int,170,;nl,,;

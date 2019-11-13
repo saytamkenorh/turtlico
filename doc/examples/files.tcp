@@ -1,5 +1,8 @@
 0_ht,,;0_pu,,;0_speed,,;int,0,;nl,,;
-0_writelines,,;(,,;[,,;str,Hello world!,;sep,,;str,Turtlico,;],,;),,;nl,,;
+nl,,;
+0_writelines,,;(,,;[,,;str,Hello world!,;sep,,;str,Turtlico,;],,;),,;#,Save data to file,;nl,,;
+nl,,;
+#,Load data from file,;nl,,;
 obj,data,;2_assign,,;5_readlines,,;nl,,;
 1_for,,;obj,line,;in,,;obj,data,;:,,;nl,,;
 tab,,;0_wr,,;obj,line,;nl,,;

@@ -1,3 +1,4 @@
+#,Plays selected sound file,;nl,,;
 obj,p,;2_assign,,;5_filediag,,;str,Choose sound file,;nl,,;
 obj,f,;2_assign,,;5_mm_ef_s,,;obj,p,;nl,,;
 3_def,,;obj,on_space,;:,,;nl,,;

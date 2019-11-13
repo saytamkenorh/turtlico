@@ -1,6 +1,9 @@
+#,Randomly moves turtle backwards and forwards,;nl,,;
 0_pu,,;nl,,;
 1_rep,,;:,,;nl,,;
+tab,,;#,Moves forwards,;nl,,;
 tab,,;0_go,,;(,,;5_rand,,;(,,;int,0,;sep,,;int,100,;),,;),,;nl,,;
 tab,,;0_pos,,;(,,;int,0,;sep,,;int,0,;),,;nl,,;
+tab,,;#,Moves backwards,;nl,,;
 tab,,;0_go,,;(,,;-,,;5_rand,,;(,,;int,0,;sep,,;int,100,;),,;),,;nl,,;
 tab,,;0_pos,,;(,,;int,0,;sep,,;int,0,;),,;nl,,;

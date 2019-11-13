@@ -1,1 +1,2 @@
 option('flatpak', type : 'boolean', value : false)
+option('help', type : 'boolean', value : false)
