@@ -4,7 +4,7 @@ test = find_program('test')
 test ('Compile examples', test, args:[turtlico_executable.full_path(), meson.current_source_dir(), python.path(), meson.current_build_dir()])
 
 if get_option('help')
-pkgdocexamplesdir_abs = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'turtlico', 'examples')
+pkgdocexamplesdir_abs = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'turtlico', 'en', 'examples')
 
 example_files = [
 	'calc.tcp',
