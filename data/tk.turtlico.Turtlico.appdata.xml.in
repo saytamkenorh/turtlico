@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-	<id>com.orsan.Turtlico.desktop</id>
+	<id>tk.turtlico.Turtlico.desktop</id>
   <name>Turtlico</name>
   <summary>The easy programming tool</summary>
   <description>
@@ -16,7 +16,7 @@
       <caption>The Turtlico main window</caption>
     </screenshot>
 	​</screenshots>
-  <launchable type="desktop-id">com.orsan.Turtlico.desktop</launchable>
+  <launchable type="desktop-id">tk.turtlico.Turtlico.desktop</launchable>
 
   <releases>
     <release version="0.1" date="2019-09-17">

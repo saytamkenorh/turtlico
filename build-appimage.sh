@@ -1,7 +1,7 @@
 #!/bin/bash
 
 projectname="turtlico"
-projectid="com.orsan.Turtlico"
+projectid="tk.turtlico.Turtlico"
 srcdir=$(pwd)/$line
 builddir="$srcdir/build-portable/meson"
 installdir="$srcdir/build-portable/install"

@@ -1,6 +1,6 @@
-data/com.orsan.Turtlico.desktop.in
-data/com.orsan.Turtlico.appdata.xml.in
-data/com.orsan.Turtlico.gschema.xml
+data/tk.turtlico.Turtlico.desktop.in
+data/tk.turtlico.Turtlico.appdata.xml.in
+data/tk.turtlico.Turtlico.gschema.xml
 src/window.ui
 src/programview.ui
 src/program-settings.ui

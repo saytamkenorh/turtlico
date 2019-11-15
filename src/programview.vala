@@ -27,7 +27,7 @@ namespace Turtlico {
         { "text/plain", 0, DnDTarget.STRING },
     };
 
-    [GtkTemplate (ui = "/com/orsan/Turtlico/programview.ui")]
+    [GtkTemplate (ui = "/tk/turtlico/Turtlico/programview.ui")]
     public class ProgramView : Gtk.DrawingArea {
         public const int cell_width = 50;
         public const int cell_height = 35;
@@ -103,7 +103,7 @@ namespace Turtlico {
             var style_context = get_style_context();
             style_context.add_class("TurtlicoProgramView");
             css_provider.parsing_error.connect((s, e)=>{debug(e.message);});
-            css_provider.load_from_resource("/com/orsan/Turtlico/programview.css");
+            css_provider.load_from_resource("/tk/turtlico/Turtlico/programview.css");
             style_context.add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             // Render
             font.set_weight(Pango.Weight.BOLD);

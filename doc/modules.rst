@@ -5,7 +5,7 @@ Modules
 Turtlico is extensible by modules that can add extra icons.
 For example, the integrated RPi plugin adds commands to control GPIO via the gpiozero library.
 
-Every set of commands has its own file. Turtlico loads these files from user data dirs (eg. ``/usr/share/turtlico/plugins``) and also from GResources with prefix ``/com/orsan/Turtlico``.
+Every set of commands has its own file. Turtlico loads these files from user data dirs (eg. ``/usr/share/turtlico/plugins``) and also from GResources with prefix ``/tk/turtlico/Turtlico``.
 
 Format of module files
 ======================
@@ -90,4 +90,4 @@ Icon specification
 There are two options to specify icons in module files:
 
 1. Plain text - use text and/or emoji to make the icon simple to understand
-2. GResources - Loads icon from Turtlico resources(``/com/orsan/Turtlico/icons/*``). It must start with ``"r:"``. Eg. ``r:example_icon.png``..
+2. GResources - Loads icon from Turtlico resources(``/tk/turtlico/Turtlico/icons/*``). It must start with ``"r:"``. Eg. ``r:example_icon.png``..

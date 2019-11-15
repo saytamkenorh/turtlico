@@ -19,7 +19,7 @@
 using Gee;
 
 namespace Turtlico {
-	[GtkTemplate (ui = "/com/orsan/Turtlico/program-settings.ui")]
+	[GtkTemplate (ui = "/tk/turtlico/Turtlico/program-settings.ui")]
 	class ProgramSettings : Gtk.Window {
 	    [GtkChild]
 	    Gtk.Box plugins_box;
@@ -35,12 +35,12 @@ namespace Turtlico {
             this.plugins_active = plugins_active;
             // Add plugins
             try {
-                var resources = resources_enumerate_children("/com/orsan/Turtlico",
+                var resources = resources_enumerate_children("/tk/turtlico/Turtlico",
                     ResourceLookupFlags.NONE);
                 foreach(var r in resources)
                 {
                     if(r.has_suffix(".json") && r !="base.json") {
-                        string full_path = "/com/orsan/Turtlico/" + r;
+                        string full_path = "/tk/turtlico/Turtlico/" + r;
                         var json = new Json.Parser();
                         var stream = GLib.resources_open_stream(full_path,
                             GLib.ResourceLookupFlags.NONE);

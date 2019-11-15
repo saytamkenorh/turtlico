@@ -1,8 +1,8 @@
 subdir('icons')
 
 desktop_file = i18n.merge_file(
-  input: 'com.orsan.Turtlico.desktop.in',
-  output: 'com.orsan.Turtlico.desktop',
+  input: 'tk.turtlico.Turtlico.desktop.in',
+  output: 'tk.turtlico.Turtlico.desktop',
   type: 'desktop',
   po_dir: '../po',
   install: true,
@@ -17,8 +17,8 @@ if desktop_utils.found()
 endif
 
 appstream_file = i18n.merge_file(
-  input: 'com.orsan.Turtlico.appdata.xml.in',
-  output: 'com.orsan.Turtlico.appdata.xml',
+  input: 'tk.turtlico.Turtlico.appdata.xml.in',
+  output: 'tk.turtlico.Turtlico.appdata.xml',
   po_dir: '../po',
   install: true,
   install_dir: join_paths(get_option('datadir'), 'appdata')
@@ -31,7 +31,7 @@ if appstream_util.found()
   )
 endif
 
-install_data('com.orsan.Turtlico.gschema.xml',
+install_data('tk.turtlico.Turtlico.gschema.xml',
   install_dir: join_paths(get_option('datadir'), 'glib-2.0/schemas')
 )
 
@@ -42,5 +42,5 @@ if compile_schemas.found()
   )
 endif
 
-install_data('com.orsan.Turtlico.xml',
+install_data('tk.turtlico.Turtlico.xml',
 	     install_dir : join_paths(get_option('datadir'),'mime/packages'))

@@ -19,7 +19,7 @@
 extern const string TURTLICO_VERSION;
 
 namespace Turtlico {
-	[GtkTemplate (ui = "/com/orsan/Turtlico/app-settings.ui")]
+	[GtkTemplate (ui = "/tk/turtlico/Turtlico/app-settings.ui")]
 	class AppSettings : Gtk.Window {
         [GtkChild]
         Gtk.AboutDialog about_dialog;
@@ -28,12 +28,12 @@ namespace Turtlico {
         [GtkChild]
         Gtk.Switch debug_data_switch;
 
-        Settings settings = new Settings("com.orsan.Turtlico");
+        Settings settings = new Settings("tk.turtlico.Turtlico");
 
         public AppSettings () {
            about_dialog.set_transient_for(this);
            #if TURTLICO_FLATPAK
-           about_dialog.set_logo_icon_name("com.orsan.Turtlico");
+           about_dialog.set_logo_icon_name("tk.turtlico.Turtlico");
            #else
            about_dialog.set_logo(null);
            #endif

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="turtlico">
-  <schema id="com.orsan.Turtlico" path="/com/orsan/Turtlico/">
+  <schema id="tk.turtlico.Turtlico" path="/tk/turtlico/Turtlico/">
     <key name="dark-mode" type="b">
       <default>false</default>
       <summary>Enable dark mode</summary>

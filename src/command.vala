@@ -41,7 +41,7 @@ namespace Turtlico {
                 try {
                     string str = name.substring(2);
                     this._pixbuf = new Gdk.Pixbuf.from_resource(
-                        "/com/orsan/Turtlico/icons/" + str);
+                        "/tk/turtlico/Turtlico/icons/" + str);
                     this._name = str;
                 }
                 catch {
@@ -91,7 +91,7 @@ namespace Turtlico {
         public static Json.Parser[] create_parsers(string[] enabled_plugins) {
             // Load paths
             Gee.ArrayList<string> command_files = new Gee.ArrayList<string>();
-            command_files.add("r:/com/orsan/Turtlico/base.json");
+            command_files.add("r:/tk/turtlico/Turtlico/base.json");
             command_files.add_all_array(enabled_plugins);
             // Load commands
             Gee.ArrayList<Json.Parser> parsers = new Gee.ArrayList<Json.Parser>();

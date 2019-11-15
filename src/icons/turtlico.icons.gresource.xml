@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/com/orsan/Turtlico/icons">
+  <gresource prefix="/tk/turtlico/Turtlico/icons">
     <file>0_ht.png</file>
     <file>0_st.png</file>
     <file>0_bf.png</file>

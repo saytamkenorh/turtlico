@@ -37,7 +37,7 @@ int main (string[] args) {
 	Environment.set_variable("GTK_CSD", "0", true);
 #endif
 	
-	var app = new Gtk.Application ("com.orsan.Turtlico", ApplicationFlags.HANDLES_OPEN | ApplicationFlags.HANDLES_COMMAND_LINE);
+	var app = new Gtk.Application ("tk.turtlico.Turtlico", ApplicationFlags.HANDLES_OPEN | ApplicationFlags.HANDLES_COMMAND_LINE);
 	app.add_main_option("compile", 'c', 0, OptionArg.STRING, _("Writes compiled program to FILE"), "");
 	app.activate.connect (() => {
 		var win = app.active_window;

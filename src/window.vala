@@ -24,7 +24,7 @@ namespace Turtlico {
         ID
     }
 
-	[GtkTemplate (ui = "/com/orsan/Turtlico/window.ui")]
+	[GtkTemplate (ui = "/tk/turtlico/Turtlico/window.ui")]
 	public class Window : Gtk.ApplicationWindow {
         [GtkChild]
         Gtk.Box categories_box;
@@ -56,11 +56,11 @@ namespace Turtlico {
             }
         }
 
-        Settings settings = new Settings("com.orsan.Turtlico");
+        Settings settings = new Settings("tk.turtlico.Turtlico");
 
 		public Window (Gtk.Application app) {
 			Object (application: app);
-            string icon_file = Path.build_filename(Path.get_dirname(Environment.get_current_dir()), "share/icons/hicolor/256x256/apps/com.orsan.Turtlico.png");
+            string icon_file = Path.build_filename(Path.get_dirname(Environment.get_current_dir()), "share/icons/hicolor/256x256/apps/tk.turtlico.Turtlico.png");
             try {
                 
                 if (FileUtils.test(icon_file, FileTest.IS_REGULAR))
@@ -69,7 +69,7 @@ namespace Turtlico {
             // CSS
             var screen = this.get_screen ();
             var css_provider = new Gtk.CssProvider();
-            css_provider.load_from_resource("/com/orsan/Turtlico/window.css");
+            css_provider.load_from_resource("/tk/turtlico/Turtlico/window.css");
             Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
 
 			// cmd view
@@ -378,7 +378,7 @@ namespace Turtlico {
                     var button = new Gtk.RadioButton(null);
                     if (icon.has_prefix("r:"))
                         button.image = new Gtk.Image.from_resource(
-                            "/com/orsan/Turtlico/icons/" + icon.substring(2));
+                            "/tk/turtlico/Turtlico/icons/" + icon.substring(2));
                     else
                         button.label = icon;
                     button.can_focus = false;

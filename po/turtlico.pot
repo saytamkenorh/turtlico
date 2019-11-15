@@ -17,27 +17,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:48
+#: data/tk.turtlico.Turtlico.desktop.in:3 src/window.ui:48
 msgid "Turtlico"
 msgstr ""
 
-#: data/com.orsan.Turtlico.desktop.in:9
-msgid "com.orsan.Turtlico"
+#: data/tk.turtlico.Turtlico.desktop.in:9
+msgid "tk.turtlico.Turtlico"
 msgstr ""
 
-#: data/com.orsan.Turtlico.gschema.xml:6
+#: data/tk.turtlico.Turtlico.gschema.xml:6
 msgid "Enable dark mode"
 msgstr ""
 
-#: data/com.orsan.Turtlico.gschema.xml:7
+#: data/tk.turtlico.Turtlico.gschema.xml:7
 msgid "If enabled, the app interface will use the dark theme."
 msgstr ""
 
-#: data/com.orsan.Turtlico.gschema.xml:13
+#: data/tk.turtlico.Turtlico.gschema.xml:13
 msgid "Write debug data to output files"
 msgstr ""
 
-#: data/com.orsan.Turtlico.gschema.xml:14
+#: data/tk.turtlico.Turtlico.gschema.xml:14
 msgid "If enabled, Turtlico writes to output files marks to help track errors."
 msgstr ""
 

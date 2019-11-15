@@ -19,27 +19,27 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
 "X-Generator: Gtranslator 3.32.1\n"
 
-#: data/com.orsan.Turtlico.desktop.in:3 src/window.ui:48
+#: data/tk.turtlico.Turtlico.desktop.in:3 src/window.ui:48
 msgid "Turtlico"
 msgstr ""
 
-#: data/com.orsan.Turtlico.desktop.in:9
-msgid "com.orsan.Turtlico"
+#: data/tk.turtlico.Turtlico.desktop.in:9
+msgid "tk.turtlico.Turtlico"
 msgstr ""
 
-#: data/com.orsan.Turtlico.gschema.xml:6
+#: data/tk.turtlico.Turtlico.gschema.xml:6
 msgid "Enable dark mode"
 msgstr "Povolit tmavý režim"
 
-#: data/com.orsan.Turtlico.gschema.xml:7
+#: data/tk.turtlico.Turtlico.gschema.xml:7
 msgid "If enabled, the app interface will use the dark theme."
 msgstr "Pokud je zapnuto, rozhraní aplikace použije tmavý motiv"
 
-#: data/com.orsan.Turtlico.gschema.xml:13
+#: data/tk.turtlico.Turtlico.gschema.xml:13
 msgid "Write debug data to output files"
 msgstr "Zapisovat data ladění do výstupních souborů"
 
-#: data/com.orsan.Turtlico.gschema.xml:14
+#: data/tk.turtlico.Turtlico.gschema.xml:14
 msgid "If enabled, Turtlico writes to output files marks to help track errors."
 msgstr ""
 "Pokud povoleno, Turtlico zapisuje do výstupních souborů značky, které "
