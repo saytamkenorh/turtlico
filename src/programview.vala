@@ -809,6 +809,11 @@ namespace Turtlico {
         }
 
         void icon_data_dialog_python(int x, int y) {
+            var gtk_settings = Gtk.Settings.get_default();
+            if (gtk_settings.gtk_application_prefer_dark_theme)
+                python_view.background_pattern = Gtk.SourceBackgroundPatternType.NONE;
+            else
+                python_view.background_pattern = Gtk.SourceBackgroundPatternType.GRID;
             python_code_dialog.set_transient_for((Gtk.Window)get_toplevel());
             python_view.buffer.text = buffer.program[y][x].data;
             python_code_dialog.run();
