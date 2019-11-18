@@ -26,21 +26,24 @@ namespace Turtlico {
         [GtkChild]
         Gtk.Switch dark_mode_switch;
         [GtkChild]
+        Gtk.Switch dark_icons_switch;
+        [GtkChild]
         Gtk.Switch debug_data_switch;
 
         Settings settings = new Settings("tk.turtlico.Turtlico");
 
         public AppSettings () {
-           about_dialog.set_transient_for(this);
-           #if TURTLICO_FLATPAK
-           about_dialog.set_logo_icon_name("tk.turtlico.Turtlico");
-           #else
-           about_dialog.set_logo(null);
-           #endif
-           about_dialog.version = TURTLICO_VERSION;
+            about_dialog.set_transient_for(this);
+            #if TURTLICO_FLATPAK
+            about_dialog.set_logo_icon_name("tk.turtlico.Turtlico");
+            #else
+            about_dialog.set_logo(null);
+            #endif
+            about_dialog.version = TURTLICO_VERSION;
 
-           dark_mode_switch.active = settings.get_boolean("dark-mode");
-           debug_data_switch.active = settings.get_boolean("debug-data");
+            dark_mode_switch.active = settings.get_boolean("dark-mode");
+            dark_icons_switch.active = settings.get_boolean("dark-icons");
+            debug_data_switch.active = settings.get_boolean("debug-data");
         }
 
         [GtkCallback]
@@ -52,6 +55,12 @@ namespace Turtlico {
         [GtkCallback]
         bool on_dark_mode_switch_state_set(Gtk.Switch sw, bool state) {
             settings.set_boolean("dark-mode", state);
+            return false;
+        }
+
+        [GtkCallback]
+        bool on_dark_icons_switch_state_set(Gtk.Switch sw, bool state) {
+            settings.set_boolean("dark-icons", state);
             return false;
         }
 

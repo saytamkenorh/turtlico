@@ -28,13 +28,29 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="valign">start</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">Dark mode</property>
+                <property name="label" translatable="yes">Write debug data to output files
+(this allows us to find on which line the error happened)</property>
                 <property name="justify">center</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSwitch" id="debug_data_switch">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="halign">end</property>
+                <property name="valign">center</property>
+                <property name="hexpand">True</property>
+                <signal name="state-set" handler="on_debug_data_switch_state_set" swapped="no"/>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
               </packing>
             </child>
             <child>
@@ -55,28 +71,39 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="valign">start</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">Write debug data to output files
-(this allows us to find on which line the error happened)</property>
+                <property name="label" translatable="yes">Dark mode</property>
                 <property name="justify">center</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="top_attach">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSwitch" id="debug_data_switch">
+              <object class="GtkSwitch" id="dark_icons_switch">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="halign">end</property>
                 <property name="valign">center</property>
                 <property name="hexpand">True</property>
-                <signal name="state-set" handler="on_debug_data_switch_state_set" swapped="no"/>
+                <signal name="state-set" handler="on_dark_icons_switch_state_set" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="label" translatable="yes">Dark icons</property>
+                <property name="justify">center</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
               </packing>
             </child>

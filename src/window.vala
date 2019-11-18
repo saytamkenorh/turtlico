@@ -460,6 +460,10 @@ namespace Turtlico {
                 var gtk_settings = Gtk.Settings.get_default();
                 gtk_settings.gtk_application_prefer_dark_theme = settings.get_boolean("dark-mode");
             }
+            if (key == "dark-icons" || key == "") {
+                programview.high_contrast = settings.get_boolean("dark-icons");
+                load_commands();
+            }
         }
 
         [GtkCallback]

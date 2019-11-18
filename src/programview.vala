@@ -44,6 +44,7 @@ namespace Turtlico {
         private ProgramBuffer _buffer;
         private bool drag_source_clipboard = false;
         private string drag_source_clipboard_text = "";
+        public bool high_contrast = false;
         //DnD
         bool start_dnd_copy = false;
         // Used in drag_data_get
@@ -91,6 +92,8 @@ namespace Turtlico {
         // Render
         Pango.FontDescription font = new Pango.FontDescription();
         Pango.FontDescription small_font = new Pango.FontDescription();
+        Gdk.RGBA color_high_contrast_cell;
+        Gdk.RGBA color_black;
 
         public ProgramView () {
             // Props
@@ -111,6 +114,8 @@ namespace Turtlico {
             small_font.set_family("Monospace");
             small_font.set_weight(Pango.Weight.THIN);
             small_font.set_size(9 * Pango.SCALE);
+            color_high_contrast_cell.parse("rgb(50,50,50)");
+            color_black.parse("rgb(0,0,0)");
             // Widgets
             num_chooser_dialog_spin_button.activate.connect(()=>{num_chooser_dialog.hide();});
             str_chooser_dialog_entry.activate.connect(()=>{str_chooser_dialog.hide();});
@@ -358,7 +363,10 @@ namespace Turtlico {
             if (c.id == "python" || c.id == "4_color")
                 width = 1;
             // Background
-            Gdk.cairo_set_source_rgba(cr, c.draw_params.bg_color);
+            if (high_contrast && c.draw_params.bg_color != color_black)
+                Gdk.cairo_set_source_rgba(cr, color_high_contrast_cell);
+            else
+                Gdk.cairo_set_source_rgba(cr, c.draw_params.bg_color);
             cr.rectangle(x, y, cell_width * width, cell_height);
             cr.fill();
 

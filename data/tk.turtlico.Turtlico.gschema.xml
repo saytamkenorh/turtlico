@@ -8,6 +8,13 @@
            If enabled, the app interface will use the dark theme.
         </description>
     </key>
+    <key name="dark-icons" type="b">
+      <default>false</default>
+      <summary>Enable dark icons</summary>
+      <description>
+           If enabled, the icons are drawn with dark background instead of light one. This results into better constrast.
+        </description>
+    </key>
     <key name="debug-data" type="b">
       <default>true</default>
       <summary>Write debug data to output files</summary>
