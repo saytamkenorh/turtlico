@@ -14,7 +14,7 @@ fi
 
 pacman -R mingw-w64-x86_64-turtlico --noconfirm
 MINGW_INSTALLS=mingw64 makepkg-mingw -sCf
-pacman -U "$srcdir"*.tar.xz --force --noconfirm
+pacman -U "$srcdir"*.tar.xz --noconfirm
 
 echo Bundling runtime. This will take a while.
 rm -rf ./output
@@ -56,10 +56,10 @@ rm -rf "$srcdir/output/share/mime"
 rm -rf "$srcdir/output/share/vala"
 rm -rf "$srcdir/output/lib/cmake"
 rm -rf "$srcdir/output/lib/python2.7"
-rm -rf "$srcdir/output/lib/python3.7/test"
+rm -rf "$srcdir/output/lib/python3.8/test"
 rm -rf "$srcdir/output/lib/pkgconfig"
 #rm -rf "$srcdir/output/lib/girepository-1.0"
-find "$srcdir/output/lib/python3.7" -name "*.pyc" -exec rm -f {} \;
+find "$srcdir/output/lib/python3.8" -name "*.pyc" -exec rm -f {} \;
 find "$srcdir/output/lib" -name "*.a" -exec rm -f {} \;
 find "$srcdir/output/share/locale/"* -maxdepth 0 -not -name "cs" -not -name "en*" -exec rm -rf {} \;
 # Bundles turtlico
