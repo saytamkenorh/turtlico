@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-26 18:23+0100\n"
-"PO-Revision-Date: 2019-11-26 18:30+0100\n"
+"PO-Revision-Date: 2019-11-29 15:18+0100\n"
 "Last-Translator: matyas5 <>\n"
 "Language-Team: Czech <>\n"
 "Language: cs\n"
@@ -531,7 +531,7 @@ msgstr "Vrátit poslední akci želvy"
 
 #: src/base.json:42
 msgid "Circle"
-msgstr ""
+msgstr "Kružnice"
 
 #: src/base.json:43
 msgid "Exit the program"
