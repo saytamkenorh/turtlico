@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-26 18:23+0100\n"
+"POT-Creation-Date: 2019-12-30 12:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,7 +175,11 @@ msgstr ""
 msgid "Additional commands"
 msgstr ""
 
-#: src/program-settings.ui:61
+#: src/program-settings.ui:58
+msgid "Open plugins folder"
+msgstr ""
+
+#: src/program-settings.ui:75
 msgid "Statistics"
 msgstr ""
 
@@ -223,7 +227,7 @@ msgstr ""
 msgid "Select file"
 msgstr ""
 
-#: src/window.vala:222 src/window.vala:256 src/window.vala:522
+#: src/window.vala:222 src/window.vala:256 src/window.vala:530
 msgid "Cancel"
 msgstr ""
 
@@ -253,27 +257,27 @@ msgstr ""
 msgid "Failed to open the program"
 msgstr ""
 
-#: src/window.vala:517
+#: src/window.vala:525
 msgid "Would you like to save your changes before closing the program?"
 msgstr ""
 
-#: src/window.vala:518
+#: src/window.vala:526
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr ""
 
-#: src/window.vala:520
+#: src/window.vala:528
 msgid "Yes"
 msgstr ""
 
-#: src/window.vala:521
+#: src/window.vala:529
 msgid "No"
 msgstr ""
 
-#: src/window.vala:538
+#: src/window.vala:546
 msgid "Unnamed"
 msgstr ""
 
-#: src/command.vala:111
+#: src/command.vala:126
 msgid "Failed to load command def file: "
 msgstr ""
 
