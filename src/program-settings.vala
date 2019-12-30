@@ -55,6 +55,9 @@ namespace Turtlico {
                 }
                 var plugins_search_dirs = new Gee.ArrayList<string>.wrap(Environment.get_system_data_dirs());
                 plugins_search_dirs.add(Environment.get_user_data_dir());
+#if TURTLICO_FLATPAK
+                plugins_search_dirs.add("/run/host/usr/share");
+#endif
                 foreach (var path in plugins_search_dirs) {
                     path = path + "/turtlico/plugins";
                     if (FileUtils.test(path, FileTest.IS_DIR)) {
@@ -65,7 +68,7 @@ namespace Turtlico {
 			                if (FileUtils.test (file, FileTest.IS_REGULAR)) {
                                 var json = new Json.Parser();
                                 json.load_from_file(file);
-                                Json.Node node = json.get_root ();
+                                Json.Node node = json.get_root();
                                 add_plugin(_(node.get_object().get_string_member("name")), file);
 			                }
 		                }
