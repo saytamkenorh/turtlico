@@ -32,16 +32,31 @@ namespace Turtlico {
         private DrawParams _draw_params;
         public DrawParams draw_params {get {return _draw_params;}}
 
-        public Command (string name, string id, string data, DrawParams draw_params) {
+        private string module_dir;
+
+        public Command (string name, string id, string data, DrawParams draw_params, string module_dir) {
             this._name = name;
             this._id = id;
             this._data = data;
             this._draw_params = draw_params;
+            this.module_dir = module_dir;
+
             if (name.has_prefix("r:")) {
                 try {
                     string str = name.substring(2);
                     this._pixbuf = new Gdk.Pixbuf.from_resource(
                         "/tk/turtlico/Turtlico/icons/" + str);
+                    this._name = str;
+                }
+                catch {
+                    this._pixbuf = null;
+                }
+            }
+            else if (name.has_prefix("f:") && name.has_suffix(".png")) {
+                try {
+                    string str = name.substring(2);
+                    this._pixbuf = new Gdk.Pixbuf.from_file(
+                        Path.build_filename(module_dir, str));
                     this._name = str;
                 }
                 catch {
@@ -59,7 +74,7 @@ namespace Turtlico {
          *
         */
         public Command set_data (string new_data, string resource_dir) {
-            var c = new Command(this.name, this.id, new_data, this.draw_params);
+            var c = new Command(this.name, this.id, new_data, this.draw_params, this.module_dir);
             if (this.id == "5_img") {
                 if (new_data.has_suffix(".png") ||
                     new_data.has_suffix(".bmp") ||

@@ -57,7 +57,7 @@ namespace Turtlico {
                         Dir dir = Dir.open (path, 0);
 		                string? name = null;
 		                while ((name = dir.read_name ()) != null) {
-			                string file = Path.build_filename (path, name);
+			                string file = Path.build_filename (path, name, "commands.json");
 			                if (FileUtils.test (file, FileTest.IS_REGULAR)) {
                                 var json = new Json.Parser();
                                 json.load_from_file(file);
@@ -112,6 +112,12 @@ namespace Turtlico {
             if (plugins_active.contains(file))
                 plugin_switch.set_active(true);
 
+	    }
+
+	    [GtkCallback]
+	    void on_open_dir_clicked() {
+            string dir = Path.build_filename(Environment.get_user_data_dir(), "turtlico", "plugins");
+            Gtk.show_uri_on_window(this, "file://" + dir, Gdk.CURRENT_TIME);
 	    }
 	}
 }

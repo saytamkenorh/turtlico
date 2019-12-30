@@ -365,6 +365,7 @@ namespace Turtlico {
             compiler =  new Compiler(programview.buffer.enabled_plugins.to_array());
             // Load from JSON
             var parsers = Command.create_parsers(programview.buffer.enabled_plugins.to_array());
+            int i = -1;
             foreach(Json.Parser parser in parsers) {
                 // Get the root node:
 		        Json.Node node = parser.get_root ();
@@ -416,9 +417,15 @@ namespace Turtlico {
                             draw_data, data_color, bg_color, fg_color, data_only,
                             _(command.get_string_member("?")));
 
+                        // Get module dir
+                        string module_dir = "";
+                        if (i >= 0) {
+                            module_dir = Path.get_dirname(programview.buffer.enabled_plugins[i]);
+                        }
+
                         Command c = new Command(command.get_string_member("icon"),
                                                 command.get_string_member("id"), "",
-                                                draw_params);
+                                                draw_params, module_dir);
                         //debug(command.get_string_member("icon"));
                         programview.buffer.commands.add(c);
                         Gtk.TreeIter iter;
@@ -436,6 +443,7 @@ namespace Turtlico {
                                CmdViewCols.ID, c.id);
                     });
                 });
+                i++;
             }
             // end foreach
             categories_box.show_all();
