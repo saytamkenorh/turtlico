@@ -367,6 +367,13 @@ namespace Turtlico {
             var parsers = Command.create_parsers(programview.buffer.enabled_plugins.to_array());
             int i = -1;
             foreach(Json.Parser parser in parsers) {
+                // Get module dir
+                string module_dir = "";
+                if (i >= 0) {
+                    module_dir = Path.get_dirname(programview.buffer.enabled_plugins[i]);
+                }
+                i++;
+
                 // Get the root node:
 		        Json.Node node = parser.get_root ();
 		        // For all commands in all categories
@@ -380,6 +387,13 @@ namespace Turtlico {
                     if (icon.has_prefix("r:"))
                         button.image = new Gtk.Image.from_resource(
                             "/tk/turtlico/Turtlico/icons/" + icon.substring(2));
+                    else if(icon.has_prefix("f:")) {
+                        try {
+                            var pixbuf = new Gdk.Pixbuf.from_file_at_size(
+                                Path.build_filename(module_dir, icon.substring(2)), 16, 16);
+                            button.image = new Gtk.Image.from_pixbuf(pixbuf);
+                        } catch (Error e) {}
+                    }
                     else
                         button.label = icon;
                     button.can_focus = false;
@@ -416,13 +430,6 @@ namespace Turtlico {
                         var draw_params = new DrawParams(
                             draw_data, data_color, bg_color, fg_color, data_only,
                             _(command.get_string_member("?")));
-
-                        // Get module dir
-                        string module_dir = "";
-                        if (i >= 0) {
-                            module_dir = Path.get_dirname(programview.buffer.enabled_plugins[i]);
-                        }
-
                         Command c = new Command(command.get_string_member("icon"),
                                                 command.get_string_member("id"), "",
                                                 draw_params, module_dir);
@@ -443,7 +450,6 @@ namespace Turtlico {
                                CmdViewCols.ID, c.id);
                     });
                 });
-                i++;
             }
             // end foreach
             categories_box.show_all();

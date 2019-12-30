@@ -55,8 +55,8 @@ namespace Turtlico {
             else if (name.has_prefix("f:") && name.has_suffix(".png")) {
                 try {
                     string str = name.substring(2);
-                    this._pixbuf = new Gdk.Pixbuf.from_file(
-                        Path.build_filename(module_dir, str));
+                    this._pixbuf = new Gdk.Pixbuf.from_file_at_size(
+                        Path.build_filename(module_dir, str), 50, 35);
                     this._name = str;
                 }
                 catch {

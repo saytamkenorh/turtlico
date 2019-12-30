@@ -27,6 +27,10 @@ namespace Turtlico {
 	    Gtk.Label all_icons_count_label;
 	    [GtkChild]
 	    Gtk.Label icons_count_label;
+	    [GtkChild]
+	    Gtk.Dialog open_dir_fail_dialog;
+        [GtkChild]
+	    Gtk.Label open_dir_fail_label;
 
 	    public Gee.ArrayList<string> plugins_active;
 
@@ -117,7 +121,14 @@ namespace Turtlico {
 	    [GtkCallback]
 	    void on_open_dir_clicked() {
             string dir = Path.build_filename(Environment.get_user_data_dir(), "turtlico", "plugins");
-            Gtk.show_uri_on_window(this, "file://" + dir, Gdk.CURRENT_TIME);
+            try {
+                Gtk.show_uri_on_window(this, "file://" + dir, Gdk.CURRENT_TIME);
+            }
+            catch(Error e) {
+                open_dir_fail_label.label = dir;
+                open_dir_fail_dialog.transient_for = this;
+                open_dir_fail_dialog.run(); open_dir_fail_dialog.hide();
+            }
 	    }
 	}
 }
