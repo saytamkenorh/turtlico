@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-30 12:08+0100\n"
-"PO-Revision-Date: 2019-12-30 12:09+0100\n"
+"POT-Creation-Date: 2019-12-30 14:36+0100\n"
+"PO-Revision-Date: 2019-12-30 14:37+0100\n"
 "Last-Translator: matyas5 <>\n"
 "Language-Team: Czech <>\n"
 "Language: cs\n"
@@ -191,6 +191,14 @@ msgstr "Otevřít složku s doplňky"
 msgid "Statistics"
 msgstr "Statistiky"
 
+#: src/program-settings.ui:117
+msgid "Cannot open plugins folder"
+msgstr "Nelze otevřít složku s doplňky"
+
+#: src/program-settings.ui:165
+msgid "Please open it manually at following address:"
+msgstr "Otevřete ji prosím manuálně (adresa):"
+
 #: src/app-settings.ui:9
 msgid "Settings"
 msgstr "Nastavení"
@@ -237,7 +245,7 @@ msgstr "Projekt uložen."
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/window.vala:222 src/window.vala:256 src/window.vala:530
+#: src/window.vala:222 src/window.vala:256 src/window.vala:536
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -269,23 +277,23 @@ msgstr ""
 msgid "Failed to open the program"
 msgstr "Nepodařilo se otevřít program"
 
-#: src/window.vala:525
+#: src/window.vala:531
 msgid "Would you like to save your changes before closing the program?"
 msgstr "Přereje si uložit změny před zavřením programu?"
 
-#: src/window.vala:526
+#: src/window.vala:532
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr "Jinak budou neuložené změny ztraceny!"
 
-#: src/window.vala:528
+#: src/window.vala:534
 msgid "Yes"
 msgstr "Ano"
 
-#: src/window.vala:529
+#: src/window.vala:535
 msgid "No"
 msgstr "Ne"
 
-#: src/window.vala:546
+#: src/window.vala:552
 msgid "Unnamed"
 msgstr "Bez názvu"
 
@@ -365,15 +373,15 @@ msgstr ""
 "verzí programu.\n"
 "ID příkazu: "
 
-#: src/program-settings.vala:75
+#: src/program-settings.vala:82
 msgid "Failed to load list of additional modules"
 msgstr "Selhalo načtení listu přídavných příkazů"
 
-#: src/program-settings.vala:91
+#: src/program-settings.vala:98
 msgid "Icon count: "
 msgstr "Počet ikon: "
 
-#: src/program-settings.vala:92
+#: src/program-settings.vala:99
 msgid "Icon count without whitespace and comments: "
 msgstr "Počet ikon bez bílých znaků a komentářů: "
 
