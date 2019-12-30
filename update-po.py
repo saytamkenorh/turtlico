@@ -33,7 +33,10 @@ for path in files:
 	f.write(output)
 	f.close()
 
-build_dir = os.path.join(src_dir, 'build')
+build_dir = os.path.join(src_dir, 'build', 'meson')
+if not os.path.isdir(build_dir):
+	subprocess.call(["./build-appimage.sh"])
+
 os.chdir(build_dir)
 subprocess.call(["ninja", "turtlico-update-po"])
 os.chdir(src_dir)

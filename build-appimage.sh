@@ -3,11 +3,13 @@
 projectname="turtlico"
 projectid="tk.turtlico.Turtlico"
 srcdir=$(pwd)/$line
-builddir="$srcdir/build-portable/meson"
-installdir="$srcdir/build-portable/install"
+builddir="$srcdir/build/meson"
+installdir="$srcdir/build/install"
 
 #build and install project
-meson $srcdir $builddir --prefix $installdir || exit 1
+rm -rf $builddir
+rm -rf $installdir
+meson $srcdir $builddir --prefix $installdir -Dhelp=true
 ninja -C $builddir || exit 2
 ninja -C $builddir install
 
