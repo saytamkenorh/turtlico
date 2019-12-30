@@ -1,13 +1,61 @@
 =======
-Modules
+Plugins
 =======
 
-Turtlico is extensible by modules that can add extra icons.
+Turtlico is extensible by plugins that can add extra icons.
 For example, the integrated RPi plugin adds commands to control GPIO via the gpiozero library.
 
-Every set of commands has its own file. Turtlico loads these files from user data dirs (eg. ``/usr/share/turtlico/plugins``) and also from GResources with prefix ``/tk/turtlico/Turtlico``.
+Activating a deactivating plugins is done in Project settings.
 
-Format of module files
+You can open the plugins folder by clicking *Open plugins folder* button in Project settings. There you can put your additional plugins.
+
+=======================
+Creating custom plugins
+=======================
+
+Every set of commands has its own file.
+Turtlico loads these files from data dirs (eg. ``/usr/share/turtlico/plugins``) and also from GResources with prefix ``/tk/turtlico/Turtlico``.
+Plugins can also contain custom icons.
+
+Plugins loaded from filesystem
+==============================
+Plugins can be stored in form of files on the local filesystem.
+Every plugin has its own folder.
+
+There is a plugin file called ``commands.json`` and there are also custom icons in every folder.
+
+Turtlico searches for plugins in all data directories.
+The most often ones are listed here:
+
++--------------------+-----------------------------------------------------------+
+| **Windows**        | ``C:/ProgramData/turtlico/plugins``                       |
+|                    | ``C:/Users/[username]/AppData/Local``                     |
++--------------------+-----------------------------------------------------------+
+| **Linux**          | ``/usr/share/turtlico/plugins``                           |
+|                    | ``~/.local/share/turtlico/plugins``                       |
++--------------------+-----------------------------------------------------------+
+| **Linux (Flatpak)**| ``/usr/share/turtlico/plugins``                           |
+|                    | ``~/.var/app/tk.turtlico.Turtlico/data/turtlico/plugins`` |
++--------------------+-----------------------------------------------------------+
+
+**Basic plugin folder structure**
+
+| plugins
+| └── [plugin name]
+|     ├──commands.json
+|     └──[PNG icon files]
+
+
+GResources plugins
+==================
+This is mostly used by the internal Turtlico plugins.
+
+Plugin file resource has to be installed as a child of path ``/tk/turtlico/Turtlico``.
+Unlike plugins loaded from filesystem GResources plugin file should be named like the plugin itself eg. ``example.json``.
+
+Icon files has to be children of ``/tk/turtlico/Turtlico/icons``.
+
+Format of plugin files
 ======================
 
 **Basic structure**
@@ -15,7 +63,6 @@ Format of module files
 Module files are json-formated. This is a basic module file with one category and one command:
 
 .. code-block:: json
-    :linenos:
 
     {
         "name": "Example plugin",
@@ -51,7 +98,6 @@ Properties:
 Example:
 
 .. code-block:: json
-    :linenos:
 
     {
         "id": "tcf_sum",
@@ -62,7 +108,6 @@ Example:
 Example corresponding command definition:
 
 .. code-block:: json
-    :linenos:
 
     {"id":"5_sum", "icon":"r:sum.png", "?": 'Returns the sum of two numbers.' , "type": 5, "func": "tcf_sum", "params": "" }
 
@@ -87,7 +132,8 @@ Basic properties:
 Icon specification
 ======================
 
-There are two options to specify icons in module files:
+There are three options to specify icons in plugin files:
 
 1. Plain text - use text and/or emoji to make the icon simple to understand
-2. GResources - Loads icon from Turtlico resources(``/tk/turtlico/Turtlico/icons/*``). It must start with ``"r:"``. Eg. ``r:example_icon.png``..
+2. GResources - Loads icon from Turtlico resources(``/tk/turtlico/Turtlico/icons/*``). It must start with ``"r:"``. Eg. ``r:example_icon.png``.
+3. Local file - Loads PNG icon from plugin dir. It must start with ``"f:"``. Eg. ``f:example_icon.png``.
