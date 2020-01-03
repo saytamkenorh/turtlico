@@ -24,7 +24,7 @@ namespace Turtlico {
         new GLib.Thread<int>(null, ()=>{
             try {
                 string args = "python3 -c 'import turtle; from gi.repository import Gst;'";
-#if TURTLICO_FLATPAK
+#if TURTLICO_FLATPAK_NO_SANDBOX
                 args = "flatpak-spawn --host " + args;
 #endif
                 string _stdout;
@@ -38,7 +38,7 @@ namespace Turtlico {
                     foreach (var c in linux_deps_tools) {
                         try {
                             exit_status = -1;
-#if TURTLICO_FLATPAK
+#if TURTLICO_FLATPAK_NO_SANDBOX
                             Process.spawn_command_line_sync("flatpak-spawn --host which " + c, out _stdout, out _stderr, out exit_status);
 #else
                             Process.spawn_command_line_sync("which " + c, out _stdout, out _stderr, out exit_status);
@@ -63,7 +63,7 @@ namespace Turtlico {
                             if (answer == Gtk.ResponseType.YES) {
                                 try {
                                     string command = "";
-#if TURTLICO_FLATPAK
+#if TURTLICO_FLATPAK_NO_SANDBOX
                                     command = "flatpak-spawn --host ";
 #endif
                                     command += "gnome-terminal -e 'sudo ";

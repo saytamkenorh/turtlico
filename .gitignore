@@ -9,3 +9,5 @@ build-portable
 *.AppDir
 *.AppImage
 *~
+.flatpak-builder
+flatpak-build

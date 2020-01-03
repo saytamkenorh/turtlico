@@ -41,6 +41,88 @@
                 }
             ]
 	},
+	{
+            "name" : "tcl",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://prdownloads.sourceforge.net/tcl/tcl8.6.10-src.tar.gz",
+                    "sha256" : "5196dbf6638e3df8d5c87b5815c8c2b758496eb6f0e41446596c9a4e638d87ed"
+                }
+            ],
+            "subdir" : "unix",
+            "build-options" : {
+                "no-debuginfo" : false
+            },
+            "post-install" : [
+                "chmod 755 /app/lib/libtcl8.6.so"
+            ]
+        },
+        {
+            "name" : "tk",
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "http://prdownloads.sourceforge.net/tcl/tk8.6.10-src.tar.gz",
+                    "sha256" : "63df418a859d0a463347f95ded5cd88a3dd3aaa1ceecaeee362194bc30f3e386"
+                }
+            ],
+            "subdir" : "unix",
+            "build-options" : {
+                "no-debuginfo" : false
+            },
+            "post-install" : [
+                "chmod 755 /app/lib/libtk8.6.so"
+            ]
+        },
+        {
+            "name" : "python",
+            "config-opts" : [
+                "--enable-shared",
+                "--enable-ipv6",
+                "--with-threads",
+                "--with-lto",
+                "--without-ensurepip",
+                "--with-system-ffi",
+                "--with-system-libmpdec",
+                "--with-system-expat"
+            ],
+            "build-options" : {
+                "no-debuginfo" : true
+            },
+            "cleanup" : [
+                "/bin/2to3*",
+                "/bin/easy_install*",
+                "/bin/idle*",
+                "/bin/python*-config",
+                "/bin/pyvenv*",
+                "/bin/pydoc*",
+                "/include",
+                "/share",
+                "/lib/pkgconfig",
+                "/lib/python*/config-*",
+                "/lib/python3.7/test",
+                "/lib/python*/distutils/tests",
+                "/lib/python*/ctypes/test",
+                "/lib/python*/sqlite3/test",
+                "/lib/python*/lib2to3/tests",
+                "/lib/python*/tkinter/test",
+                "/lib/python*/unittest/test",
+                "/lib/python*/lib-dynload/_*_test.*.so",
+                "/lib/python*/lib-dynload/_test*.*.so",
+                "/lib/python*/idlelib",
+                "*.pyc",
+                "__pycache__",
+                "*.exe"
+            ],
+            "sources" : [
+                {
+                    "type" : "archive",
+                    "url" : "https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tar.xz",
+                    "sha256" : "75894117f6db7051c1b34f37410168844bbb357c139a8a10a352e9bf8be594e8"
+                }
+            ]
+        },
         {
             "name": "turtlico",
             "builddir": true,

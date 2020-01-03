@@ -67,7 +67,7 @@ namespace Turtlico {
                             argv.add("python3w");
 #else
                             GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
-#if TURTLICO_FLATPAK
+#if TURTLICO_FLATPAK_NO_SANDBOX
                             argv.add_all_array({"flatpak-spawn", "--host", "python3"});
 #else
                             argv.add("python3");
@@ -102,7 +102,7 @@ namespace Turtlico {
                     catch (IOError e) {
                         if (subprocess != null) {
                             subprocess.force_exit();
-#if TURTLICO_FLATPAK
+#if TURTLICO_FLATPAK_NO_SANDBOX
                             try {
                                 if (_stdout == "") {
                                     var dis = new DataInputStream (subprocess.get_stdout_pipe());
