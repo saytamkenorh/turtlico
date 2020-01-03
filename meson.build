@@ -1,4 +1,4 @@
-project('turtlico', ['c', 'vala'],        version: '0.2.0',
+project('turtlico', ['c', 'vala'],        version: '0.3.0',
   meson_version: '>= 0.47.0',
 )
 
