@@ -19,6 +19,12 @@
   <launchable type="desktop-id">tk.turtlico.Turtlico.desktop</launchable>
 
   <releases>
+    <release version="0.3" date="2020-01-03">
+      <description>
+        <p>
+        </p>
+      </description>
+    </release>
     <release version="0.1" date="2019-09-17">
       <description>
         <p>

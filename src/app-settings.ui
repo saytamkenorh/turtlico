@@ -152,7 +152,7 @@
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
     <property name="program_name">Turtlico</property>
-    <property name="copyright">Copyright © 2018-2019 Matyáš Hronek</property>
+    <property name="copyright">Copyright © 2018-2020 Matyáš Hronek</property>
     <property name="website">https://turtlico.tk</property>
     <property name="authors">Matyáš Hronek</property>
     <property name="logo_icon_name"/>
