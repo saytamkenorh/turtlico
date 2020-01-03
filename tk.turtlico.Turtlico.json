@@ -40,8 +40,8 @@
                     "url" : "https://gitlab.gnome.org/GNOME/gtksourceview.git"
                 }
             ]
-	},
-	{
+	    },
+	    {
             "name" : "tcl",
             "sources" : [
                 {
@@ -52,8 +52,11 @@
             ],
             "subdir" : "unix",
             "build-options" : {
-                "no-debuginfo" : false
+                "no-debuginfo" : true
             },
+            "config-opts": [
+                "--enable-threads"
+            ],
             "post-install" : [
                 "chmod 755 /app/lib/libtcl8.6.so"
             ]
@@ -69,20 +72,22 @@
             ],
             "subdir" : "unix",
             "build-options" : {
-                "no-debuginfo" : false
+                "no-debuginfo" : true
             },
+            "config-opts": [
+                "--with-x",
+                "--enable-threads"
+            ],
             "post-install" : [
                 "chmod 755 /app/lib/libtk8.6.so"
             ]
         },
         {
-            "name" : "python",
+            "name" : "python3",
             "config-opts" : [
-                "--enable-shared",
                 "--enable-ipv6",
                 "--with-threads",
                 "--with-lto",
-                "--without-ensurepip",
                 "--with-system-ffi",
                 "--with-system-libmpdec",
                 "--with-system-expat"
@@ -101,7 +106,7 @@
                 "/share",
                 "/lib/pkgconfig",
                 "/lib/python*/config-*",
-                "/lib/python3.7/test",
+                "/lib/python*/test",
                 "/lib/python*/distutils/tests",
                 "/lib/python*/ctypes/test",
                 "/lib/python*/sqlite3/test",
@@ -120,6 +125,20 @@
                     "type" : "archive",
                     "url" : "https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tar.xz",
                     "sha256" : "75894117f6db7051c1b34f37410168844bbb357c139a8a10a352e9bf8be594e8"
+                }
+            ]
+        },
+        {
+            "name": "python3-Pillow",
+            "buildsystem": "simple",
+            "build-commands": [
+                "LDFLAGS=-L/usr/lib/${FLATPAK_ARCH}-linux-gnu pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=/app Pillow"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/39/47/f28067b187dd664d205f75b07dcc6e0e95703e134008a14814827eebcaab/Pillow-7.0.0.tar.gz",
+                    "sha256": "4d9ed9a64095e031435af120d3c910148067087541131e82b3e8db302f4c8946"
                 }
             ]
         },

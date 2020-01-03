@@ -141,8 +141,7 @@ namespace Turtlico {
 			update_window_title();
 			show_all();
 			programview.grab_focus();
-
-#if LINUX
+#if LINUX && !TURTLICO_FLATPAK
 			linux_check_deps(this);
 #endif
 #if WINDOWS
