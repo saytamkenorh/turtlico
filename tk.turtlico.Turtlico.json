@@ -13,8 +13,10 @@
         "--filesystem=~/.config/dconf:ro",
         "--filesystem=host",
         "--talk-name=ca.desrt.dconf",
+        "--device=all",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
-        "--env=PYTHONPATH=/usr/lib/python3.7/site-packages"
+        "--env=PYTHONPATH=/usr/lib/python3.7/site-packages",
+        "--env=GPIOZERO_PIN_FACTORY=native"
     ],
     "cleanup": [
         "/include",
@@ -123,7 +125,7 @@
             "name": "python3-Pillow",
             "buildsystem": "simple",
             "build-commands": [
-                "LDFLAGS=-L/usr/lib/${FLATPAK_ARCH}-linux-gnu pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} Pillow"
+                "LDFLAGS=-L`echo /usr/lib/${FLATPAK_ARCH}-linux-*` pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} Pillow"
             ],
             "sources": [
                 {
