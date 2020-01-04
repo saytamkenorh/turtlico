@@ -13,8 +13,8 @@
         "--filesystem=~/.config/dconf:ro",
         "--filesystem=host",
         "--talk-name=ca.desrt.dconf",
-        "--talk-name=org.freedesktop.Flatpak",
-        "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        "--env=PYTHONPATH=/usr/lib/python3.7/site-packages"
     ],
     "cleanup": [
         "/include",
@@ -51,9 +51,6 @@
                 }
             ],
             "subdir" : "unix",
-            "build-options" : {
-                "no-debuginfo" : true
-            },
             "config-opts": [
                 "--enable-threads"
             ],
@@ -71,9 +68,6 @@
                 }
             ],
             "subdir" : "unix",
-            "build-options" : {
-                "no-debuginfo" : true
-            },
             "config-opts": [
                 "--with-x",
                 "--enable-threads"
@@ -92,9 +86,6 @@
                 "--with-system-libmpdec",
                 "--with-system-expat"
             ],
-            "build-options" : {
-                "no-debuginfo" : true
-            },
             "cleanup" : [
                 "/bin/2to3*",
                 "/bin/easy_install*",
@@ -123,8 +114,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tar.xz",
-                    "sha256" : "75894117f6db7051c1b34f37410168844bbb357c139a8a10a352e9bf8be594e8"
+                    "url" : "https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tar.xz",
+                    "sha256" : "55a2cce72049f0794e9a11a84862e9039af9183603b78bc60d89539f82cf533f"
                 }
             ]
         },
@@ -132,13 +123,32 @@
             "name": "python3-Pillow",
             "buildsystem": "simple",
             "build-commands": [
-                "LDFLAGS=-L/usr/lib/${FLATPAK_ARCH}-linux-gnu pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=/app Pillow"
+                "LDFLAGS=-L/usr/lib/${FLATPAK_ARCH}-linux-gnu pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} Pillow"
             ],
             "sources": [
                 {
                     "type": "file",
                     "url": "https://files.pythonhosted.org/packages/39/47/f28067b187dd664d205f75b07dcc6e0e95703e134008a14814827eebcaab/Pillow-7.0.0.tar.gz",
                     "sha256": "4d9ed9a64095e031435af120d3c910148067087541131e82b3e8db302f4c8946"
+                }
+            ]
+        },
+        {
+            "name": "python3-gpiozero",
+            "buildsystem": "simple",
+            "build-commands": [
+                "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} gpiozero"
+            ],
+            "sources": [
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/cc/a2/718e78485d0a42c3c2971e0d4a0eb9878bd1121cd640f0773de0695c858e/colorzero-1.1-py2.py3-none-any.whl",
+                    "sha256": "e3c36d15b293de2b2f77ff54a5bd243fffac941ed0a5332d0697a6612a26a0a3"
+                },
+                {
+                    "type": "file",
+                    "url": "https://files.pythonhosted.org/packages/5a/06/e3440c452a0c2ba1f12527c12c5676b158f2591ac6c43979016f21f71b2a/gpiozero-1.5.1-py2.py3-none-any.whl",
+                    "sha256": "101044038e71cec8be2fa841d4cea9e50e7962e9fb0287f465298b59e3f06594"
                 }
             ]
         },
