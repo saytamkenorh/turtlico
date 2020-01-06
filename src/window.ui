@@ -2,228 +2,145 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">document-save</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">document-save-as</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">document-open</property>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">document-properties</property>
-  </object>
-  <object class="GtkImage" id="image6">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">preferences-system</property>
-  </object>
-  <object class="GtkImage" id="image7">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">edit-redo</property>
-  </object>
-  <object class="GtkImage" id="image8">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">edit-undo</property>
-  </object>
-  <object class="GtkImage" id="run_btn_image">
-    <property name="name">runBtnImg</property>
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">media-playback-start</property>
-  </object>
   <template class="TurtlicoWindow" parent="GtkApplicationWindow">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Turtlico</property>
     <property name="default_width">1000</property>
     <property name="default_height">500</property>
-    <child>
-      <placeholder/>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="title" translatable="yes">Turtlico</property>
+        <property name="show_close_button">True</property>
+        <child>
+          <object class="GtkButton" id="run_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Run program</property>
+            <property name="image">run_btn_image</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_run_btn_clicked" swapped="no"/>
+            <accelerator key="F5" signal="clicked"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="open_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Open program</property>
+            <property name="image">image4</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_open_btn_clicked" swapped="no"/>
+            <accelerator key="o" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="save_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Save</property>
+            <property name="image">image2</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_save_btn_clicked" swapped="no"/>
+            <accelerator key="s" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="save_as_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Save as</property>
+            <property name="image">image3</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_save_as_btn_clicked" swapped="no"/>
+            <accelerator key="s" signal="clicked" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
+          </object>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="undo_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Undo</property>
+            <property name="image">image8</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_undo_btn_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="position">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="redo_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Redo</property>
+            <property name="image">image7</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_redo_btn_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="position">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="settings_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Project settings</property>
+            <property name="image">image5</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_settings_btn_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="position">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="preferences_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="focus_on_click">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Application settings</property>
+            <property name="image">image6</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="on_preferences_btn_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="pack_type">end</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
     </child>
     <child>
       <object class="GtkBox" id="top_box">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkButton" id="run_btn">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="focus_on_click">False</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Run program</property>
-                <property name="image">run_btn_image</property>
-                <property name="relief">none</property>
-                <signal name="clicked" handler="on_run_btn_clicked" swapped="no"/>
-                <accelerator key="F5" signal="clicked"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="open_btn">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="focus_on_click">False</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Open program</property>
-                <property name="image">image4</property>
-                <property name="relief">none</property>
-                <signal name="clicked" handler="on_open_btn_clicked" swapped="no"/>
-                <accelerator key="o" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="save_btn">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="focus_on_click">False</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Save</property>
-                <property name="image">image2</property>
-                <property name="relief">none</property>
-                <signal name="clicked" handler="on_save_btn_clicked" swapped="no"/>
-                <accelerator key="s" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="save_as_btn">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="focus_on_click">False</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Save as</property>
-                <property name="image">image3</property>
-                <property name="relief">none</property>
-                <signal name="clicked" handler="on_save_as_btn_clicked" swapped="no"/>
-                <accelerator key="s" signal="clicked" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="undo_btn">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="focus_on_click">False</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Undo</property>
-                <property name="image">image8</property>
-                <property name="relief">none</property>
-                <signal name="clicked" handler="on_undo_btn_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="redo_btn">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="focus_on_click">False</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Redo</property>
-                <property name="image">image7</property>
-                <property name="relief">none</property>
-                <signal name="clicked" handler="on_redo_btn_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="preferences_btn">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="focus_on_click">False</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Application settings</property>
-                <property name="image">image6</property>
-                <property name="relief">none</property>
-                <signal name="clicked" handler="on_preferences_btn_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack_type">end</property>
-                <property name="position">6</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="settings_btn">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="focus_on_click">False</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Project settings</property>
-                <property name="image">image5</property>
-                <property name="relief">none</property>
-                <signal name="clicked" handler="on_settings_btn_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">9</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="delete_btn">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="tooltip_text" translatable="yes">Drop items here to delete them</property>
-                <property name="pixel_size">16</property>
-                <property name="icon_name">user-trash</property>
-                <property name="icon_size">2</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="pack_type">end</property>
-                <property name="position">10</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child>
           <object class="GtkBox" id="centerBox">
             <property name="visible">True</property>
@@ -336,4 +253,45 @@
       </object>
     </child>
   </template>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">document-save-symbolic</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">document-save-as-symbolic</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">document-open-symbolic</property>
+  </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">document-properties-symbolic</property>
+  </object>
+  <object class="GtkImage" id="image6">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">preferences-system-symbolic</property>
+  </object>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">edit-redo-symbolic</property>
+  </object>
+  <object class="GtkImage" id="image8">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">edit-undo-symbolic</property>
+  </object>
+  <object class="GtkImage" id="run_btn_image">
+    <property name="name">runBtnImg</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">media-playback-start-symbolic</property>
+  </object>
 </interface>

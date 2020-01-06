@@ -37,8 +37,6 @@ namespace Turtlico {
         [GtkChild]
         Gtk.Button save_btn;
         [GtkChild]
-        Gtk.Image delete_btn;
-        [GtkChild]
         Gtk.Label status_label;
         [GtkChild]
         Gtk.Image run_btn_image;
@@ -82,14 +80,6 @@ namespace Turtlico {
             );
             Gtk.drag_dest_set (
                 cmd_view,                       // widget that will accept a drop
-                Gtk.DestDefaults.ALL,           // default actions for dest on DnD
-                target_list,                    // lists of target to support
-                Gdk.DragAction.COPY
-                | Gdk.DragAction.MOVE           // what to do with data after dropped
-            );
-            // delete btn
-            Gtk.drag_dest_set (
-                delete_btn,                     // widget that will accept a drop
                 Gtk.DestDefaults.ALL,           // default actions for dest on DnD
                 target_list,                    // lists of target to support
                 Gdk.DragAction.COPY
