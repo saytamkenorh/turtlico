@@ -1,0 +1,18 @@
+nclude: 'https://gitlab.gnome.org/bilelmoussaoui/win32-ci-template/raw/master/ci-template.yml'
+
+variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+    APP_NAME: "Turtlico"
+    BIN_NAME: "turtlico"
+    MSI_BUNDLE: "turtlico.msi"
+    MANUFACTURER: "matyas5"
+    MESON_ARGS: ""
+    VERSION: "0.3"
+    DEPENDENCIES: "vala gtk3 gtksourceview4 python3 python3-pillow gst-python gobject-introspection gettext appstream-glib meson ninja"
+    ICON_PATH: "data/icons/scalable/tk.turtlico.Turtlico.svg"
+
+win32:
+    extends: .win32
+
+win64:
+    extends: .win64
