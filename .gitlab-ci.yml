@@ -13,10 +13,6 @@ variables:
 
 win32:
     extends: .win32
-    tags:
-      - windows
 
 win64:
     extends: .win64
-    tags:
-      - windows
