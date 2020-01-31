@@ -90,6 +90,10 @@ namespace Turtlico {
         Gtk.MenuItem popup_menu_cut;
         [GtkChild]
         Gtk.SeparatorMenuItem popup_menu_sep;
+        [GtkChild]
+        Gtk.MenuItem popup_menu_comment;
+        [GtkChild]
+        Gtk.MenuItem popup_menu_uncomment;
         // Render
         Pango.FontDescription font = new Pango.FontDescription();
         Pango.FontDescription small_font = new Pango.FontDescription();
@@ -265,24 +269,7 @@ namespace Turtlico {
                         }
                         // Split lines
                         if (c.id == "nl") {
-                            var new_line = new Gee.ArrayList<Turtlico.Command>();
-                            new_line.add(buffer.commands[0]);
-                            buffer.program.insert(y + 1, new_line);
-                            // Get commands beyond the dropped new line
-                            var beyond = new Gee.ArrayList<Command>.wrap(buffer.program[y].slice(x, buffer.program[y].size - 1).to_array());
-                            buffer.program[y + 1].insert_all(0, beyond);
-                            for (int i = 0; i < buffer.program[y + 1].size - 1; i++) {
-                                buffer.program[y].remove_at(x);
-                            }
-                            // Auto indent
-                            if(auto_indent) {
-                                // Get number of tabs on current line
-                                int n = 0;
-                                while(n < buffer.program[y].size && buffer.program[y][n].id == "tab") {
-                                    new_line.insert(0, buffer.commands[1]);
-                                    n++;
-                                }
-                            }
+                            buffer.insert_new_line(x, y, auto_indent);
                         }
                         else {
                             if (cmd.size >= 2)
@@ -321,8 +308,10 @@ namespace Turtlico {
             int x;
             int original_x;
             bool selected = false;
+            bool comment = false;
             for (int line = 0; line < buffer.program.size; line++) {
                 x = 0;
+                comment = false;
                 for (int command = 0; command < buffer.program[line].size; command++) {
                     if (buffer.program[line][command].id == "int" && buffer.program[line][command].data == "") {
                         buffer.program[line][command] = buffer.program[line][command].set_data("0", buffer.resource_dir);
@@ -358,6 +347,17 @@ namespace Turtlico {
                         selected = false;
                     if (on_selection_point && selected)
                         selected = false;
+                    // Comments
+                    if (buffer.program[line][command].id == "nl")
+                        comment = false;
+                    if (comment) {
+                        cr.set_source_rgba(0, 0, 0, 0.5);
+                        cr.rectangle(original_x * cell_width, line * cell_height,
+                            cell_width * (x - original_x), cell_height);
+                        cr.fill();
+                    }
+                    if (buffer.program[line][command].id == "#" && buffer.program[line][command].data == "")
+                        comment = true;
                 }
                 if (x > width)
                     width = x;
@@ -616,10 +616,12 @@ namespace Turtlico {
                 start_dnd_copy = false;
                 bool icon_at_pointer = get_icon_at_pointer();
                 bool selection = buffer.selection_phase == SelectionPhase.BLOCK_SELECTED;
-                popup_menu_edit.visible = icon_at_pointer;
+                popup_menu_edit.visible = icon_at_pointer && !selection;
                 popup_menu_copy.visible = icon_at_pointer && selection;
                 popup_menu_cut.visible = icon_at_pointer && selection;
                 popup_menu_sep.visible = icon_at_pointer;
+                popup_menu_comment.visible = selection;
+                popup_menu_uncomment.visible = selection;
                 popup_menu_widget.popup_at_pointer(null);
             }
             return false;
@@ -628,6 +630,16 @@ namespace Turtlico {
         [GtkCallback]
         void on_popup_menu_edit_activate(Gtk.MenuItem item) {
             icon_data_dialog();
+        }
+
+        [GtkCallback]
+        void on_popup_menu_comment_activate(Gtk.MenuItem item) {
+            buffer.selection_comment();
+        }
+
+        [GtkCallback]
+        void on_popup_menu_uncomment_activate(Gtk.MenuItem item) {
+            buffer.selection_uncomment();
         }
 
         [GtkCallback]

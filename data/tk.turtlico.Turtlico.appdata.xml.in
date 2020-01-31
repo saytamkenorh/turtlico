@@ -23,6 +23,7 @@
       <description>
         <p>
           Added automatic indentation support.
+          Added support for commenting blocks of commands.
         </p>
       </description>
     </release>

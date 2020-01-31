@@ -265,6 +265,42 @@ namespace Turtlico {
             return data;
         }
 
+        public void selection_comment() {
+            Command comment;
+            try {
+                comment = find_command_by_id("#");
+            } catch {return;}
+
+            if (selection_end.x < program[selection_end.y].size - 1)
+                insert_new_line(selection_end.x + 1, selection_end.y, true);
+            if (selection_start.x > 0) {
+                insert_new_line(selection_start.x, selection_start.y, true);
+                selection_start.y++; selection_end.y++;
+            }
+
+            for (int line = selection_start.y; line <= selection_end.y; line++) {
+                int x = 0;
+                while(x < program[line].size && program[line][x].id == "tab") x++;
+                if(program[line][x].id != "#")
+                    program[line].insert(x, comment);
+            }
+            selection_phase = SelectionPhase.NOTHING_SELECTED;
+            redraw_required();
+            backup_program();
+        }
+
+        public void selection_uncomment() {
+            for (int line = selection_start.y; line <= selection_end.y; line++) {
+                int x = 0;
+                while(x < program[line].size && program[line][x].id == "tab") x++;
+                if(program[line][x].id == "#")
+                    program[line].remove_at(x);
+            }
+            selection_phase = SelectionPhase.NOTHING_SELECTED;
+            redraw_required();
+            backup_program();
+        }
+
         public Command find_command_by_id(string id) throws GLib.FileError {
             for (int i = 0; i < commands.size; i++) {
                 if(commands[i].id == id) {
@@ -279,6 +315,27 @@ namespace Turtlico {
                 if (program[line].size == 0) {
                     program.remove_at(line);
                     line--;
+                }
+            }
+        }
+
+        public void insert_new_line(int x, int y, bool auto_indent) {
+            var new_line = new Gee.ArrayList<Turtlico.Command>();
+            new_line.add(commands[0]);
+            program.insert(y + 1, new_line);
+            // Get commands beyond the dropped new line
+            var beyond = new Gee.ArrayList<Command>.wrap(program[y].slice(x, program[y].size - 1).to_array());
+            program[y + 1].insert_all(0, beyond);
+            for (int i = 0; i < program[y + 1].size - 1; i++) {
+                program[y].remove_at(x);
+            }
+            // Auto indent
+            if(auto_indent) {
+                // Get number of tabs on current line
+                int n = 0;
+                while(n < program[y].size && program[y][n].id == "tab") {
+                    new_line.insert(0, commands[1]);
+                    n++;
                 }
             }
         }

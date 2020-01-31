@@ -126,6 +126,10 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                 }
                 for(int x = 0; x < program[y].size; x++) {
                     out_line = output.size - 1;
+                    // Comments
+                    if (program[y][x].id == "#" && program[y][x].data == "") {
+                        break;
+                    }
                     // Functions
                     bool con = false;
                     foreach(var f in functions){

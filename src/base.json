@@ -5,7 +5,7 @@
 			"commands": [
 				{"id":"nl", "icon":"⏎", "?": 'New line (Enter)', "type": -1, "bg-color": "#000000" },
 				{"id":"tab", "icon":"·", "?": 'Tab', "type": -1, "bg-color": "#000000" },
-				{"id":"#", "icon":"#", "?": 'Comment', "type": -1, "data-draw": true, "data-color": "#000000", "bg-color": "rgb(255, 233, 140)" },
+				{"id":"#", "icon":"#", "?": 'Comment', "type": -1, "data-draw": true, "data-color": "#000000", "fg-color": "#000000", "bg-color": "rgb(255, 233, 140)" },
 				{"id":"0_go", "icon":"🐢", "?": 'Go forward', "type": 0, "func": "forward", "params": "30" },
 				{"id":"0_left", "icon":"↺", "?": 'Turn left', "type": 0, "func": "left", "params": "90" },
 				{"id":"0_right", "icon":"↻", "?": 'Turn right', "type": 0, "func": "right", "params": "90" },
