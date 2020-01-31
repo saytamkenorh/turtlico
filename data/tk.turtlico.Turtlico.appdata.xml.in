@@ -13,7 +13,7 @@
   <screenshots>
 		<screenshot width="836" height="448" type="default">
       <image>https://turtlico.tk/ss-2.png</image>
-      <caption>The Turtlico main window</caption>
+      <caption>Turtlico main window</caption>
     </screenshot>
 	​</screenshots>
   <launchable type="desktop-id">tk.turtlico.Turtlico.desktop</launchable>
@@ -22,14 +22,18 @@
     <release version="0.4" date="2020-01-04">
       <description>
         <p>
-          Added automatic indentation support.
-          Added support for commenting blocks of commands.
+          This release contains bug fixes and new features:
         </p>
+        <ul>
+          <li>Added automatic indentation support.</li>
+          <li>Added support for commenting blocks of commands.</li>
+        </ul>
       </description>
     </release>
     <release version="0.3" date="2020-01-03">
       <description>
         <p>
+          New major release.
         </p>
       </description>
     </release>
