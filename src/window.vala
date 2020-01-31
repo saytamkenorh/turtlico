@@ -477,6 +477,9 @@ namespace Turtlico {
                 programview.high_contrast = settings.get_boolean("dark-icons");
                 load_commands();
             }
+            if (key == "auto-indent" || key == "") {
+                programview.auto_indent = settings.get_boolean("auto-indent");
+            }
         }
 
         [GtkCallback]
