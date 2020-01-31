@@ -12,7 +12,7 @@ BEGIN
       VALUE "LegalCopyright", "Copyright © 2018-2019 Matyáš Hronek"
       VALUE "OriginalFilename", "turtlico.exe"
       VALUE "ProductName", "Turtlico"
-      VALUE "ProductVersion", "0.1"
+      VALUE "ProductVersion", "0.4"
     END
   END
 END
