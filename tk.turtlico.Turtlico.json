@@ -164,7 +164,7 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "file:///home/matyas/Projects/turtlico"
+                    "url": "https://gitlab.com/turtlico/turtlico.git"
                 }
             ]
         }

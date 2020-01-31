@@ -12,18 +12,12 @@ under certain conditions; see [COPYING](./COPYING) for details.
 
 ## Downloads
 Turtlico supports Windows and Linux. <br>
-**[Download the latest release](https://turtlico.tk/#downloads)**
+**[Download the latest release on the official website](https://turtlico.tk/#downloads)**
+
+<a href='https://flathub.org/apps/details/tk.turtlico.Turtlico'><img width='240' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-i-en.png'/></a>
 
 Or clone this repository and build the program yourself:
 	
 	meson ./ ./build --prefix /usr/local
 	cd ./build
 	ninja && sudo ninja install
-**Linux notes:**
-
-If you would like to use the Linux version of Turtlico, you will need to install [Flatpak](https://flatpak.org/) and add the [Flathub](https://flathub.org/about) remote.
-
-So please follow **[these instructions](https://flatpak.org/setup)** before installing Turtlico.
-Then install the downloaded Flatpak bundle by running following command:
-    
-    flatpak install ./turtlico-linux.flatpak
