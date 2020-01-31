@@ -45,6 +45,7 @@ namespace Turtlico {
         private bool drag_source_clipboard = false;
         private string drag_source_clipboard_text = "";
         public bool high_contrast = false;
+        public bool auto_indent = true;
         //DnD
         bool start_dnd_copy = false;
         // Used in drag_data_get
@@ -272,6 +273,15 @@ namespace Turtlico {
                             buffer.program[y + 1].insert_all(0, beyond);
                             for (int i = 0; i < buffer.program[y + 1].size - 1; i++) {
                                 buffer.program[y].remove_at(x);
+                            }
+                            // Auto indent
+                            if(auto_indent) {
+                                // Get number of tabs on current line
+                                int n = 0;
+                                while(n < buffer.program[y].size && buffer.program[y][n].id == "tab") {
+                                    new_line.insert(0, buffer.commands[1]);
+                                    n++;
+                                }
                             }
                         }
                         else {
