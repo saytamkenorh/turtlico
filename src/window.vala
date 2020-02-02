@@ -42,9 +42,14 @@ namespace Turtlico {
         Gtk.Label status_label;
         [GtkChild]
         Gtk.Image run_btn_image;
+        [GtkChild]
+        Gtk.ToggleButton search_btn;
+        [GtkChild]
+        Gtk.SearchBar search_bar;
 
         public Compiler compiler; // Initialized in load_commands
         Debugger debugger = new Debugger();
+        SearchWidget search_widget;
 
         private File _current_file = null;
         File current_file {
@@ -131,6 +136,10 @@ namespace Turtlico {
                 run_btn_image.set_from_icon_name(
                      icon_name, Gtk.IconSize.BUTTON);
             });
+            // Search Widget
+            search_widget = new SearchWidget(programview);
+            search_bar.add(search_widget);
+            search_bar.show_all();
 
             // Load commands database
             load_commands();
@@ -357,6 +366,8 @@ namespace Turtlico {
             // Clear
             categories_box.get_children().foreach((w)=>{categories_box.remove(w);});
             programview.buffer.commands.clear();
+            search_widget.find_entry.buffer.commands.clear();
+            search_widget.replace_entry.buffer.commands.clear();
             // Get default icon color
             var programview_bg_color = programview.get_style_context().get_color(Gtk.StateFlags.ACTIVE).to_string();
             var programview_fg_color = "rgb(255, 255, 255)";
@@ -434,6 +445,8 @@ namespace Turtlico {
                                                 draw_params, module_dir);
                         //debug(command.get_string_member("icon"));
                         programview.buffer.commands.add(c);
+                        search_widget.find_entry.buffer.commands.add(c);
+                        search_widget.replace_entry.buffer.commands.add(c);
                         Gtk.TreeIter iter;
                         ls.append(out iter);
                         var surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,
@@ -555,6 +568,11 @@ namespace Turtlico {
             else
                 name += current_file.get_basename();
             title = name + " - Turtlico";
+        }
+
+        [GtkCallback]
+        void on_search_btn_toggled () {
+            search_bar.set_search_mode(search_btn.active);
         }
 	}
 }

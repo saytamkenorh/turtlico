@@ -7,6 +7,7 @@
     <file>programview.css</file>
     <file>program-settings.ui</file>
     <file>app-settings.ui</file>
+    <file>search-widget.ui</file>
     <file>base.json</file>
     <file>rpi.json</file>
     <file>mm.json</file>

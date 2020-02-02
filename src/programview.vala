@@ -46,6 +46,7 @@ namespace Turtlico {
         private string drag_source_clipboard_text = "";
         public bool high_contrast = false;
         public bool auto_indent = true;
+        public bool basic_mode = false;
         //DnD
         bool start_dnd_copy = false;
         // Used in drag_data_get
@@ -106,6 +107,7 @@ namespace Turtlico {
             add_events(Gdk.EventMask.KEY_PRESS_MASK);
             can_focus = true;
             buffer = new ProgramBuffer();
+            buffer.save_history = !basic_mode;
             // CSS
             var css_provider = new Gtk.CssProvider();
             var style_context = get_style_context();
@@ -212,7 +214,7 @@ namespace Turtlico {
             int length = selection_data.get_length();
             if(length > 0 && selection_data.get_format() == 8) {
                 var data = new Gee.ArrayList<Gee.ArrayList<string>>();
-                if(selection_data.get_text().has_prefix("file://")) {
+                if(selection_data.get_text().has_prefix("file://") && !basic_mode) {
                     try {
                         string path = selection_data.get_text().split("\r\n")[0];
                         File input = File.new_for_uri(path);
@@ -269,7 +271,8 @@ namespace Turtlico {
                         }
                         // Split lines
                         if (c.id == "nl") {
-                            buffer.insert_new_line(x, y, auto_indent);
+                            if (!basic_mode)
+                                buffer.insert_new_line(x, y, auto_indent);
                         }
                         else {
                             if (cmd.size >= 2)
@@ -363,7 +366,7 @@ namespace Turtlico {
                     width = x;
             }
             set_size_request((width + 1) * cell_width,
-                (buffer.program.size + 2) * cell_height);
+                (buffer.program.size + (basic_mode ? 0 : 2)) * cell_height);
             return true;
         }
 

@@ -55,6 +55,8 @@ namespace Turtlico {
 
         public signal void redraw_required();
 
+        public bool save_history = true;
+
         public ProgramBuffer () {
         }
 
@@ -79,6 +81,8 @@ namespace Turtlico {
         }
 
         public void backup_program () {
+            if (!save_history)
+                return;
             program_changed = true;
             if (history_index > 0) {
                 for (int i = history.size - history_index; i < history.size; i++)
@@ -301,6 +305,27 @@ namespace Turtlico {
             backup_program();
         }
 
+        public void selection_select(int start_x, int start_y, int end_x, int end_y) {
+            Gdk.Point selection_start = Gdk.Point();
+            selection_start.x = start_x; selection_start.y = start_y;
+            Gdk.Point selection_end = Gdk.Point();
+            selection_end.x = end_x; selection_end.y = end_y;
+            bool swap = false;
+            if (selection_start.x > selection_end.x && selection_start.y == selection_end.y)
+                swap = true;
+            if (selection_start.y > selection_end.y)
+                swap = true;
+            if (swap) {
+                var temp = selection_end;
+                selection_end = selection_start;
+                selection_start = temp;
+            }
+            this.selection_start = selection_start;
+            this.selection_end = selection_end;
+            this.selection_phase = SelectionPhase.BLOCK_SELECTED;
+            redraw_required();
+        }
+
         public Command find_command_by_id(string id) throws GLib.FileError {
             for (int i = 0; i < commands.size; i++) {
                 if(commands[i].id == id) {
@@ -336,6 +361,52 @@ namespace Turtlico {
                 while(n < program[y].size && program[y][n].id == "tab") {
                     new_line.insert(0, commands[1]);
                     n++;
+                }
+            }
+        }
+
+        public void search(Gee.ArrayList<Turtlico.Command> commands, bool backwards = false) {
+            if (commands.size == 0) return;
+            if (commands.last().id == "nl") {
+                commands.remove(commands.last());
+            }
+            int match;
+            bool has_start = selection_phase == SelectionPhase.BLOCK_SELECTED;
+            bool rolled = false;
+            if (backwards) {
+                int selection_end_x = 0;
+                for (int line = (has_start ? selection_start.y : program.size - 1); line >= 0; line--) {
+                    match = commands.size - 1;
+                    for (int command = (has_start && line == selection_start.y ? selection_start.x - 1 : program[line].size - 1); command >= 0; command--) {
+                        Command c = program[line][command];
+                        if (commands[match].id == c.id && commands[match].data == c.data) {
+                            if (match == commands.size - 1) selection_end_x = command;
+                            match--;
+                        }
+                        if (match == -1) {
+                            selection_select(command, line, selection_end_x, line);
+                            return;
+                        }
+                    }
+                    if (line == 0 && !rolled) {rolled = true; line = program.size; has_start = false;}
+                }
+            }
+            else {
+                int selection_start_x = 0;
+                for (int line = (has_start ? selection_end.y : 0); line < program.size; line++) {
+                    match = 0;
+                    for (int command = (has_start && line == selection_end.y ? selection_end.x + 1 : 0); command < program[line].size; command++) {
+                        Command c = program[line][command];
+                        if (commands[match].id == c.id && commands[match].data == c.data) {
+                            if (match == 0) selection_start_x = command;
+                            match++;
+                        }
+                        if (match == commands.size) {
+                            selection_select(selection_start_x, line, command , line);
+                            return;
+                        }
+                    }
+                    if (line == program.size - 1 && !rolled) {rolled = true; line = -1; has_start = false;}
                 }
             }
         }

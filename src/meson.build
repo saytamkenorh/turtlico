@@ -9,6 +9,7 @@ turtlico_sources = [
   'program-settings.vala',
   'app-settings.vala',
   'package-service.vala',
+  'search-widget.vala',
 ]
 
 if build_machine.system() == 'windows'
