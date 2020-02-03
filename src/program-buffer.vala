@@ -365,8 +365,10 @@ namespace Turtlico {
             }
         }
 
-        public void search(Gee.ArrayList<Turtlico.Command> commands, bool backwards = false) {
-            if (commands.size == 0) return;
+        // This searches for 'commands'. It selects the first occurrence after current selection.
+        // If it finds an occurrence it will return true
+        public bool search(Gee.ArrayList<Turtlico.Command> commands, bool backwards = false) {
+            if (commands.size == 0) return false;
             if (commands.last().id == "nl") {
                 commands.remove(commands.last());
             }
@@ -385,7 +387,7 @@ namespace Turtlico {
                         }
                         if (match == -1) {
                             selection_select(command, line, selection_end_x, line);
-                            return;
+                            return true;
                         }
                     }
                     if (line == 0 && !rolled) {rolled = true; line = program.size; has_start = false;}
@@ -403,12 +405,41 @@ namespace Turtlico {
                         }
                         if (match == commands.size) {
                             selection_select(selection_start_x, line, command , line);
-                            return;
+                            return true;
                         }
                     }
                     if (line == program.size - 1 && !rolled) {rolled = true; line = -1; has_start = false;}
                 }
             }
+            return false;
+        }
+
+        public void replace(Gee.ArrayList<Turtlico.Command> commands) {
+            _replace(commands, true);
+        }
+
+        private void _replace(Gee.ArrayList<Turtlico.Command> commands, bool save_history) {
+            if (commands.size == 0) return;
+            if (commands.last().id == "nl")
+                commands.remove(commands.last());
+            Gdk.Point insertion_point = selection_start;
+            selection_delete();
+            program[insertion_point.y].insert_all(
+                insertion_point.x, commands);
+            redraw_required();
+            if (save_history)
+                backup_program();
+            selection_select(selection_start.x, selection_start.y,
+                selection_start.x, selection_start.y);
+        }
+
+        public void replace_all(Gee.ArrayList<Turtlico.Command> find, Gee.ArrayList<Turtlico.Command> replacewith) {
+            while (search(find)) {
+                _replace(replacewith, false);
+            }
+            backup_program();
+            selection_phase = SelectionPhase.NOTHING_SELECTED;
+            redraw_required();
         }
     }
 }

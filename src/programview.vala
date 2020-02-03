@@ -257,10 +257,15 @@ namespace Turtlico {
                         Command c = buffer.find_command_by_id(id);
                         // Icon dropped under the last line
                         if (y >= buffer.program.size) {
-                            var new_line = new Gee.ArrayList<Turtlico.Command>();
-                            new_line.add(buffer.commands[0]);
-                            y = buffer.program.size; buffer.program.add(new_line);
-                            if (c.id == "nl") { buffer.program_changed = true; continue; }
+                            if (basic_mode && buffer.program.size > 0) {
+                                y = 0;
+                            }
+                            else {
+                                var new_line = new Gee.ArrayList<Turtlico.Command>();
+                                new_line.add(buffer.commands[0]);
+                                y = buffer.program.size; buffer.program.add(new_line);
+                                if (c.id == "nl") { buffer.program_changed = true; continue; }
+                            }
                         }
                         // Icon dropped beyond the end of the line
                         if (x >= buffer.program[y].size) {
