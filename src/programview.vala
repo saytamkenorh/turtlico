@@ -36,9 +36,14 @@ namespace Turtlico {
                 return _buffer;
             }
             set {
+                if (_buffer is ProgramBuffer) {
+                    _buffer.redraw_required.disconnect(queue_draw);
+                    _buffer.scroll_to_selection.disconnect(scroll_to_selection);
+                }
                 _buffer = value;
                 queue_draw();
                 _buffer.redraw_required.connect(queue_draw);
+                _buffer.scroll_to_selection.connect(scroll_to_selection);
             }
         }
         private ProgramBuffer _buffer;
@@ -944,6 +949,13 @@ namespace Turtlico {
                 return true;
             }
             return false;
+        }
+
+        public void scroll_to_selection () {
+            var scrollable = get_parent() as Gtk.Scrollable;
+            if (scrollable == null) return;
+            scrollable.get_hadjustment().set_value(buffer.selection_start.x * cell_width);
+            scrollable.get_vadjustment().set_value(buffer.selection_start.y * cell_height);
         }
     }
 }

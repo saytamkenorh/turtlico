@@ -54,6 +54,7 @@ namespace Turtlico {
         public static string str_mark_utf8 = "~";
 
         public signal void redraw_required();
+        public signal void scroll_to_selection();
 
         public bool save_history = true;
 
@@ -324,6 +325,7 @@ namespace Turtlico {
             this.selection_end = selection_end;
             this.selection_phase = SelectionPhase.BLOCK_SELECTED;
             redraw_required();
+            scroll_to_selection();
         }
 
         public Command find_command_by_id(string id) throws GLib.FileError {

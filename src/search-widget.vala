@@ -25,8 +25,6 @@ namespace Turtlico {
         Gtk.ScrolledWindow find_entry_sw;
         [GtkChild]
         Gtk.ScrolledWindow replace_entry_sw;
-        [GtkChild]
-        Gtk.Button replace_btn;
 
         public ProgramView find_entry = new ProgramView();
         public ProgramView replace_entry = new ProgramView();
