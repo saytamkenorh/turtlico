@@ -1,15 +1,15 @@
 turtlico_sources = [
-  'main.vala',
-  'window.vala',
-  'programview.vala',
-  'program-buffer.vala',
+  'app-settings.vala',
   'command.vala',
   'compiler.vala',
   'debugger.vala',
-  'program-settings.vala',
-  'app-settings.vala',
+  'main.vala',
   'package-service.vala',
+  'program-buffer.vala',
+  'program-settings.vala',
+  'programview.vala',
   'search-widget.vala',
+  'window.vala',
 ]
 
 if build_machine.system() == 'windows'
