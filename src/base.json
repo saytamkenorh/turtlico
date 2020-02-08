@@ -284,9 +284,9 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 		{
 			"id": "tcf_index",
 			"code": "def tcf_index(list, item, start=0, direction=1):\
-	if direction == 0: raise Exception('Direction can not bet zero.')\
+	if direction == 0: raise Exception('Direction can not be zero.')\
 	if direction < 0: end = 0\
-	if direction >0: end = len(list)\
+	if direction > 0: end = len(list)\
 	for i in range(start, end, direction):\
 		if list[i] == item:\
 			return i\
