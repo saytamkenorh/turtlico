@@ -50,6 +50,7 @@ namespace Turtlico {
         public Compiler compiler; // Initialized in load_commands
         Debugger debugger = new Debugger();
         SearchWidget search_widget;
+        FunctionsDialog functions_dialog;
 
         private File _current_file = null;
         File current_file {
@@ -140,6 +141,8 @@ namespace Turtlico {
             search_widget = new SearchWidget(programview);
             search_bar.add(search_widget);
             search_bar.show_all();
+            // Functions Dialog
+            functions_dialog = new FunctionsDialog(programview);
 
             // Load commands database
             load_commands();
@@ -345,6 +348,14 @@ namespace Turtlico {
             var app_settings = new AppSettings();
             app_settings.set_transient_for(this);
             app_settings.show_all();
+        }
+
+        [GtkCallback]
+        void on_functions_btn_clicked() {
+            functions_dialog.load_functions();
+            functions_dialog.set_transient_for(this);
+            functions_dialog.run();
+            functions_dialog.hide();
         }
 
         public void open_file (File file) {

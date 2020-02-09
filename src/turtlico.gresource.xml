@@ -3,6 +3,7 @@
   <gresource prefix="/tk/turtlico/Turtlico">
     <file>app-settings.ui</file>
     <file>base.json</file>
+    <file>functions-dialog.ui</file>
     <file>mm.json</file>
     <file>program-settings.ui</file>
     <file>programview.css</file>
