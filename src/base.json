@@ -292,6 +292,38 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 			return i\
 	return -1"
 		}
+	],
+	"events": [
+	    {
+	        "name": 'Specified key press',
+	        "code": "",
+	        "connector": "0_ekey;~(;~obj;$name~sep;~key;$name~);~",
+	        "params": ""
+	    },
+	    {
+	        "name": 'Mouse click',
+	        "code": "",
+	        "connector": "0_emc;~(;~obj;$name~sep;~int;1~);~",
+	        "params": "x,y"
+	    },
+	    {
+	        "name": 'Timer',
+	        "code": "0_tmr;~(;~obj;$name~sep;~int;30~);~",
+	        "connector": "obj;$name~(;~);~",
+	        "params": ""
+	    },
+	    {
+	        "name": 'Circular collision',
+	        "code": "",
+	        "connector": "0_collision;~(;~5_gett;~sep;~obj;other_turle~sep;~obj;$name~sep;~int;10~sep;~int;10~);~",
+	        "params": ""
+	    },
+	    {
+	        "name": 'Rectangle collision',
+	        "code": "",
+	        "connector": "tcf_collision_rect;~(;~5_gett;~sep;~obj;other_turle~sep;~obj;$name~sep;~(;~int;10~sep;~int;10~);~sep;~(;~int;10~sep;~int;10~);~);~",
+	        "params": ""
+	    }
 	]
 }
 
