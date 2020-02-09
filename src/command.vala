@@ -85,11 +85,8 @@ namespace Turtlico {
                         if (path.has_prefix("./")) {
                             path = Path.build_filename(resource_dir, path.substring(2));
                         }
-                        var pb = new Gdk.Pixbuf.from_file(path);
-                        var pb_scaled = pb.scale_simple(30,
-                            (int)(((float)pb.height / (float)pb.width * 30).abs()),
-                            Gdk.InterpType.BILINEAR);
-                        c._pixbuf = pb_scaled;
+                        var pb = new Gdk.Pixbuf.from_file_at_size(path, 30, 25);
+                        c._pixbuf = pb;
                     } catch (Error e) {c._pixbuf = null; debug(e.message);}
                 }
                 else
