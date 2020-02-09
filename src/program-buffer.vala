@@ -443,5 +443,82 @@ namespace Turtlico {
             selection_phase = SelectionPhase.NOTHING_SELECTED;
             redraw_required();
         }
+
+        public bool paste_icons_string(string icons, ref int x, ref int y, bool basic_mode = false, bool auto_indent = false) throws Error {
+            var data = new Gee.ArrayList<Gee.ArrayList<string>>();
+            bool success = false;
+
+            if(icons.has_prefix("file://") && !basic_mode) {
+                try {
+                    string path = icons.split("\r\n")[0];
+                    File input = File.new_for_uri(path);
+                    if (resource_dir == "") {
+                        throw new FileError.ACCES(_("Please save the project first."));
+                    }
+                    File dest = File.new_for_path(
+                        Path.build_filename(resource_dir, input.get_basename()));
+                    if (!dest.query_exists())
+                        input.copy(dest, FileCopyFlags.NONE);
+                    data.add(new Gee.ArrayList<string>.wrap({"5_img", "./" + dest.get_basename()}));
+                }
+                catch (Error e) {
+                    throw new FileError.ACCES(_("Cannot insert the image: ") + e.message);
+                }
+            }
+            else {
+                var commands = icons.split(ProgramBuffer.str_mark_utf8);
+                foreach (var c in commands) {
+                    data.add(new Gee.ArrayList<string>.wrap(c.split(";")));
+                }
+            }
+            for (int index = data.size - 1; index >= 0; index--) {
+                Gee.ArrayList<string> cmd = data[index];
+                if (cmd.size < 1) {
+                    data.remove_at(index);
+                    continue;
+                }
+                string id = cmd[0];
+                try {
+                    Command c = find_command_by_id(id);
+                    // Icon dropped under the last line
+                    if (y >= program.size) {
+                        if (basic_mode && program.size > 0) {
+                            y = 0;
+                        }
+                        else {
+                            var new_line = new Gee.ArrayList<Turtlico.Command>();
+                            new_line.add(commands[0]);
+                            y = program.size; program.add(new_line);
+                            if (c.id == "nl") { program_changed = true; continue; }
+                        }
+                    }
+                    // Icon dropped beyond the end of the line
+                    if (x >= program[y].size) {
+                        x = program[y].size;
+                        if (program[y][program[y].size - 1].id == "nl") {
+                            x--;
+                        }
+                    }
+                    // Split lines
+                    if (c.id == "nl") {
+                        if (!basic_mode)
+                            insert_new_line(x, y, auto_indent);
+                    }
+                    else {
+                        if (cmd.size >= 2)
+                            c = c.set_data(cmd[1], resource_dir);
+                        program[y].insert(x, c);
+                    }
+                    redraw_required();
+                    success = true;
+                    if (c.id == "int") { c = c.set_data("0", resource_dir); }
+                    continue;
+                }
+                catch (FileError e) {}
+            }
+            backup_program();
+            selection_phase = SelectionPhase.NOTHING_SELECTED;
+            return success;
+        }
     }
 }

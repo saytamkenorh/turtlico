@@ -217,93 +217,28 @@ namespace Turtlico {
             mouse_x = x;
             mouse_y = y;
             int length = selection_data.get_length();
+            bool success = false;
+
             if(length > 0 && selection_data.get_format() == 8) {
-                var data = new Gee.ArrayList<Gee.ArrayList<string>>();
-                if(selection_data.get_text().has_prefix("file://") && !basic_mode) {
-                    try {
-                        string path = selection_data.get_text().split("\r\n")[0];
-                        File input = File.new_for_uri(path);
-                        if (buffer.resource_dir == "") {
-                            throw new FileError.ACCES(_("Please save the project first."));
-                        }
-                        File dest = File.new_for_path(
-                            Path.build_filename(buffer.resource_dir, input.get_basename()));
-                        if (!dest.query_exists())
-                            input.copy(dest, FileCopyFlags.NONE);
-                        data.add(new Gee.ArrayList<string>.wrap({"5_img", "./" + dest.get_basename()}));
-                    }
-                    catch (Error e) {
-                        var dialog = new Gtk.MessageDialog((Gtk.Window)get_toplevel(),
-                                                            Gtk.DialogFlags.MODAL,
-                                                            Gtk.MessageType.ERROR,
-                                                            Gtk.ButtonsType.OK, "");
-                        dialog.text = _("Cannot insert the image");
-                        dialog.secondary_text = e.message;
-                        dialog.run(); dialog.destroy();
-                        return;
-                    }
-                }
-                else {
-                    var commands = selection_data.get_text().split(ProgramBuffer.str_mark_utf8);
-                    foreach (var c in commands) {
-                        data.add(new Gee.ArrayList<string>.wrap(c.split(";")));
-                    }
-                }
                 y = y / cell_height;
                 x = mouse_to_program_x(x / cell_width, y);
-                for (int index = data.size - 1; index >= 0; index--) {
-                    Gee.ArrayList<string> cmd = data[index];
-                    if (cmd.size < 1) {
-                        data.remove_at(index);
-                        continue;
+                try {
+                    success = buffer.paste_icons_string(selection_data.get_text(), ref x, ref y, basic_mode, auto_indent);
+                    if (selection_data.get_text() == "tc") {
+                        icon_data_dialog_tc(x, y);
                     }
-                    string id = cmd[0];
-                    try {
-                        Command c = buffer.find_command_by_id(id);
-                        // Icon dropped under the last line
-                        if (y >= buffer.program.size) {
-                            if (basic_mode && buffer.program.size > 0) {
-                                y = 0;
-                            }
-                            else {
-                                var new_line = new Gee.ArrayList<Turtlico.Command>();
-                                new_line.add(buffer.commands[0]);
-                                y = buffer.program.size; buffer.program.add(new_line);
-                                if (c.id == "nl") { buffer.program_changed = true; continue; }
-                            }
-                        }
-                        // Icon dropped beyond the end of the line
-                        if (x >= buffer.program[y].size) {
-                            x = buffer.program[y].size;
-                            if (buffer.program[y][buffer.program[y].size - 1].id == "nl") {
-                                x--;
-                            }
-                        }
-                        // Split lines
-                        if (c.id == "nl") {
-                            if (!basic_mode)
-                                buffer.insert_new_line(x, y, auto_indent);
-                        }
-                        else {
-                            if (cmd.size >= 2)
-                                c = c.set_data(cmd[1], buffer.resource_dir);
-                            buffer.program[y].insert(x, c);
-                        }
-                        buffer.backup_program();
-                        queue_draw();
-                        Gtk.drag_finish(context, true, false, time);
-                        if (c.id == "tc") {
-                            icon_data_dialog_tc(x, y);
-                        }
-                        else if (c.id == "int") { c = c.set_data("0", buffer.resource_dir); }
-                        continue;
-                    }
-                    catch (FileError e) {}
                 }
-                buffer.selection_phase = SelectionPhase.NOTHING_SELECTED;
+                catch (Error e) {
+                    var dialog = new Gtk.MessageDialog((Gtk.Window)get_toplevel(),
+                                        Gtk.DialogFlags.MODAL,
+                                        Gtk.MessageType.ERROR,
+                                        Gtk.ButtonsType.OK, "");
+                    dialog.text = e.message;
+                    dialog.run(); dialog.destroy();
+                }
                 set_drag_source_active(true);
             }
-            Gtk.drag_finish(context, false, false, time);
+            Gtk.drag_finish(context, success, false, time);
         }
 
         public override bool draw (Cairo.Context cr) {
@@ -714,6 +649,10 @@ namespace Turtlico {
         public void paste() {
             var clipboard = get_clipboard(Gdk.SELECTION_CLIPBOARD);
             string data = clipboard.wait_for_text();
+            paste_data(data);
+        }
+
+        public void paste_data(string data) {
             if (data == null || !data.contains(";") || data == "")
                 return;
             buffer.selection_phase = SelectionPhase.NOTHING_SELECTED;
