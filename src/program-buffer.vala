@@ -187,7 +187,15 @@ namespace Turtlico {
                          throw new IOError.INVALID_DATA(_("Failed to open the file. Error on line: ") + y.to_string());
                     }
                     try {
-                        Command c = find_command_by_id(props[0]);
+                        Command c;
+                        try {
+                            c = find_command_by_id(props[0]);
+                        }
+                        catch (FileError e) {
+                            // Some functions may change their id in the future.
+                            // This keeps backward compatibility with older files
+                            c = find_command_by_id("5_" + props[0].substring(2));
+                        }
                         // Set data only if necessary
                         if (props[1] != "") c = c.set_data(props[1], resource_dir);
 
