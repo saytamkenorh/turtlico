@@ -75,6 +75,8 @@ Module files are json-formated. This is a basic module file with one category an
             }
         ],
         "modules": [
+        ],
+        "events": [
         ]
     }
 
@@ -110,6 +112,24 @@ Example corresponding command definition:
 .. code-block:: json
 
     {"id":"5_sum", "icon":"r:sum.png", "?": 'Returns the sum of two numbers.' , "type": 5, "func": "tcf_sum", "params": "" }
+
+**Events (optional)**
+
+Functions dialog provides an option to create new methods and also automatically connect functions to events.
+
+Properties:
+
+- ``name`` - The name of the event.
+- ``code`` - Default code in newly created function. Use $name to get name of the function.
+- ``connector`` - A piece of code that is used to connect the event to a function in string format. Use $name to get name of the function.
+- ``params`` - Default parameters for functions that are connected to this event.
+
+Example:
+
+.. code-block:: json
+
+    {"name":"Key press", "code":""}
+
 
 Command specification
 ======================
