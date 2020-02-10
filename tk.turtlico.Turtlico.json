@@ -9,6 +9,7 @@
         "--share=ipc",
         "--socket=x11",
         "--socket=wayland",
+        "--socket=pulseaudio",
         "--filesystem=xdg-run/dconf",
         "--filesystem=~/.config/dconf:ro",
         "--filesystem=host",
