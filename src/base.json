@@ -40,6 +40,7 @@
 				{"id":"tcf_collision_rect", "icon":"r:0_collision_rect.png", "?": 'Connect a function to handle collision (in rectangle collider of specified size) between two turtles', "type": 0, "func": "tcf_collision_rect", "params": "" },
 				{"id":"0_undo", "icon":"↶", "?": 'Undo the last turtle action', "type": 0, "func": "undo", "params": "" },
 				{"id":"0_circle", "icon":"◯", "?": 'Circle' , "type": 0, "func": "circle", "params": "" },
+				{"id":"0_turbo", "icon":"r:turbo.png", "?": 'Turbo mode' , "type": 0, "func": "tcf_turbo", "params": "" },
 				{"id":"0_exit", "icon":"r:0_exit.png", "?": 'Exit the program', "type": 0, "func": "sys.exit", "params": "0" }
 			]
 		},
@@ -117,7 +118,7 @@
 				{"id":"5_rand", "icon":"🎲", "?": 'Random number' , "type": 5, "func": "random.randint", "params": "1, 100" },
 				{"id":"5_range", "icon":"r:5_range.png", "?": 'Return list of numbers in specified range' , "type": 5, "func": "range", "params": "1, 10" },
 				{"id":"0_emc", "icon":"👇", "?": 'Connect a function to handle mouse clicks' , "type": 0, "func": "onscreenclick", "params": "" },
-				{"id":"0_ekey", "icon":"⌨", "?": 'Connect a function to handle key presses' , "type": 0, "func": "onkey", "params": "" },
+				{"id":"0_ekey", "icon":"⌨", "?": 'Connect a function to handle key presses' , "type": 0, "func": "tcf_keypress", "params": "" },
 				{"id":"0_tmr", "icon":"⌚", "?": 'Call a function after n miliseconds' , "type": 0, "func": "ontimer", "params": "" },
 				{"id":"5_numi", "icon":"⌨#", "?": 'Number input' , "type": 5, "func": "numinput", "params": "'Number','Enter a number:'" },
 				{"id":"5_stri", "icon":"⌨\"", "?": 'String input' , "type": 5, "func": "textinput", "params": "'String','Enter a string:'" },
@@ -291,9 +292,37 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 		if list[i] == item:\
 			return i\
 	return -1"
+		},
+		{
+			"id": "tcf_turbo",
+			"code": "def tcf_turbo(turbo=False, do_not_render=False):\
+	if turbo == 2: trubo=True; do_not_render=True\
+	delay(0 if turbo else 10)\
+	tracer(not do_not_render)"
+		},
+		{
+			"id": "tcf_keypress",
+			"code": "def tcf_keypress(function, key=None):\
+	if key==None:\
+	    def callback(e):\
+	        mods = []\
+	        if (e.state & 0x4) != 0: mods.append('Control_L')\
+	        if (e.state & 0x8) != 0: mods.append('Alt_L')\
+	        if (e.state & 0x80) != 0: mods.append('Alt_R')\
+	        if (e.state & 0x1) != 0: mods.append('Shift_L')\
+	        function(str(e.keysym), e.char, mods)\
+	    getcanvas().bind('<Key>', callback)\
+	else:\
+	    onkeypress(function, key)"
 		}
 	],
 	"events": [
+	    {
+	        "name": 'Key press',
+	        "code": "",
+	        "connector": "0_ekey;~(;~obj;$name~);~",
+	        "params": "key,char,modifiers"
+	    },
 	    {
 	        "name": 'Specified key press',
 	        "code": "",
