@@ -6,7 +6,7 @@ tab,,;if,,;obj,input,;==,,;str,EOF,;:,,;nl,,;
 tab,,;tab,,;3_b,,;nl,,;
 tab,,;obj,towrite,;2_.,,;0_apnd,,;obj,input,;nl,,;
 nl,,;
-obj,file,;2_assign,,;5_filediag,,;(,,;str,Save file,;sep,,;obj,save,;2_assign,,;true,,;),,;nl,,;
+obj,file,;2_assign,,;5_filediag,,;(,,;str,Save file,;sep,,;obj,save,;2_assign,,;4_true,,;),,;nl,,;
 0_writelines,,;(,,;obj,towrite,;sep,,;obj,file,;),,;nl,,;
 nl,,;
 #,Load data from saved file,;nl,,;
