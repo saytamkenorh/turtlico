@@ -321,7 +321,11 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     parsed = indentation + f.function + "(" + program[y][x+1].data.substring(3) + ")";
                 }
                 else {
-                    parsed = indentation + f.function + "(" + program[y][x+1].id.substring(2) + ")";
+                    try {
+                        var si = find_simple_icon(program[y][x+1].id);
+                        parsed = indentation + f.function + "(" + si.code + ")";
+                    }
+                    catch (FileError e) {}
                 }
                 skip_next_command = true;
             }
@@ -338,6 +342,14 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
         	}
             else output.add(parsed);
             if(skip_next_command) x++;
+        }
+
+        CompilerSimpleIcon find_simple_icon (string id) {
+            foreach(var i in simple_icons) {
+                if(i.id == id)
+                    return i;
+            }
+            throw new FileError.FAILED("Command not found");
         }
     }
 }

@@ -64,8 +64,8 @@
 				{"id":"4_color", "icon":"🎨", "?": 'Color (property or editable)' , "type": -1, "c":"color"},
 				{"id":"4_font", "icon":"Aa", "?": 'Font (property or editable)' , "type": 4, "c":"font", "data-draw": true},
 				{"id":"key", "icon":"r:key.png", "?": 'Key', "type": -1, "data-draw": true, "data-only": false},
-				{"id":"true", "icon":"r:true.png", "?": 'True' , "type": 4, "c":"True"},
-				{"id":"false", "icon":"r:false.png", "?": 'False' , "type": 4, "c":"False"}
+				{"id":"4_true", "icon":"r:true.png", "?": 'True' , "type": 4, "c":"True"},
+				{"id":"4_false", "icon":"r:false.png", "?": 'False' , "type": 4, "c":"False"}
 			]
 		},
 		{
