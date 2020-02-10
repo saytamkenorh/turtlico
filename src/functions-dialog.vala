@@ -32,6 +32,8 @@ namespace Turtlico {
         Gtk.Stack view_stack;
         [GtkChild]
         Gtk.Entry name_entry;
+        [GtkChild]
+        Gtk.Button create_btn;
 
         string selected_event_connector = "";
         string selected_event_code = "";
@@ -87,6 +89,7 @@ namespace Turtlico {
                     rb.show();
                 });
             }
+            view_stack.set_visible_child_name("list");
         }
 
         [GtkCallback]
@@ -106,6 +109,7 @@ namespace Turtlico {
         [GtkCallback]
         void on_add_btn_clicked () {
             view_stack.set_visible_child_name("create");
+            set_default(create_btn);
         }
 
         [GtkCallback]
