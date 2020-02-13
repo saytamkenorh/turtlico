@@ -57,10 +57,10 @@ namespace Turtlico {
                 }
                 // RUN
                 new GLib.Thread<int>(null, ()=>{
-                    string _stdout = "";
                     string _stderr = "";
                     int status = 0;
                     Subprocess subprocess = null;
+                    DataInputStream dise = null;
                     try {
                         var argv = new Gee.LinkedList<string>();
 #if WINDOWS
@@ -84,24 +84,40 @@ namespace Turtlico {
                         if (use_launcher) {
                             var launcher = new SubprocessLauncher(SubprocessFlags.STDERR_PIPE | SubprocessFlags.STDOUT_PIPE);
                             launcher.setenv("G_MESSAGES_DEBUG", "all", true);
+                            launcher.setenv("PYTHONUNBUFFERED", "x", true);
                             subprocess = launcher.spawnv(argv.to_array());
                         }
                         else {
                             subprocess = new Subprocess(SubprocessFlags.STDERR_PIPE | SubprocessFlags.STDOUT_PIPE, "python3w", path);
                         }
-
+                        dise = new DataInputStream (subprocess.get_stderr_pipe());
+                        // Force program exit on error
+                        dise.read_line_async.begin(Priority.DEFAULT, debug_cancellable, (obj, res) =>{
+                            try {
+                                _stderr = dise.read_line_async.end(res);
+                                _stderr += "\n";
+                            } catch (Error e) {}
+                            string read = "";
+                            bool indent = false;
+                            // Wait for complete error report before killing the program
+                            while (read != null) {
+                                try {
+                                    if (read.has_prefix(" ")) indent = true;
+                                    else if (indent) break;
+                                    read = dise.read_line();
+                                    _stderr += read;
+                                    _stderr += "\n";
+                                } catch (Error e) {}
+                            }
+                            debug_cancellable.cancel(); // Kill child process
+                        });
                         subprocess.wait(debug_cancellable);
-                        var dis = new DataInputStream (subprocess.get_stdout_pipe());
-                        _stdout = dis.read_upto("\0", 1, null);
-                        dis.close();
-                        dis = new DataInputStream (subprocess.get_stderr_pipe());
-                        _stderr = dis.read_upto("\0", 1, null);
-                        dis.close();
                         status = subprocess.get_status();
                     }
                     catch (IOError e) {
                         if (subprocess != null) {
                             subprocess.force_exit();
+                            try { subprocess.wait(); } catch {}
 #if TURTLICO_FLATPAK_NO_SANDBOX
                             try {
                                 if (_stdout == "") {
@@ -126,36 +142,40 @@ namespace Turtlico {
                             return false;
                         });
                     }
-                    debug(_("stdout of child process:\n") + _stdout);
+                    while (dise.has_pending()) {Thread.usleep(1000);}
+                    dise.close();
                     debug(_("stderr of child process:\n") + _stderr);
                     Idle.add(()=>{
                         debug_running = false;
                         // Show error dialog
-                        if (status != 0 && _stderr != "") {
-                            string[] err_lines = _stderr.split("\n");
-                            string error = err_lines[err_lines.length - 2];
+                        if (_stderr != null && _stderr != "") {
                             if (_stderr.contains("turtle.Terminator"))
+                                return false;
+                            string error = "";
+                            string [] err_lines = _stderr.split("\n");
+                            if (err_lines.length >= 3)
+                                error = err_lines[err_lines.length - 2];
+                            else
                                 return false;
                             // Extracts line
                             if (settings.get_boolean("debug-data")) {
                                 Gee.ArrayList<string> words = new Gee.ArrayList<string>.wrap(_stderr.split(" "));
-                                int i = 0;
-                                bool search_for_line = false;
-                                for (int index = 0; index < words.size; index ++) {
-                                    if (words[index].contains(path))
-                                        search_for_line = true;
-                                    if (search_for_line && words[index] == "line") {
-                                        i = index;
-                                        break;
+                                int i = -1;
+                                for (int index = 0; index < words.size; index++) {
+                                    if (words[index].contains(path)) {
+                                        if (index < words.size - 1 && words[index + 1] == "line") {
+                                            i = index + 2;
+                                        }
                                     }
                                 }
-                                int code_line = int.parse(words[i + 1].replace(",", ""));
-                                debug(words[i + 1]);
-                                code_line--; // Python indexes lines from 1
-                                int line = compiler.out_line_to_src_line(buffer.program, code_line);
-                                if (line >= 0) {
-                                    line++; // We show line numbers indexed from 1 to user
-                                    error += "\n" + _("Error occurred at line ") + line.to_string();
+                                if (i >= 0 && i < words.size) {
+                                    int code_line = int.parse(words[i].replace(",", ""));
+                                    code_line--; // Python indexes lines from 1
+                                    int line = compiler.out_line_to_src_line(buffer.program, code_line);
+                                    if (line >= 0) {
+                                        line++; // We show line numbers indexed from 1 to user
+                                        error += "\n" + _("Error occurred at line ") + line.to_string();
+                                    }
                                 }
                             }
 
