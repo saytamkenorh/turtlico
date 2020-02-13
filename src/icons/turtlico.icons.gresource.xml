@@ -39,6 +39,9 @@
     <file>5_subdirs.png</file>
     <file>5_dirname.png</file>
     <file>5_basename.png</file>
+    <file>time.png</file>
+    <file>time_strf.png</file>
+    <file>time_strp.png</file>
     <file>multimedia.png</file>
   </gresource>
 </gresources>

@@ -143,7 +143,7 @@ namespace Turtlico {
                         });
                     }
                     while (dise.has_pending()) {Thread.usleep(1000);}
-                    dise.close();
+                    try { dise.close(); } catch {}
                     debug(_("stderr of child process:\n") + _stderr);
                     Idle.add(()=>{
                         debug_running = false;

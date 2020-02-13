@@ -61,12 +61,15 @@
 				{"id":"5_abs", "icon":"abs", "?": 'Absolute value', "type": 5, "func": "abs", "params": ""},
 				{"id":"5_rad", "icon":"rad", "?": 'Convert angle from degrees to radians.', "type": 5, "func": "math.radians", "params": ""},
 				{"id":"5_deg", "icon":"deg", "?": 'Convert angle from radians to degrees.', "type": 5, "func": "math.degrees", "params": ""},
+				{"id":"4_true", "icon":"r:true.png", "?": 'True' , "type": 4, "c":"True"},
+				{"id":"4_false", "icon":"r:false.png", "?": 'False' , "type": 4, "c":"False"},
 				{"id":"5_rnd", "icon":"rnd", "?": 'Round a number', "type": 5, "func": "round", "params": ""},
+				{"id":"5_floor", "icon":"flr", "?": 'Floor', "type": 5, "func": "math.floor", "params": ""},
+				{"id":"5_ceil", "icon":"ceil", "?": 'Ceil', "type": 5, "func": "math.ceil", "params": ""},
+				{"id":"5_sqrt", "icon":"sqrt", "?": 'Returns square root of n. Use ** for int powers.', "type": 5, "func": "math.sqrt", "params": ""},
 				{"id":"4_color", "icon":"🎨", "?": 'Color (property or editable)' , "type": -1, "c":"color"},
 				{"id":"4_font", "icon":"Aa", "?": 'Font (property or editable)' , "type": 4, "c":"font", "data-draw": true},
-				{"id":"key", "icon":"r:key.png", "?": 'Key', "type": -1, "data-draw": true, "data-only": false},
-				{"id":"4_true", "icon":"r:true.png", "?": 'True' , "type": 4, "c":"True"},
-				{"id":"4_false", "icon":"r:false.png", "?": 'False' , "type": 4, "c":"False"}
+				{"id":"key", "icon":"r:key.png", "?": 'Key', "type": -1, "data-draw": true, "data-only": false}
 			]
 		},
 		{
@@ -138,7 +141,10 @@
 				{"id":"5_subfiles", "icon":"r:5_subfiles.png", "?": 'Get files in DIRECTORY' , "type": 5, "func": "tcf_subfiles", "params": "" },
 				{"id":"5_subdirs", "icon":"r:5_subdirs.png", "?": 'Get subdirs in DIRECTORY' , "type": 5, "func": "tcf_subdirs", "params": "" },
 				{"id":"5_dirname", "icon":"r:5_dirname.png", "?": 'Get parent directory / the directory the item is located in' , "type": 5, "func": "os.path.dirname", "params": "" },
-				{"id":"5_basename", "icon":"r:5_basename.png", "?": 'Get file name from path' , "type": 5, "func": "os.path.basename", "params": "" }
+				{"id":"5_basename", "icon":"r:5_basename.png", "?": 'Get file name from path' , "type": 5, "func": "os.path.basename", "params": "" },
+				{"id":"5_time", "icon":"r:time.png", "?": 'Get current timestamp' , "type": 5, "func": "time.time", "params": "" },
+				{"id":"5_timestrf", "icon":"r:time_strf.png", "?": 'Convert timestamp to string (time, format)' , "type": 5, "func": "tcf_strftime", "params": "" },
+				{"id":"5_timestrp", "icon":"r:time_strp.png", "?": 'Convert string to timestamp (string time, format)' , "type": 5, "func": "tcf_strptime", "params": "" }
 			]
 		}
 	],
@@ -314,6 +320,17 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 	    getcanvas().bind('<Key>', callback)\
 	else:\
 	    onkeypress(function, key)"
+		},
+		{
+			"id": "tcf_strftime",
+			"code": "def tcf_strftime(time, format='%d/%m/%y %H:%M:%S'):\
+	return datetime.fromtimestamp(time).strftime(format)"
+		}
+		,
+		{
+			"id": "tcf_strptime",
+			"code": "def tcf_strptime(string_time, format='%d/%m/%y %H:%M:%S'):\
+	return datetime.timestamp(datetime.strptime(string_time, format))"
 		}
 	],
 	"events": [
