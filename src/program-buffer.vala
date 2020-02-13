@@ -476,7 +476,8 @@ namespace Turtlico {
             else {
                 var commands = icons.split(ProgramBuffer.str_mark_utf8);
                 foreach (var c in commands) {
-                    data.add(new Gee.ArrayList<string>.wrap(c.split(";")));
+                    debug(c);
+                    data.add(new Gee.ArrayList<string>.wrap(c.split(";", 2)));
                 }
             }
             for (int index = data.size - 1; index >= 0; index--) {

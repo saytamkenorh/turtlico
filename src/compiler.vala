@@ -302,7 +302,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
             // Can check next icon
             bool check_next_icon = x + 1 < program[y].size;
             string parsed = "";
-            if (f.id == "5_img") {
+            if (f.id == "5_img" && program[y][x].data != "") {
                 parsed = indentation + f.function + "('" + program[y][x].data + "')";
             }
             else if (check_next_icon && program[y][x + 1].id == "(") {
@@ -344,7 +344,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
             if(skip_next_command) x++;
         }
 
-        CompilerSimpleIcon find_simple_icon (string id) {
+        CompilerSimpleIcon find_simple_icon (string id) throws FileError {
             foreach(var i in simple_icons) {
                 if(i.id == id)
                     return i;
