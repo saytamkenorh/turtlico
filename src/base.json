@@ -168,13 +168,13 @@
 			"id": "tcf_filedialog",
 			"code": "def tcf_filedialog(text = 'Choose a file', filter = 'All files | *', save = False):\
 	if sys.platform.startswith('linux'):\
-		from subprocess import Popen, PIPE\
+		from subprocess import Popen, PIPE, DEVNULL\
 		my_env=os.environ.copy()\
 		my_env['G_MESSAGES_DEBUG']=''\
 		if save: save = '--save'\
 		else: save = ''\
 		proc = Popen(['zenity', '--file-selection', '--title', text,\
-                	 '--file-filter', filter, save], stdout=PIPE, env=my_env)\
+                	 '--file-filter', filter, save], stdout=PIPE, stderr=DEVNULL, stdin=DEVNULL, env=my_env)\
 		(output, err) = proc.communicate(); proc.wait()\
 		output = output.decode().replace('\\n', ''); return output\
 	else:\
