@@ -31,9 +31,23 @@
 		},
 		{
 			"id": "tcf_rpi_event_off",
-			"code": "def tcf_rpi_event(obj, function):\
+			"code": "def tcf_rpi_event_off(obj, function):\
 	if (type(obj) is Button):\
 		obj.when_released = function"
 		}
+	],
+	"events": [
+	    {
+	        "name": 'RPi device activated',
+	        "code": "",
+	        "connector": "0_rpievent;~(;~obj;device~sep;~obj;$name~);~",
+	        "params": ""
+	    },
+	    {
+	        "name": 'RPi device deactivated',
+	        "code": "",
+	        "connector": "0_rpieventoff;~(;~obj;device~sep;~obj;$name~);~",
+	        "params": ""
+	    }
 	]
 }

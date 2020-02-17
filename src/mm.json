@@ -5,6 +5,7 @@
 			"icon" : "r:multimedia.png",
 			"commands": [
 				{"id":"5_mm_ef_s", "icon":"r:multimedia.png", "?": 'Create sound player for a file' , "type": 5, "func": "tcf_mm_player", "params": "" },
+				{"id":"5_mm_tone", "icon":"🎺", "?": 'Play tone (frequency/C-B, duration, wait for end)' , "type": 5, "func": "tcf_mm_tone", "params": "" },
 				{"id":"0_mm_ps", "icon":"▶️", "?": 'Play sound (file or sound player, volume - optional)', "type": 0, "func": "tcf_mm_play_sound", "params": "" },
 				{"id":"0_mm_ss", "icon":"⏸️", "?": 'Pause sound player', "type": 0, "func": "tcf_mm_player_pause", "params": "" },
 				{"id":"5_mm_ef_s_status", "icon":"?⏯️", "?": 'is player playing' , "type": 5, "func": "tcf_mm_player_get_playing", "params": "" },
@@ -43,6 +44,26 @@ Gst.init(sys.argv)"
 	if Gst.uri_is_valid(file): uri = file\
 	else: uri = Gst.filename_to_uri(file)\
 	pl.set_property('uri', uri)\
+	return pl"
+		},
+		{
+			"id": "tcf_mm_tone",
+			"code": "def tcf_mm_tone(frequency, duration = 500, wait_for_end = True):\
+	if isinstance(frequency, str):\
+	    frequencies = {'C': 261.6, 'D': 293.66, 'E': 329.62, 'F': 349.22, 'G': 391.99, 'A': 440, 'B': 493.88}\
+	    frequency = frequencies[frequency]\
+	pl = Gst.Pipeline(name='note')\
+	source = Gst.ElementFactory.make('audiotestsrc', 'src')\
+	sink = Gst.ElementFactory.make('autoaudiosink', 'output')\
+	source.set_property('freq', frequency)\
+	pl.add(source); pl.add(sink); source.link(sink)\
+	pl.set_state(Gst.State.PLAYING)\
+	def stop():\
+	    pl.set_state(Gst.State.NULL)\
+	    return False\
+	if wait_for_end:\
+	    time.sleep(duration / 1000); stop()\
+	elif duration != 0: ontimer(stop, duration)\
 	return pl"
 		},
 		{
