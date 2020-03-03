@@ -47,6 +47,11 @@
     <property name="can_focus">False</property>
     <property name="icon_name">applications-utilities</property>
   </object>
+  <object class="GtkImage" id="left_bar_btn_img">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sidebar-hide-symbolic</property>
+  </object>
   <object class="GtkImage" id="run_btn_image">
     <property name="name">runBtnImg</property>
     <property name="visible">True</property>
@@ -274,23 +279,51 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkEventBox" id="categories_box_eb">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="events">GDK_STRUCTURE_MASK | GDK_SCROLL_MASK</property>
-                <signal name="scroll-event" handler="on_categories_box_eb_scroll_event" swapped="no"/>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox" id="categories_box">
+                  <object class="GtkEventBox" id="categories_box_eb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="border_width">3</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">3</property>
+                    <property name="events">GDK_STRUCTURE_MASK | GDK_SCROLL_MASK</property>
                     <signal name="scroll-event" handler="on_categories_box_eb_scroll_event" swapped="no"/>
                     <child>
-                      <placeholder/>
+                      <object class="GtkBox" id="categories_box">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="border_width">3</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">3</property>
+                        <signal name="scroll-event" handler="on_categories_box_eb_scroll_event" swapped="no"/>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="left_bar_btn">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">left_bar_btn_img</property>
+                    <property name="relief">none</property>
+                    <property name="always_show_image">True</property>
+                    <signal name="clicked" handler="on_left_bar_btn_clicked" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -300,7 +333,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkScrolledWindow" id="cmd_view_sw">
                 <property name="width_request">220</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

@@ -31,6 +31,8 @@ namespace Turtlico {
         [GtkChild]
         Gtk.IconView cmd_view;
         [GtkChild]
+        Gtk.ScrolledWindow cmd_view_sw;
+        [GtkChild]
         Gtk.ScrolledWindow icons_scrolled_window;
         public ProgramView programview;
 
@@ -63,6 +65,21 @@ namespace Turtlico {
         }
 
         Settings settings = new Settings("tk.turtlico.Turtlico");
+
+        [GtkChild]
+        Gtk.Image left_bar_btn_img;
+        private bool _left_bar_pinned = true;
+        bool left_bar_pinned {
+            get {return _left_bar_pinned;}
+            set {
+                _left_bar_pinned = value;
+                if (_left_bar_pinned) cmd_view_sw.show();
+                else cmd_view_sw.hide();
+                string i = _left_bar_pinned ? "sidebar-hide-symbolic" : "sidebar-show-symbolic";
+                left_bar_btn_img.set_from_icon_name(i, Gtk.IconSize.BUTTON);
+                settings.set_boolean("left-sidebar-pinned", _left_bar_pinned);
+            }
+        }
 
 		public Window (Gtk.Application app) {
 			Object (application: app);
@@ -128,6 +145,10 @@ namespace Turtlico {
                 status_label.label = "";
                 return false;
             });
+            programview.button_release_event.connect((button)=>{
+                if (!left_bar_pinned) cmd_view_sw.hide();
+                return false;
+            });
             // Debugger
             debugger.on_error.connect((title, message)=>{
                 msg(title, message, Gtk.MessageType.ERROR);
@@ -152,6 +173,7 @@ namespace Turtlico {
 
 			update_window_title();
 			show_all();
+			left_bar_pinned = settings.get_boolean("left-sidebar-pinned");
 			programview.grab_focus();
 #if LINUX && !TURTLICO_FLATPAK
 			linux_check_deps(this);
@@ -194,6 +216,7 @@ namespace Turtlico {
 		[GtkCallback]
 		void on_cmd_view_drag_end (Gdk.DragContext context) {
             cmd_view.unselect_all();
+            if (!left_bar_pinned) cmd_view_sw.hide();
 		}
 
 		[GtkCallback]
@@ -423,8 +446,9 @@ namespace Turtlico {
                         Gtk.RadioButton rb = (Gtk.RadioButton)categories_box.get_children().nth_data(0);
                         button.join_group(rb);
                     }
-                    button.toggled.connect((btn)=>{
-                        if(btn.active) cmd_view.set_model(ls);
+                    button.clicked.connect((btn)=>{
+                        cmd_view.set_model(ls);
+                        cmd_view_sw.show();
                     });
                     categories_box.pack_start(button, false, false);
                     // Add commands to prograview and liststore
@@ -584,6 +608,11 @@ namespace Turtlico {
         [GtkCallback]
         void on_search_btn_toggled () {
             search_bar.set_search_mode(search_btn.active);
+        }
+
+        [GtkCallback]
+        void on_left_bar_btn_clicked() {
+            left_bar_pinned = !left_bar_pinned;
         }
 	}
 }

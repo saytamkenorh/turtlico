@@ -29,6 +29,10 @@
            If enabled, the app inserts automatically tabulators on new line when enter icon is dropped into the program.
       </description>
     </key>
+    <key name="left-sidebar-pinned" type="b">
+      <default>true</default>
+      <summary>Left sidebar pinned</summary>
+    </key>
   </schema>
 </schemalist>
 
