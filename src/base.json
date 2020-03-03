@@ -41,6 +41,7 @@
 				{"id":"0_undo", "icon":"↶", "?": 'Undo the last turtle action', "type": 0, "func": "undo", "params": "" },
 				{"id":"0_circle", "icon":"◯", "?": 'Circle' , "type": 0, "func": "circle", "params": "" },
 				{"id":"0_turbo", "icon":"r:turbo.png", "?": 'Turbo mode' , "type": 0, "func": "tcf_turbo", "params": "" },
+				{"id":"5_screenp", "icon":"r:screenprop.png", "?": 'Camera properties' , "type": 5, "func": "tcf_screenprop", "params": "" },
 				{"id":"0_exit", "icon":"r:0_exit.png", "?": 'Exit the program', "type": 0, "func": "sys.exit", "params": "0" }
 			]
 		},
@@ -304,6 +305,7 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 			"code": "def tcf_turbo(turbo=False, do_not_render=False):\
 	if turbo == 2: trubo=True; do_not_render=True\
 	delay(0 if turbo else 10)\
+	speed(0 if turbo else 1)\
 	tracer(not do_not_render)"
 		},
 		{
@@ -325,12 +327,24 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 			"id": "tcf_strftime",
 			"code": "def tcf_strftime(time, format='%d/%m/%y %H:%M:%S'):\
 	return datetime.fromtimestamp(time).strftime(format)"
-		}
-		,
+		},
 		{
 			"id": "tcf_strptime",
 			"code": "def tcf_strptime(string_time, format='%d/%m/%y %H:%M:%S'):\
 	return datetime.timestamp(datetime.strptime(string_time, format))"
+		},
+		{
+			"id": "tcf_screenprop",
+			"code": "def tcf_screenprop(cam_x = None, cam_y = None):\
+	global tcf_cam_x; global tcf_cam_y\
+	if cam_x == None: return (tcf_cam_x, tcf_cam_y)\
+	tcf_cam_x = int(cam_x); tcf_cam_y = int(cam_y)\
+	h = window_height(); w = window_width()\
+	screensize(max(abs(tcf_cam_x) * 2 + w, w * 2), max(abs(tcf_cam_y) * 2 + h, h * 2))\
+	canvas = getcanvas()\
+	canvas.config(xscrollincrement=1)\
+	canvas.config(yscrollincrement=1)\
+	canvas.xview_scroll(tcf_cam_x, 'units'); canvas.yview_scroll(-tcf_cam_y, 'units')"
 		}
 	],
 	"events": [
