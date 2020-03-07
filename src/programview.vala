@@ -326,23 +326,23 @@ namespace Turtlico {
             cr.rectangle(x, y, cell_width * width, cell_height);
             cr.fill();
 
-            // Pixbuf icons
-            if (c.pixbuf != null) {
-                Cairo.Surface pb = Gdk.cairo_surface_create_from_pixbuf(c.pixbuf, get_scale_factor(), get_window());
-                cr.set_source_surface(pb,
-                    x + cell_width * width / 2 - c.pixbuf.width / get_scale_factor() / 2,
-                    y + cell_height / 2 - c.pixbuf.height / get_scale_factor() / 2);
-                cr.paint();
-                if (!c.draw_params.data_draw)
-                    return 1;
-            }
-
-            cr.move_to(x, y + 5); // Center of the icon
-            Gdk.cairo_set_source_rgba(cr, c.draw_params.fg_color); // Foreground color
-
-            // Draw emoji icon
-            if (!c.name.has_suffix(".png") && !c.name.has_suffix(".svg")){
-                if (c.data == "" || (c.draw_params.data_draw && !c.draw_params.data_only) || c.id == "4_color") {
+            // Draw icon
+            // Does not draw icon if icon draw params are set to data only but it will draw icon if data is empty
+            if (!(c.draw_params.data_draw && c.draw_params.data_only) || c.data == "") {
+                if (c.pixbuf != null) {
+                    // Pixbuf icon
+                    Cairo.Surface pb = Gdk.cairo_surface_create_from_pixbuf(c.pixbuf, get_scale_factor(), get_window());
+                    cr.set_source_surface(pb,
+                        x + cell_width * width / 2 - c.pixbuf.width / get_scale_factor() / 2,
+                        y + cell_height / 2 - c.pixbuf.height / get_scale_factor() / 2);
+                    cr.paint();
+                    if (!c.draw_params.data_draw)
+                        return 1;
+                }
+                else {
+                    // Emoji icon
+                    cr.move_to(x, y + 5); // Center of the icon
+                    Gdk.cairo_set_source_rgba(cr, c.draw_params.fg_color); // Foreground color
                     string text;
                     if (c.id == "4_color" && c.data != "") {
                         text = "⬤";
@@ -356,6 +356,7 @@ namespace Turtlico {
                 }
             }
             // Draw data
+            cr.move_to(x, y + 5); // Center of the icon
             if (c.draw_params.data_draw && c.data != "") {
                 if (!c.draw_params.data_only)
                     cr.move_to(x, y + cell_height - 15); // Draw data under the icon if we draw both
