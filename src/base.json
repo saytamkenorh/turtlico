@@ -30,7 +30,7 @@
 				{"id":"0_cs", "icon":"r:0_cs.svg", "?": 'Clear turtle screen' , "type": 0, "func": "clear", "params": "" },
 				{"id":"5_screen_c", "icon":"r:5_screen_c.svg", "?": 'Get or set the color of the screen' , "type": 5, "func": "bgcolor", "params": "" },
 				{"id":"5_screen_i", "icon":"r:5_screen_i.svg", "?": 'Get or set the background picture of the screen' , "type": 5, "func": "bgpic", "params": "" },
-				{"id":"5_img", "icon":"🖼", "?": 'Image' , "type": 0, "func": "tcf_get_image", "params": "", "data-draw": true, "data-color": "#000000" },
+				{"id":"5_img", "icon":"🖼", "?": 'Image' , "type": 0, "func": "tcf_get_image", "params": "", "data-draw": true, "data-only": false, "data-color": "#000000" },
 				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "'turtle'" },
 				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
 				{"id":"5_gett", "icon":"r:5_gett.png", "?": 'Get the predefined turtle object' , "type": 5, "func": "getturtle", "params": "" },
