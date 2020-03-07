@@ -5,44 +5,44 @@
     <file>0_st.png</file>
     <file>0_bf.png</file>
     <file>0_ef.png</file>
-    <file>0_cs.png</file>
-    <file>5_screen_c.png</file>
-    <file>5_screen_i.png</file>
+    <file>0_cs.svg</file>
+    <file>5_screen_c.svg</file>
+    <file>5_screen_i.svg</file>
     <file>3_r.png</file>
     <file>5_gett.png</file>
-    <file>5_plcimg.png</file>
-    <file>0_collision.png</file>
-    <file>0_collision_rect.png</file>
+    <file>5_plcimg.svg</file>
+    <file>0_collision.svg</file>
+    <file>0_collision_rect.svg</file>
     <file>turbo.png</file>
-    <file>screenprop.png</file>
-    <file>0_exit.png</file>
-    <file>key.png</file>
+    <file>screenprop.svg</file>
+    <file>0_exit.svg</file>
+    <file>key.svg</file>
     <file>true.png</file>
     <file>false.png</file>
     <file>0_apnd.png</file>
     <file>0_ins.png</file>
     <file>0_clr.png</file>
     <file>5_index.png</file>
-    <file>0_sspl.png</file>
-    <file>0_srep.png</file>
+    <file>0_sspl.svg</file>
+    <file>0_srep.svg</file>
     <file>1_while.png</file>
     <file>python.png</file>
-    <file>5_range.png</file>
+    <file>5_range.svg</file>
     <file>raspberrypi.png</file>
-    <file>0_rpion.png</file>
-    <file>0_rpioff.png</file>
+    <file>0_rpion.svg</file>
+    <file>0_rpioff.svg</file>
     <file>0_rpievent.png</file>
     <file>0_rpieventoff.png</file>
-    <file>5_fileis.png</file>
-    <file>5_diris.png</file>
-    <file>open_file.png</file>
-    <file>5_subfiles.png</file>
-    <file>5_subdirs.png</file>
-    <file>5_dirname.png</file>
-    <file>5_basename.png</file>
-    <file>time.png</file>
-    <file>time_strf.png</file>
-    <file>time_strp.png</file>
-    <file>multimedia.png</file>
+    <file>5_fileis.svg</file>
+    <file>5_diris.svg</file>
+    <file>open_file.svg</file>
+    <file>5_subfiles.svg</file>
+    <file>5_subdirs.svg</file>
+    <file>5_dirname.svg</file>
+    <file>5_basename.svg</file>
+    <file>time.svg</file>
+    <file>time_strf.svg</file>
+    <file>time_strp.svg</file>
+    <file>multimedia.svg</file>
   </gresource>
 </gresources>

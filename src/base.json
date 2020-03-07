@@ -27,22 +27,22 @@
 				{"id":"0_wr", "icon":"✍", "?": 'Write text on screen' , "type": 0, "func": "write", "params": "" },
 				{"id":"0_bf", "icon":"r:0_bf.png", "?": 'Begin fill' , "type": 0, "func": "begin_fill", "params": "" },
 				{"id":"0_ef", "icon":"r:0_ef.png", "?": 'End fill - fill the drawn shape' , "type": 0, "func": "end_fill", "params": "" },
-				{"id":"0_cs", "icon":"r:0_cs.png", "?": 'Clear turtle screen' , "type": 0, "func": "clear", "params": "" },
-				{"id":"5_screen_c", "icon":"r:5_screen_c.png", "?": 'Get or set the color of the screen' , "type": 5, "func": "bgcolor", "params": "" },
-				{"id":"5_screen_i", "icon":"r:5_screen_i.png", "?": 'Get or set the background picture of the screen' , "type": 5, "func": "bgpic", "params": "" },
+				{"id":"0_cs", "icon":"r:0_cs.svg", "?": 'Clear turtle screen' , "type": 0, "func": "clear", "params": "" },
+				{"id":"5_screen_c", "icon":"r:5_screen_c.svg", "?": 'Get or set the color of the screen' , "type": 5, "func": "bgcolor", "params": "" },
+				{"id":"5_screen_i", "icon":"r:5_screen_i.svg", "?": 'Get or set the background picture of the screen' , "type": 5, "func": "bgpic", "params": "" },
 				{"id":"5_img", "icon":"🖼", "?": 'Image' , "type": 0, "func": "tcf_get_image", "params": "", "data-draw": true, "data-color": "#000000" },
 				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "'turtle'" },
 				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
 				{"id":"5_gett", "icon":"r:5_gett.png", "?": 'Get the predefined turtle object' , "type": 5, "func": "getturtle", "params": "" },
-				{"id":"5_plcimg", "icon":"r:5_plcimg.png", "?": 'Place image at the position of the turtle' , "type": 5, "func": "tcf_place_img", "params": "" },
+				{"id":"5_plcimg", "icon":"r:5_plcimg.svg", "?": 'Place image at the position of the turtle' , "type": 5, "func": "tcf_place_img", "params": "" },
 				{"id":"0_sleep", "icon":"💤", "?": 'Sleep n seconds (freezes window)' , "type": 0, "func": "time.sleep", "params": "1" },
-				{"id":"0_collision", "icon":"r:0_collision.png", "?": 'Connect a function to handle collision (in circle collider of specified radius) between two turtles', "type": 0, "func": "tcf_collision", "params": "" },
-				{"id":"tcf_collision_rect", "icon":"r:0_collision_rect.png", "?": 'Connect a function to handle collision (in rectangle collider of specified size) between two turtles', "type": 0, "func": "tcf_collision_rect", "params": "" },
+				{"id":"0_collision", "icon":"r:0_collision.svg", "?": 'Connect a function to handle collision (in circle collider of specified radius) between two turtles', "type": 0, "func": "tcf_collision", "params": "" },
+				{"id":"tcf_collision_rect", "icon":"r:0_collision_rect.svg", "?": 'Connect a function to handle collision (in rectangle collider of specified size) between two turtles', "type": 0, "func": "tcf_collision_rect", "params": "" },
 				{"id":"0_undo", "icon":"↶", "?": 'Undo the last turtle action', "type": 0, "func": "undo", "params": "" },
 				{"id":"0_circle", "icon":"◯", "?": 'Circle' , "type": 0, "func": "circle", "params": "" },
 				{"id":"0_turbo", "icon":"r:turbo.png", "?": 'Turbo mode' , "type": 0, "func": "tcf_turbo", "params": "" },
-				{"id":"5_screenp", "icon":"r:screenprop.png", "?": 'Camera properties' , "type": 5, "func": "tcf_screenprop", "params": "" },
-				{"id":"0_exit", "icon":"r:0_exit.png", "?": 'Exit the program', "type": 0, "func": "sys.exit", "params": "0" }
+				{"id":"5_screenp", "icon":"r:screenprop.svg", "?": 'Camera properties' , "type": 5, "func": "tcf_screenprop", "params": "" },
+				{"id":"0_exit", "icon":"r:0_exit.svg", "?": 'Exit the program', "type": 0, "func": "sys.exit", "params": "0" }
 			]
 		},
 		{
@@ -70,7 +70,7 @@
 				{"id":"5_sqrt", "icon":"sqrt", "?": 'Returns square root of n. Use ** for int powers.', "type": 5, "func": "math.sqrt", "params": ""},
 				{"id":"4_color", "icon":"🎨", "?": 'Color (property or editable)' , "type": -1, "c":"color"},
 				{"id":"4_font", "icon":"Aa", "?": 'Font (property or editable)' , "type": 4, "c":"font", "data-draw": true},
-				{"id":"key", "icon":"r:key.png", "?": 'Key', "type": -1, "data-draw": true, "data-only": false}
+				{"id":"key", "icon":"r:key.svg", "?": 'Key', "type": -1, "data-draw": true, "data-only": false}
 			]
 		},
 		{
@@ -86,8 +86,8 @@
 				{"id":"5_index", "icon":"r:5_index.png", "?": 'Finds index of the occurence of an item in a list or in a string (list, item, start, direction)', "type": 0, "func": "tcf_index", "params": "" },
 				{"id":"0_slo", "icon":"ab", "?": 'Converts a string into lower case', "type": 0, "func": "lower", "params": "" },
 				{"id":"0_sup", "icon":"AB", "?": 'Converts a string into upper case', "type": 0, "func": "upper", "params": "" },
-				{"id":"0_sspl", "icon":"r:0_sspl.png", "?": 'Splits the string at the specified separator, and returns a list', "type": 0, "func": "split", "params": "'\\n'" },
-				{"id":"0_srep", "icon":"r:0_srep.png", "?": 'Replaces a specified phrase with another specified phrase', "type": 0, "func": "replace", "params": "" },
+				{"id":"0_sspl", "icon":"r:0_sspl.svg", "?": 'Splits the string at the specified separator, and returns a list', "type": 0, "func": "split", "params": "'\\n'" },
+				{"id":"0_srep", "icon":"r:0_srep.svg", "?": 'Replaces a specified phrase with another specified phrase', "type": 0, "func": "replace", "params": "" },
 				{"id":"if", "icon":"❔if", "?": 'If statement', "type": 3, "c":"if"},
 				{"id":"else", "icon":"else", "?": 'Else', "type": 3, "c":"else"},
 				{"id":":", "icon":":", "?": 'Begin block of commands', "type": 4, "c":":"},
@@ -99,7 +99,7 @@
 				{"id":"||", "icon":"or", "?": 'or', "type": 4, "c":" or "},
 				{"id":"!", "icon":"not", "?": 'negation', "type": 4, "c":" not "},
 				{"id":"3_def", "icon":"def", "?": 'Define a method', "type": -1, "fg-color": "rgb(0, 0, 128)"},
-				{"id":"3_r", "icon":"r:3_r.png", "?": 'Return a value', "type": 3, "c":"return", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"3_r", "icon":"r:3_r.svg", "?": 'Return a value', "type": 3, "c":"return", "fg-color": "rgb(0, 0, 128)"},
 				{"id":"1_rep", "icon":"🔂", "?": 'Repeat block of commands', "type": -1, "bg-color": "rgb(200, 0, 0)"},
 				{"id":"1_for", "icon":"for", "?": 'For loop', "type": -1, "bg-color": "rgb(200, 0, 0)"},
 				{"id":"in", "icon":"in", "?": 'Is item in a list? / For all items in a collection.', "type": 4, "c":" in "},
@@ -120,7 +120,7 @@
 				{"id":"tc", "icon":"🔄", "?": 'Type conversion', "type": -1, "bg-color": "rgb(255, 140, 0)", "data-draw": true, "data-only": false},
 				{"id":"python", "icon":"r:python.png", "?": 'Direct Python code', "type": -1},
 				{"id":"5_rand", "icon":"🎲", "?": 'Random number' , "type": 5, "func": "random.randint", "params": "1, 100" },
-				{"id":"5_range", "icon":"r:5_range.png", "?": 'Return list of numbers in specified range' , "type": 5, "func": "range", "params": "1, 10" },
+				{"id":"5_range", "icon":"r:5_range.svg", "?": 'Return list of numbers in specified range' , "type": 5, "func": "range", "params": "1, 10" },
 				{"id":"0_emc", "icon":"👇", "?": 'Connect a function to handle mouse clicks' , "type": 0, "func": "onscreenclick", "params": "" },
 				{"id":"0_ekey", "icon":"⌨", "?": 'Connect a function to handle key presses' , "type": 0, "func": "tcf_keypress", "params": "" },
 				{"id":"0_tmr", "icon":"⌚", "?": 'Call a function after n miliseconds' , "type": 0, "func": "ontimer", "params": "" },
@@ -135,17 +135,17 @@
 			"commands" : [
 				{"id":"5_readlines", "icon":"📤", "?": 'Read all lines of a file' , "type": 5, "func": "tcf_readlines", "params": "" },
 				{"id":"0_writelines", "icon":"📥", "?": 'Write lines to a file' , "type": 0, "func": "tcf_writelines", "params": "" },
-				{"id":"5_filediag", "icon":"r:open_file.png", "?": 'File dialog' , "type": 5, "func": "tcf_filedialog", "params": "" },
-				{"id":"5_fileis", "icon":"r:5_fileis.png", "?": 'Check file exists' , "type": 5, "func": "os.path.isfile", "params": "" },
-				{"id":"5_diris", "icon":"r:5_diris.png", "?": 'Check directory exists' , "type": 5, "func": "os.path.isdir", "params": "" },
+				{"id":"5_filediag", "icon":"r:open_file.svg", "?": 'File dialog' , "type": 5, "func": "tcf_filedialog", "params": "" },
+				{"id":"5_fileis", "icon":"r:5_fileis.svg", "?": 'Check file exists' , "type": 5, "func": "os.path.isfile", "params": "" },
+				{"id":"5_diris", "icon":"r:5_diris.svg", "?": 'Check directory exists' , "type": 5, "func": "os.path.isdir", "params": "" },
 				{"id":"0_filedirdel", "icon":"␡", "?": 'Delete file or directory' , "type": 0, "func": "tcf_filedirdel", "params": "" },
-				{"id":"5_subfiles", "icon":"r:5_subfiles.png", "?": 'Get files in DIRECTORY' , "type": 5, "func": "tcf_subfiles", "params": "" },
-				{"id":"5_subdirs", "icon":"r:5_subdirs.png", "?": 'Get subdirs in DIRECTORY' , "type": 5, "func": "tcf_subdirs", "params": "" },
-				{"id":"5_dirname", "icon":"r:5_dirname.png", "?": 'Get parent directory / the directory the item is located in' , "type": 5, "func": "os.path.dirname", "params": "" },
-				{"id":"5_basename", "icon":"r:5_basename.png", "?": 'Get file name from path' , "type": 5, "func": "os.path.basename", "params": "" },
-				{"id":"5_time", "icon":"r:time.png", "?": 'Get current timestamp' , "type": 5, "func": "time.time", "params": "" },
-				{"id":"5_timestrf", "icon":"r:time_strf.png", "?": 'Convert timestamp to string (time, format)' , "type": 5, "func": "tcf_strftime", "params": "" },
-				{"id":"5_timestrp", "icon":"r:time_strp.png", "?": 'Convert string to timestamp (string time, format)' , "type": 5, "func": "tcf_strptime", "params": "" }
+				{"id":"5_subfiles", "icon":"r:5_subfiles.svg", "?": 'Get files in DIRECTORY' , "type": 5, "func": "tcf_subfiles", "params": "" },
+				{"id":"5_subdirs", "icon":"r:5_subdirs.svg", "?": 'Get subdirs in DIRECTORY' , "type": 5, "func": "tcf_subdirs", "params": "" },
+				{"id":"5_dirname", "icon":"r:5_dirname.svg", "?": 'Get parent directory / the directory the item is located in' , "type": 5, "func": "os.path.dirname", "params": "" },
+				{"id":"5_basename", "icon":"r:5_basename.svg", "?": 'Get file name from path' , "type": 5, "func": "os.path.basename", "params": "" },
+				{"id":"5_time", "icon":"r:time.svg", "?": 'Get current timestamp' , "type": 5, "func": "time.time", "params": "" },
+				{"id":"5_timestrf", "icon":"r:time_strf.svg", "?": 'Convert timestamp to string (time, format)' , "type": 5, "func": "tcf_strftime", "params": "" },
+				{"id":"5_timestrp", "icon":"r:time_strp.svg", "?": 'Convert string to timestamp (string time, format)' , "type": 5, "func": "tcf_strptime", "params": "" }
 			]
 		}
 	],

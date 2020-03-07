@@ -2,9 +2,9 @@
 	"name": "Multimedia",
 	"categories": [
 		{
-			"icon" : "r:multimedia.png",
+			"icon" : "r:multimedia.svg",
 			"commands": [
-				{"id":"5_mm_ef_s", "icon":"r:multimedia.png", "?": 'Create sound player for a file' , "type": 5, "func": "tcf_mm_player", "params": "" },
+				{"id":"5_mm_ef_s", "icon":"r:multimedia.svg", "?": 'Create sound player for a file' , "type": 5, "func": "tcf_mm_player", "params": "" },
 				{"id":"5_mm_tone", "icon":"🎺", "?": 'Play tone (frequency/C-B, duration, wait for end)' , "type": 5, "func": "tcf_mm_tone", "params": "" },
 				{"id":"0_mm_ps", "icon":"▶️", "?": 'Play sound (file or sound player, volume - optional)', "type": 0, "func": "tcf_mm_play_sound", "params": "" },
 				{"id":"0_mm_ss", "icon":"⏸️", "?": 'Pause sound player', "type": 0, "func": "tcf_mm_player_pause", "params": "" },
