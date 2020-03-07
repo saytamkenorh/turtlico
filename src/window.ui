@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="image2">
@@ -63,7 +63,7 @@
     <property name="title" translatable="yes">Turtlico</property>
     <property name="default_width">1000</property>
     <property name="default_height">500</property>
-    <child>
+    <child type="titlebar">
       <placeholder/>
     </child>
     <child>
@@ -344,7 +344,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin">6</property>
-                    <property name="item_width">20</property>
+                    <property name="item_width">50</property>
                     <property name="row_spacing">2</property>
                     <property name="column_spacing">2</property>
                     <property name="tooltip_column">1</property>
@@ -352,6 +352,7 @@
                     <signal name="drag-begin" handler="on_cmd_view_drag_begin" swapped="no"/>
                     <signal name="drag-data-get" handler="on_cmd_view_drag_data_get" swapped="no"/>
                     <signal name="drag-end" handler="on_cmd_view_drag_end" swapped="no"/>
+                    <signal name="notify::scale-factor" handler="on_cmd_view_scale_factor_notify" swapped="no"/>
                     <style>
                       <class name="cmdView"/>
                     </style>

@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+ using Gee;
+
 namespace Turtlico {
 	enum CmdViewCols
     {
@@ -96,59 +98,9 @@ namespace Turtlico {
             Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
 
 			// cmd view
-			cmd_view.pixbuf_column = 0;
-            Gtk.drag_source_set(
-                cmd_view,                      // widget will be drag-able
-                Gdk.ModifierType.BUTTON1_MASK, // modifier that will start a drag
-                target_list,                   // lists of target to support
-                Gdk.DragAction.COPY            // what to do with data after dropped
-            );
-            Gtk.drag_dest_set (
-                cmd_view,                       // widget that will accept a drop
-                Gtk.DestDefaults.ALL,           // default actions for dest on DnD
-                target_list,                    // lists of target to support
-                Gdk.DragAction.COPY
-                | Gdk.DragAction.MOVE           // what to do with data after dropped
-            );
-            // delete btn
-            Gtk.drag_dest_set (
-                delete_btn,                     // widget that will accept a drop
-                Gtk.DestDefaults.ALL,           // default actions for dest on DnD
-                target_list,                    // lists of target to support
-                Gdk.DragAction.COPY
-                | Gdk.DragAction.MOVE           // what to do with data after dropped
-            );
+			setup_cmd_view();
             // ProgramView
-            programview = new ProgramView();
-            icons_scrolled_window.add(programview);
-            programview.buffer.notify["program-changed"].connect(()=>{
-                if (programview.buffer.program_changed)
-                    save_btn.sensitive = true;
-                else
-                    save_btn.sensitive = false;
-                update_window_title();
-            });
-            programview.buffer.program_changed = false;
-            programview.motion_notify_event.connect((event)=>{
-                int x = (int)event.x / ProgramView.cell_width;
-                int y = (int)event.y / ProgramView.cell_height;
-                x = programview.mouse_to_program_x(x, y);
-                if (x >= 0 && y >= 0 && programview.buffer.program.size > y && programview.buffer.program[y].size > x) {
-                    status_label.label = (x + 1).to_string() + ":" +  (y + 1).to_string() + " " + programview.buffer.program[y][x].draw_params.help;
-                }
-                else {
-                    status_label.label = "";
-                }
-                return false;
-            });
-            programview.leave_notify_event.connect((event)=>{
-                status_label.label = "";
-                return false;
-            });
-            programview.button_release_event.connect((button)=>{
-                if (!left_bar_pinned) cmd_view_sw.hide();
-                return false;
-            });
+            setup_program_view();
             // Debugger
             debugger.on_error.connect((title, message)=>{
                 msg(title, message, Gtk.MessageType.ERROR);
@@ -183,11 +135,74 @@ namespace Turtlico {
 #endif
 		}
 
+		void setup_cmd_view () {
+            var cell_renderer =  new Gtk.CellRendererPixbuf();
+			cmd_view.pack_start(cell_renderer, false);
+			cmd_view.set_cell_data_func(cell_renderer, (layout, cell, model, iter)=>{
+                Value pixbuf_val;
+                model.get_value(iter, 0, out pixbuf_val);
+                var pixbuf = (Gdk.Pixbuf)pixbuf_val;
+                Cairo.Surface surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, cmd_view.get_scale_factor(), cmd_view.get_window());
+                ((Gtk.CellRendererPixbuf)cell).surface = surface;
+			});
+            Gtk.drag_source_set(
+                cmd_view,                      // widget will be drag-able
+                Gdk.ModifierType.BUTTON1_MASK, // modifier that will start a drag
+                target_list,                   // lists of target to support
+                Gdk.DragAction.COPY            // what to do with data after dropped
+            );
+            Gtk.drag_dest_set (
+                cmd_view,                       // widget that will accept a drop
+                Gtk.DestDefaults.ALL,           // default actions for dest on DnD
+                target_list,                    // lists of target to support
+                Gdk.DragAction.COPY
+                | Gdk.DragAction.MOVE           // what to do with data after dropped
+            );
+            // delete btn
+            Gtk.drag_dest_set (
+                delete_btn,                     // widget that will accept a drop
+                Gtk.DestDefaults.ALL,           // default actions for dest on DnD
+                target_list,                    // lists of target to support
+                Gdk.DragAction.COPY
+                | Gdk.DragAction.MOVE           // what to do with data after dropped
+            );
+		}
+
+		void setup_program_view () {
+            programview = new ProgramView();
+            icons_scrolled_window.add(programview);
+            programview.buffer.notify["program-changed"].connect(()=>{
+                if (programview.buffer.program_changed)
+                    save_btn.sensitive = true;
+                else
+                    save_btn.sensitive = false;
+                update_window_title();
+            });
+            programview.buffer.program_changed = false;
+            programview.motion_notify_event.connect((event)=>{
+                int x = (int)event.x / ProgramView.cell_width;
+                int y = (int)event.y / ProgramView.cell_height;
+                x = programview.mouse_to_program_x(x, y);
+                if (x >= 0 && y >= 0 && programview.buffer.program.size > y && programview.buffer.program[y].size > x) {
+                    status_label.label = (x + 1).to_string() + ":" +  (y + 1).to_string() + " " + programview.buffer.program[y][x].draw_params.help;
+                }
+                else {
+                    status_label.label = "";
+                }
+                return false;
+            });
+            programview.leave_notify_event.connect((event)=>{
+                status_label.label = "";
+                return false;
+            });
+            programview.button_release_event.connect((button)=>{
+                if (!left_bar_pinned) cmd_view_sw.hide();
+                return false;
+            });
+		}
+
 		[GtkCallback]
 		void on_cmd_view_drag_begin (Gdk.DragContext context) {
-            var surface = new Cairo.ImageSurface(Cairo.Format.RGB24,
-                                                 ProgramView.cell_width, ProgramView.cell_height);
-            var ctx = new Cairo.Context(surface);
             if (cmd_view.get_selected_items().length() == 0)
                 return;
             var selected_path = cmd_view.get_selected_items().nth_data(0);
@@ -196,11 +211,11 @@ namespace Turtlico {
             string t;
             cmd_view.get_model().get(selected_iter, CmdViewCols.ID, out t);
             try {
-                programview.draw_icon(ctx, 0, 0, programview.buffer.find_command_by_id(t));
-            }
-            catch {}
-            var pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0, ProgramView.cell_width, ProgramView.cell_height);
-            Gtk.drag_set_icon_pixbuf(context, pixbuf, ProgramView.cell_width / 2, ProgramView.cell_height / 2);
+                ArrayList<ArrayList<Command>> c = new ArrayList<ArrayList<Command>>();
+                c.add(new ArrayList<Command>.wrap({programview.buffer.find_command_by_id(t)}));
+                var surface = programview.get_dnd_surface(c);
+                Gtk.drag_set_icon_surface(context, surface);
+            } catch {}
 		}
 		[GtkCallback]
 		void on_cmd_view_drag_data_get (Gdk.DragContext context, Gtk.SelectionData selection_data, uint info, uint time_) {
@@ -218,6 +233,11 @@ namespace Turtlico {
             cmd_view.unselect_all();
             if (!left_bar_pinned) cmd_view_sw.hide();
 		}
+
+	    [GtkCallback]
+        void on_cmd_view_scale_factor_notify () {
+            load_commands();
+        }
 
 		[GtkCallback]
 		void on_run_btn_clicked() {
@@ -484,11 +504,9 @@ namespace Turtlico {
                         search_widget.replace_entry.buffer.commands.add(c);
                         Gtk.TreeIter iter;
                         ls.append(out iter);
-                        var surface = new Cairo.ImageSurface(Cairo.Format.ARGB32,
-                            ProgramView.cell_width,
-                            ProgramView.cell_height);
-                        var ctx = new Cairo.Context(surface);
-                        programview.draw_icon(ctx, 0, 0, c);
+                        ArrayList<ArrayList<Command>> clist = new ArrayList<ArrayList<Command>>();
+                        clist.add(new ArrayList<Command>.wrap({c}));
+                        var surface = programview.get_dnd_surface(clist);
                         var pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0,
                             surface.get_width(), surface.get_height());
                         ls.set(iter,

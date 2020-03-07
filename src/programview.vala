@@ -317,9 +317,7 @@ namespace Turtlico {
 
         public int draw_icon (Cairo.Context cr, int x, int y, Command c) {
             // Size by the length of data
-            int width = (c.data.length / 7 + 1);
-            if (c.id == "python" || c.id == "4_color")
-                width = 1;
+            int width = get_icon_width(c);
             // Background
             if (high_contrast && c.draw_params.bg_color != color_black)
                 Gdk.cairo_set_source_rgba(cr, color_high_contrast_cell);
@@ -364,10 +362,7 @@ namespace Turtlico {
                 Gdk.cairo_set_source_rgba(cr, c.draw_params.data_color);
                 Pango.cairo_show_layout(cr, data_layout);
             }
-            if (c.draw_params.data_draw)
-                return width;
-            else
-                return 1;
+            return width;
         }
 
         Pango.Layout draw_icon_new_layout (string text, Pango.FontDescription font, int icon_width) {
@@ -377,6 +372,44 @@ namespace Turtlico {
             layout.set_width(cell_width * icon_width * Pango.SCALE);
             layout.set_justify(false);
             return layout;
+        }
+
+        private int get_icon_width (Command c) {
+            int width;
+            if (!c.draw_params.data_draw || c.id == "python" || c.id == "4_color")
+                width = 1;
+            else
+                width = c.data.length / 7 + 1;
+            return width;
+        }
+
+        // Creates a cairo surface that is intended to be set as a DnD icon
+        public Cairo.ImageSurface get_dnd_surface (ArrayList<ArrayList<Command>> commands) {
+            int width_scaled = cell_width * get_scale_factor();
+            int height_scaled = cell_height * get_scale_factor();
+            // Get max width
+            int width = 0;
+            for (int line = 0; line < commands.size; line++) {
+                int w = 0;
+                for (int command = 0; command < commands[line].size; command++) {
+                    w+=get_icon_width(commands[line][command]);
+                }
+                if (w > width) width = w;
+            }
+
+            var surface = new Cairo.ImageSurface(Cairo.Format.RGB24,
+                width_scaled * width, height_scaled * commands.size);
+            surface.set_device_scale(get_scale_factor(), get_scale_factor());
+            var ctx = new Cairo.Context(surface);
+
+            for (int line = 0; line < commands.size; line++) {
+                for (int command = 0; command < commands[line].size; command++) {
+                    draw_icon(ctx, command * cell_width, line * cell_height, commands[line][command]);
+                }
+            }
+
+            surface.set_device_offset(-width_scaled / 2 , -height_scaled / 2);
+            return surface;
         }
 
         void on_drag_begin(Gdk.DragContext context) {
@@ -425,33 +458,10 @@ namespace Turtlico {
                 buffer.selection_start.x = item.x; buffer.selection_end.x = item.x;
                 buffer.selection_start.y = item.y; buffer.selection_end.y = item.y;
             }
-            // Get height
-            int height = (buffer.selection_end.y - buffer.selection_start.y + 1) * cell_height;
-            int width;
-            get_size_request(out width, null);
-            // Draw commands
-            var surface = new Cairo.ImageSurface(Cairo.Format.RGB24,
-                width, height);
-            var ctx = new Cairo.Context(surface);
-            width = 0;
-            int x = 0;
-            int y = -1;
-            buffer.selection_foreach((p)=>{
-                if (p.y > y) {
-                    x = 0;
-                    y = p.y;
-                }
-                x += draw_icon(ctx, x * cell_width, (p.y - buffer.selection_start.y) * cell_height, buffer.program[p.y][p.x]);
-                if (x > width)
-                    width = x;
-            });
-            width = width * cell_width;
-
-            var pixbuf = Gdk.pixbuf_get_from_surface(surface, 0, 0,
-                width, height);
-            // Does not work when copying items
-            // Gtk.drag_source_set_icon_pixbuf(this, pixbuf);
-            Gtk.drag_set_icon_pixbuf(context, pixbuf, cell_width / 2, cell_height / 2);
+            // Set DnD icon
+            var commands = buffer.selection_to_list();
+            var surface = get_dnd_surface(commands);
+            Gtk.drag_set_icon_surface(context, surface);
         }
 
         void on_drag_data_get(Gdk.DragContext context, Gtk.SelectionData selection_data, uint info, uint time_) {
@@ -861,17 +871,9 @@ namespace Turtlico {
             int result = 0;
             int i = 0;
             while (i < x && result < buffer.program[y].size) {
-                if (buffer.program[y][result].id != "python" && buffer.program[y][result].id != "4_color") {
-                    for (int iterator = 0;
-                        iterator < (buffer.program[y][result].data.length / 7) && i < x && result < buffer.program[y].size;
-                        iterator++)
-                    {
-                        i++;
-                    }
-                }
-                if (i >= x) break;
+                i += get_icon_width(buffer.program[y][result]);
+                if (i > x) break;
                 result++;
-                i++;
             }
             if (result < 0) result = 0;
             return result;

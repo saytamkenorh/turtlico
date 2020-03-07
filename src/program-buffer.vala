@@ -246,6 +246,22 @@ namespace Turtlico {
             }
         }
 
+        public ArrayList<ArrayList<Command>> selection_to_list () {
+            ArrayList<ArrayList<Command>> lines  = new ArrayList<ArrayList<Command>>();
+            for (int line = selection_start.y; line <= selection_end.y; line++) {
+                Gee.ArrayList<Command> row = new Gee.ArrayList<Command>();
+                for (int command = 0; command < program[line].size; command++) {
+                    if (line == selection_start.y && command < selection_start.x)
+                        continue;
+                    if (line == selection_end.y && command > selection_end.x)
+                        break;
+                    row.add(program[line][command]);
+                }
+                lines.add(row);
+            }
+            return lines;
+        }
+
         public void selection_delete () {
             for (int line = selection_start.y; line <= selection_end.y; line++) {
                 for (int command = 0; command < program[line].size; command++) {
