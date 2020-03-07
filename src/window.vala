@@ -448,14 +448,22 @@ namespace Turtlico {
                     Gtk.ListStore ls = new Gtk.ListStore(3, typeof(Gdk.Pixbuf), string_type, string_type);
                     string icon = category_node.get_object().get_string_member("icon");
                     var button = new Gtk.RadioButton(null);
-                    if (icon.has_prefix("r:"))
-                        button.image = new Gtk.Image.from_resource(
-                            "/tk/turtlico/Turtlico/icons/" + icon.substring(2));
-                    else if(icon.has_prefix("f:")) {
+
+                    if(icon.has_prefix("f:") || icon.has_prefix("r:")) {
                         try {
-                            var pixbuf = new Gdk.Pixbuf.from_file_at_size(
-                                Path.build_filename(module_dir, icon.substring(2)), 16, 16);
-                            button.image = new Gtk.Image.from_pixbuf(pixbuf);
+                            Gdk.Pixbuf pixbuf;
+                            if (icon.has_prefix("r:")) {
+                                pixbuf = new Gdk.Pixbuf.from_resource_at_scale(
+                                    "/tk/turtlico/Turtlico/icons/" + icon.substring(2),
+                                    24 * get_scale_factor(), 24 * get_scale_factor(), true);
+                            }
+                            else {
+                                pixbuf = new Gdk.Pixbuf.from_file_at_size(
+                                    Path.build_filename(module_dir, icon.substring(2)),
+                                    24 * get_scale_factor(), 24 * get_scale_factor());
+                            }
+                            Cairo.Surface img = Gdk.cairo_surface_create_from_pixbuf(pixbuf, get_scale_factor(), get_window());
+                            button.image = new Gtk.Image.from_surface(img);
                         } catch (Error e) {}
                     }
                     else
@@ -494,7 +502,8 @@ namespace Turtlico {
 
                         var draw_params = new DrawParams(
                             draw_data, data_color, bg_color, fg_color, data_only,
-                            _(command.get_string_member("?")));
+                            _(command.get_string_member("?")),
+                            programview.get_scale_factor());
                         Command c = new Command(command.get_string_member("icon"),
                                                 command.get_string_member("id"), "",
                                                 draw_params, module_dir);

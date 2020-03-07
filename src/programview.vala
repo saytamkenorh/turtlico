@@ -328,9 +328,10 @@ namespace Turtlico {
 
             // Pixbuf icons
             if (c.pixbuf != null) {
-                Gdk.cairo_set_source_pixbuf(cr, c.pixbuf,
-                    x + cell_width * width / 2 - c.pixbuf.width / 2,
-                    y + cell_height / 2 - c.pixbuf.height / 2);
+                Cairo.Surface pb = Gdk.cairo_surface_create_from_pixbuf(c.pixbuf, get_scale_factor(), get_window());
+                cr.set_source_surface(pb,
+                    x + cell_width * width / 2 - c.pixbuf.width / get_scale_factor() / 2,
+                    y + cell_height / 2 - c.pixbuf.height / get_scale_factor() / 2);
                 cr.paint();
                 if (!c.draw_params.data_draw)
                     return 1;
@@ -340,7 +341,7 @@ namespace Turtlico {
             Gdk.cairo_set_source_rgba(cr, c.draw_params.fg_color); // Foreground color
 
             // Draw emoji icon
-            if (!c.name.has_suffix(".png")) {
+            if (!c.name.has_suffix(".png") && !c.name.has_suffix(".svg")){
                 if (c.data == "" || (c.draw_params.data_draw && !c.draw_params.data_only) || c.id == "4_color") {
                     string text;
                     if (c.id == "4_color" && c.data != "") {

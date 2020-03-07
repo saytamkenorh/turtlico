@@ -44,8 +44,9 @@ namespace Turtlico {
             if (name.has_prefix("r:")) {
                 try {
                     string str = name.substring(2);
-                    this._pixbuf = new Gdk.Pixbuf.from_resource(
-                        "/tk/turtlico/Turtlico/icons/" + str);
+                    this._pixbuf = new Gdk.Pixbuf.from_resource_at_scale(
+                        "/tk/turtlico/Turtlico/icons/" + str,
+                        (int)(50 * draw_params.scale), (int)(35 * draw_params.scale), true);
                     this._name = str;
                 }
                 catch {
@@ -56,7 +57,8 @@ namespace Turtlico {
                 try {
                     string str = name.substring(2);
                     this._pixbuf = new Gdk.Pixbuf.from_file_at_size(
-                        Path.build_filename(module_dir, str), 50, 35);
+                        Path.build_filename(module_dir, str),
+                        (int)(50 * draw_params.scale), (int)(35 * draw_params.scale));
                     this._name = str;
                 }
                 catch {
@@ -80,6 +82,7 @@ namespace Turtlico {
                     new_data.has_suffix(".bmp") ||
                     new_data.has_suffix(".gif"))
                 {
+                    // Get Image thumbnail
                     try {
                         string path = new_data;
                         if (path.has_prefix("./")) {
@@ -133,6 +136,7 @@ namespace Turtlico {
         public Gdk.RGBA bg_color;
         public Gdk.RGBA fg_color;
         public bool data_only;
+        public float scale;
 
         public string help;
 
@@ -140,7 +144,8 @@ namespace Turtlico {
             bool data_draw,
             Gdk.RGBA data_color, Gdk.RGBA bg_color, Gdk.RGBA fg_color,
             bool data_only,
-            string help)
+            string help,
+            float scale)
         {
             this.data_draw = data_draw;
             this.data_color = data_color;
@@ -148,6 +153,7 @@ namespace Turtlico {
             this.fg_color = fg_color;
             this.data_only = data_only;
             this.help = help;
+            this.scale = scale;
         }
     }
 }
