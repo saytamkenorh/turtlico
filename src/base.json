@@ -99,7 +99,7 @@
 				{"id":"||", "icon":"or", "?": 'or', "type": 4, "c":" or "},
 				{"id":"!", "icon":"not", "?": 'negation', "type": 4, "c":" not "},
 				{"id":"3_def", "icon":"def", "?": 'Define a method', "type": -1, "fg-color": "rgb(0, 0, 128)"},
-				{"id":"3_r", "icon":"r:3_r.svg", "?": 'Return a value', "type": 3, "c":"return", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"3_r", "icon":"r:3_r.png", "?": 'Return a value', "type": 3, "c":"return", "fg-color": "rgb(0, 0, 128)"},
 				{"id":"1_rep", "icon":"🔂", "?": 'Repeat block of commands', "type": -1, "bg-color": "rgb(200, 0, 0)"},
 				{"id":"1_for", "icon":"for", "?": 'For loop', "type": -1, "bg-color": "rgb(200, 0, 0)"},
 				{"id":"in", "icon":"in", "?": 'Is item in a list? / For all items in a collection.', "type": 4, "c":" in "},
