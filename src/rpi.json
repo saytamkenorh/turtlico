@@ -2,7 +2,7 @@
 	"name": "Raspberry Pi (gpiozero)",
 	"categories": [
 		{
-			"icon" : "r:raspberrypi.png",
+			"icon" : "r:raspberrypi.svg",
 			"commands": [
 				{"id":"5_rpiled", "icon":"LED", "?": 'Connect LED' , "type": 5, "func": "LED", "params": "" },
 				{"id":"5_rpirgb", "icon":"RGB", "?": 'Connect RGB LED' , "type": 5, "func": "RGBLED", "params": "" },

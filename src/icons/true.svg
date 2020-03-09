@@ -7,6 +7,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="50"
@@ -15,12 +16,31 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 5da689c313, 2019-01-14"
-   sodipodi:docname="0_sspl.svg"
-   inkscape:export-filename="/home/matyas/Projects/turtlico/src/icons/0_sspl.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
+   sodipodi:docname="true.svg">
   <defs
-     id="defs2" />
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1507">
+      <stop
+         style="stop-color:#00bc18;stop-opacity:1;"
+         offset="0"
+         id="stop1503" />
+      <stop
+         style="stop-color:#28d23e;stop-opacity:1"
+         offset="1"
+         id="stop1505" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1507"
+       id="linearGradient1509"
+       x1="3.4080939"
+       y1="293.1337"
+       x2="10.20939"
+       y2="289.06296"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -29,8 +49,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="15.839192"
-     inkscape:cx="26.000717"
-     inkscape:cy="12.476408"
+     inkscape:cx="19.238075"
+     inkscape:cy="33.817145"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -57,26 +77,22 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-287.73957)">
+    <path
+       style="fill:none;stroke:url(#linearGradient1509);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 3.6190702,291.0106 2.4214098,2.42141 4.16891,-4.36905"
+       id="path815"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:5.62124491px;line-height:51.30823517px;font-family:sans-serif;letter-spacing:1.01138365px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.15036318"
-       x="0.5569796"
-       y="294.46548"
-       id="text817"><tspan
+       style="font-style:normal;font-weight:normal;font-size:2.73516726px;line-height:24.96540451px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="3.7865965"
+       y="296.36127"
+       id="text821"><tspan
          sodipodi:role="line"
-         id="tspan815"
-         x="0.5569796"
-         y="294.46548"
-         style="letter-spacing:1.01138365px;stroke-width:0.15036318">abc</tspan></text>
-    <path
-       style="fill:#ff0000;stroke:#ff0000;stroke-width:0.26458344px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 4.3570308,289.85628 v 5.02716 z"
-       id="path819"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:#ff0000;stroke:#ff0000;stroke-width:0.26458344px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 8.8721346,289.85612 v 5.02706 z"
-       id="path819-3"
-       inkscape:connector-curvature="0" />
+         id="tspan819"
+         x="3.7865965"
+         y="296.36127"
+         style="stroke-width:0.26458332">True</tspan></text>
   </g>
 </svg>
