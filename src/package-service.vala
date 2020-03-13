@@ -143,7 +143,7 @@ namespace Turtlico {
                     var local = File.new_for_path(path);
                     remote.copy(local, FileCopyFlags.OVERWRITE, null, (current, total)=>{
                         Idle.add(()=>{
-                            progress_bar.pulse();
+                            progress_bar.set_fraction((float)current / total);
                             return false;
                         });
                     });
