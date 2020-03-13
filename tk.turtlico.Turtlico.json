@@ -1,7 +1,7 @@
 {
     "app-id": "tk.turtlico.Turtlico",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "3.34",
+    "runtime-version": "3.36",
     "sdk": "org.gnome.Sdk",
     "command": "turtlico",
     "finish-args": [
@@ -117,8 +117,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://www.python.org/ftp/python/3.7.6/Python-3.7.6.tar.xz",
-                    "sha256" : "55a2cce72049f0794e9a11a84862e9039af9183603b78bc60d89539f82cf533f"
+                    "url" : "https://www.python.org/ftp/python/3.7.7/Python-3.7.7.tar.xz",
+                    "sha256" : "06a0a9f1bf0d8cd1e4121194d666c4e28ddae4dd54346de6c343206599f02136"
                 }
             ]
         },
