@@ -29,6 +29,14 @@ namespace Turtlico {
 	[GtkTemplate (ui = "/tk/turtlico/Turtlico/window.ui")]
 	public class Window : Gtk.ApplicationWindow {
         [GtkChild]
+        Gtk.Box toolbar_box;
+        [GtkChild]
+        Gtk.Box toolbar_box_left;
+        [GtkChild]
+        Gtk.Box toolbar_box_right;
+        [GtkChild]
+        Gtk.HeaderBar csd_headerbar;
+        [GtkChild]
         Gtk.Box categories_box;
         [GtkChild]
         Gtk.IconView cmd_view;
@@ -45,7 +53,7 @@ namespace Turtlico {
         [GtkChild]
         Gtk.Label status_label;
         [GtkChild]
-        Gtk.Image run_btn_image;
+        Gtk.Button run_btn;
         [GtkChild]
         Gtk.ToggleButton search_btn;
         [GtkChild]
@@ -107,8 +115,7 @@ namespace Turtlico {
             });
             debugger.notify["debug-running"].connect(()=>{
                 string icon_name = "media-playback-" + (debugger.debug_running ? "stop" : "start");
-                run_btn_image.set_from_icon_name(
-                     icon_name, Gtk.IconSize.BUTTON);
+                set_csd_icon(run_btn, icon_name);
             });
             // Search Widget
             search_widget = new SearchWidget(programview);
@@ -555,6 +562,54 @@ namespace Turtlico {
             if (key == "auto-indent" || key == "") {
                 programview.auto_indent = settings.get_boolean("auto-indent");
             }
+            if (key == "csd" || key == "") {
+                set_csd(settings.get_boolean("csd"));
+            }
+        }
+
+        void set_csd (bool csd) {
+            // Prevents Window reappearance when csd is not changed
+            if (!csd == (get_titlebar() == null)) return;
+            // Remove right and left toolbar box from its currnet parent
+            toolbar_box.remove(toolbar_box_left);
+            toolbar_box.remove(toolbar_box_right);
+            csd_headerbar.remove(toolbar_box_left);
+            csd_headerbar.remove(toolbar_box_right);
+
+            set_titlebar(null);
+            delete_btn.visible = !csd;
+
+            if (csd) {
+                csd_headerbar.pack_start(toolbar_box_left);
+                csd_headerbar.pack_end(toolbar_box_right);
+                set_titlebar(csd_headerbar);
+                csd_headerbar.show_all();
+            }
+            else {
+                toolbar_box.pack_start(toolbar_box_left, true, true);
+                toolbar_box.pack_end(toolbar_box_right, false, false);
+            }
+            // Reload icons
+            foreach (var child in toolbar_box_left.get_children())
+                set_csd_icon(child);
+            foreach (var child in toolbar_box_right.get_children())
+                set_csd_icon(child);
+            update_window_title();
+        }
+
+        void set_csd_icon (Gtk.Widget widget, owned string icon = "") {
+            if (!(widget is Gtk.Button)) return;
+            Gtk.Button btn = (Gtk.Button)widget;
+            if (btn.image == null) return;
+            if (!(btn.image is Gtk.Image)) return;
+            Gtk.Image img = (Gtk.Image)btn.image;
+            if (icon == "") {
+                icon = img.icon_name;
+                if (icon == null) return;
+                icon = icon.replace("-symbolic", "");
+            }
+            if (this.get_titlebar() != null) icon+="-symbolic";
+            img.set_from_icon_name(icon, Gtk.IconSize.BUTTON);
         }
 
         [GtkCallback]
@@ -629,6 +684,10 @@ namespace Turtlico {
                 name += _("Unnamed");
             else
                 name += current_file.get_basename();
+            if (get_titlebar() != null) {
+                csd_headerbar.set_title(name);
+                return;
+            }
             title = name + " - Turtlico";
         }
 

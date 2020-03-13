@@ -31,6 +31,10 @@ namespace Turtlico {
         Gtk.Switch debug_data_switch;
         [GtkChild]
         Gtk.Switch auto_indent_switch;
+        [GtkChild]
+        Gtk.Switch csd_switch;
+        [GtkChild]
+        Gtk.Label csd_label;
 
         Settings settings = new Settings("tk.turtlico.Turtlico");
 
@@ -47,6 +51,11 @@ namespace Turtlico {
             dark_icons_switch.active = settings.get_boolean("dark-icons");
             debug_data_switch.active = settings.get_boolean("debug-data");
             auto_indent_switch.active = settings.get_boolean("auto-indent");
+            #if LINUX
+            csd_switch.active = settings.get_boolean("csd");
+            csd_switch.visible = true;
+            csd_label.visible = true;
+            #endif
         }
 
         [GtkCallback]
@@ -75,6 +84,11 @@ namespace Turtlico {
         [GtkCallback]
         bool on_auto_indent_switch_state_set(Gtk.Switch sw, bool state) {
             settings.set_boolean("auto-indent", state);
+            return false;
+        }
+        [GtkCallback]
+        bool on_csd_switch_state_set(Gtk.Switch sw, bool state) {
+            settings.set_boolean("csd", state);
             return false;
         }
 	}

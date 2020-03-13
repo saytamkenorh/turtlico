@@ -33,6 +33,10 @@
       <default>true</default>
       <summary>Left sidebar pinned</summary>
     </key>
+    <key name="csd" type="b">
+      <default>false</default>
+      <summary>Use client side decoration</summary>
+    </key>
   </schema>
 </schemalist>
 

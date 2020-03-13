@@ -492,7 +492,7 @@ namespace Turtlico {
             else {
                 var commands = icons.split(ProgramBuffer.str_mark_utf8);
                 foreach (var c in commands) {
-                    debug(c);
+                    //debug(c);
                     data.add(new Gee.ArrayList<string>.wrap(c.split(";", 2)));
                 }
             }
