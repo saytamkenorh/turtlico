@@ -31,10 +31,12 @@ namespace Turtlico {
         Gtk.Switch debug_data_switch;
         [GtkChild]
         Gtk.Switch auto_indent_switch;
+        #if LINUX
         [GtkChild]
         Gtk.Switch csd_switch;
         [GtkChild]
         Gtk.Label csd_label;
+        #endif
 
         Settings settings = new Settings("tk.turtlico.Turtlico");
 

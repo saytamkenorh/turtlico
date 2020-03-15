@@ -76,7 +76,7 @@ namespace Turtlico {
                     // Parse one command
                     Json.Object event = event_node.get_object();
                     Gtk.RadioButton rb = new Gtk.RadioButton.from_widget(rb_none);
-                    rb.label = event.get_string_member("name");
+                    rb.label = _(event.get_string_member("name"));
                     event_type_box.pack_start(rb, false, false, 0);
                     rb.clicked.connect(()=>{
                         if (event.has_member("connector"))
