@@ -1,21 +1,45 @@
-image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:3.36"
-
-cache:
- key: "$CI_JOB_NAME"
- paths:
-  - '.flatpak-builder/downloads'
-  - '.flatpak-builder/git'
-
 variables:
- APP_ID: "tk.turtlico.Turtlico"
- BUNDLE_FILENAME: "turtlico-master.flatpak"
+    APP_ID: "tk.turtlico.Turtlico"
+    BUNDLE_FILENAME: "turtlico-master.flatpak"
+    WINDOWS_INSTALLER_BASENAME: "turtlico-master-setup"
 
-build:
- script:
-  - flatpak-builder --repo=repo --force-clean _build ${APP_ID}.json
-  - flatpak build-bundle ./repo ${BUNDLE_FILENAME} ${APP_ID}
- artifacts:
-  paths:
-   - ${BUNDLE_FILENAME}
-  expire_in: 1 month
+flatpak:
+    stage: build
+    image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:3.36"
+    cache:
+        key: "$CI_JOB_NAME"
+        paths:
+            - '.flatpak-builder/downloads'
+            - '.flatpak-builder/git'
+    script:
+        - flatpak-builder --repo=repo --force-clean _build ${APP_ID}.json
+        - flatpak build-bundle ./repo ${BUNDLE_FILENAME} ${APP_ID}
+    artifacts:
+        paths:
+        - ${BUNDLE_FILENAME}
+        expire_in: 1 month
 
+.shared_windows_runners:
+    tags:
+    - shared-windows
+    - windows
+    - windows-1809
+
+windows:
+    extends:
+        - .shared_windows_runners
+    stage: build
+    script:
+        - Set-Variable -Name "time" -Value (date -Format "%H:%m")
+        - echo ${time}
+        - echo "started by ${GITLAB_USER_NAME}"
+        - choco install msys2 -y
+        - choco install innosetup -y
+        - cd .\windows
+        - filter replace-slash {$_ -replace "\\", "/"}
+        - C:\tools\msys64\usr\bin\bash.exe -lc "$(Get-Location | replace-slash)/build.sh"
+        - iscc .\build\turtlico.iss /Q /O$(Get-Location) /F${WINDOWS_INSTALLER_BASENAME}
+    artifacts:
+        paths:
+        - windows/${WINDOWS_INSTALLER_BASENAME}.exe
+        expire_in: 1 month
