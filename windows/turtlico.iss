@@ -21,13 +21,13 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile=S:\Projects\turtlico\COPYING
+LicenseFile=@PROJECT_DIR@\COPYING
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputDir=S:\Projects
+OutputDir=@PROJECT_DIR@\windows
 OutputBaseFilename=turtlico-setup
-SetupIconFile=S:\Projects\turtlico\src\turtlico.ico
+SetupIconFile=@PROJECT_DIR@\src\turtlico.ico
 Compression=lzma
 SolidCompression=yes
 CloseApplications=force
@@ -44,7 +44,7 @@ Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "S:\Projects\turtlico\windows\output\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "@PROJECT_DIR@\windows\output\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

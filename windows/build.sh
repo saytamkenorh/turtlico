@@ -1,9 +1,17 @@
+MINGW_PREFIX=mingw-w64-x86_64
+# Compile dependencies. Packages that are then bundled to distribution are contained in pkglist.txt file.
+BUILD_DEPS="desktop-file-utils gcc meson pkg-config vala"
+srcdir=$(dirname $0)
+cd $srcdir
+
 pacman -Syu --noconfirm
 pacman -Su --noconfirm
-pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-pkg-config mingw-w64-x86_64-vala \
-mingw-w64-x86_64-meson mingw-w64-x86_64-gtk3 mingw-w64-x86_64-gettext mingw-w64-x86_64-desktop-file-utils \
-mingw-w64-x86_64-libgee mingw-w64-x86_64-gtksourceview4 mingw-w64-x86_64-gst-python mingw-w64-x86_64-python3-pillow --needed --noconfirm
-srcdir=$(pwd)/$line
+pkglist=$(cat ./pkglist.txt | sed ':a;N;$!ba;s/\n/ /g')
+pkglist="$pkglist $BUILD_DEPS"
+pkglist=$(echo $pkglist | sed "s/[^ ]* */$MINGW_PREFIX-&/g")
+pkglist="tar $pkglist" # Packages required for this script
+pacman -S $pkglist --needed --noconfirm
+
 rm -rf ./build
 
 # Workarouds
@@ -11,20 +19,22 @@ rm -rf ./build
 if grep -q appstream_file "../data/meson.build"; then
   sed -i -e '18,32d' ../data/meson.build
 fi
+sed -i 's/^M$//' ./PKGBUILD
 
-pacman -R mingw-w64-x86_64-turtlico --noconfirm
 MINGW_INSTALLS=mingw64 makepkg-mingw -sCf
-pacman -U "$srcdir"*.tar.xz --noconfirm
 
-echo Bundling runtime. This will take a while.
+echo "Bundling runtime. This will take a while."
 rm -rf ./output
-./deploy.sh /mingw64/bin/turtlico.exe "$srcdir/output"
 
-mkdir "$srcdir/output/lib"
-cp -r $1/mingw64/lib/gdk-pixbuf-2.0 "$srcdir/output/lib"
-cp -r $1/mingw64/share/mime "$srcdir/output/share"
-gdk-pixbuf-query-loaders > "$srcdir/output/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+# Copy library stack
+./deploy.sh "$srcdir/output" $MINGW_PREFIX
+# Add it to PATH
+bindir=$(echo "$srcdir/output/bin" | sed -e "s-C:/-/c/-g")
+export PATH="$bindir:$PATH"
 
+gdk-pixbuf-query-loaders.exe > "$srcdir/output/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+
+echo "Removing useless stuff..."
 # Useless Adwaita icons
 rm -rf "$srcdir/output/share/icons/Adwaita/cursors"
 rm -rf "$srcdir/output/share/icons/Adwaita/"*/apps
@@ -39,7 +49,7 @@ rm -rf "$srcdir/output/share/icons/Adwaita/256x256"
 rm -rf "$srcdir/output/share/icons/Adwaita/512x512"
 # Other useless stuff
 rm -rf "$srcdir/output/bin/gtk3-"*
-find "$srcdir/output/bin" -not -name "g*.exe" -name "*.exe" -not -name "*python*" -not -name "update*.exe" -exec rm -f {} \;
+find "$srcdir/output/bin" -not -name "g*" -name "*.exe" -not -name "*python*" -not -name "update-mime-database.exe" -exec rm -f {} \;
 rm -rf "$srcdir/output/share/aclocal"
 rm -rf "$srcdir/output/share/applications"
 rm -rf "$srcdir/output/share/bash-completion"
@@ -58,20 +68,29 @@ rm -rf "$srcdir/output/lib/cmake"
 rm -rf "$srcdir/output/lib/python2.7"
 rm -rf "$srcdir/output/lib/python3.8/test"
 rm -rf "$srcdir/output/lib/pkgconfig"
+rm -rf "$srcdir/output/lib/tk8.6/demos"
 #rm -rf "$srcdir/output/lib/girepository-1.0"
 find "$srcdir/output/lib/python3.8" -name "*.pyc" -exec rm -f {} \;
 find "$srcdir/output/lib" -name "*.a" -exec rm -f {} \;
 find "$srcdir/output/share/locale/"* -maxdepth 0 -not -name "cs" -not -name "en*" -exec rm -rf {} \;
+
 # Bundles turtlico
+echo "Extracting Turtlico package to output directory..."
+cd $srcdir
 tmp=`mktemp -d`
+tar -I zstd -xf ./mingw-w64-x86_64-turtlico-* -C $tmp
 cd $tmp
-tar -xf $srcdir/mingw-w64-x86_64-turtlico-1.0-1-any.pkg.tar.xz
 cp -r $PWD/mingw64/bin "$srcdir/output"
 cp -r $PWD/mingw64/share "$srcdir/output"
-
-glib-compile-schemas "$srcdir/output/share/glib-2.0/schemas"
-update-mime-database "$srcdir/output/share/mime"
-
 cd $srcdir
+rm -rf $tmp
 
-read -n1 -r -p "Press any key to continue..." key
+# Post-inst procedures
+glib-compile-schemas "$srcdir/output/share/glib-2.0/schemas"
+rm "$srcdir/output/bin/glib-compile-schemas.exe"
+update-mime-database.exe "$srcdir/output/share/mime"
+rm "$srcdir/output/bin/update-mime-database"*
+
+# Create ISS file
+rootdir=$(dirname $srcdir) # Get the root dir of the project
+sed 's~@PROJECT_DIR@~'$rootdir'~g' "$rootdir/windows/turtlico.iss" > "$rootdir/windows/build/turtlico.iss"

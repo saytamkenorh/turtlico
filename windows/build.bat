@@ -1,5 +1,5 @@
 @echo off
-set msys=C:\msys64\
-echo The MSYS2 directroy is set to: %msys%. If you need change this visit build.bat file.
+set msys=C:\tools\msys64\
+echo The MSYS2 directroy is set to: %msys%. If you need change this please visit build.bat file.
 pause
-%msys%/mingw64.exe ./build.sh %msys%
+%msys%/mingw64/bin/bash.exe -lc %CD%/build.sh

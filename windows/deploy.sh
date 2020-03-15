@@ -1,44 +1,25 @@
 #! /usr/bin/env sh
 export LANG=en_US.utf8
 
-if [ "$#" -ne 2 ];
-then
-  printf "Usage: ./deploy.sh exe directory\n"
-fi
-
 paccache -rk 1 # Keep only the latest version of packages in cache
 
-list=$(ldd $1 | grep /mingw64 | sed 's/.dll.*/.dll/')
-list="$list python3.exe tcl86.dll tk86.dll"
-#list="$list /min"
-for dll in $list;
-do
-  pkg=`pacman -Qo $dll | sed 's/.* is owned by //' | tr ' ' '-'`
-  pkglist="$pkglist $pkg"
-done
-# remove duplicates
-pkglist=`echo $pkglist | tr ' ' '\n' | sort | uniq`
-printf "$pkglist\n"
-
-mkdir -p "$2"
+mkdir -p "$1"
+pkglist=$(cat ./pkglist.txt | sed ':a;N;$!ba;s/\n/ /g')
 
 tmp=`mktemp -d`
 cd $tmp
 
+# Extract
 for pkg in $pkglist
 do
-  tar -xf /var/cache/pacman/pkg/$pkg-any.pkg.tar.xz
-  # more fine-grained control is possible here
+  version=$(pacman -Qi $2-$pkg | grep Version | uniq |  awk '{print $3}')
+  echo $2-$pkg-$version
+  tar -xf /var/cache/pacman/pkg/$2-$pkg-$version-any.pkg.tar.xz
 done
+echo "Copying files to the output directory..."
+cp -r $PWD/mingw64/bin $1
+cp -r $PWD/mingw64/share $1
+cp -r $PWD/mingw64/lib $1
 
-extra_pkgs="adwaita python3-pillow gstreamer gst-python python3-gobject gobject-introspection-runtime lcms2 libjpeg libtiff openjpeg2 python3-olefile zstd \
-gst-plugins-base gst-plugins-good graphene gmp gsl flac lame libcaca libjpeg libpng libshout libpsl libsoup libvpx mpg123 speex- taglib twolame wavpack libogg libtheora libvorbis- libvorbisidec- opus orc"
-
-for pkg in $extra_pkgs
-do
-  tar -xf /var/cache/pacman/pkg/mingw-w64-x86_64-$pkg*-any.pkg.tar.xz
-done
-
-cp -r $PWD/mingw64/bin $2
-cp -r $PWD/mingw64/share $2
-cp -r $PWD/mingw64/lib $2
+echo "Removing temp folder..."
+rm -rf $tmp
