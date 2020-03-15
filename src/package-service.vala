@@ -103,15 +103,36 @@ namespace Turtlico {
                     parser.load_from_stream_async.end(result);
                     Json.Node node = parser.get_root();
                     string remote_ver = node.get_object().get_string_member("version");
-                    if (remote_ver != TURTLICO_VERSION) {
+                    if (is_version_newer_than(remote_ver, TURTLICO_VERSION)) {
                         download_update(win);
                     }
                 }
                 catch (Error e) {
-                    warning(_("Unable to check for updates") + e.message);
+                    warning(_("Cannot check for updates: ") + e.message);
                 }
             });
-        } catch (Error e) {}
+        } catch (Error e) {
+            warning(_("Cannot check for updates: ") + e.message);
+        }
+    }
+
+    // Returns whether version a is newer than version b
+    // Returns false on error
+    public static bool is_version_newer_than(string a, string b) {
+        string[] parts_a = a.split(".");
+        string[] parts_b = b.split(".");
+        for (int i = 0; i < parts_a.length; i++) {
+            if (i >= parts_b.length) return true;
+
+            int part_a;
+            if (!int.try_parse(parts_a[i], out part_a)) return false;
+            int part_b;
+            if (!int.try_parse(parts_b[i], out part_b)) return false;
+            // Continues if current part is equal
+            if (part_a < part_b) return false;
+            if (part_a > part_b) return true;
+        }
+        return false;
     }
 
     private void download_update(Gtk.Window win) {
