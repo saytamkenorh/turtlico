@@ -16,8 +16,34 @@ Turtlico supports Windows and Linux. <br>
 
 <a href='https://flathub.org/apps/details/tk.turtlico.Turtlico'><img width='240' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-i-en.png'/></a>
 
-Or clone this repository and build the program yourself:
+## Development
+
+Development builds are available to download from [pipeline](https://gitlab.com/turtlico/turtlico/pipelines/latest).
+
+**Building**
+
+Please install following dependencies in order to compile Turtlico:
+
+- `gee-0.8`
+- `gtk+-3.0 >= 3.22`
+- `gtksourceview-4`
+- `json-glib-1.0`
+- `meson >= 0.47.0`
+- `vala`
+
+To run programs created in Turtlico please install following:
+
+- `python3`
+- `python3-tk`
+- `python3-gpiozero` (Rapspberry Pi plugin)
+- `gir1.2-gstreamer-1.0` (Multimedia plugin)
+
+Then just clone this repository, build and install the program:
 	
-	meson ./ ./build --prefix /usr/local
-	cd ./build
-	ninja && sudo ninja install
+```sh
+git clone https://gitlab.com/turtlico/turtlico.git
+cd turtlico
+meson ./ ./build --prefix /usr/local
+ninja -C build
+sudo ninja -C build install
+```
