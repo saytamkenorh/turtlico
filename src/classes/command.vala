@@ -18,6 +18,8 @@
 
 namespace Turtlico {
     public class Command {
+        public const string PLUGIN_RESOURCES = "/tk/turtlico/Turtlico/plugins/";
+
         private string _name;
         public string name {get { return _name;}}
         private Gdk.Pixbuf _pixbuf;
@@ -106,7 +108,7 @@ namespace Turtlico {
         public static Json.Parser[] create_parsers(string[] enabled_plugins) {
             // Load paths
             Gee.ArrayList<string> command_files = new Gee.ArrayList<string>();
-            command_files.add("r:/tk/turtlico/Turtlico/base.json");
+            command_files.add("r:base.json");
             command_files.add_all_array(enabled_plugins);
             // Load commands
             Gee.ArrayList<Json.Parser> parsers = new Gee.ArrayList<Json.Parser>();
@@ -114,7 +116,10 @@ namespace Turtlico {
                 try {
                     var parser = new Json.Parser();
                     if (file.has_prefix("r:")) {
-                        var stream = GLib.resources_open_stream(file.substring(2), GLib.ResourceLookupFlags.NONE);
+                        string path = file.substring(2);
+                        path = path.replace("/tk/turtlico/Turtlico/", ""); // Backward compatibility
+                        path = PLUGIN_RESOURCES + path;
+                        var stream = GLib.resources_open_stream(path, GLib.ResourceLookupFlags.NONE);
                         parser.load_from_stream(stream);
                     }
                     else {

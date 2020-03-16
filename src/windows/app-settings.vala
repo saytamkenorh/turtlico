@@ -19,7 +19,7 @@
 extern const string TURTLICO_VERSION;
 
 namespace Turtlico {
-	[GtkTemplate (ui = "/tk/turtlico/Turtlico/app-settings.ui")]
+	[GtkTemplate (ui = "/tk/turtlico/Turtlico/windows/app-settings.ui")]
 	class AppSettings : Gtk.Window {
         [GtkChild]
         Gtk.AboutDialog about_dialog;

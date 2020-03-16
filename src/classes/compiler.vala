@@ -114,7 +114,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
             modules_to_load = new Gee.LinkedList<string>();
             // Plugins
             foreach(string plugin in enabled_plugins) {
-                modules_to_load.add(Path.get_basename(plugin));
+                modules_to_load.add(Path.get_basename(plugin.replace("r:", "")));
             }
 
             for(int y = 0; y < program.size; y++) {

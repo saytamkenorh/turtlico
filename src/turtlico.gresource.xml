@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/tk/turtlico/Turtlico">
-    <file>app-settings.ui</file>
-    <file>base.json</file>
-    <file>functions-dialog.ui</file>
-    <file>mm.json</file>
-    <file>program-settings.ui</file>
-    <file>programview.css</file>
-    <file>programview.ui</file>
-    <file>rpi.json</file>
-    <file>search-widget.ui</file>
-    <file>window.css</file>
-    <file>window.ui</file>
+    <file>plugins/base.json</file>
+    <file>plugins/mm.json</file>
+    <file>plugins/rpi.json</file>
+    <file>widgets/programview.css</file>
+    <file>widgets/programview.ui</file>
+    <file>widgets/search-widget.ui</file>
+    <file>windows/app-settings.ui</file>
+    <file>windows/functions-dialog.ui</file>
+    <file>windows/program-settings.ui</file>
+    <file>windows/window.css</file>
+    <file>windows/window.ui</file>
   </gresource>
 </gresources>

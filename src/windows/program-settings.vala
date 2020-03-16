@@ -19,7 +19,7 @@
 using Gee;
 
 namespace Turtlico {
-	[GtkTemplate (ui = "/tk/turtlico/Turtlico/program-settings.ui")]
+	[GtkTemplate (ui = "/tk/turtlico/Turtlico/windows/program-settings.ui")]
 	class ProgramSettings : Gtk.Window {
 	    [GtkChild]
 	    Gtk.Box plugins_box;
@@ -39,18 +39,18 @@ namespace Turtlico {
             this.plugins_active = plugins_active;
             // Add plugins
             try {
-                var resources = resources_enumerate_children("/tk/turtlico/Turtlico",
+                var resources = resources_enumerate_children(Command.PLUGIN_RESOURCES,
                     ResourceLookupFlags.NONE);
                 foreach(var r in resources)
                 {
                     if(r.has_suffix(".json") && r !="base.json") {
-                        string full_path = "/tk/turtlico/Turtlico/" + r;
+                        string full_path = Command.PLUGIN_RESOURCES + r;
                         var json = new Json.Parser();
                         var stream = GLib.resources_open_stream(full_path,
                             GLib.ResourceLookupFlags.NONE);
                         json.load_from_stream(stream);
                         Json.Node node = json.get_root ();
-                        add_plugin(_(node.get_object().get_string_member("name")), "r:" + full_path);
+                        add_plugin(_(node.get_object().get_string_member("name")), "r:" + r);
                     }
                 }
                 var plugins_search_dirs = new Gee.ArrayList<string>.wrap(Environment.get_system_data_dirs());
@@ -84,6 +84,10 @@ namespace Turtlico {
                 dialog.run();
                 dialog.destroy();
             }
+            debug ("Active plugins:");
+            this.plugins_active.foreach((s)=>{debug(s); return false;});
+            debug ("----------------");
+
             // Stats
             int icons_all = 0;
             int icons = 0;
@@ -115,7 +119,6 @@ namespace Turtlico {
             });
             plugin_box.pack_end(plugin_switch, false, false, 0);
             plugins_box.pack_start(plugin_box, false, false, 0);
-            this.plugins_active.foreach((s)=>{debug(s); return false;});
             if (plugins_active.contains(file))
                 plugin_switch.set_active(true);
 

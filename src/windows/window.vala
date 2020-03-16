@@ -26,7 +26,7 @@ namespace Turtlico {
         ID
     }
 
-	[GtkTemplate (ui = "/tk/turtlico/Turtlico/window.ui")]
+	[GtkTemplate (ui = "/tk/turtlico/Turtlico/windows/window.ui")]
 	public class Window : Gtk.ApplicationWindow {
         [GtkChild]
         Gtk.Box toolbar_box;
@@ -95,14 +95,14 @@ namespace Turtlico {
 			Object (application: app);
             string icon_file = Path.build_filename(Path.get_dirname(Environment.get_current_dir()), "share/icons/hicolor/256x256/apps/tk.turtlico.Turtlico.png");
             try {
-                
+
                 if (FileUtils.test(icon_file, FileTest.IS_REGULAR))
                     set_default_icon_from_file(icon_file);
             } catch {}
             // CSS
             var screen = this.get_screen ();
             var css_provider = new Gtk.CssProvider();
-            css_provider.load_from_resource("/tk/turtlico/Turtlico/window.css");
+            css_provider.load_from_resource("/tk/turtlico/Turtlico/windows/window.css");
             Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
 
 			// cmd view

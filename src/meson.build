@@ -1,16 +1,16 @@
 turtlico_sources = [
-  'app-settings.vala',
-  'command.vala',
-  'compiler.vala',
-  'debugger.vala',
-  'functions-dialog.vala',
+  'classes/command.vala',
+  'classes/compiler.vala',
+  'classes/debugger.vala',
+  'classes/package-service.vala',
+  'classes/program-buffer.vala',
   'main.vala',
-  'package-service.vala',
-  'program-buffer.vala',
-  'program-settings.vala',
-  'programview.vala',
-  'search-widget.vala',
-  'window.vala',
+  'widgets/programview.vala',
+  'widgets/search-widget.vala',
+  'windows/app-settings.vala',
+  'windows/functions-dialog.vala',
+  'windows/program-settings.vala',
+  'windows/window.vala',
 ]
 
 if build_machine.system() == 'windows'

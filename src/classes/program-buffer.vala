@@ -117,6 +117,8 @@ namespace Turtlico {
                 dostream.put_string("\n");
             }
             foreach(string plugin in enabled_plugins) {
+                plugin = plugin.replace(Command.PLUGIN_RESOURCES, "");
+                plugin = plugin.replace("/tk/turtlico/Turtlico/", "");
                 dostream.put_string("plugin,");
                 dostream.put_string(plugin + ",;");
             }
@@ -175,8 +177,12 @@ namespace Turtlico {
                     }
                     // Plugins
                     if (props[0] == "plugin") {
-                        if (!enabled_plugins.contains(props[1]))
-                            enabled_plugins.add(props[1]);
+                        if (!enabled_plugins.contains(props[1])) {
+                            string plugin = props[1];
+                            plugin = plugin.replace(Command.PLUGIN_RESOURCES, "");
+                            plugin = plugin.replace("/tk/turtlico/Turtlico/", "");
+                            enabled_plugins.add(plugin);
+                        }
                         continue;
                     }
                     else if (plugins_only) {

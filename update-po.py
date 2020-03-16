@@ -6,7 +6,7 @@
 import json, os
 import subprocess
 
-files = ['./src/base.json', './src/rpi.json', './src/mm.json']
+files = ['./src/plugins/base.json', './src/plugins/rpi.json', './src/plugins/mm.json']
 original_data = []
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
