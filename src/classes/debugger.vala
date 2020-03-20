@@ -67,11 +67,7 @@ namespace Turtlico {
                             argv.add("python3w");
 #else
                             GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
-#if TURTLICO_FLATPAK_NO_SANDBOX
-                            argv.add_all_array({"flatpak-spawn", "--host", "python3"});
-#else
                             argv.add("python3");
-#endif
 #endif
                         argv.add(path);
                         bool use_launcher = true;
@@ -83,11 +79,12 @@ namespace Turtlico {
 #endif
                         if (use_launcher) {
                             var launcher = new SubprocessLauncher(SubprocessFlags.STDERR_PIPE | SubprocessFlags.STDOUT_PIPE);
-                            launcher.setenv("G_MESSAGES_DEBUG", "all", true);
+                            launcher.setenv("G_MESSAGES_DEBUG", "", true);
                             launcher.setenv("PYTHONUNBUFFERED", "x", true);
                             subprocess = launcher.spawnv(argv.to_array());
                         }
                         else {
+                            // Windows 8 and older
                             subprocess = new Subprocess(SubprocessFlags.STDERR_PIPE | SubprocessFlags.STDOUT_PIPE, "python3w", path);
                         }
                         dise = new DataInputStream (subprocess.get_stderr_pipe());
@@ -118,21 +115,6 @@ namespace Turtlico {
                         if (subprocess != null) {
                             subprocess.force_exit();
                             try { subprocess.wait(); } catch {}
-#if TURTLICO_FLATPAK_NO_SANDBOX
-                            try {
-                                if (_stdout == "") {
-                                    var dis = new DataInputStream (subprocess.get_stdout_pipe());
-                                    _stdout = dis.read_line(); // We need just the PID
-                                }
-                                string pid_msg = "child_pid: ";
-                                int pid_index = _stdout.index_of(pid_msg);
-                                if (pid_index >= 0) {
-                                    int pid_index_start = pid_index + pid_msg.length;
-                                    string pid = _stdout.substring(pid_index_start);
-                                    GLib.Process.spawn_command_line_async("flatpak-spawn --host kill -SIGKILL " + pid);
-                                }
-                            } catch {}
-#endif
                         }
                     }
                     catch (Error e) {
