@@ -1,3 +1,2 @@
 option('flatpak', type : 'boolean', value : false)
-option('flatpak-no-sandbox', type : 'boolean', value : false)
 option('help', type : 'boolean', value : false)

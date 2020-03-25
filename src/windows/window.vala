@@ -165,9 +165,13 @@ namespace Turtlico {
                 Gdk.DragAction.COPY
                 | Gdk.DragAction.MOVE           // what to do with data after dropped
             );
-            // delete btn
+            make_trash_widget(delete_btn);
+            make_trash_widget(categories_box);
+		}
+
+		void make_trash_widget (Gtk.Widget widget) {
             Gtk.drag_dest_set (
-                delete_btn,                     // widget that will accept a drop
+                widget,                         // widget that will accept a drop
                 Gtk.DestDefaults.ALL,           // default actions for dest on DnD
                 target_list,                    // lists of target to support
                 Gdk.DragAction.COPY
