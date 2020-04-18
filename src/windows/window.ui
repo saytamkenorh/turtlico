@@ -184,7 +184,7 @@
                     <property name="can_focus">True</property>
                     <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Save as</property>
+                    <property name="tooltip_text" translatable="yes">Undo</property>
                     <property name="image">undo_btn_img</property>
                     <property name="relief">none</property>
                     <signal name="clicked" handler="on_undo_btn_clicked" swapped="no"/>
@@ -202,7 +202,7 @@
                     <property name="can_focus">True</property>
                     <property name="focus_on_click">False</property>
                     <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Save as</property>
+                    <property name="tooltip_text" translatable="yes">Redo</property>
                     <property name="image">redo_btn_img</property>
                     <property name="relief">none</property>
                     <signal name="clicked" handler="on_redo_btn_clicked" swapped="no"/>
