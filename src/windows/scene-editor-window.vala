@@ -1,0 +1,387 @@
+/* scene-editor.vala
+ *
+ * Copyright 2020 matyas5
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+using Gee;
+using Turtlico.SceneEditor;
+
+namespace Turtlico {
+	enum ScenesViewCols
+    {
+        NAME
+    }
+    enum SpritesViewCols
+    {
+        ICON,
+        NAME
+    }
+
+	[GtkTemplate (ui = "/tk/turtlico/Turtlico/windows/scene-editor-window.ui")]
+	public class SceneEditorWindow : Gtk.Window {
+	    [GtkChild]
+	    Gtk.ListStore scenes_store;
+	    //[GtkChild]
+	    //Gtk.TreeView scenes_view;
+	    [GtkChild]
+	    Gtk.ListStore sprites_store;
+	    [GtkChild]
+	    Gtk.IconView sprites_view;
+	    [GtkChild]
+	    Gtk.Entry add_scene_entry;
+	    [GtkChild]
+	    Gtk.Entry scene_name_entry;
+	    [GtkChild]
+	    Gtk.Button save_btn;
+	    [GtkChild]
+	    Gtk.Button delete_btn;
+	    [GtkChild]
+	    Gtk.ScrolledWindow scene_view_sw;
+	    // Properties
+	    [GtkChild]
+	    Gtk.Label selected_sprite;
+	    [GtkChild]
+	    Gtk.SpinButton prop_x;
+	    [GtkChild]
+	    Gtk.SpinButton prop_y;
+	    [GtkChild]
+	    Gtk.SpinButton prop_w;
+	    [GtkChild]
+	    Gtk.SpinButton prop_h;
+	    [GtkChild]
+	    Gtk.Button remove_sprite_btn;
+
+	    SceneEditor.View scene_view;
+
+	    protected string scene_prefix; // Path prefix for scene files. Eg "/home/user/project/projectname."
+	    protected string project_dir_path;
+	    protected string project_name;
+	    static string[] supported_image_exts = {".gif", ".png", ".bmp"};
+	    const int SPRITES_PREVIEW_SIZE = 32;
+
+	    FileMonitor resource_monitor;
+	    // Current scene data
+	    File scene_file = null;
+	    Scene scene;
+
+        public SceneEditorWindow (File project_file) {
+            // Scene view
+            scene_view = new SceneEditor.View();
+            scene_view_sw.add(scene_view);
+            scene_view.selection_changed.connect(on_scene_view_selection_changed);
+            scene_view.selection_moved.connect(()=>{
+                if (scene_view.selected_sprite == null) return;
+                prop_x.set_value(scene_view.selected_sprite.x);
+                prop_y.set_value(scene_view.selected_sprite.y);
+            });
+            scene_view.show_all();
+
+            string basename = project_file.get_basename();
+            project_dir_path = Path.get_dirname(project_file.get_path());
+            if (basename.has_suffix(".tcp")) {
+                basename = basename.splice(-4, basename.length);
+            }
+            project_name = basename;
+            this.scene_prefix = Path.build_path(
+                Path.DIR_SEPARATOR_S,
+                project_dir_path,
+                basename + ".");
+            set_title(_("Scene editor") + " (" + basename + ")");
+
+            // Setup widgets
+            sprites_view.set_text_column(SpritesViewCols.NAME);
+            sprites_view.set_pixbuf_column(SpritesViewCols.ICON);
+
+            // Setup directory monitor
+            File project_dir = File.new_for_path(project_dir_path);
+            try {
+                resource_monitor = project_dir.monitor (FileMonitorFlags.NONE, null);
+                resource_monitor.changed.connect(on_resource_monitor_change);
+            } catch(Error e) {
+                warning("Unable to setup monitor in project dir.");
+            }
+            reload_resources();
+            init_sprites_view();
+            unload_scene(); // Set UI to "No scene opened" state
+        }
+
+        void init_sprites_view () {
+            Gtk.drag_source_set(
+                sprites_view,
+                Gdk.ModifierType.BUTTON1_MASK,
+                dnd_target_list, // Defined in program view
+                Gdk.DragAction.COPY);
+        }
+
+        void on_resource_monitor_change(File file, File? other_file, FileMonitorEvent event_type) {
+            reload_resources();
+        }
+
+        [GtkCallback]
+        void on_add_scene_btn_clicked () {
+            scene = new Scene();
+            scene_file = File.new_for_path(
+                scene_prefix + add_scene_entry.get_text() + Scene.SCENE_FILE_SUFFIX);
+            save();
+
+        }
+
+        [GtkCallback]
+        void on_save_btn_clicked() {
+            scene_file = File.new_for_path(
+                scene_prefix + scene_name_entry.get_text() + Scene.SCENE_FILE_SUFFIX);
+            save();
+        }
+
+        [GtkCallback]
+        void on_delete_btn_clicked() {
+            if (scene_file == null) return;
+            try {
+                scene_file.delete();
+                unload_scene();
+            } catch (Error e) {
+                msg(_("Cannot delete the scene"), e.message, Gtk.MessageType.ERROR);
+            }
+        }
+
+        [GtkCallback]
+        void on_scenes_view_row_activated (Gtk.TreePath path, Gtk.TreeViewColumn column) {
+            string name;
+            Gtk.TreeIter iter;
+            scenes_store.get_iter(out iter, path);
+            scenes_store.get(iter, ScenesViewCols.NAME, out name, -1);
+            scene_file = File.new_for_path(
+                scene_prefix + name + Scene.SCENE_FILE_SUFFIX);
+            load();
+        }
+
+        [GtkCallback]
+        void on_sprites_view_drag_begin(Gdk.DragContext context) {
+            if (sprites_view.get_selected_items().length() == 0)
+                return;
+            var selected_path = sprites_view.get_selected_items().nth_data(0);
+            Gtk.TreeIter selected_iter;
+            sprites_view.get_model().get_iter(out selected_iter, selected_path);
+            Gdk.Pixbuf pixbuf;
+            sprites_view.get_model().get(selected_iter, SpritesViewCols.ICON, out pixbuf);
+            Gtk.drag_set_icon_pixbuf(context, pixbuf, SPRITES_PREVIEW_SIZE / 2, SPRITES_PREVIEW_SIZE / 2);
+        }
+
+        [GtkCallback]
+		void on_sprites_view_drag_data_get(Gdk.DragContext context, Gtk.SelectionData selection_data, uint info, uint time_) {
+		    if (sprites_view.get_selected_items().length() == 0)
+                return;
+            var selected_path = sprites_view.get_selected_items().nth_data(0);
+            Gtk.TreeIter selected_iter;
+            sprites_view.get_model().get_iter(out selected_iter, selected_path);
+            string name;
+            sprites_view.get_model().get(selected_iter, SpritesViewCols.NAME, out name);
+            selection_data.set_text(name, -1);
+		}
+
+        [GtkCallback]
+		void on_sprites_view_drag_end (Gdk.DragContext context) {
+            sprites_view.unselect_all();
+		}
+
+		[GtkCallback]
+		void on_prop_x_value_changed () {
+		    if (scene_view.selected_sprite == null) return;
+		    scene_view.selected_sprite.x = prop_x.get_value_as_int();
+		    scene_view.queue_draw();
+		}
+		[GtkCallback]
+		void on_prop_y_value_changed () {
+		    if (scene_view.selected_sprite == null) return;
+		    scene_view.selected_sprite.y = prop_y.get_value_as_int();
+		    scene_view.queue_draw();
+		}
+		[GtkCallback]
+		void on_prop_w_value_changed () {
+		    if (scene == null || !prop_w.get_editable()) return;
+		    scene.width = prop_w.get_value_as_int();
+		    scene_view.queue_draw();
+		}
+		[GtkCallback]
+		void on_prop_h_value_changed () {
+		    if (scene == null || !prop_h.get_editable()) return;
+		    scene.height = prop_h.get_value_as_int();
+		    scene_view.queue_draw();
+		}
+		[GtkCallback]
+		void on_remove_sprite_btn_clicked () {
+            scene_view.selection_delete();
+		}
+
+        void on_scene_view_selection_changed (Sprite? sprite) {
+            // Nothing selected -> show scene properties
+            bool scene_properties = sprite == null;
+            prop_x.set_editable(!scene_properties);
+            prop_y.set_editable(!scene_properties);
+            prop_w.set_editable(scene_properties);
+            prop_h.set_editable(scene_properties);
+            remove_sprite_btn.sensitive = !scene_properties;
+            if (sprite == null) {
+                prop_x.set_value(0);
+                prop_y.set_value(0);
+                prop_w.set_value(scene.width);
+                prop_h.set_value(scene.height);
+                selected_sprite.set_text(_("Scene"));
+                return;
+            }
+            prop_x.set_value(sprite.x);
+            prop_x.adjustment.upper = scene.width + sprite.icon.get_width() / 2;
+            prop_y.set_value(sprite.y);
+            prop_y.adjustment.upper = scene.height + sprite.icon.get_height() / 2;
+            prop_w.set_value(sprite.icon.get_width());
+            prop_h.set_value(sprite.icon.get_height());
+            selected_sprite.set_text(sprite.name);
+        }
+
+        void load () {
+            try {
+                scene = new Scene.from_file(scene_file, project_dir_path);
+                scene_view.scene = scene;
+                scene_name_entry.set_text(Scene.get_basename_file(scene_file));
+                set_ui_sensitive(true);
+
+            } catch (Error e) {
+                msg(_("Cannot load the scene"), e.message, Gtk.MessageType.ERROR);
+            }
+        }
+
+        void save () {
+            if (scene == null) return;
+            try {
+                scene.save(scene_file);
+            } catch (Error e) {
+                msg(_("Cannot save the scene"), e.message, Gtk.MessageType.ERROR);
+            }
+        }
+
+        void unload_scene () {
+            scene_file = null;
+            scene_view.scene = null;
+            scene = null;
+            set_ui_sensitive(false);
+        }
+
+        void set_ui_sensitive(bool sensitive) {
+            scene_name_entry.set_sensitive(sensitive);
+            save_btn.sensitive = sensitive; delete_btn.sensitive = sensitive;
+            if (!sensitive) {
+                // Properties must be activated by selecting a sprite/scene
+                // This is done in by handling selection change (View) signal when scene is loaded
+                prop_x.set_editable(false); prop_y.set_editable(false);
+                prop_w.set_editable(false); prop_h.set_editable(false);
+                remove_sprite_btn.sensitive = false;
+            }
+        }
+
+        void reload_resources () {
+            new Thread<void>(null, ()=>{
+                ArrayList<string> scenes = new ArrayList<string>();
+                ArrayList<Sprite?> sprites = new ArrayList<Sprite?>();
+                ArrayList<Gdk.Pixbuf> sprites_pb_fullres = new ArrayList<Gdk.Pixbuf>();
+                var dir = File.new_for_path(project_dir_path);
+            	FileEnumerator enumerator;
+            	try {
+            	    enumerator = dir.enumerate_children (
+		                "standard::*",
+		                FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
+		                null);
+		        } catch (Error e) {
+    		        msg(_("Error occurred while loading scenes and sprites"), e.message, Gtk.MessageType.ERROR);
+    		        return;
+		        }
+
+	            FileInfo info = null;
+	            try {
+	                while ((info = enumerator.next_file (null)) != null) {
+		                if (info.get_file_type () == FileType.REGULAR) {
+			                string name = info.get_name(); // Basename
+			                // Scenes
+			                if (name.has_suffix(Scene.SCENE_FILE_SUFFIX)) {
+                                scenes.add(Scene.get_basename(name));
+			                }
+			                // Sprites
+			                bool is_image = false;
+			                foreach(string ext in supported_image_exts) {
+			                    if(name.has_suffix(ext)) {
+			                        is_image = true; break;
+			                    }
+			                }
+			                if (!is_image) continue;
+			                try {
+			                    Sprite s = new Sprite();
+			                    var sprite_path = Path.build_path(Path.DIR_SEPARATOR_S, project_dir_path, name);
+			                    var pixbuf = new Gdk.Pixbuf.from_file_at_size(sprite_path, SPRITES_PREVIEW_SIZE, SPRITES_PREVIEW_SIZE);
+			                    s.name = name;
+			                    s.icon = pixbuf;
+			                    sprites.add(s);
+			                    var pixbuf_fullres = new Gdk.Pixbuf.from_file(sprite_path);
+			                    sprites_pb_fullres.add(pixbuf_fullres);
+			                } catch (Error e) {
+                                msg(_("Faile to load image '%s'").printf(name), e.message, Gtk.MessageType.ERROR);
+			                }
+		                }
+	                }
+	            } catch (Error e) {
+                    msg(_("Error occurred while loading scenes and sprites"), e.message, Gtk.MessageType.ERROR);
+	            }
+                Idle.add(()=>{
+                    // Load data from async thread to  widgets
+                    // Scenes
+                    scenes_store.clear();
+                    foreach (var scene in scenes) {
+                        Gtk.TreeIter iter;
+                        scenes_store.append(out iter);
+                        scenes_store.set(iter,
+                            ScenesViewCols.NAME, scene);
+                    }
+                    // Sprites
+                    sprites_store.clear();
+                    scene_view.sprites.remove_all();
+                    for (int i = 0; i < sprites.size; i++) {
+                        Sprite sprite = sprites[i];
+                        Gtk.TreeIter iter;
+                        sprites_store.append(out iter);
+                        sprites_store.set(iter,
+                            SpritesViewCols.NAME, sprite.name,
+                            SpritesViewCols.ICON, sprite.icon);
+                        // Load full size sprite Pixbufs into scene view
+                        scene_view.sprites.set(sprite.name, sprites_pb_fullres[i]);
+                    }
+
+                    return Source.REMOVE;
+                });
+            });
+        }
+
+        void msg (string text, string secondary_text = "", Gtk.MessageType type = Gtk.MessageType.INFO) {
+            var dialog = new Gtk.MessageDialog(this, Gtk.DialogFlags.MODAL, type,
+                                               Gtk.ButtonsType.OK, text);
+            if(secondary_text != "") {
+                dialog.secondary_text = secondary_text;
+            }
+            dialog.run();
+            dialog.destroy();
+        }
+	}
+
+}

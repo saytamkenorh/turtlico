@@ -22,7 +22,7 @@ namespace Turtlico {
     public enum DnDTarget {
         STRING
     }
-	public const Gtk.TargetEntry[] target_list = {
+	public const Gtk.TargetEntry[] dnd_target_list = {
         { "STRING",     0, DnDTarget.STRING },
         { "text/plain", 0, DnDTarget.STRING },
     };
@@ -134,8 +134,8 @@ namespace Turtlico {
             // DnD
             Gtk.drag_dest_set(
                 this,                           // widget that will accept a drop
-                Gtk.DestDefaults.ALL,           // default actions for dest on DnD
-                target_list,                    // lists of target to support
+                Gtk.DestDefaults.DROP | Gtk.DestDefaults.MOTION,
+                dnd_target_list,                // lists of target to support
                 Gdk.DragAction.COPY
                 | Gdk.DragAction.MOVE           // what to do with data after dropped
             );
@@ -204,7 +204,7 @@ namespace Turtlico {
                 Gtk.drag_source_set (
                     this,                          // widget will be drag-able
                     Gdk.ModifierType.BUTTON1_MASK, // modifier that will start a drag
-                    target_list,                   // lists of target to support
+                    dnd_target_list,                   // lists of target to support
                     Gdk.DragAction.MOVE            // what to do with data after dropped
                 );
             }
@@ -900,5 +900,10 @@ namespace Turtlico {
             scrollable.get_hadjustment().set_value(buffer.selection_start.x * cell_width);
             scrollable.get_vadjustment().set_value(buffer.selection_start.y * cell_height);
         }
+
+        [GtkCallback]
+        void on_undo_activate () {buffer.undo();}
+        [GtkCallback]
+        void on_redo_activate () {buffer.redo();}
     }
 }

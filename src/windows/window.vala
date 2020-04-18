@@ -63,6 +63,7 @@ namespace Turtlico {
         Debugger debugger = new Debugger();
         SearchWidget search_widget;
         FunctionsDialog functions_dialog;
+        SceneEditorWindow scene_editor = null;
 
         private File _current_file = null;
         File current_file {
@@ -70,6 +71,9 @@ namespace Turtlico {
             set {
                 _current_file = value;
                 programview.buffer.resource_dir = Path.get_dirname(current_file.get_path());
+                if (scene_editor != null) {
+                    scene_editor.destroy(); scene_editor = null;
+                }
                 update_window_title();
             }
         }
@@ -152,16 +156,17 @@ namespace Turtlico {
                 Cairo.Surface surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, cmd_view.get_scale_factor(), cmd_view.get_window());
                 ((Gtk.CellRendererPixbuf)cell).surface = surface;
 			});
+			// target list is defined in programview
             Gtk.drag_source_set(
                 cmd_view,                      // widget will be drag-able
                 Gdk.ModifierType.BUTTON1_MASK, // modifier that will start a drag
-                target_list,                   // lists of target to support
+                dnd_target_list,                   // lists of target to support
                 Gdk.DragAction.COPY            // what to do with data after dropped
             );
             Gtk.drag_dest_set (
                 cmd_view,                       // widget that will accept a drop
                 Gtk.DestDefaults.ALL,           // default actions for dest on DnD
-                target_list,                    // lists of target to support
+                dnd_target_list,                    // lists of target to support
                 Gdk.DragAction.COPY
                 | Gdk.DragAction.MOVE           // what to do with data after dropped
             );
@@ -173,7 +178,7 @@ namespace Turtlico {
             Gtk.drag_dest_set (
                 widget,                         // widget that will accept a drop
                 Gtk.DestDefaults.ALL,           // default actions for dest on DnD
-                target_list,                    // lists of target to support
+                dnd_target_list,                    // lists of target to support
                 Gdk.DragAction.COPY
                 | Gdk.DragAction.MOVE           // what to do with data after dropped
             );
@@ -410,6 +415,19 @@ namespace Turtlico {
             functions_dialog.set_transient_for(this);
             functions_dialog.run();
             functions_dialog.hide();
+        }
+
+        [GtkCallback]
+        void on_scene_editor_btn_clicked() {
+            if (current_file == null) {
+                msg(_("Please save the program before opening the scene editor."), "", Gtk.MessageType.INFO);
+                return;
+            }
+            if (scene_editor == null) {
+                scene_editor = new SceneEditorWindow(current_file);
+                scene_editor.destroy.connect(()=>{scene_editor=null;});
+            }
+            scene_editor.present();
         }
 
         public void open_file (File file) {

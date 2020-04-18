@@ -12,6 +12,9 @@ src/plugins/mm.json
 src/plugins/rpi.json
 src/widgets/programview.ui
 src/widgets/programview.vala
+src/widgets/scene-editor-view.ui
+src/widgets/scene-editor-view.vala
+src/widgets/search-widget.ui
 src/widgets/search-widget.vala
 src/windows/app-settings.ui
 src/windows/app-settings.vala
@@ -19,5 +22,7 @@ src/windows/functions-dialog.ui
 src/windows/functions-dialog.vala
 src/windows/program-settings.ui
 src/windows/program-settings.vala
+src/windows/scene-editor-window.ui
+src/windows/scene-editor-window.vala
 src/windows/window.ui
 src/windows/window.vala

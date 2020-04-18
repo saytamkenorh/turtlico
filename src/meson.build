@@ -4,12 +4,15 @@ turtlico_sources = [
   'classes/debugger.vala',
   'classes/package-service.vala',
   'classes/program-buffer.vala',
+  'classes/scene-editor.vala',
   'main.vala',
   'widgets/programview.vala',
+  'widgets/scene-editor-view.vala',
   'widgets/search-widget.vala',
   'windows/app-settings.vala',
   'windows/functions-dialog.vala',
   'windows/program-settings.vala',
+  'windows/scene-editor-window.vala',
   'windows/window.vala',
 ]
 
