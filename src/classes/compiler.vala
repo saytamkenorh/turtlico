@@ -26,12 +26,17 @@ namespace Turtlico {
         public string id;
         public string code;
     }
+    protected class CompilerModule {
+        public string id;
+        public string code;
+        public string[] deps;
+    }
 
     public class Compiler {
         protected Gee.ArrayList<CompilerFunction> functions = new Gee.ArrayList<CompilerFunction>();
         protected Gee.ArrayList<CompilerSimpleIcon> simple_icons = new Gee.ArrayList<CompilerSimpleIcon>();
         protected Gee.ArrayList<CompilerSimpleIcon> keywords = new Gee.ArrayList<CompilerSimpleIcon>();
-        protected Gee.ArrayList<CompilerSimpleIcon> modules = new Gee.ArrayList<CompilerSimpleIcon>();
+        protected HashTable<string, CompilerModule> modules = new HashTable<string, CompilerModule> (str_hash, str_equal);
 
         Gee.ArrayList<string> output;
         Gee.LinkedList<string> modules_to_load;
@@ -77,10 +82,18 @@ namespace Turtlico {
                 var modules = node.get_object().get_array_member("modules");
                 modules.foreach_element((array, index_, module_node)=>{
                     var module = module_node.get_object();
-                    CompilerSimpleIcon f = new CompilerSimpleIcon();
+                    CompilerModule f = new CompilerModule();
                     f.id = module.get_string_member("id");
                     f.code = module.get_string_member("code");
-                    this.modules.add(f);
+                    Gee.ArrayList<string> deps = new Gee.ArrayList<string>();
+                    if (module.has_member("deps")) {
+                        var dependencies = module.get_array_member("deps");
+                        dependencies.foreach_element((array, dep_index, dep_node)=>{
+                            deps.add(dep_node.get_string());
+                        });
+                    }
+                    f.deps = deps.to_array();
+                    this.modules.set(f.id, f);
                 });
             }
         }
@@ -277,16 +290,27 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
             }
 
             // Load modules
-            foreach (var module in modules) {
-                if (modules_to_load.index_of(module.id) > -1) {
-                    output.insert(1, module.code);
-                }
+            // Resolve dependencies
+            foreach (var module in modules_to_load.to_array()) {
+                module_add_deps(modules[module], modules_to_load);
+            }
+            foreach (var module in modules_to_load) {
+                output.insert(1, modules[module].code);
             }
 
             output.add("listen();done()");
             string ret = string.joinv("\n", output.to_array());
             debug(_("Generated code:\n") + ret);
             return ret;
+        }
+
+        private void module_add_deps (CompilerModule module, Gee.LinkedList<string> modules_to_load) {
+            foreach (string dep in module.deps) {
+                if (!modules_to_load.contains(dep)) {
+                    modules_to_load.add(dep);
+                    module_add_deps(modules[dep], modules_to_load);
+                }
+            }
         }
 
         protected void parse_function(CompilerFunction f,
