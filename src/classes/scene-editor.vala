@@ -24,6 +24,7 @@ namespace Turtlico.SceneEditor {
     public class Sprite {
         public Gdk.Pixbuf icon;
         public string name;
+        public string id;
         public int x;
         public int y;
     }
@@ -58,6 +59,7 @@ namespace Turtlico.SceneEditor {
                 sprite.x = (int)sprite_obj.get_int_member("x");
                 sprite.y = (int)sprite_obj.get_int_member("y");
                 sprite.name = sprite_obj.get_string_member("name");
+                sprite.id = sprite_obj.get_string_member("id");
                 string icon_path = Path.build_path(Path.DIR_SEPARATOR_S, project_dir_path, sprite.name);
                 try {
                     sprite.icon = new Gdk.Pixbuf.from_file(icon_path);
@@ -91,6 +93,8 @@ namespace Turtlico.SceneEditor {
                 builder.add_int_value(sprite.y);
                 builder.set_member_name("name");
                 builder.add_string_value(sprite.name);
+                builder.set_member_name("id");
+                builder.add_string_value(sprite.id);
 
                 builder.end_object();
             }

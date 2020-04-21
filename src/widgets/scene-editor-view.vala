@@ -54,6 +54,7 @@ namespace Turtlico.SceneEditor {
 
         public signal void selection_changed(Sprite? sprite);
         public signal void selection_moved();
+        public signal void scene_changed();
 
         public View () {
             add_events(Gdk.EventMask.BUTTON_PRESS_MASK);
@@ -98,8 +99,8 @@ namespace Turtlico.SceneEditor {
             cr.fill();
             // Foreground
             foreach (var sprite in scene.sprites) {
-                int x = sprite.x - sprite.icon.get_width() / 2;
-                int y = sprite.y - sprite.icon.get_height() / 2;
+                int x = x_from_turtle(sprite.x) - sprite.icon.get_width() / 2;
+                int y = y_from_turtle(sprite.y) - sprite.icon.get_height() / 2;
                 Gdk.cairo_set_source_pixbuf(cr, sprite.icon, x, y);
                 cr.paint();
             }
@@ -110,8 +111,8 @@ namespace Turtlico.SceneEditor {
                 cr.set_line_width(2);
                 cr.set_source_rgba (0.241, 0.53, 0.918, 1);
                 cr.rectangle(
-                    selected_sprite.x - width / 2,
-                    selected_sprite.y - height / 2,
+                    x_from_turtle(selected_sprite.x) - width / 2,
+                    y_from_turtle(selected_sprite.y) - height / 2,
                     width, height);
                 cr.stroke();
             }
@@ -124,7 +125,9 @@ namespace Turtlico.SceneEditor {
             if (scene == null) return false;
             if (event.button == Gdk.BUTTON_PRIMARY) {
                 Sprite? sprite = null;
-                var mouseRect = Gdk.Rectangle() {x=(int)event.x, y=(int)event.y, width=1, height=1};
+                var mouseRect = Gdk.Rectangle() {
+                    x=x_to_turtle((int)event.x), y=y_to_turtle((int)event.y),
+                    width=1, height=1};
                 foreach (var s in scene.sprites) {
                     var spriteRect = Gdk.Rectangle() {
                         x=s.x - s.icon.get_width() / 2, y=s.y - s.icon.get_height() / 2,
@@ -140,8 +143,8 @@ namespace Turtlico.SceneEditor {
                 selected_sprite = sprite;
                 selection_move = (sprite != null);
                 if (sprite != null) {
-                    selection_offset_x = (int)event.x - sprite.x;
-                    selection_offset_y = (int)event.y - sprite.y;
+                    selection_offset_x = x_to_turtle((int)event.x) - sprite.x;
+                    selection_offset_y = y_to_turtle((int)event.y) - sprite.y;
                 }
                 queue_draw();
             }
@@ -159,13 +162,14 @@ namespace Turtlico.SceneEditor {
         [GtkCallback]
         bool on_motion_notify_event (Gdk.EventMotion event) {
             if (selection_move && selected_sprite != null) {
-                int x = (int)event.x - selection_offset_x;
-                int y = (int)event.y - selection_offset_y;
-                selected_sprite.x = int.max(0, int.min(
-                    scene.width + selected_sprite.icon.get_width() / 2, x));
-                selected_sprite.y = int.max(0, int.min(
-                    scene.height + selected_sprite.icon.get_height() / 2, y));
-                queue_draw();
+                int x = x_to_turtle((int)event.x) - selection_offset_x;
+                int y = y_to_turtle((int)event.y) - selection_offset_y;
+                x = int.max(-scene.width / 2, int.min(
+                    scene.width / 2 + selected_sprite.icon.get_width() / 2, x));
+                y = int.max(-scene.height / 2 - selected_sprite.icon.get_height() / 2, int.min(
+                    scene.height / 2, y));
+                set_sprite_x(selected_sprite, x);
+                set_sprite_y(selected_sprite, y);
                 selection_moved();
             }
             return false;
@@ -190,17 +194,60 @@ namespace Turtlico.SceneEditor {
             queue_draw();
         }
 
+        public int x_to_turtle (int x) { return x - scene.width / 2; }
+        public int y_to_turtle (int y) { return -(y - scene.height / 2); }
+        public int x_from_turtle (int x) { return x + scene.width / 2; }
+        public int y_from_turtle (int y) { return -y + scene.height / 2; }
+
         bool paste_sprite (string name, int x, int y) {
             if (sprites == null || scene == null) return false;
             if (!sprites.contains(name)) return false;
             Sprite sprite = new Sprite();
             sprite.name = name;
             sprite.icon = sprites[name];
-            sprite.x = x;
-            sprite.y = y;
+
+            // Choose id
+            int n = 0;
+            bool id_exists = true;
+            while (id_exists) {
+                id_exists = false;
+                foreach(var s in scene.sprites) {
+                    if (s.id == "%s%d".printf(name, n)) {
+                        n++;
+                        id_exists = true;
+                        break;
+                    }
+                }
+            }
+            string id = "%s%d".printf(name, n);
+            sprite.id = id;
+            sprite.x = x_to_turtle(x);
+            sprite.y = y_to_turtle(y);
             scene.sprites.add(sprite);
+            scene_changed();
             queue_draw();
             return true;
+        }
+
+        public void set_scene_width (int width) {
+            if (width == scene.width) return;
+            scene.width = width; scene_changed(); queue_draw();
+        }
+        public void set_scene_height (int height) {
+            if (height == scene.height) return;
+            scene.height = height; scene_changed(); queue_draw();
+        }
+        public void set_sprite_x (Sprite s, int x) {
+            if (x == s.x) return;
+            s.x = x; scene_changed(); queue_draw();
+        }
+        public void set_sprite_y (Sprite s, int y) {
+            if (y == s.y) return;
+            s.y = y; scene_changed(); queue_draw();
+        }
+        public void set_sprite_id (Sprite s, string id) {
+            if (id == s.id) return;
+            s.id = id; scene_changed(); queue_draw();
         }
     }
 }

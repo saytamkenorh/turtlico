@@ -54,7 +54,7 @@ namespace Turtlico {
 	    Gtk.ScrolledWindow scene_view_sw;
 	    // Properties
 	    [GtkChild]
-	    Gtk.Label selected_sprite;
+	    Gtk.Entry selected_sprite;
 	    [GtkChild]
 	    Gtk.SpinButton prop_x;
 	    [GtkChild]
@@ -76,10 +76,19 @@ namespace Turtlico {
 
 	    FileMonitor resource_monitor;
 	    // Current scene data
-	    File scene_file = null;
+	    File scene_file {get; set;}
 	    Scene scene;
+	    private bool _scene_changed = false;
+	    bool scene_changed {
+	        get {return _scene_changed;}
+	        set{_scene_changed=value; update_window_title();}
+	    }
 
         public SceneEditorWindow (File project_file) {
+            // Scene file
+            notify["scene-file"].connect(update_window_title);
+            scene_file = null;
+            scene_changed = false;
             // Scene view
             scene_view = new SceneEditor.View();
             scene_view_sw.add(scene_view);
@@ -89,6 +98,7 @@ namespace Turtlico {
                 prop_x.set_value(scene_view.selected_sprite.x);
                 prop_y.set_value(scene_view.selected_sprite.y);
             });
+            scene_view.scene_changed.connect(()=>{scene_changed=true;});
             scene_view.show_all();
 
             string basename = project_file.get_basename();
@@ -101,7 +111,6 @@ namespace Turtlico {
                 Path.DIR_SEPARATOR_S,
                 project_dir_path,
                 basename + ".");
-            set_title(_("Scene editor") + " (" + basename + ")");
 
             // Setup widgets
             sprites_view.set_text_column(SpritesViewCols.NAME);
@@ -117,6 +126,7 @@ namespace Turtlico {
             }
             reload_resources();
             init_sprites_view();
+            update_window_title();
             unload_scene(); // Set UI to "No scene opened" state
         }
 
@@ -128,16 +138,30 @@ namespace Turtlico {
                 Gdk.DragAction.COPY);
         }
 
+        void update_window_title () {
+            string title = _("Scene editor") + " (" + project_name;
+            if (scene_view.scene != null) {
+                title += "/";
+                title += Scene.get_basename_file(scene_file);
+                if (scene_changed) title+="*";
+            }
+            title += ")";
+            set_title(title);
+        }
+
         void on_resource_monitor_change(File file, File? other_file, FileMonitorEvent event_type) {
             reload_resources();
         }
 
         [GtkCallback]
         void on_add_scene_btn_clicked () {
+            if (check_file_save()) return;
             scene = new Scene();
             scene_file = File.new_for_path(
                 scene_prefix + add_scene_entry.get_text() + Scene.SCENE_FILE_SUFFIX);
             save();
+            load();
+            add_scene_entry.set_text("");
 
         }
 
@@ -151,6 +175,16 @@ namespace Turtlico {
         [GtkCallback]
         void on_delete_btn_clicked() {
             if (scene_file == null) return;
+            // Confirmation dialog
+            var dialog = new Gtk.MessageDialog(this,
+                Gtk.DialogFlags.MODAL,
+                Gtk.MessageType.QUESTION,
+                Gtk.ButtonsType.YES_NO,
+                _("Do you really wish to delete the scene?"));
+            dialog.secondary_text = _("This cannot be undone.");
+            var result = dialog.run(); dialog.destroy();
+            if (result == Gtk.ResponseType.NO) return;
+
             try {
                 scene_file.delete();
                 unload_scene();
@@ -161,6 +195,7 @@ namespace Turtlico {
 
         [GtkCallback]
         void on_scenes_view_row_activated (Gtk.TreePath path, Gtk.TreeViewColumn column) {
+            if (check_file_save()) return;
             string name;
             Gtk.TreeIter iter;
             scenes_store.get_iter(out iter, path);
@@ -202,30 +237,33 @@ namespace Turtlico {
 		[GtkCallback]
 		void on_prop_x_value_changed () {
 		    if (scene_view.selected_sprite == null) return;
-		    scene_view.selected_sprite.x = prop_x.get_value_as_int();
-		    scene_view.queue_draw();
+		    scene_view.set_sprite_x(scene_view.selected_sprite,
+		        prop_x.get_value_as_int());
 		}
 		[GtkCallback]
 		void on_prop_y_value_changed () {
 		    if (scene_view.selected_sprite == null) return;
-		    scene_view.selected_sprite.y = prop_y.get_value_as_int();
-		    scene_view.queue_draw();
+		    scene_view.set_sprite_y(scene_view.selected_sprite,
+		        prop_y.get_value_as_int());
 		}
 		[GtkCallback]
 		void on_prop_w_value_changed () {
 		    if (scene == null || !prop_w.get_editable()) return;
-		    scene.width = prop_w.get_value_as_int();
-		    scene_view.queue_draw();
+		    scene_view.set_scene_width(prop_w.get_value_as_int());
 		}
 		[GtkCallback]
 		void on_prop_h_value_changed () {
 		    if (scene == null || !prop_h.get_editable()) return;
-		    scene.height = prop_h.get_value_as_int();
-		    scene_view.queue_draw();
+		    scene_view.set_scene_height(prop_h.get_value_as_int());
 		}
 		[GtkCallback]
 		void on_remove_sprite_btn_clicked () {
             scene_view.selection_delete();
+		}
+		[GtkCallback]
+		void on_selected_sprite_changed () {
+		    if (scene_view.selected_sprite == null) return;
+		    scene_view.set_sprite_id(scene_view.selected_sprite, selected_sprite.get_text());
 		}
 
         void on_scene_view_selection_changed (Sprite? sprite) {
@@ -235,22 +273,28 @@ namespace Turtlico {
             prop_y.set_editable(!scene_properties);
             prop_w.set_editable(scene_properties);
             prop_h.set_editable(scene_properties);
+            selected_sprite.sensitive = !scene_properties;
             remove_sprite_btn.sensitive = !scene_properties;
             if (sprite == null) {
                 prop_x.set_value(0);
                 prop_y.set_value(0);
-                prop_w.set_value(scene.width);
-                prop_h.set_value(scene.height);
+                prop_w.set_value(scene != null ? scene.width : 0);
+                prop_h.set_value(scene != null ? scene.height : 0);
                 selected_sprite.set_text(_("Scene"));
                 return;
             }
-            prop_x.set_value(sprite.x);
+            prop_x.adjustment.lower = -scene.width / 2;
             prop_x.adjustment.upper = scene.width + sprite.icon.get_width() / 2;
-            prop_y.set_value(sprite.y);
+            prop_x.set_value(sprite.x);
+
+            prop_y.adjustment.lower = -scene.height / 2;
             prop_y.adjustment.upper = scene.height + sprite.icon.get_height() / 2;
+            prop_y.set_value(sprite.y);
+
             prop_w.set_value(sprite.icon.get_width());
             prop_h.set_value(sprite.icon.get_height());
-            selected_sprite.set_text(sprite.name);
+
+            selected_sprite.set_text(sprite.id);
         }
 
         void load () {
@@ -259,6 +303,7 @@ namespace Turtlico {
                 scene_view.scene = scene;
                 scene_name_entry.set_text(Scene.get_basename_file(scene_file));
                 set_ui_sensitive(true);
+                scene_changed = false;
 
             } catch (Error e) {
                 msg(_("Cannot load the scene"), e.message, Gtk.MessageType.ERROR);
@@ -269,6 +314,7 @@ namespace Turtlico {
             if (scene == null) return;
             try {
                 scene.save(scene_file);
+                scene_changed = false;
             } catch (Error e) {
                 msg(_("Cannot save the scene"), e.message, Gtk.MessageType.ERROR);
             }
@@ -290,7 +336,38 @@ namespace Turtlico {
                 prop_x.set_editable(false); prop_y.set_editable(false);
                 prop_w.set_editable(false); prop_h.set_editable(false);
                 remove_sprite_btn.sensitive = false;
+                selected_sprite.sensitive = false;
+                scene_name_entry.set_text("");
             }
+        }
+
+        public override bool delete_event (Gdk.EventAny event) {
+            return check_file_save();
+        }
+
+        bool check_file_save () {
+            // Program not changed (no confirm dialog)
+            if (!scene_changed)
+                return false;
+            // Program changed (show a confirm dialog)
+            var dialog = new Gtk.MessageDialog(this,
+                Gtk.DialogFlags.MODAL,
+                Gtk.MessageType.QUESTION,
+                Gtk.ButtonsType.NONE,
+                _("Would you like to save your changes before closing the scene?"));
+            dialog.secondary_text = _("Otherwise the unsaved changes will be lost!");
+            dialog.add_buttons (
+                _("Yes"), Gtk.ResponseType.YES,
+                _("No"), Gtk.ResponseType.NO,
+                _("Cancel"), Gtk.ResponseType.CANCEL
+            );
+            var answer = dialog.run();
+            dialog.destroy();
+            if (answer == Gtk.ResponseType.YES)
+                save_btn.clicked();
+            else if (answer == Gtk.ResponseType.CANCEL)
+                return true;
+            return false;
         }
 
         void reload_resources () {
@@ -317,7 +394,9 @@ namespace Turtlico {
 			                string name = info.get_name(); // Basename
 			                // Scenes
 			                if (name.has_suffix(Scene.SCENE_FILE_SUFFIX)) {
-                                scenes.add(Scene.get_basename(name));
+                                if (name.has_prefix(project_name))
+                                    scenes.add(Scene.get_basename(name));
+                                continue;
 			                }
 			                // Sprites
 			                bool is_image = false;

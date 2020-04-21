@@ -83,9 +83,9 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Scenes</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="heading"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -190,9 +190,9 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Sprites</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="heading"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -287,6 +287,7 @@
                     <property name="relief">none</property>
                     <property name="always_show_image">True</property>
                     <signal name="clicked" handler="on_save_btn_clicked" swapped="no"/>
+                    <accelerator key="s" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -355,7 +356,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">3</property>
-                    <property name="row_spacing">3</property>
+                    <property name="row_spacing">5</property>
+                    <property name="column_spacing">5</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
@@ -392,9 +394,9 @@
                         <property name="halign">start</property>
                         <property name="valign">center</property>
                         <property name="label" translatable="yes">Properties</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
+                        <style>
+                          <class name="heading"/>
+                        </style>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -487,19 +489,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="selected_sprite">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label">
-</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkButton" id="remove_sprite_btn">
                         <property name="label" translatable="yes">Remove</property>
                         <property name="visible">True</property>
@@ -508,10 +497,24 @@
                         <property name="halign">end</property>
                         <property name="valign">start</property>
                         <signal name="clicked" handler="on_remove_sprite_btn_clicked" swapped="no"/>
+                        <accelerator key="Delete" signal="clicked"/>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="selected_sprite">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="input_purpose">alpha</property>
+                        <property name="input_hints">GTK_INPUT_HINT_NO_SPELLCHECK | GTK_INPUT_HINT_NO_EMOJI | GTK_INPUT_HINT_NONE</property>
+                        <signal name="changed" handler="on_selected_sprite_changed" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
                       </packing>
                     </child>
                     <child>
