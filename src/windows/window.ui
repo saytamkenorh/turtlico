@@ -67,6 +67,11 @@
     <property name="can_focus">False</property>
     <property name="icon_name">preferences-desktop-display</property>
   </object>
+  <object class="GtkImage" id="undo_btn_img">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">edit-undo</property>
+  </object>
   <template class="TurtlicoWindow" parent="GtkApplicationWindow">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Turtlico</property>
@@ -339,6 +344,7 @@
                     <property name="image">functions_btn_img</property>
                     <property name="relief">none</property>
                     <signal name="clicked" handler="on_functions_btn_clicked" swapped="no"/>
+                    <accelerator key="F6" signal="clicked"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -356,6 +362,7 @@
                     <property name="image">scene_editor_btn_img</property>
                     <property name="relief">none</property>
                     <signal name="clicked" handler="on_scene_editor_btn_clicked" swapped="no"/>
+                    <accelerator key="F7" signal="clicked"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -373,6 +380,7 @@
                     <property name="image">image5</property>
                     <property name="relief">none</property>
                     <signal name="clicked" handler="on_settings_btn_clicked" swapped="no"/>
+                    <accelerator key="F8" signal="clicked"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -489,9 +497,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkImage" id="undo_btn_img">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">edit-undo</property>
-  </object>
 </interface>

@@ -352,54 +352,54 @@ namespace Turtlico {
             var program_settings = new ProgramSettings(ref programview.buffer.enabled_plugins,
                 programview.buffer.program);
             program_settings.set_transient_for(this);
-            program_settings.show_all();
-            program_settings.delete_event.connect(()=>{
-                load_commands();
-                int remove_missing = -1;
-                // Check for missing commands
-                for (int y = 0; y < programview.buffer.program.size; y++)
+            program_settings.run();
+            program_settings.hide();
+
+            load_commands();
+
+            int remove_missing = -1;
+            // Check for missing commands
+            for (int y = 0; y < programview.buffer.program.size; y++)
+            {
+                for (int x = 0; x < programview.buffer.program[y].size; x++)
                 {
-                    for (int x = 0; x < programview.buffer.program[y].size; x++)
-                    {
-                        bool found = false;
-                        foreach(Command c in programview.buffer.commands) {
-                            if (c.id == programview.buffer.program[y][x].id) {
-                                found = true;
+                    bool found = false;
+                    foreach(Command c in programview.buffer.commands) {
+                        if (c.id == programview.buffer.program[y][x].id) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        if (remove_missing < 0) {
+                            var dialog = new Gtk.MessageDialog(this,
+                                Gtk.DialogFlags.MODAL,
+                                Gtk.MessageType.WARNING,
+                                Gtk.ButtonsType.YES_NO,
+                                    _("Would you really like to apply these changes?"));
+                            dialog.secondary_text = _("The program contains commands that are only available from a plugin. Unavailable commands will be removed.");
+                            var answer = dialog.run();
+                            dialog.destroy();
+                            if (answer == Gtk.ResponseType.YES) {
+                                remove_missing = 1;
+                                programview.buffer.backup_clear();
+                            }
+                            else {
+                                programview.buffer.enabled_plugins = previous_state;
+                                load_commands();
+                                y = programview.buffer.program.size;
                                 break;
                             }
                         }
-                        if (!found) {
-                            if (remove_missing < 0) {
-                                var dialog = new Gtk.MessageDialog(this,
-                                    Gtk.DialogFlags.MODAL,
-                                    Gtk.MessageType.WARNING,
-                                    Gtk.ButtonsType.YES_NO,
-                                        _("Would you really like to apply these changes?"));
-                                dialog.secondary_text = _("The program contains commands that are only available from a plugin. Unavailable commands will be removed.");
-                                var answer = dialog.run();
-                                dialog.destroy();
-                                if (answer == Gtk.ResponseType.YES) {
-                                    remove_missing = 1;
-                                    programview.buffer.backup_clear();
-                                }
-                                else {
-                                    programview.buffer.enabled_plugins = previous_state;
-                                    load_commands();
-                                    y = programview.buffer.program.size;
-                                    break;
-                                }
-                            }
-                            if (remove_missing == 1) {
-                                programview.buffer.program[y].remove_at(x);
-                                x--;
-                            }
+                        if (remove_missing == 1) {
+                            programview.buffer.program[y].remove_at(x);
+                            x--;
                         }
                     }
-                    if (remove_missing == 1)
-                        programview.buffer.backup_program();
                 }
-                return false;
-            });
+                if (remove_missing == 1)
+                    programview.buffer.backup_program();
+            }
         }
 
         [GtkCallback]

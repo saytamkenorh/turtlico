@@ -20,7 +20,7 @@ using Gee;
 
 namespace Turtlico {
 	[GtkTemplate (ui = "/tk/turtlico/Turtlico/windows/program-settings.ui")]
-	class ProgramSettings : Gtk.Window {
+	class ProgramSettings : Gtk.Dialog {
 	    [GtkChild]
 	    Gtk.Box plugins_box;
 	    [GtkChild]
@@ -119,6 +119,7 @@ namespace Turtlico {
             });
             plugin_box.pack_end(plugin_switch, false, false, 0);
             plugins_box.pack_start(plugin_box, false, false, 0);
+            plugin_box.show_all();
             if (plugins_active.contains(file))
                 plugin_switch.set_active(true);
 
