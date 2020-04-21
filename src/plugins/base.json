@@ -30,6 +30,7 @@
 				{"id":"0_cs", "icon":"r:0_cs.svg", "?": 'Clear turtle screen' , "type": 0, "func": "clear", "params": "" },
 				{"id":"5_screen_c", "icon":"r:5_screen_c.svg", "?": 'Get or set the color of the screen' , "type": 5, "func": "bgcolor", "params": "" },
 				{"id":"5_screen_i", "icon":"r:5_screen_i.svg", "?": 'Get or set the background picture of the screen' , "type": 5, "func": "bgpic", "params": "" },
+				{"id":"0_scene", "icon":"r:0_scene.svg", "?": 'Load scene (file)' , "type": 0, "func": "tcf_load_scene", "params": "" },
 				{"id":"5_img", "icon":"🖼", "?": 'Image' , "type": 0, "func": "tcf_get_image", "params": "", "data-draw": true, "data-only": false, "data-color": "#000000" },
 				{"id":"0_ds", "icon":"🎭", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "'turtle'" },
 				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
@@ -212,6 +213,29 @@
 	else:\
 		turt.setpos(pos())\
 	return turt"
+		},
+		{
+		    "id": "tcf_load_scene",
+		    "deps": ["tcf_get_image"],
+			"code": "tcf_scene_turtles=[]\
+def tcf_load_scene(path):\
+	tracer_n = tracer(); tracer_delay = delay();\
+	import json\
+	if not path.endswith('.tcs'): \
+	    project_name = os.path.basename(os.path.splitext(__file__)[0])\
+	    scene_name = os.path.splitext(project_name)[0]\
+	    path = '{}.{}.tcs'.format(scene_name, path)\
+	with open(path) as f:\
+	    scene = json.loads(f.read())\
+	for t in tcf_scene_turtles:\
+	    del t\
+	setup(width=scene['width'], height=scene['height'], startx=None, starty=None)\
+	clearscreen(); tracer(0, 0)\
+	for s in scene['sprites']:\
+	    globals()[s['id']] = Turtle(); turtle = globals()[s['id']]\
+	    turtle.penup(); turtle.setpos(s['x'],s['y'])\
+	    turtle.shape(tcf_get_image(s['name'])); turtle.pendown()\
+	tracer(tracer_n, tracer_delay)"
 		},
 		{
 			"id": "tcf_get_image",
