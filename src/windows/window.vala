@@ -506,6 +506,11 @@ namespace Turtlico {
                     button.clicked.connect((btn)=>{
                         cmd_view.set_model(ls);
                         cmd_view_sw.show();
+                        // FIXME: This hack is used in order to prevent
+                        // invisibility of icons after DnD data receive. It should be fixed in a more proper way.
+                        Gtk.Allocation al;
+                        cmd_view.get_allocation(out al);
+                        cmd_view.size_allocate(al);
                     });
                     categories_box.pack_start(button, false, false);
                     // Add commands to prograview and liststore
