@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50" height="35" version="1.1" viewBox="0 0 13.229 9.2604" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs>
+		<linearGradient id="a">
+			<stop stop-color="#b40000" offset="0"/>
+			<stop stop-color="#ff2121" offset="1"/>
+		</linearGradient>
+		<radialGradient id="b" cx="6.6146" cy="291.27" r="2.8619" gradientTransform="translate(-.1348 -1.3596)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+		<radialGradient id="c" cx="6.6146" cy="291.27" r="2.8619" gradientTransform="matrix(.70712 -.7071 .75294 .75296 -217.5 75.272)" gradientUnits="userSpaceOnUse" xlink:href="#a"/>
+	</defs>
+	<metadata>
+		<rdf:RDF>
+			<cc:Work rdf:about="">
+				<dc:format>image/svg+xml</dc:format>
+				<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+				<dc:title/>
+			</cc:Work>
+		</rdf:RDF>
+	</metadata>
+	<g transform="translate(0 -287.74)">
+		<g fill="none" stroke="#000">
+			<path d="m2.3812 288.93h8.4667" stroke-width=".79375"/>
+			<path d="m2.3812 290.78h8.7312" stroke-width=".79375"/>
+			<path d="m2.3813 292.37h6.0854" stroke-width=".79375"/>
+			<path d="m2.3812 294.22h5.0271" stroke-width=".79375"/>
+			<path d="m2.3812 296.07h7.9375" stroke-width=".79375"/>
+		</g>
+		<g transform="matrix(1 0 0 1 .13487 1.3587)" fill="#f00" stroke-linecap="round" stroke-width="1.4">
+			<path d="m4.4597 293.43 4.3097-4.3097" stroke="url(#b)"/>
+			<path d="m8.7694 293.43-4.3097-4.3097" stroke="url(#c)"/>
+		</g>
+	</g>
+</svg>

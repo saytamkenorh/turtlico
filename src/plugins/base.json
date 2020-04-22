@@ -25,8 +25,8 @@
 				{"id":"0_ht", "icon":"r:0_ht.png", "?": 'Hide turtle' , "type": 0, "func": "hideturtle", "params": "" },
 				{"id":"0_st", "icon":"r:0_st.png", "?": 'Show turtle' , "type": 0, "func": "showturtle", "params": "" },
 				{"id":"0_wr", "icon":"✍", "?": 'Write text on screen' , "type": 0, "func": "write", "params": "" },
-				{"id":"0_bf", "icon":"r:0_bf.png", "?": 'Begin fill' , "type": 0, "func": "begin_fill", "params": "" },
-				{"id":"0_ef", "icon":"r:0_ef.png", "?": 'End fill - fill the drawn shape' , "type": 0, "func": "end_fill", "params": "" },
+				{"id":"0_bf", "icon":"r:0_bf.svg", "?": 'Begin fill' , "type": 0, "func": "begin_fill", "params": "" },
+				{"id":"0_ef", "icon":"r:0_ef.svg", "?": 'End fill - fill the drawn shape' , "type": 0, "func": "end_fill", "params": "" },
 				{"id":"0_cs", "icon":"r:0_cs.svg", "?": 'Clear turtle screen' , "type": 0, "func": "clear", "params": "" },
 				{"id":"5_screen_c", "icon":"r:5_screen_c.svg", "?": 'Get or set the color of the screen' , "type": 5, "func": "bgcolor", "params": "" },
 				{"id":"5_screen_i", "icon":"r:5_screen_i.svg", "?": 'Get or set the background picture of the screen' , "type": 5, "func": "bgpic", "params": "" },
@@ -42,7 +42,7 @@
 				{"id":"0_undo", "icon":"↶", "?": 'Undo the last turtle action', "type": 0, "func": "undo", "params": "" },
 				{"id":"0_circle", "icon":"◯", "?": 'Circle' , "type": 0, "func": "circle", "params": "" },
 				{"id":"0_turbo", "icon":"r:turbo.png", "?": 'Turbo mode' , "type": 0, "func": "tcf_turbo", "params": "" },
-				{"id":"5_screenp", "icon":"r:screenprop.svg", "?": 'Camera properties' , "type": 5, "func": "tcf_screenprop", "params": "" },
+				{"id":"5_screenp", "icon":"r:screenprop.svg", "?": 'Camera properties (x, y, [width], [height])' , "type": 5, "func": "tcf_screenprop", "params": "" },
 				{"id":"0_exit", "icon":"r:0_exit.svg", "?": 'Exit the program', "type": 0, "func": "sys.exit", "params": "0" }
 			]
 		},
@@ -81,10 +81,10 @@
 				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":", "},
 				{"id":"]", "icon":"]", "?": 'Right square bracket', "type": 4, "c":"]"},
 				{"id":"2_del", "icon":"del", "?": 'Delete an object', "type": 3, "c":"del ", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"0_apnd", "icon":"r:0_apnd.png", "?": 'Append an item to a list', "type": 0, "func": "append", "params": "" },
-				{"id":"0_ins", "icon":"r:0_ins.png", "?": 'Insert an item to a list', "type": 0, "func": "insert", "params": "" },
-				{"id":"0_clr", "icon":"r:0_clr.png", "?": 'Clear list', "type": 0, "func": "clear", "params": "" },
-				{"id":"5_index", "icon":"r:5_index.png", "?": 'Finds index of the occurence of an item in a list or in a string (list, item, start, direction)', "type": 0, "func": "tcf_index", "params": "" },
+				{"id":"0_apnd", "icon":"r:0_apnd.svg", "?": 'Append an item to a list', "type": 0, "func": "append", "params": "" },
+				{"id":"0_ins", "icon":"r:0_ins.svg", "?": 'Insert an item to a list', "type": 0, "func": "insert", "params": "" },
+				{"id":"0_clr", "icon":"r:0_clr.svg", "?": 'Clear list', "type": 0, "func": "clear", "params": "" },
+				{"id":"5_index", "icon":"r:5_index.svg", "?": 'Finds index of the occurence of an item in a list or in a string (list, item, start, direction)', "type": 0, "func": "tcf_index", "params": "" },
 				{"id":"0_slo", "icon":"ab", "?": 'Converts a string into lower case', "type": 0, "func": "lower", "params": "" },
 				{"id":"0_sup", "icon":"AB", "?": 'Converts a string into upper case', "type": 0, "func": "upper", "params": "" },
 				{"id":"0_sspl", "icon":"r:0_sspl.svg", "?": 'Splits the string at the specified separator, and returns a list', "type": 0, "func": "split", "params": "'\\n'" },
@@ -100,7 +100,7 @@
 				{"id":"||", "icon":"or", "?": 'or', "type": 4, "c":" or "},
 				{"id":"!", "icon":"not", "?": 'negation', "type": 4, "c":" not "},
 				{"id":"3_def", "icon":"def", "?": 'Define a method', "type": -1, "fg-color": "rgb(0, 0, 128)"},
-				{"id":"3_r", "icon":"r:3_r.png", "?": 'Return a value', "type": 3, "c":"return", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"3_r", "icon":"r:3_r.svg", "?": 'Return a value', "type": 3, "c":"return", "fg-color": "rgb(0, 0, 128)"},
 				{"id":"1_rep", "icon":"🔂", "?": 'Repeat block of commands', "type": -1, "bg-color": "rgb(200, 0, 0)"},
 				{"id":"1_for", "icon":"for", "?": 'For loop', "type": -1, "bg-color": "rgb(200, 0, 0)"},
 				{"id":"in", "icon":"in", "?": 'Is item in a list? / For all items in a collection.', "type": 4, "c":" in "},
@@ -359,7 +359,8 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 		},
 		{
 			"id": "tcf_screenprop",
-			"code": "def tcf_screenprop(cam_x = None, cam_y = None):\
+			"code": "def tcf_screenprop(cam_x = None, cam_y = None, width=None, height=None):\
+	if width != None and height != None: setup(width, height, None, None)\
 	global tcf_cam_x; global tcf_cam_y\
 	if cam_x == None: return (tcf_cam_x, tcf_cam_y)\
 	tcf_cam_x = int(cam_x); tcf_cam_y = int(cam_y)\

@@ -1,91 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="50"
-   height="35"
-   viewBox="0 0 13.229166 9.2604169"
-   version="1.1"
-   id="svg8"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="0_collision_rect.svg"
-   inkscape:export-filename="/home/matyas/Projects/turtlico/src/icons/0_collision_rect.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
-  <defs
-     id="defs2" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="8.0000004"
-     inkscape:cx="27.273043"
-     inkscape:cy="18.553901"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
-     showgrid="false"
-     units="px"
-     inkscape:window-width="1854"
-     inkscape:window-height="1016"
-     inkscape:window-x="66"
-     inkscape:window-y="27"
-     inkscape:window-maximized="1" />
-  <metadata
-     id="metadata5">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:label="Vrstva 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-287.73957)">
-    <path
-       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.47518051;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       inkscape:transform-center-x="-0.18046143"
-       inkscape:transform-center-y="-0.46560059"
-       d="m 7.0457543,295.64526 -3.0185482,-0.95604 -3.0185482,0.95046 3.0227854,-5.482 z"
-       id="path815"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
-    <rect
-       style="opacity:0.93999999;fill:#0000ff;fill-opacity:0.39215686;stroke:#ff0000;stroke-width:0.1715766;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect821"
-       width="6.6724234"
-       height="6.6724234"
-       x="0.69099432"
-       y="289.82733" />
-    <path
-       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.47518051;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       inkscape:transform-center-x="-0.18046143"
-       inkscape:transform-center-y="-0.46560059"
-       d="m 12.22051,294.05777 -3.0185484,-0.95604 -3.018548,0.95046 3.022785,-5.482 z"
-       id="path815-3"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
-    <rect
-       style="opacity:0.93999999;fill:#0000ff;fill-opacity:0.39215686;stroke:#ff0000;stroke-width:0.1715766;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect821-6"
-       width="6.6724234"
-       height="6.6724234"
-       x="5.8657489"
-       y="288.23981" />
-  </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50" height="35" version="1.1" viewBox="0 0 13.229 9.2604" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<metadata>
+		<rdf:RDF>
+			<cc:Work rdf:about="">
+				<dc:format>image/svg+xml</dc:format>
+				<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+				<dc:title/>
+			</cc:Work>
+		</rdf:RDF>
+	</metadata>
+	<g transform="translate(0 -287.74)">
+		<path d="m7.276 295.4-2.3812-0.771-2.3812 0.7665 2.3846-4.421z"/>
+		<rect x="2.2489" y="290.52" width="5.2917" height="5.2917" fill="#00f" fill-opacity=".39216" opacity=".94" stroke="#f00" stroke-width=".26458"/>
+		<path d="m11.245 293.81-2.3812-0.771-2.3812 0.7665 2.3846-4.421z"/>
+		<rect x="6.2176" y="288.93" width="5.2917" height="5.2917" fill="#00f" fill-opacity=".39216" opacity=".94" stroke="#f00" stroke-width=".26458"/>
+	</g>
 </svg>

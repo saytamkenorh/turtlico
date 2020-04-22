@@ -13,8 +13,8 @@
 				{"id":"0_rpion", "icon":"r:0_rpion.svg", "?": 'Turn on device', "type": 0, "func": "on", "params": "" },
 				{"id":"0_rpioff", "icon":"r:0_rpioff.svg", "?": 'Turn off device', "type": 0, "func": "off", "params": "" },
 				{"id":"0_rpival", "icon":"🔧", "?": 'Value (input and output)', "type": 0, "func": "value", "params": "" },
-				{"id":"0_rpievent", "icon":"r:0_rpievent.png", "?": 'Connect a function that is called when the device state changes to active', "type": 0, "func": "tcf_rpi_event", "params": "" },
-				{"id":"0_rpieventoff", "icon":"r:0_rpieventoff.png", "?": 'Connect a function that is called when the device state changes to inactive', "type": 0, "func": "tcf_rpi_event_off", "params": "" }
+				{"id":"0_rpievent", "icon":"r:0_rpievent.svg", "?": 'Connect a function that is called when the device state changes to active', "type": 0, "func": "tcf_rpi_event", "params": "" },
+				{"id":"0_rpieventoff", "icon":"r:0_rpieventoff.svg", "?": 'Connect a function that is called when the device state changes to inactive', "type": 0, "func": "tcf_rpi_event_off", "params": "" }
 			]
 		}
 	],

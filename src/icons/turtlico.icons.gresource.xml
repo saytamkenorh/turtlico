@@ -3,13 +3,13 @@
   <gresource prefix="/tk/turtlico/Turtlico/icons">
     <file>0_ht.png</file>
     <file>0_st.png</file>
-    <file>0_bf.png</file>
-    <file>0_ef.png</file>
+    <file>0_bf.svg</file>
+    <file>0_ef.svg</file>
     <file>0_cs.svg</file>
     <file>5_screen_c.svg</file>
     <file>0_scene.svg</file>
     <file>5_screen_i.svg</file>
-    <file>3_r.png</file>
+    <file>3_r.svg</file>
     <file>5_gett.png</file>
     <file>5_plcimg.svg</file>
     <file>0_collision.svg</file>
@@ -20,10 +20,10 @@
     <file>key.svg</file>
     <file>true.svg</file>
     <file>false.svg</file>
-    <file>0_apnd.png</file>
-    <file>0_ins.png</file>
-    <file>0_clr.png</file>
-    <file>5_index.png</file>
+    <file>0_apnd.svg</file>
+    <file>0_ins.svg</file>
+    <file>0_clr.svg</file>
+    <file>5_index.svg</file>
     <file>0_sspl.svg</file>
     <file>0_srep.svg</file>
     <file>1_while.svg</file>
@@ -32,8 +32,8 @@
     <file>raspberrypi.svg</file>
     <file>0_rpion.svg</file>
     <file>0_rpioff.svg</file>
-    <file>0_rpievent.png</file>
-    <file>0_rpieventoff.png</file>
+    <file>0_rpievent.svg</file>
+    <file>0_rpieventoff.svg</file>
     <file>5_fileis.svg</file>
     <file>5_diris.svg</file>
     <file>open_file.svg</file>
