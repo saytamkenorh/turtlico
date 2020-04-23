@@ -21,7 +21,7 @@
 using Gee;
 using Turtlico.SceneEditor;
 
-namespace Turtlico {
+namespace Turtlico.SceneEditor {
 	enum ScenesViewCols
     {
         NAME
@@ -33,7 +33,7 @@ namespace Turtlico {
     }
 
 	[GtkTemplate (ui = "/tk/turtlico/Turtlico/windows/scene-editor-window.ui")]
-	public class SceneEditorWindow : Gtk.Window {
+	public class Window : Gtk.Window {
 	    [GtkChild]
 	    Gtk.ListStore scenes_store;
 	    //[GtkChild]
@@ -84,13 +84,13 @@ namespace Turtlico {
 	        set{_scene_changed=value; update_window_title();}
 	    }
 
-        public SceneEditorWindow (File project_file) {
+        public Window (File project_file, ProgramView programview) {
             // Scene file
             notify["scene-file"].connect(update_window_title);
             scene_file = null;
             scene_changed = false;
             // Scene view
-            scene_view = new SceneEditor.View();
+            scene_view = new SceneEditor.View(programview);
             scene_view_sw.add(scene_view);
             scene_view.selection_changed.connect(on_scene_view_selection_changed);
             scene_view.selection_moved.connect(()=>{

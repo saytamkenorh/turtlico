@@ -63,7 +63,7 @@ namespace Turtlico {
         Debugger debugger = new Debugger();
         SearchWidget search_widget;
         FunctionsDialog functions_dialog;
-        SceneEditorWindow scene_editor = null;
+        SceneEditor.Window scene_editor = null;
 
         private File _current_file = null;
         File current_file {
@@ -163,13 +163,7 @@ namespace Turtlico {
                 dnd_target_list,                   // lists of target to support
                 Gdk.DragAction.COPY            // what to do with data after dropped
             );
-            Gtk.drag_dest_set (
-                cmd_view,                       // widget that will accept a drop
-                Gtk.DestDefaults.ALL,           // default actions for dest on DnD
-                dnd_target_list,                    // lists of target to support
-                Gdk.DragAction.COPY
-                | Gdk.DragAction.MOVE           // what to do with data after dropped
-            );
+            make_trash_widget(cmd_view);
             make_trash_widget(delete_btn);
             make_trash_widget(categories_box);
 		}
@@ -424,7 +418,7 @@ namespace Turtlico {
                 return;
             }
             if (scene_editor == null) {
-                scene_editor = new SceneEditorWindow(current_file);
+                scene_editor = new SceneEditor.Window(current_file, programview);
                 scene_editor.destroy.connect(()=>{scene_editor=null;});
             }
             scene_editor.present();

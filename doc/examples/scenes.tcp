@@ -1,0 +1,6 @@
+0_scene,,;str,1,;nl,,;
+obj,smile,;2_.,,;0_pu,,;nl,,;
+1_rep,,;:,,;nl,,;
+tab,,;obj,smile,;2_.,,;0_go,,;int,100,;nl,,;
+tab,,;obj,smile,;2_.,,;0_left,,;nl,,;
+nl,,;

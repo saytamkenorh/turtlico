@@ -47,6 +47,7 @@ namespace Turtlico.SceneEditor {
             }
         }
         public HashTable<string, Gdk.Pixbuf> sprites = new HashTable<string, Gdk.Pixbuf> (str_hash, str_equal);
+        protected ProgramView programview;
         public Sprite? selected_sprite = null;
         bool selection_move = false;
         int selection_offset_x = 0;
@@ -56,7 +57,7 @@ namespace Turtlico.SceneEditor {
         public signal void selection_moved();
         public signal void scene_changed();
 
-        public View () {
+        public View (ProgramView programview) {
             add_events(Gdk.EventMask.BUTTON_PRESS_MASK);
             add_events(Gdk.EventMask.BUTTON_RELEASE_MASK);
             add_events(Gdk.EventMask.POINTER_MOTION_MASK);
@@ -65,6 +66,7 @@ namespace Turtlico.SceneEditor {
                 Gtk.DestDefaults.DROP | Gtk.DestDefaults.MOTION,
                 dnd_target_list,
                 Gdk.DragAction.COPY);
+            this.programview = programview;
         }
 
         public override bool draw (Cairo.Context cr) {
@@ -124,20 +126,7 @@ namespace Turtlico.SceneEditor {
         bool on_button_press_event (Gtk.Widget widget, Gdk.EventButton event) {
             if (scene == null) return false;
             if (event.button == Gdk.BUTTON_PRIMARY) {
-                Sprite? sprite = null;
-                var mouseRect = Gdk.Rectangle() {
-                    x=x_to_turtle((int)event.x), y=y_to_turtle((int)event.y),
-                    width=1, height=1};
-                foreach (var s in scene.sprites) {
-                    var spriteRect = Gdk.Rectangle() {
-                        x=s.x - s.icon.get_width() / 2, y=s.y - s.icon.get_height() / 2,
-                        width=s.icon.get_width(), height=s.icon.get_height()
-                    };
-                    if (mouseRect.intersect(spriteRect, null)) {
-                        sprite = s;
-                        break;
-                    }
-                }
+                Sprite? sprite = get_sprite_at_pos((int)event.x, (int)event.y);
                 selected_sprite = null;
                 selection_changed(sprite);
                 selected_sprite = sprite;
@@ -148,7 +137,33 @@ namespace Turtlico.SceneEditor {
                 }
                 queue_draw();
             }
+            if (event.button == Gdk.BUTTON_SECONDARY) {
+                Sprite? sprite = get_sprite_at_pos((int)event.x, (int)event.y);
+                if (sprite != null) {
+                    programview.paste_data(
+                        @"obj;$(sprite.id)~".replace("~", ProgramBuffer.str_mark_utf8));
+                }
+                var toplevel = programview.get_toplevel();
+                if (toplevel is Gtk.Window)
+                    ((Gtk.Window)toplevel).present();
+            }
             return false;
+        }
+
+        Sprite? get_sprite_at_pos (int x, int y) {
+            var mouseRect = Gdk.Rectangle() {
+                x=x_to_turtle(x), y=y_to_turtle(y),
+                width=1, height=1};
+            foreach (var s in scene.sprites) {
+                var spriteRect = Gdk.Rectangle() {
+                    x=s.x - s.icon.get_width() / 2, y=s.y - s.icon.get_height() / 2,
+                    width=s.icon.get_width(), height=s.icon.get_height()
+                };
+                if (mouseRect.intersect(spriteRect, null)) {
+                    return s;
+                }
+            }
+            return null;
         }
 
         [GtkCallback]

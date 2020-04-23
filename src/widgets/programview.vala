@@ -508,7 +508,7 @@ namespace Turtlico {
             grab_focus();
             var modifiers = Gtk.accelerator_get_default_mod_mask();
             // Selection
-            if (event.button == 1) {
+            if (event.button == Gdk.BUTTON_PRIMARY) {
                 if ((event.state & modifiers) == Gdk.ModifierType.SHIFT_MASK
                     && buffer.selection_phase == SelectionPhase.NOTHING_SELECTED)
                 {
@@ -547,7 +547,7 @@ namespace Turtlico {
                 }
             }
             // Copy icon
-            if (event.button == 3) {
+            if (event.button == Gdk.BUTTON_SECONDARY) {
                 if(get_icon_at_pointer()) {
                     start_dnd_copy = true;
                 }
