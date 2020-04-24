@@ -22,8 +22,6 @@ namespace Turtlico {
 	[GtkTemplate (ui = "/tk/turtlico/Turtlico/windows/app-settings.ui")]
 	class AppSettings : Gtk.Window {
         [GtkChild]
-        Gtk.AboutDialog about_dialog;
-        [GtkChild]
         Gtk.Switch dark_mode_switch;
         [GtkChild]
         Gtk.Switch dark_icons_switch;
@@ -41,14 +39,6 @@ namespace Turtlico {
         Settings settings = new Settings("tk.turtlico.Turtlico");
 
         public AppSettings () {
-            about_dialog.set_transient_for(this);
-            #if TURTLICO_FLATPAK
-            about_dialog.set_logo_icon_name("tk.turtlico.Turtlico");
-            #else
-            about_dialog.set_logo(null);
-            #endif
-            about_dialog.version = TURTLICO_VERSION;
-
             dark_mode_switch.active = settings.get_boolean("dark-mode");
             dark_icons_switch.active = settings.get_boolean("dark-icons");
             debug_data_switch.active = settings.get_boolean("debug-data");
@@ -58,12 +48,6 @@ namespace Turtlico {
             csd_switch.visible = true;
             csd_label.visible = true;
             #endif
-        }
-
-        [GtkCallback]
-        void on_about_btn_clicked () {
-            about_dialog.run();
-            about_dialog.hide();
         }
 
         [GtkCallback]

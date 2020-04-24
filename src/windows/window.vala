@@ -55,9 +55,9 @@ namespace Turtlico {
         [GtkChild]
         Gtk.Button run_btn;
         [GtkChild]
-        Gtk.ToggleButton search_btn;
-        [GtkChild]
         Gtk.SearchBar search_bar;
+        [GtkChild]
+        Gtk.AboutDialog about_dialog;
 
         public Compiler compiler; // Initialized in load_commands
         Debugger debugger = new Debugger();
@@ -128,6 +128,8 @@ namespace Turtlico {
             search_bar.show_all();
             // Functions Dialog
             functions_dialog = new FunctionsDialog(programview);
+            setup_about_dialog();
+            setup_accels(app);
 
             // Load commands database
             load_commands();
@@ -212,6 +214,34 @@ namespace Turtlico {
             });
 		}
 
+		void setup_about_dialog () {
+		    about_dialog.set_transient_for(this);
+#if TURTLICO_FLATPAK
+            about_dialog.set_logo_icon_name("tk.turtlico.Turtlico");
+#else
+            about_dialog.set_logo(null);
+#endif
+            about_dialog.version = TURTLICO_VERSION;
+		}
+
+		void setup_accels (Gtk.Application app) {
+		    var search = new SimpleAction("search", null);
+		    search.activate.connect(()=>{search_bar.set_search_mode(!search_bar.search_mode_enabled);});
+		    app.add_action(search);
+		    app.set_accels_for_action ("app.search", {"<Primary>f"});
+		    var save_as = new SimpleAction("save-as", null);
+		    save_as.activate.connect(this.save_as);
+		    app.add_action(save_as);
+		    app.set_accels_for_action ("app.save-as", {"<Control><Shift>s"});
+		    var new_project = new SimpleAction("new-project", null);
+		    new_project.activate.connect(()=>{
+		        if (check_file_save()) return;
+		        new_program();
+		    });
+		    app.add_action(new_project);
+		    app.set_accels_for_action ("app.new-project", {"<Control>n"});
+		}
+
 		[GtkCallback]
 		void on_cmd_view_drag_begin (Gdk.DragContext context) {
             if (cmd_view.get_selected_items().length() == 0)
@@ -274,12 +304,11 @@ namespace Turtlico {
                 }
             }
             else
-                on_save_as_btn_clicked();
+                save_as();
             status_label.label = _("Project saved.");
         }
 
-        [GtkCallback]
-        void on_save_as_btn_clicked() {
+        void save_as() {
             #if TURTLICO_FLATPAK
             var dialog = new Gtk.FileChooserDialog(_("Select file"), this,
                                                    Gtk.FileChooserAction.SAVE,
@@ -405,6 +434,12 @@ namespace Turtlico {
         }
 
         [GtkCallback]
+        void on_about_btn_clicked () {
+            about_dialog.run();
+            about_dialog.hide();
+        }
+
+        [GtkCallback]
         void on_functions_btn_clicked() {
             functions_dialog.load_functions();
             functions_dialog.set_transient_for(this);
@@ -421,6 +456,7 @@ namespace Turtlico {
             if (scene_editor == null) {
                 scene_editor = new SceneEditor.Window(current_file, programview);
                 scene_editor.destroy.connect(()=>{scene_editor=null;});
+                get_application().add_window(scene_editor);
             }
             scene_editor.present();
         }
@@ -614,7 +650,7 @@ namespace Turtlico {
         void set_csd (bool csd) {
             // Prevents Window reappearance when csd is not changed
             if (!csd == (get_titlebar() == null)) return;
-            // Remove right and left toolbar box from its currnet parent
+            // Remove right and left toolbar box from its current parent
             toolbar_box.remove(toolbar_box_left);
             toolbar_box.remove(toolbar_box_right);
             csd_headerbar.remove(toolbar_box_left);
@@ -692,6 +728,7 @@ namespace Turtlico {
         }
 
         public override bool delete_event (Gdk.EventAny event) {
+            if (scene_editor != null) scene_editor.close();
             return check_file_save();
         }
 
@@ -733,11 +770,6 @@ namespace Turtlico {
                 return;
             }
             title = name + " - Turtlico";
-        }
-
-        [GtkCallback]
-        void on_search_btn_toggled () {
-            search_bar.set_search_mode(search_btn.active);
         }
 
         [GtkCallback]
