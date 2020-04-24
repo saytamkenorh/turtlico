@@ -3,7 +3,7 @@
 
 #define MyAppName "Turtlico"
 #define MyAppVersion "0.4"
-#define MyAppPublisher "Matyá¹ Hronek"
+#define MyAppPublisher "Matyas Hronek"
 #define MyAppURL "https://turtlico.tk"
 #define MyAppExeName "bin\turtlico.exe"
 

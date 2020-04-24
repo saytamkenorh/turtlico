@@ -130,7 +130,7 @@ namespace Turtlico {
             load_from_stream_(istream, false);
         }
 
-        public void load_from_stream_ (InputStream istream, bool plugins_only) throws IOError {
+        public void load_from_stream_ (InputStream istream, bool plugins_only, bool ingore_errors = false) throws IOError {
             program.clear();
             enabled_plugins.clear();
             var distream = new DataInputStream(istream);
@@ -181,7 +181,17 @@ namespace Turtlico {
                             string plugin = props[1];
                             plugin = plugin.replace(Command.PLUGIN_RESOURCES, "");
                             plugin = plugin.replace("/tk/turtlico/Turtlico/", "");
-                            enabled_plugins.add(plugin);
+                            try {
+                                if ((plugin.has_prefix("r:") && resources_get_info(
+                                        Command.PLUGIN_RESOURCES + plugin.substring(2, -1), ResourceLookupFlags.NONE, null, null))
+                                    || FileUtils.test(plugin, FileTest.EXISTS))
+                                {
+                                    enabled_plugins.add(plugin);
+                                } else {throw new IOError.INVALID_DATA("");};
+                            } catch {
+                                if (!ingore_errors)
+                                    throw new IOError.INVALID_DATA(_("Cannot load plugin %s.".printf(plugin)));
+                            }
                         }
                         continue;
                     }
@@ -208,9 +218,11 @@ namespace Turtlico {
                         program[y].add(c);
                     }
                     catch (FileError e) {
-                        string message = _("The file to load contains an unkown command!\n");
-                        message += _("This might be because of the file was damaged or created by a newer version of this program.\nCommand ID: ") + props[0];
-                        throw new IOError.INVALID_DATA(message);
+                        if (!ingore_errors) {
+                            string message = _("The file to load contains an unkown command!\n");
+                            message += _("This might be because of the file was damaged or created by a newer version of this program.\nCommand ID: ") + props[0];
+                            throw new IOError.INVALID_DATA(message);
+                        }
                     }
                 }
                 if (program[y].size == 0) {program.remove_at(y);}
@@ -222,6 +234,20 @@ namespace Turtlico {
             history_index = 0;
             backup_program();
             program_changed = false;
+            selection_phase = SelectionPhase.NOTHING_SELECTED;
+        }
+
+        public void new_program () {
+            resource_dir = "";
+            program.clear();
+            enabled_plugins.clear();
+            redraw_required();
+            // History
+            history.clear();
+            history_index = 0;
+            backup_program();
+            program_changed = false;
+            selection_phase = SelectionPhase.NOTHING_SELECTED;
         }
 
         void copy_list(ArrayList<ArrayList<Command>> l1,

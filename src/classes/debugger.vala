@@ -64,7 +64,8 @@ namespace Turtlico {
                     try {
                         var argv = new Gee.LinkedList<string>();
 #if WINDOWS
-                            argv.add("python3w");
+                            string pythonw = Environment.find_program_in_path("python3w.exe");
+                            argv.add(pythonw);
 #else
                             GLib.Process.spawn_command_line_sync("chmod +x '" + path + "'");
                             argv.add("python3");
@@ -120,11 +121,12 @@ namespace Turtlico {
                     catch (Error e) {
                         string error_msg = e.message;
                         Idle.add(()=>{
-                            on_error(error_msg, "");
+                            on_error(error_msg, ""); 
                             return false;
                         });
+                        try { dise.close(); } catch {}; dise = null;
                     }
-                    while (dise.has_pending()) {Thread.usleep(1000);}
+                    while (dise != null && dise is InputStream && dise.has_pending()) {Thread.usleep(1000);}
                     try { dise.close(); } catch {}
                     debug(_("stderr of child process:\n") + _stderr);
                     Idle.add(()=>{

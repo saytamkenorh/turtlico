@@ -70,7 +70,8 @@ namespace Turtlico {
             get {return _current_file;}
             set {
                 _current_file = value;
-                programview.buffer.resource_dir = Path.get_dirname(current_file.get_path());
+				if (value != null)
+					programview.buffer.resource_dir = Path.get_dirname(current_file.get_path());
                 if (scene_editor != null) {
                     scene_editor.destroy(); scene_editor = null;
                 }
@@ -425,19 +426,41 @@ namespace Turtlico {
         }
 
         public void open_file (File file) {
-            try {
-                var stream = file.read();
-                current_file = file;
-                programview.buffer.load_from_stream_(stream, true);
-                load_commands();
-                stream = file.read();
-                programview.buffer.load_from_stream_(stream, false);
-                stream.close();
-            }
-            catch (Error e) {
-                msg(_("Failed to open the program"), e.message, Gtk.MessageType.ERROR);
-            }
+			bool ignore_errors = false;
+            for (int i = 0; i < 2; i++) { // Limit max attempts to 2
+				try {
+					var stream = file.read();
+					current_file = file;
+					programview.buffer.load_from_stream_(stream, true, ignore_errors);
+					load_commands();
+					stream = file.read();
+					programview.buffer.load_from_stream_(stream, false, ignore_errors);
+					stream.close();
+					return;
+				}
+				catch (Error e) {
+					var dialog = new Gtk.MessageDialog(this,
+						Gtk.DialogFlags.MODAL,
+						Gtk.MessageType.ERROR,
+						Gtk.ButtonsType.YES_NO,
+						e.message);
+                    dialog.secondary_text = _("Would you like to continue loading anyway and ignore further errors?");
+                    var answer = dialog.run();
+                    dialog.destroy();
+                    if (answer == Gtk.ResponseType.NO) {
+					    new_program();
+						return;
+                    }
+					ignore_errors = true;
+				}
+			}
         }
+
+		public void new_program () {
+			current_file = null;
+            programview.buffer.new_program();
+			load_commands();
+		}
 
         void load_commands () {
             // Clear

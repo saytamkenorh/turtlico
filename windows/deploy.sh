@@ -16,10 +16,10 @@ do
   echo $2-$pkg-$version
   tar -xf /var/cache/pacman/pkg/$2-$pkg-$version-any.pkg.tar.xz
 done
-echo "Copying files to the output directory..."
-cp -r $PWD/mingw64/bin $1
-cp -r $PWD/mingw64/share $1
-cp -r $PWD/mingw64/lib $1
+echo "Moving files to the output directory..."
+mv $PWD/mingw64/bin $1
+mv $PWD/mingw64/share $1
+mv $PWD/mingw64/lib $1
 
 echo "Removing temp folder..."
 rm -rf $tmp

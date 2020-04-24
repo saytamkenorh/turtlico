@@ -32,9 +32,10 @@ rm -rf ./output
 bindir=$(echo "$srcdir/output/bin" | sed -e "s-C:/-/c/-g")
 export PATH="$bindir:$PATH"
 
-gdk-pixbuf-query-loaders.exe > "$srcdir/output/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+"$bindir/gdk-pixbuf-query-loaders.exe" > "$srcdir/output/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
 
 echo "Removing useless stuff..."
+rm -rf "$srcdir/output/share/icons/hicolor/"*/apps
 # Useless Adwaita icons
 rm -rf "$srcdir/output/share/icons/Adwaita/cursors"
 rm -rf "$srcdir/output/share/icons/Adwaita/"*/apps
@@ -44,6 +45,9 @@ rm -rf "$srcdir/output/share/icons/Adwaita/"*/emblems
 rm -rf "$srcdir/output/share/icons/Adwaita/"*/emotes
 rm -rf "$srcdir/output/share/icons/Adwaita/"*/status
 rm -rf "$srcdir/output/share/icons/Adwaita/"*/legacy/face*
+rm -rf "$srcdir/output/share/icons/Adwaita/"*/legacy/battery*
+rm -rf "$srcdir/output/share/icons/Adwaita/"*/legacy/network*
+rm -rf "$srcdir/output/share/icons/Adwaita/"*/legacy/weather*
 # Sizes that are not used often
 rm -rf "$srcdir/output/share/icons/Adwaita/256x256"
 rm -rf "$srcdir/output/share/icons/Adwaita/512x512"
@@ -88,7 +92,7 @@ rm -rf $tmp
 # Post-inst procedures
 glib-compile-schemas "$srcdir/output/share/glib-2.0/schemas"
 rm "$srcdir/output/bin/glib-compile-schemas.exe"
-update-mime-database.exe "$srcdir/output/share/mime"
+"$bindir/update-mime-database.exe" "$srcdir/output/share/mime"
 rm "$srcdir/output/bin/update-mime-database"*
 
 # Create ISS file
