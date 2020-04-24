@@ -133,7 +133,7 @@ namespace Turtlico {
                         debug_running = false;
                         // Show error dialog
                         if (_stderr != null && _stderr != "") {
-                            if (_stderr.contains("turtle.Terminator"))
+                            if (_stderr.contains("turtle.Terminator") || _stderr.contains("_tkinter.TclError: invalid command name"))
                                 return false;
                             string error = "";
                             string [] err_lines = _stderr.split("\n");
