@@ -105,7 +105,7 @@
                         <property name="placeholder_text" translatable="yes">New scene name</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
@@ -146,11 +146,10 @@
                         <property name="model">scenes_store</property>
                         <property name="headers_visible">False</property>
                         <property name="activate_on_single_click">True</property>
+                        <signal name="button-press-event" handler="on_scenes_view_button_press_event" swapped="no"/>
                         <signal name="row-activated" handler="on_scenes_view_row_activated" swapped="no"/>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection">
-                            <property name="mode">none</property>
-                          </object>
+                          <object class="GtkTreeSelection"/>
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="scenes_view_column">

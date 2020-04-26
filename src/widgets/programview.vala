@@ -556,7 +556,7 @@ namespace Turtlico {
         }
 
         bool on_button_release_event(Gdk.EventButton event) {
-            if (event.button == 1) {
+            if (event.button == Gdk.BUTTON_PRIMARY) {
                 if (buffer.selection_phase == SelectionPhase.SELECT_END) {
                     buffer.selection_phase = SelectionPhase.BLOCK_SELECTED;
                     // Swap selection end and start if needed
@@ -572,7 +572,7 @@ namespace Turtlico {
                     }
                 }
             }
-            if (event.button == 3) {
+            if (event.button == Gdk.BUTTON_SECONDARY) {
                 start_dnd_copy = false;
                 bool icon_at_pointer = get_icon_at_pointer();
                 bool selection = buffer.selection_phase == SelectionPhase.BLOCK_SELECTED;

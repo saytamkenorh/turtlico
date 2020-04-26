@@ -36,8 +36,8 @@ namespace Turtlico.SceneEditor {
 	public class Window : Gtk.Window {
 	    [GtkChild]
 	    Gtk.ListStore scenes_store;
-	    //[GtkChild]
-	    //Gtk.TreeView scenes_view;
+	    [GtkChild]
+	    Gtk.TreeView scenes_view;
 	    [GtkChild]
 	    Gtk.ListStore sprites_store;
 	    [GtkChild]
@@ -67,6 +67,7 @@ namespace Turtlico.SceneEditor {
 	    Gtk.Button remove_sprite_btn;
 
 	    SceneEditor.View scene_view;
+	    ProgramView programview;
 
 	    protected string scene_prefix; // Path prefix for scene files. Eg "/home/user/project/projectname."
 	    protected string project_dir_path;
@@ -85,6 +86,7 @@ namespace Turtlico.SceneEditor {
 	    }
 
         public Window (File project_file, ProgramView programview) {
+            this.programview = programview;
             // Scene file
             notify["scene-file"].connect(update_window_title);
             scene_file = null;
@@ -112,7 +114,7 @@ namespace Turtlico.SceneEditor {
                 project_dir_path,
                 basename + ".");
 
-            // Setup widgets
+            // Sprites widgets
             sprites_view.set_text_column(SpritesViewCols.NAME);
             sprites_view.set_pixbuf_column(SpritesViewCols.ICON);
 
@@ -203,6 +205,24 @@ namespace Turtlico.SceneEditor {
             scene_file = File.new_for_path(
                 scene_prefix + name + Scene.SCENE_FILE_SUFFIX);
             load();
+        }
+
+        [GtkCallback]
+        bool on_scenes_view_button_press_event (Gdk.EventButton event) {
+            if (event.button == Gdk.BUTTON_SECONDARY) {
+                var selection = scenes_view.get_selection();
+                string scene;
+                Gtk.TreeIter iter;
+                if (!selection.get_selected(null, out iter)) return false;
+                scenes_store.get(iter, ScenesViewCols.NAME, out scene, -1);
+
+                programview.paste_data(
+                        @"0_scene;~str;$(scene)~".replace("~", ProgramBuffer.str_mark_utf8));
+                var toplevel = programview.get_toplevel();
+                if (toplevel is Gtk.Window)
+                    ((Gtk.Window)toplevel).present();
+            }
+            return false;
         }
 
         [GtkCallback]
@@ -426,12 +446,16 @@ namespace Turtlico.SceneEditor {
                 Idle.add(()=>{
                     // Load data from async thread to  widgets
                     // Scenes
+                    var current_scene_name = scene_file != null ? Scene.get_basename_file(scene_file) : "";
                     scenes_store.clear();
                     foreach (var scene in scenes) {
                         Gtk.TreeIter iter;
                         scenes_store.append(out iter);
                         scenes_store.set(iter,
                             ScenesViewCols.NAME, scene);
+                        if (scene == current_scene_name) {
+                            scenes_view.get_selection().select_iter(iter);
+                        }
                     }
                     // Sprites
                     sprites_store.clear();
