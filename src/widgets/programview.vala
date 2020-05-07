@@ -91,6 +91,8 @@ namespace Turtlico {
         [GtkChild]
         Gtk.MenuItem popup_menu_edit;
         [GtkChild]
+        Gtk.MenuItem popup_menu_help;
+        [GtkChild]
         Gtk.MenuItem popup_menu_copy;
         [GtkChild]
         Gtk.MenuItem popup_menu_cut;
@@ -577,6 +579,7 @@ namespace Turtlico {
                 bool icon_at_pointer = get_icon_at_pointer();
                 bool selection = buffer.selection_phase == SelectionPhase.BLOCK_SELECTED;
                 popup_menu_edit.visible = icon_at_pointer && !selection;
+                popup_menu_help.visible = icon_at_pointer;
                 popup_menu_copy.visible = icon_at_pointer && selection;
                 popup_menu_cut.visible = icon_at_pointer && selection;
                 popup_menu_sep.visible = icon_at_pointer;
@@ -616,6 +619,10 @@ namespace Turtlico {
         bool on_popup_menu_cut_button_release_event(Gtk.Widget btn, Gdk.EventButton event) {
             cut(); return false;
         }
+        [GtkCallback]
+        void on_popup_menu_help_activate(Gtk.MenuItem item) {
+            icon_help();
+        }
 
         bool on_key_press_event(Gdk.EventKey key_event) {
             var modifiers = Gtk.accelerator_get_default_mod_mask();
@@ -642,6 +649,10 @@ namespace Turtlico {
             if (key_event.keyval == Gdk.Key.y &&
                 (key_event.state & modifiers) == Gdk.ModifierType.CONTROL_MASK)
                 buffer.redo();
+            if (key_event.keyval == Gdk.Key.F1) {
+                icon_help();
+                return false;
+            }
             if (key_event.keyval == Gdk.Key.F2) {
                 icon_data_dialog();
                 return false;
@@ -688,6 +699,33 @@ namespace Turtlico {
                 copy();
                 buffer.selection_delete();
                 buffer.backup_program();
+            }
+        }
+
+        void icon_help() {
+            Gdk.Point item;
+            if(!get_icon_at_pointer(out item)) return;
+            string name = buffer.program[item.y][item.x].draw_params.help_en;
+            name = name.down();
+            string[] invalid_chars = {"(", ")", ".", "~", "?", "#", ":", ","};
+            foreach (var ch in invalid_chars) {
+                name = name.replace(ch, "");
+            }
+            name = name.replace(" ", "-").replace("/", "-");
+            string url;
+
+            string cd = GLib.Environment.get_current_dir();
+	        string prefix = GLib.Path.get_dirname(cd);
+	        string docdir = GLib.Path.build_path(Path.DIR_SEPARATOR_S, prefix, "share", "doc", "turtlico");
+	        if (GLib.FileUtils.test(docdir, GLib.FileTest.IS_DIR))
+	            url = "file://" + docdir;
+	        else
+	            url = "https://turtlico.tk/doc";
+
+            try {
+                Gtk.show_uri_on_window((Gtk.Window)this.get_toplevel(), "%s/en/reference_doc.html#%s".printf(url, name), Gdk.CURRENT_TIME);
+            } catch (Error e) {
+                debug("Cannot open help: " + e.message);
             }
         }
 

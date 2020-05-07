@@ -26,7 +26,7 @@ int main (string[] args) {
 
 	string cd = GLib.Environment.get_current_dir();
 	string prefix = GLib.Path.get_dirname(cd);
-	string localedir = GLib.Path.build_path("/", prefix, "share", "locale");
+	string localedir = GLib.Path.build_path(Path.DIR_SEPARATOR_S, prefix, "share", "locale");
 	if (GLib.FileUtils.test(localedir, GLib.FileTest.IS_DIR))
 	    Intl.bindtextdomain("turtlico", localedir);
 	else

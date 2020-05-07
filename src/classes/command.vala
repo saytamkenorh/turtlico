@@ -144,6 +144,7 @@ namespace Turtlico {
         public float scale;
 
         public string help;
+        public string help_en; // Used for help page opening
 
         public DrawParams (
             bool data_draw,
@@ -157,7 +158,8 @@ namespace Turtlico {
             this.bg_color = bg_color;
             this.fg_color = fg_color;
             this.data_only = data_only;
-            this.help = help;
+            this.help = _(help);
+            this.help_en = help;
             this.scale = scale;
         }
     }

@@ -589,7 +589,7 @@ namespace Turtlico {
 
                         var draw_params = new DrawParams(
                             draw_data, data_color, bg_color, fg_color, data_only,
-                            _(command.get_string_member("?")),
+                            command.get_string_member("?"),
                             programview.get_scale_factor());
                         Command c = new Command(command.get_string_member("icon"),
                                                 command.get_string_member("id"), "",
