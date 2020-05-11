@@ -129,9 +129,16 @@ namespace Turtlico {
 	    void on_open_dir_clicked() {
             string dir = Path.build_filename(Environment.get_user_data_dir(), "turtlico", "plugins");
             try {
-                Gtk.show_uri_on_window(this, "file://" + dir, Gdk.CURRENT_TIME);
+                if (!FileUtils.test (dir, FileTest.IS_DIR)) {
+                    File file = File.new_for_path(dir);
+                    file.make_directory_with_parents();
+                }
+            } catch (Error e) {
+                warning("Cannot create user plugins folder: " + e.message);
             }
-            catch(Error e) {
+            try {
+                Gtk.show_uri_on_window(this, "file://" + dir, Gdk.CURRENT_TIME);
+            } catch(Error e) {
                 open_dir_fail_label.label = dir;
                 open_dir_fail_dialog.transient_for = this;
                 open_dir_fail_dialog.run(); open_dir_fail_dialog.hide();
