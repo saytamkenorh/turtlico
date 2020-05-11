@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAboutDialog" id="about_dialog">
@@ -11,9 +11,6 @@
     <property name="authors">Matyáš Hronek</property>
     <property name="logo_icon_name"/>
     <property name="license_type">gpl-3-0</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -40,6 +37,9 @@
           <placeholder/>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
   <object class="GtkHeaderBar" id="csd_headerbar">
@@ -83,8 +83,8 @@
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">10</property>
-        <property name="margin_right">10</property>
+        <property name="margin_start">10</property>
+        <property name="margin_end">10</property>
         <property name="margin_top">10</property>
         <property name="margin_bottom">10</property>
         <property name="orientation">vertical</property>
@@ -167,6 +167,20 @@
           </packing>
         </child>
         <child>
+          <object class="GtkModelButton" id="help_btn">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="text" translatable="yes">Help</property>
+            <signal name="clicked" handler="on_help_btn_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">6</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkModelButton" id="about_btn">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -177,7 +191,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">6</property>
+            <property name="position">7</property>
           </packing>
         </child>
       </object>
@@ -209,9 +223,6 @@
     <property name="title" translatable="yes">Turtlico</property>
     <property name="default_width">1000</property>
     <property name="default_height">500</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkBox" id="top_box">
         <property name="visible">True</property>
@@ -593,6 +604,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </template>
 </interface>

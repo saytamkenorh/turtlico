@@ -434,6 +434,15 @@ namespace Turtlico {
         }
 
         [GtkCallback]
+        void on_help_btn_clicked () {
+            try {
+                Gtk.show_uri_on_window(this, "https://turtlico.tk/doc/en/index.html", Gdk.CURRENT_TIME);
+            } catch (Error e) {
+                warning("Cannot open on-line help: " + e.message);
+            }
+        }
+
+        [GtkCallback]
         void on_about_btn_clicked () {
             about_dialog.run();
             about_dialog.hide();
