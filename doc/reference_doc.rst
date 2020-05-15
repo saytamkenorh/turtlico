@@ -2,7 +2,15 @@
 Reference documentation
 =======================
 
-This page contains description for commands in Turtlico.
+New line (Enter)
+================
+
+Tab
+===
+Tabs are used to create blocks of commands. For example it is used in order to specify what commands should happen if a condition is true or what commands should be executed n-times.
+
+.. image:: figures/tabs.png
+    :align: center
 
 Comment
 =======
@@ -60,12 +68,12 @@ If input is smaller than 0.5 or greater than 10 the speed is set to zero.
 ``NUMBER`` Speed (default: 1)
 
 Number
-=========
+======
 
 This editable icon represents an integer number.
 
 String
-=========
+======
 This editable icon represents a string.
 
 Length of (string, list etc)
@@ -100,13 +108,13 @@ Set color of Turtle's pen. Without any parameters the color is set to black.
 
 ``TUPLE(r, g, b)`` Color tuple that represents RGB color. Each of r, g and b must be in the range 0..255.
 
-Pull the pen up – no drawing when moving
-========================================
-The turtle will no longer draw when moving.
+Lift the pen up – no drawing when moving.
+=========================================
+Do not not draw when the turtle moves.
 
-Pull the pen down – drawing when moving
+Put the pen down – drawing when moving.
 =======================================
-The turtle will draw a line when moving.
+Draw when the turtle moves.
 
 Pen properties
 ==============
@@ -134,6 +142,19 @@ Return or set the pen’s attributes. All the parameters are optional.
 
 ``NUMBER`` "tilt" Rotate the turtleshape by angle from its current tilt-angle.
 
+Left parenthesis
+================
+Used to specify parameters of commands.
+The example usage is "command(parameter, parameter)".
+
+Argument separator (Comma)
+==========================
+See `here <#left-parenthesis>`_.
+
+Right parenthesis
+=================
+See `here <#left-parenthesis>`_.
+
 Hide turtle
 ===========
 
@@ -158,11 +179,19 @@ Write text on screen
 Begin fill
 ==========
 To be called just before drawing a shape to be filled.
-Call this, draw a shape (eg. rectangle) and then call `End fill <#end-fill>`_
+Call this, draw a shape (e.g. rectangle) and then call End fill.
 
-End fill
-=========
-Fill the shape drawn after the last call to `Begin fill <#begin-fill>`_
+.. image:: figures/square-shape-fill.png
+   :align: center
+
+.. figure:: figures/square-shape-fill-result.gif
+   :align: center
+
+   Result
+
+End fill - fill the drawn shape
+===============================
+See `Begin fill <#begin-fill>`_.
 
 Clear turtle screen
 ===================
@@ -180,11 +209,16 @@ Get or set the background picture of the screen
 
 **Parameters**
 
-``PICTURE | STRING`` The new backgroud picture. It cloud be a string path name or an `image <#id3>`_.
+``PICTURE | STRING`` The new backgroud picture. It cloud be a string path name or an `image <#image-file>`_.
 
-Image
-=====
+Load scene (file)
+=================
 
+**Parameters**
+``STRING`` Path to scene file.
+
+Image file
+==========
 Editable object that represents an image file.
 Drag and drop an image from file explorer to your program directly or put this icon into the program and enter path by pressing F2 manually.
 
@@ -196,12 +230,17 @@ You can change turtle's appearance with this command.
 
 ``STRING`` Set turtle appearance to a predefined shape 'arrow', 'turtle', 'circle', 'square', 'triangle', 'classic'.
 
-``IMAGE``  Set turtle apperance to an `image <#id3>`_.
+``IMAGE``  Set turtle apperance to an `image <#image-file>`_.
 
 Create new turtle
 =================
 This creates a turtle. The result of this function should be stored in a variable.
 All turtle functions can be accessed from this variable.
+
+.. figure:: figures/new-turtle.png
+    :align: center
+
+    Creates a new turtle and moves it forward.
 
 Get the predefined turtle object
 ================================
@@ -212,7 +251,7 @@ Place image at the position of the turtle
 
 **Parameters**
 
-``Image`` An `image <#id3>`_.
+``Image`` An `image <#image-file>`_.
 
 ``Turtle`` A turtle object to place the image at. (optional)
 
@@ -258,12 +297,157 @@ Undo the last turtle action
 ===========================
 Undoes the last turtle action. For example removes drawen line and moves turtle to previous position.
 
+Circle
+======
+Draws a circle with specified perimeter.
+
+**Parameters**
+
+``NUMBER`` Radius.
+
+``NUMBER`` Extent - determines which part of the circle is drawn. (optional)
+
+``NUMBER`` Steps - the number of steps tu use. If not given, it will be calculated automatically. May be used to draw regular polygons. (optional)
+
+Turbo mode
+==========
+Turbo mode can hide turtle actions from the user. This is useful for example when prepairing scene.
+
+**Parameters**
+
+``NUMBER`` "turbo" There are three levels of turbo mode:
+
+	0 - Off - Set default turtle speed.
+
+	1 - On - Set maximal turtle speed.
+
+	2 - Full - Set maximal turtle speed and disable screen updating. (User cannot see any action)
+
+	(default: False)
+
+``BOOL`` "do_not_render" Disables screen updating. This is automatically set to True when "turbo" is level 2. (default: False)
+
+Camera properties
+=================
+
+**Parameters**
+
+``NUMBER`` "x" X coordinate of camera.
+
+``NUMBER`` "y" Y coordinate of camera.
+
+``NUMBER`` "width" Width of the program window. (optional)
+
+``NUMBER`` "hegiht" Height of the program window. (optional)
+
+
 Exit the program
 ================
 
 **Parameters**
 
 ``NUMBER`` Program return code. (default: 0)
+
+East
+====
+0°.
+
+North
+=====
+90°.
+
+West
+====
+180°.
+
+South
+=====
+270°.
+
+Pi (3.14)
+=========
+The Pi (π) constant.
+
+Get x coordinate
+================
+Gets current x coordinate of the turtle.
+
+Get y coordinate
+================
+Gets current y coordinate of the turtle.
+
+Return True if turtle is shown.
+===============================
+
+Sine
+====
+Return the sine of x radians.
+
+``NUMBER`` Number x.
+
+Cosine
+======
+Return the cosine of x radians.
+
+``NUMBER`` Number x.
+
+Tangent
+=======
+Return the tangent of x radians.
+
+``NUMBER`` Number x.
+
+Absolute value
+==============
+Return absolute value of x. Example results 3→3, -3→3.
+
+``NUMBER`` Number x.
+
+Convert angle from degrees to radians.
+======================================
+``NUMBER`` Angle.
+
+Convert angle from radians to degrees.
+======================================
+``NUMBER`` Angle.
+
+True
+====
+Represents always true condition.
+
+False
+=====
+Represents always false condition.
+
+Round a number
+==============
+
+``NUMBER`` "number" The number to be roundend.
+
+``NUMBER`` "digits" The number of decimals to use when rounding the number. (default: 0)
+
+Floor
+=====
+Return the largest integer not greater than x. E.g. 3.4→3.
+
+``NUMBER`` Number x.
+
+Ceil
+====
+Return the smallest integer not less than x. E.g. 3.4→4.
+
+``NUMBER`` Number x.
+
+Returns square root of n. Use ** for int powers.
+================================================
+Return square root of n. E.g. 16→4.
+
+``NUMBER`` Number n.
+
+For getting int powers you can use `** <#multiply>`_:
+
+.. image:: figures/int-powers.png
+    :align: left
 
 Color (property or editable)
 ============================
@@ -278,6 +462,290 @@ Represents a font description string. Press F2 to edit.
 Key
 ===
 Represents a key. Press F2 to edit.
+
+Left square bracket
+===================
+Square brackets are used create lists and to access list elements by index.
+
+Example usage of list-related commands:
+
+.. image:: figures/lists.png
+    :align: center
+
+Right square bracket
+====================
+See `Left square bracket <#left-square-bracket>`__.
+
+Delete an object
+================
+Deletes a varibale.
+
+May be also used to remove items from list.
+For more information about lists see `this <#left-square-bracket>`__.
+
+Append an item to a list
+========================
+
+For more information about lists see `this <#left-square-bracket>`__.
+
+**Parameters**
+
+``OBJECT`` The item.
+
+Insert an item to a list
+========================
+
+For more information about lists see `this <#left-square-bracket>`__.
+
+**Parameters**
+
+``NUMBER`` Index.
+
+``OBJECT`` The item.
+
+Clear list
+==========
+Removes all items from the list.
+
+For more information about lists see `this <#left-square-bracket>`__.
+
+Finds index of the occurence of an item in a list or in a string
+================================================================
+Returns -1 if no occurence found.
+
+For more information about lists see `this <#left-square-bracket>`__.
+
+**Parameters**
+
+``LIST`` List to find items in.
+
+``OBJECT`` Item. It could be almost any type.
+
+``NUMBER`` Search start index. (default: 0)
+
+``NUMBER`` Direction of search. (direction: 1)
+
+Converts a string into lower case
+=================================
+Makes the whole string to contain only lower case letters.
+
+**Parameters**
+
+``STRING`` The string.
+
+Converts a string into upper case
+=================================
+Makes the whole string to contain only upper case letters.
+
+**Parameters**
+
+``STRING`` The string.
+
+Splits the string at the specified separator, and returns a list
+================================================================
+Returns the edited string.
+
+**Parameters**
+
+``STRING`` The separator.
+
+Replaces a specified phrase with another specified phrase
+=========================================================
+Returns the edited string.
+
+**Parameters**
+
+``STRING`` Phrase to be replaced.
+
+``STRING`` String to replace the phrase with.
+
+If statement
+============
+With if statements you mark blocks of commands that will be executed only if a specified condition is true.
+
+Else
+====
+Happens if condition in if statement was not true.
+See `if statement <#if-statement>`_.
+
+Begin block of commands
+=======================
+See `if statement <#if-statement>`_.
+
+Equals
+======
+
+Not equals
+==========
+
+is less than
+============
+
+is greater than
+===============
+
+and
+===
+
+or
+==
+
+negation
+========
+
+Define a method
+===============
+Methods can be used in order to minimize repeating blocks of code. You can define a method and then call it from different places of the program.
+
+You can also use the functions dialog to create functions and connect events to them with less effort.
+There you can also simply create method usage blocks (`Object <#object>`__ with parenthesis).
+
+.. figure:: figures/function.png
+   :align: left
+
+   Creates an example function called "sum" that returns sum of two numbers.
+
+Return a value
+==============
+
+See `method <#define-a-method>`__.
+
+Repeat block of commands
+========================
+
+This is used to repeat block of commands n times. Place a ``NUMBER`` after this command. If no number is specified the cycle will repeat infinitely.
+
+Example (see also `Begin fill <#begin-fill>`__):
+
+.. image:: figures/square-shape-fill.png
+   :align: center
+
+.. figure:: figures/square-shape-fill-result.gif
+   :align: center
+
+   Result
+
+For loop
+========
+With for loop you can execute block of commands for every item in a list. List values are placed in a variable that you can use then.
+
+.. image:: figures/for-loop.png
+   :align: center
+
+Is item in a list? / For all items in a collection.
+===================================================
+Checks wheter item is in a list. It is also used with `for loop <#for-loop>`_.
+
+Repeat while the condition is true
+==================================
+Similiar to `Repeat block of commands <#repeat-block-of-commands>`__ but instead of a number you have to specify a condition.
+
+.. figure:: figures/while-loop.png
+   :align: center
+
+   Create a "wall" up to X coordinate 200.
+
+Break out of a loop
+===================
+Stops iterating current loop and starts executing commands after the loop.
+
+Continue with next iteration of a loop
+======================================
+Skips commands after this and starts next iteration of the loop (or exits to loop if this is the last iteration).
+
+Object
+======
+Objects represent a variable or a method. You can edit its name by pressing F2 on it or by clicking "Edit value" in the context menu.
+
+**Functions**
+
+You can define a new method with `Define a method <#define-a-method>`__.
+Then place parenthesis after this command just like with built-in functions.
+Please note that you must you parenthesis even if you don't specify any parameters. Otherwise the object will be treaten as a variable.
+
+**Varibales**
+
+In variables can be stored various values like numbers or strings.
+You have to assert a value to a variable and then you can use it in following code.
+
+.. figure:: figures/variables-snail.png
+   :align: center
+
+   Creates a "snail" using line length variable
+
+Use variable as a global one
+============================
+Forces specified object to be used as a global variable. Global variables have persistent values all over the program.
+For example if you change value of a global varibale in a function it will affect all occurences of the variable in the code.
+
+If you would assign a value to a global varibale without marking it as global at the start of the function or program the program will only create a new local variable
+that will be destroyed after the functions ends.
+
+**Usage at the start of the program (recommended)**
+
+If you mark variable as global outside of any commands block it will be marked as global automatically in all following functions.
+This means that if you place this at the start of the program the variable will be accessible from anywhere.
+
+.. image:: figures/global-varibales.png
+    :align: center
+
+**Usage at start of functions**
+
+You can also mark variable as global only for specific function. Just place this at the start of the function.
+
+However if you only read from a global variable you don't have to use this command at all but is is recommended to use it in order to make code easier to read.
+
+Assign value to a variable
+==========================
+See `Object <#object>`__.
+
+Increase value by
+=================
+Increases value of a variable by specified amount.
+Example:
+
+.. figure:: figures/increase-value-by.png
+    :align: center
+
+    Increases value of variable "n" by 10
+
+Decrease value by
+=================
+Decreases value of a variable by specified amount.
+Also see `Increase value by <#increase-value-by>`__.
+
+Dot (use to access properties of an object)
+===========================================
+Some objects (e.g. turtles and lists) have properties like varibales or methods. Dot is used in order to access them.
+To look at an example usage check out `Create new turtle <#create-new-turtle>`__.
+
+Plus
+====
+
+Minus
+=====
+
+Multiply
+========
+
+Divide
+======
+
+Modulo
+======
+
+Type conversion
+===============
+Type conversion is used in order to make value of specified type from another value (e.g. a number from a string).
+
+Example usage (note that the number 100 is a string):
+
+.. image:: figures/type-conversion.png
+    :align: center
+
+Direct Python code
+==================
+This icon represents custom Python code that you can change by editing the value of this icon.
 
 Random number
 =============
@@ -300,6 +768,7 @@ Return list of numbers in specified range
 
 Connect a function to handle mouse clicks
 =========================================
+You can also use the functions dialog to create a new method and connect mouse click signal to it automatically.
 
 **Parameters**
 
@@ -311,6 +780,7 @@ Connect a function to handle mouse clicks
 
 Connect a function to handle key presses
 ========================================
+You can also use the functions dialog to create a new method and connect key preess signal to it automatically.
 
 **Parameters**
 
@@ -355,6 +825,24 @@ Pop up a dialog window for input of a string.
 
 ``STRING`` Prompt text. (default: 'Enter a string:')
 
+Converts a character to an int value
+====================================
+Returns an integer represeting the character.
+The result is a Unicode code point or a value of the byte when the argument is an 8-bit string.
+You can also check out the `Unicode table <https://en.wikipedia.org/wiki/List_of_Unicode_characters#Latin_script>`__ to determine int values of various characters.
+
+**Parameters**
+
+``STRING`` The character. The string must be exactly one character long.
+
+Converts an int value to a character
+====================================
+Returns a string representing a character whose Unicode code point is an integer.
+
+**Parameters**
+
+``NUMBER`` Int value of the character.
+
 Read all lines of a file
 ========================
 Returns an array of strings.
@@ -372,7 +860,7 @@ Writes a string array to a file.
 ``STRING`` File path
 
 File dialog
-================
+===========
 Opens a file dialog a lets user to choose a file.
 Returns file path as string.
 
@@ -380,7 +868,7 @@ Returns file path as string.
 
 ``STRING`` "text" Text to show in the header of the dialog. (default: 'Choose a file')
 
-``STRING`` "filter" File filter. Format: '[Filter name] | [File name pattern]'. (default: 'All files | *')
+``STRING`` "filter" File filter. Format: '[Filter name] | [File name pattern]'. (default: 'All files | \*')
 
 ``BOOL`` "save" Activate file save mode.
 
@@ -393,7 +881,7 @@ Returns boolean.
 ``STRING`` File path
 
 Check directory exists
-=================
+======================
 Returns boolean.
 
 **Parameters**
@@ -425,9 +913,173 @@ Returns a sorted list of subdirs in the specified directory.
 ``STRING`` Directory path.
 
 Get parent directory / the directory the item is located in
-============================================================
-Returns the parent directory. Eg. for '/dir1/dir2/file' this returns '/dir1/dir2'.
+===========================================================
+Returns the parent directory. E.g. for '/dir1/dir2/file' this returns '/dir1/dir2'.
 
 **Parameters**
 
 ``STRING`` Path.
+
+Get file name from path
+=======================
+Returns name of the file at path. E.g. for '/home/user' this returns 'user'.
+
+**Parameters**
+
+``STRING`` Path.
+
+Get current timestamp
+=====================
+Return the time in seconds since the epoch as a float.
+
+Convert timestamp to string
+===========================
+Returns a string that represents the timestamp.
+
+Format codes:
+
++-----------+-------------------------------------------------------+-------------------------------+
+| Directive | Meaning                                               | Example (English (US) locale) |
++===========+=======================================================+===============================+
+| %a        | Weekday as locale’s                                   |                               |
+|           | abbreviated name.                                     | Sun, Mon, …, Sat              |
++-----------+-------------------------------------------------------+-------------------------------+
+| %A        | Weekday as locale’s full name.                        | Sunday, Monday, …,            |
+|           |                                                       | Saturday                      |
++-----------+-------------------------------------------------------+-------------------------------+
+| %w        | Weekday as a decimal number,                          | 0, 1, …, 6                    |
+|           | where 0 is Sunday and 6 is                            |                               |
+|           | Saturday.                                             |                               |
++-----------+-------------------------------------------------------+-------------------------------+
+| %d        | Day of the month as a                                 | 01, 02, …, 31                 |
+|           | zero-padded decimal number.                           |                               |
++-----------+-------------------------------------------------------+-------------------------------+
+| %b        | Month as locale’s abbreviated name.                   | Jan, Feb, …, Dec              |
++-----------+-------------------------------------------------------+-------------------------------+
+| %B        | Month as locale’s full name.                          | January, February,            |
+|           |                                                       | …, December                   |
++-----------+-------------------------------------------------------+-------------------------------+
+| %m        | Month as a zero-padded decimal number.                | 01, 02, …, 12                 |
++-----------+-------------------------------------------------------+-------------------------------+
+| %y        | Year without century as a zero-padded decimal number. | 00, 01, …, 99                 |
++-----------+-------------------------------------------------------+-------------------------------+
+| %Y        | Year with century as a decimal                        | 0001, 0002, …, 2013,          |
+|           | number.                                               | 2014                          |
++-----------+-------------------------------------------------------+-------------------------------+
+| %H        | Hour (24-hour clock) as a zero-padded decimal number. | 00, 01, …, 23                 |
++-----------+-------------------------------------------------------+-------------------------------+
+| %I        | Hour (12-hour clock) as a                             | 01, 02, …, 12                 |
+|           | zero-padded decimal number.                           |                               |
++-----------+-------------------------------------------------------+-------------------------------+
+| %p        | Locale’s equivalent of either                         |                               |
+|           | AM or PM.                                             | AM, PM                        |
++-----------+-------------------------------------------------------+-------------------------------+
+| %M        | Minute as a zero-padded decimal number.               | 00, 01, …, 59                 |
++-----------+-------------------------------------------------------+-------------------------------+
+| %S        | Second as a zero-padded                               | 00, 01, …, 59                 |
+|           | decimal number.                                       |                               |
++-----------+-------------------------------------------------------+-------------------------------+
+| %j        | Day of the year as a                                  | 001, 002, …, 366              |
+|           | zero-padded decimal number.                           |                               |
++-----------+-------------------------------------------------------+-------------------------------+
+| %U        | Week number of the year                               | 00, 01, …, 53                 |
+|           | (Sunday as the first day of                           |                               |
+|           | the week) as a zero padded                            |                               |
+|           | decimal number. All days in a                         |                               |
+|           | new year preceding the first                          |                               |
+|           | Sunday are considered to be in                        |                               |
+|           | week 0.                                               |                               |
++-----------+-------------------------------------------------------+-------------------------------+
+| %W        | Week number of the year                               | 00, 01, …, 53                 |
+|           | (Monday as the first day of                           |                               |
+|           | the week) as a decimal number.                        |                               |
+|           | All days in a new year                                |                               |
+|           | preceding the first Monday                            |                               |
+|           | are considered to be in                               |                               |
+|           | week 0.                                               |                               |
++-----------+-------------------------------------------------------+-------------------------------+
+| %c        | Locale’s appropriate date and time representation.    | Tue Aug 16 21:30:00           |
+|           |                                                       | 2000                          |
++-----------+-------------------------------------------------------+-------------------------------+
+| %x        | Locale’s appropriate date                             | 08/16/1988                    |
+|           | representation.                                       |                               |
++-----------+-------------------------------------------------------+-------------------------------+
+| %X        | Locale’s appropriate time                             | 21:30:00                      |
+|           | representation.                                       |                               |
++-----------+-------------------------------------------------------+-------------------------------+
+| %%        | A literal '%' character.                              | %                             |
++-----------+-------------------------------------------------------+-------------------------------+
+
+**Parameters**
+
+``NUMBER`` Timestamp.
+
+``STRING`` Format of output string. (default: '%d/%m/%y %H:%M:%S')
+
+Convert string to timestamp
+===========================
+For list of format codes see `Convert timestamp to string <#convert-timestamp-to-string>`__.
+
+**Parameters**
+
+``NUMBER`` String representing a date/time.
+
+``STRING`` Format of the string. (default: '%d/%m/%y %H:%M:%S')
+
+Create sound player for a file
+==============================
+
+Play tone (frequency/C-B, duration, wait for end)
+=================================================
+
+Play sound (file or sound player, volume - optional)
+====================================================
+
+Pause sound player
+==================
+
+is player playing
+=================
+
+Seek to given position in seconds
+=================================
+
+Get current position
+====================
+
+Get the duration of the media opened in player (returns zero if duration is unknown)
+====================================================================================
+
+Connect LED
+===========
+
+Connect RGB LED
+===============
+
+Connect Button
+==============
+
+Connect Input Device
+====================
+
+Connect PWM Output Device
+=========================
+
+Connect Digital Output Device
+=============================
+
+Turn on device
+==============
+
+Turn off device
+===============
+
+Value (input and output)
+========================
+
+Connect a function that is called when the device state changes to active
+=========================================================================
+
+Connect a function that is called when the device state changes to inactive
+===========================================================================
+

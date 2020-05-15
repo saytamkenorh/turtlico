@@ -63,6 +63,7 @@ Format of plugin files
 Module files are json-formated. This is a basic module file with one category and one command:
 
 .. code-block:: json
+    :force:
 
     {
         "name": "Example plugin",
@@ -96,10 +97,12 @@ Properties:
 
 - ``id`` - The ID of the module. This must be same as the ``func`` property of the corresponding command.
 - ``code`` - A piece of code that is placed before the generated code to the output file. It should define a method with an id that corresponds with the id property of the module.
+- ``deps`` - You can use other modules from a module. This specifies a list of modules that will be inserted into the program with the module.
 
 Example:
 
 .. code-block:: json
+    :force:
 
     {
         "id": "tcf_sum",
@@ -110,6 +113,7 @@ Example:
 Example corresponding command definition:
 
 .. code-block:: json
+    :force:
 
     {"id":"5_sum", "icon":"r:sum.png", "?": 'Returns the sum of two numbers.' , "type": 5, "func": "tcf_sum", "params": "" }
 
@@ -139,7 +143,7 @@ Basic properties:
 - ``id`` - The ID of the command. It should have a prefix that corresponds with the icon type. Eg. ``0_go``.
 - ``icon`` - The icon of the command (see Icon specification).
 - ``?`` - Basic short description of the icon.
-- ``type`` - The type of the icon. See below.
+- ``type`` - The type of the command. See below.
 
 **Command types**
 

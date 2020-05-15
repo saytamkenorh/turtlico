@@ -18,6 +18,7 @@ example_files = [
 	'random-move.tcp',
 	'sound-player.tcp',
 	'turtle-star.tcp',
+	'scenes.zip',
 ]
 
 install_data(

@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Turtlico'
-copyright = '2019, matyas5'
+copyright = '2020, matyas5'
 author = 'matyas5'
 
 # The short X.Y version
@@ -104,7 +104,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Turtlicodoc'
+htmlhelp_basename = 'Turtlico'
 
 
 # -- Options for LaTeX output ------------------------------------------------

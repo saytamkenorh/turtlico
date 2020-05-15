@@ -12,3 +12,4 @@ Examples
 - `Random move <./examples/random-move.tcp>`_
 - `Sound player <./examples/sound-player.tcp>`_
 - `Turtle star <./examples/turtle-star.tcp>`_
+- `Scenes <./examples/scenes.zip>`_
