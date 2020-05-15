@@ -126,8 +126,27 @@ namespace Turtlico {
             try {
                 programview.buffer.paste_icons_string(
                     code, ref x, ref y, false, programview.auto_indent);
+
+                // Get function line
                 y = 0;
+                int first_def = int.MAX;
+                int last_global = int.MAX;
+                for (int line = 0; line < programview.buffer.program.size; line++) {
+                    if (programview.buffer.program[line].size == 0) continue;
+                    if (programview.buffer.program[line][0].id == "3_def" && line < first_def)
+                        first_def = line;
+                    if (programview.buffer.program[line][0].id == "3_global")
+                        last_global = line + 1;
+                }
+                if (first_def != int.MAX || last_global != int.MAX)
+                    y = int.min(first_def, last_global);
+
                 var builder = new StringBuilder ();
+                if (programview.buffer.check_coord_valid(0, y - 1) &&
+                    programview.buffer.program[y - 1][0].id != "nl")
+                {
+                    builder.append("nl;~");
+                }
                 builder.append(@"3_def;~obj;$(name_entry.text)~(;~");
                 int i = 0;
                 foreach(var param in selected_event_params.split(",")) {

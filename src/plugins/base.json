@@ -108,7 +108,7 @@
 				{"id":"3_b", "icon":"🛑", "?": 'Break out of a loop', "type": 3, "c":"break", "fg-color": "rgb(0, 0, 128)"},
 				{"id":"3_c", "icon":"↦", "?": 'Continue with next iteration of a loop', "type": 3, "c":"continue", "fg-color": "rgb(0, 0, 128)"},
 				{"id":"obj", "icon":"🆔", "?": 'Object', "type": -1, "data-draw": true, "bg-color": "rgb(100, 100, 100)"},
-				{"id":"3_global", "icon":"Glob", "?": 'Use variable as a global one', "type": 3, "c":"global", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"3_global", "icon":"Glob", "?": 'Use variable as a global one', "type": -1, "c":"global", "fg-color": "rgb(0, 0, 128)"},
 				{"id":"2_assign", "icon":"=", "?": 'Assign value to a variable', "type": 4, "c":"=", "fg-color": "rgb(0, 0, 128)"},
 				{"id":"2_+=", "icon":"↖", "?": 'Increase value by', "type": 4, "c":"+=", "fg-color": "rgb(0, 0, 128)"},
 				{"id":"2_-=", "icon":"↙", "?": 'Decrease value by', "type": 4, "c":"-=", "fg-color": "rgb(0, 0, 128)"},

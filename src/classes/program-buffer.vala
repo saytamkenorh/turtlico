@@ -577,5 +577,9 @@ namespace Turtlico {
             selection_phase = SelectionPhase.NOTHING_SELECTED;
             return success;
         }
+
+        public bool check_coord_valid (int x, int y) {
+            return (x >= 0 && y >= 0 && y < program.size && x < program[y].size);
+        }
     }
 }

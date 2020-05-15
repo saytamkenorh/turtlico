@@ -130,6 +130,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                 modules_to_load.add(Path.get_basename(plugin.replace("r:", "")));
             }
 
+            var global_variables = new Gee.LinkedList<string>(); // Variables that are available in every method
+
             for(int y = 0; y < program.size; y++) {
                 string indentation = "";
                 bool increase_indent = true;
@@ -138,12 +140,20 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     output.add("# Line: " + y.to_string());
                     output.add("");
                 }
+                Command line_start_command = null;
+
                 for(int x = 0; x < program[y].size; x++) {
                     out_line = output.size - 1;
                     // Comments
                     if (program[y][x].id == "#" && program[y][x].data == "") {
                         break;
                     }
+
+                    // First command after indentation
+                    if (program[y][x].id != "tab" && line_start_command == null) {
+                        line_start_command = program[y][x];
+                    }
+
                     // Functions
                     bool con = false;
                     foreach(var f in functions){
@@ -163,6 +173,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     else {
                         increase_indent = false;
                     }
+
                     // Cycles
                     if (program[y][x].id == "1_rep") {
                         if (check_next_icon && program[y][x + 1].id == ":") {
@@ -187,6 +198,10 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     }
                     // Functions
                     if (program[y][x].id == "3_def") {
+                        if (line_start_command.id != "3_def") {
+                            output.add("%sraise SyntaxError('%s')".printf(
+                                indentation, _("Functions must start on a separate line!")));
+                        }
                         if (x + 2 < program[y].size &&
                             program[y][x + 1].id == "obj" &&
                             program[y][x + 2].id == ":")
@@ -204,7 +219,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                         continue;
                     }
                     if (program[y][x].id == "str" || program[y][x].id == "key") {
-                        output[out_line] = output[out_line] + "'" + program[y][x].data + "'";
+                        output[out_line] = output[out_line] + "'" + program[y][x].data.replace("'", """\'""") + "'";
                         continue;
                     }
                     // Objects (variables, user defined functions etc.)
@@ -257,6 +272,20 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                             break;
                         }
                     }
+                    if (program[y][x].id == ":") {
+                        // Support for one line conditions etc.
+                        // The rest of the line after ":" is processed as a part of the command block
+                        indentation = indentation + "\t";
+                        output.add(indentation);
+                        out_line++;
+                        // Add global variable markers on start of functions
+                        if (line_start_command.id == "3_def") {
+                            foreach (var v in global_variables) {
+                                output[out_line] = output[out_line] + @"global $v;";
+                            }
+                        }
+                    }
+
                     if (program[y][x].id == "4_color") {
                         if (param_level == 0)
                 	        output.add(indentation + "color" + program[y][x].data.substring(3)); // Change turtle color
@@ -284,6 +313,21 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                         if(program[y][x].id == f.id) {
                             output.add(indentation + f.code + " ");
                             break;
+                        }
+                    }
+                    if (program[y][x].id == "3_global" && check_next_icon && program[y][x + 1].id == "obj")
+                    {
+                        if (indentation == "") {
+                            global_variables.add(program[y][x + 1].data);
+                        }
+                        int x2 = x + 2;
+                        if (x2 < program[y].size && program[y][x2].id == "2_assign") {
+                            // Shorter global variable declarations glob var = [something]
+                            output.add(
+                                indentation  + "global %1$s; %1$s".printf(program[y][x + 1].data));
+                            x++; // Skip object
+                        } else {
+                            output.add(indentation + "global ");
                         }
                     }
                 }
@@ -328,7 +372,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
             bool check_next_icon = x + 1 < program[y].size;
             string parsed = "";
             if (f.id == "5_img" && program[y][x].data != "") {
-                parsed = indentation + f.function + "('" + program[y][x].data + "')";
+                parsed = indentation + f.function + "('" + program[y][x].data.replace("'", """\'""") + "')";
             }
             else if (check_next_icon && program[y][x + 1].id == "(") {
                 parsed = indentation + f.function;
@@ -338,7 +382,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                 skip_next_command = true;
             }
             else if (check_next_icon && program[y][x + 1].id == "str"){
-                parsed = indentation + f.function + "('" + program[y][x+1].data + "')";
+                parsed = indentation + f.function + "('" + program[y][x+1].data.replace("'", """\'""") + "')";
                 skip_next_command = true;
             }
             else if (check_next_icon && program[y][x + 1].id[0] == '4') {
