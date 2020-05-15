@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Turtlico
-Exec=turtlico
+Exec=turtlico %F
 Terminal=false
 Type=Application
 Categories=GTK;Development;
