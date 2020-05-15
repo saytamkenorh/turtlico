@@ -9,6 +9,8 @@ env["GSETTINGS_SCHEMA_DIR"] = sys.argv[4]
 
 for file in os.listdir(sys.argv[2]):
 	if not file.endswith('.tcp'): continue
+	print()
+	print("Compiling {}...".format(file))
 	src = os.path.join(sys.argv[2], file)
 	output = os.path.join(sys.argv[4], file)
 	if os.path.isfile(output): os.remove(output)

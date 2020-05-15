@@ -19,6 +19,7 @@ example_files = [
 	'sound-player.tcp',
 	'turtle-star.tcp',
 	'scenes.zip',
+	'click-counter.tcp',
 ]
 
 install_data(

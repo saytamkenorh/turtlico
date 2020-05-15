@@ -1,0 +1,10 @@
+3_global,,;obj,n,;2_assign,,;int,0,;nl,,;
+nl,,;
+3_def,,;obj,click,;(,,;obj,x,;sep,,;obj,y,;),,;:,,;nl,,;
+tab,,;obj,n,;2_+=,,;int,1,;nl,,;
+tab,,;0_cs,,;nl,,;
+tab,,;0_wr,,;obj,n,;nl,,;
+nl,,;
+0_ht,,;nl,,;
+0_turbo,,;int,2,;#,Only text is rendered,;nl,,;
+0_emc,,;(,,;obj,click,;sep,,;int,1,;),,;nl,,;
