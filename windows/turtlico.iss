@@ -33,6 +33,7 @@ Compression=lzma
 SolidCompression=yes
 CloseApplications=force
 WizardStyle=modern
+ChangesAssociations=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -54,4 +55,10 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall
+
+[Registry]
+Root: HKLM; Subkey: "Software\Classes\.tcp"; ValueType: string; ValueName: ""; ValueData: "TurtlicoProject"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Classes\TurtlicoProject"; ValueType: string; ValueName: ""; ValueData: "Turtlico Project"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "Software\Classes\TurtlicoProject\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"
+Root: HKLM; Subkey: "Software\Classes\TurtlicoProject\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1""" 
 
