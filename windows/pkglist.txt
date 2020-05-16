@@ -1,6 +1,7 @@
 adwaita-icon-theme
 atk
 bzip2
+brotli
 cairo
 expat
 flac

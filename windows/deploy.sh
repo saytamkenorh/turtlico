@@ -14,7 +14,12 @@ for pkg in $pkglist
 do
   version=$(pacman -Qi $2-$pkg | grep Version | uniq |  awk '{print $3}')
   echo $2-$pkg-$version
-  tar -xf /var/cache/pacman/pkg/$2-$pkg-$version-any.pkg.tar.xz
+  file="/var/cache/pacman/pkg/$2-$pkg-$version-any.pkg"
+  if test -f "$file.tar.zst"; then
+    tar -I zstd -xf $file.tar.zst || exit 1¨
+  else
+    tar -xf $file.tar.xz || exit 1
+  fi
 done
 echo "Moving files to the output directory..."
 mv $PWD/mingw64/bin $1

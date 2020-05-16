@@ -27,7 +27,7 @@ echo "Bundling runtime. This will take a while."
 rm -rf ./output
 
 # Copy library stack
-./deploy.sh "$srcdir/output" $MINGW_PREFIX
+./deploy.sh "$srcdir/output" $MINGW_PREFIX || exit 1
 # Add it to PATH
 bindir=$(echo "$srcdir/output/bin" | sed -e "s-C:/-/c/-g")
 export PATH="$bindir:$PATH"
