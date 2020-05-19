@@ -10,6 +10,7 @@ example_files = [
 	'calc.tcp',
 	'color.tcp',
 	'direct-python.tcp',
+	'exceptions.tcp',
 	'files.tcp',
 	'files-write-input.tcp',
 	'image.tcp',

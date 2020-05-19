@@ -149,9 +149,11 @@ Basic properties:
 
 - -1 - This is an internal type. It indicates that command has its own processing code in the compiler. This should not be used in the icon prefix.
 - 0 - Basic method. You must specify two extra properties: ``func`` (Python method name eg. ``forward``) and ``params`` (default parameters separated by commas that are passed to the method if the icon is placed standalone eg ``"50, 40"``)
+- 2 - Operator. E.g. Assign value, increase value by, etc. Command that immediately follows an operator is placed on the same line as the operator in the output file.
 - 3 - Keyword. It is a command that is on its own line and it doesn't need any parameters in parenthesis. You need to specify propery ``c`` that indicates which keyword is put instead of the icon to the python code (eg. ``break``).
 - 4 - Simple code snippet. Use that for icons that represent a simple Python snippet like constants, variables etc. You need to specify property ``c`` that contains the code (eg. ``"math.pi"``).
-- 5 - Function that returns a value - Like Basic method but this is not put always on its own line.
+- 5 - Obsolete since version 0.4: Doesn't have any effect anymore. Please use 0 type for all commands. Function that returns a value - Like Basic method but this is not put always on its own line.
+- 6 - Keyword that takes arguments. Like If or For cylcles. Following commands upto : or Enter are placed on the same line in the output file.
 
 Icon specification
 ======================

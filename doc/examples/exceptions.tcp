@@ -1,0 +1,6 @@
+0_ht,,;nl,,;
+3_try,,;nl,,;
+tab,,;5_readlines,,;str,not existing file,;nl,,;
+tab,,;3_rs,,;obj,IOError,;(,,;str,Not exisitng file exists,;),,;nl,,;
+3_exc,,;obj,IOError,;as,,;obj,e,;:,,;nl,,;
+tab,,;0_wr,,;obj,e,;nl,,;

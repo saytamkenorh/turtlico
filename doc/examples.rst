@@ -14,3 +14,4 @@ Examples
 - `Sound player <./examples/sound-player.tcp>`_
 - `Turtle star <./examples/turtle-star.tcp>`_
 - `Scenes <./examples/scenes.zip>`_
+- `Exceptions <./examples/exceptions.tcp>`_
