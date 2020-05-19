@@ -36,6 +36,7 @@ namespace Turtlico {
         protected Gee.ArrayList<CompilerFunction> functions = new Gee.ArrayList<CompilerFunction>();
         protected Gee.ArrayList<CompilerSimpleIcon> simple_icons = new Gee.ArrayList<CompilerSimpleIcon>();
         protected Gee.ArrayList<CompilerSimpleIcon> keywords = new Gee.ArrayList<CompilerSimpleIcon>();
+        protected Gee.ArrayList<CompilerSimpleIcon> keywords_with_args = new Gee.ArrayList<CompilerSimpleIcon>();
         protected HashTable<string, CompilerModule> modules = new HashTable<string, CompilerModule> (str_hash, str_equal);
 
         Gee.ArrayList<string> output;
@@ -43,6 +44,7 @@ namespace Turtlico {
         string[] enabled_plugins;
         int out_line;
         uint param_level = 0;
+        uint keyword_level = 0; // Detects whether compiler is reading a condition (if, for, while)
 
         public Compiler (string[] enabled_plugins) {
             this.enabled_plugins = enabled_plugins;
@@ -65,16 +67,13 @@ namespace Turtlico {
                             functions.add(f);
                         }
                         else if(command.get_int_member("type") == 4) {
-                            CompilerSimpleIcon f = new CompilerSimpleIcon();
-                            f.id = command.get_string_member("id");
-                            f.code = command.get_string_member("c");
-                            simple_icons.add(f);
+                            simple_icons.add(create_simple_icon(command));
                         }
                         else if(command.get_int_member("type") == 3) {
-                            CompilerSimpleIcon f = new CompilerSimpleIcon();
-                            f.id = command.get_string_member("id");
-                            f.code = command.get_string_member("c");
-                            keywords.add(f);
+                            keywords.add(create_simple_icon(command));
+                        }
+                        else if(command.get_int_member("type") == 6) {
+                            keywords_with_args.add(create_simple_icon(command));
                         }
                         //debug(command.get_string_member("id"));
                     });
@@ -96,6 +95,13 @@ namespace Turtlico {
                     this.modules.set(f.id, f);
                 });
             }
+        }
+
+        private CompilerSimpleIcon create_simple_icon(Json.Object command) {
+            CompilerSimpleIcon f = new CompilerSimpleIcon();
+            f.id = command.get_string_member("id");
+            f.code = command.get_string_member("c");
+            return f;
         }
 
         public int out_line_to_src_line (
@@ -136,6 +142,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                 string indentation = "";
                 bool increase_indent = true;
                 param_level = 0;
+                keyword_level = 0;
                 if (write_line_hints) {
                     output.add("# Line: " + y.to_string());
                     output.add("");
@@ -153,6 +160,13 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     if (program[y][x].id != "tab" && line_start_command == null) {
                         line_start_command = program[y][x];
                     }
+                    // Indentation
+                    if (program[y][x].id == "tab" && increase_indent) {
+                        indentation = indentation + "\t"; continue;
+                    }
+                    else {
+                        increase_indent = false;
+                    }
 
                     // Functions
                     bool con = false;
@@ -166,16 +180,9 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     if (con) continue;
                     // Gets wheter program can check next icon
                     bool check_next_icon = x + 1 < program[y].size;
-
-                    if (program[y][x].id == "tab" && increase_indent) {
-                        indentation = indentation + "\t"; continue;
-                    }
-                    else {
-                        increase_indent = false;
-                    }
-
                     // Cycles
                     if (program[y][x].id == "1_rep") {
+                        keyword_level++;
                         if (check_next_icon && program[y][x + 1].id == ":") {
                             output.add(indentation + "while True"); continue;
                         }
@@ -190,14 +197,9 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                         }
                         continue;
                     }
-                    if (program[y][x].id == "1_for") {
-                        output.add(indentation + "for "); continue;
-                    }
-                    if (program[y][x].id == "1_while") {
-                        output.add(indentation + "while "); continue;
-                    }
                     // Functions
                     if (program[y][x].id == "3_def") {
+                        keyword_level++;
                         if (line_start_command.id != "3_def") {
                             output.add("%sraise SyntaxError('%s')".printf(
                                 indentation, _("Functions must start on a separate line!")));
@@ -224,21 +226,27 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     }
                     // Objects (variables, user defined functions etc.)
                     if (program[y][x].id == "obj") {
-                        if (x > 0 && (program[y][x - 1].id == "3_def" ||
-									       program[y][x - 1].id == "2_assign" ||
-									       program[y][x - 1].id == "2_."))
+                        if (get_no_indent(program, x, y) ||
+                            (x > 0 && program[y][x - 1].id == "3_def"))
 						{
 						    output[out_line] = output[out_line] + program[y][x].data;
 						}
-						else if (check_next_icon && (program[y][x + 1].id[0] == '2' ||
-						                                program[y][x + 1].id[0] == '(' ||
-						                                program[y][x + 1].id == "2_.")
-						         && param_level == 0)
+						else if (check_next_icon && (
+                            program[y][x + 1].id[0] == '2' || program[y][x + 1].id[0] == '('))
 						{
                             output.add(indentation + program[y][x].data);
 						}
 						else {
 						    output[out_line] = output[out_line] + program[y][x].data;
+						}
+						// Add parameters if detects value icon after object (string, int, ...)
+						// or if the object is used as a function
+						bool skip_next_command;
+						bool wrote_default;
+						string args = parse_short_args("", "", "", program, x, y, "", out skip_next_command, out wrote_default);
+						if (!wrote_default) {
+						    output[output.size - 1] = output[output.size - 1] + args;
+						    if (skip_next_command) x++;
 						}
 						continue;
                     }
@@ -263,8 +271,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                         continue;
                     }
 
-                    if (program[y][x].id == "(") {param_level++;}
-			        if (program[y][x].id == ")") {param_level--;}
+                    if (program[y][x].id == "(" || program[y][x].id == "[") {param_level++;}
+			        if (program[y][x].id == ")" || program[y][x].id == "]") {param_level--;}
 			        // Simple icons
                     foreach (var f in simple_icons) {
                         if(program[y][x].id == f.id) {
@@ -276,6 +284,9 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                         // Support for one line conditions etc.
                         // The rest of the line after ":" is processed as a part of the command block
                         indentation = indentation + "\t";
+                        if (param_level == 0 && keyword_level > 0) keyword_level--;
+                        if (param_level != 0)
+                            continue;
                         output.add(indentation);
                         out_line++;
                         // Add global variable markers on start of functions
@@ -312,6 +323,13 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     foreach (var f in keywords) {
                         if(program[y][x].id == f.id) {
                             output.add(indentation + f.code + " ");
+                            break;
+                        }
+                    }
+                    foreach (var f in keywords_with_args) {
+                        if(program[y][x].id == f.id) {
+                            output.add(indentation + f.code + " ");
+                            keyword_level++;
                             break;
                         }
                     }
@@ -367,50 +385,64 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     modules_to_load.add(f.function);
                 }
             }
-            bool skip_next_command = false;
+            bool skip_next_command;
+            // Use function's return value (do not put it on a new line)
+            bool no_indent = get_no_indent(program, x, y);
+            string parsed = parse_short_args(f.id, f.function, f.default_params, program, x, y, no_indent ? "" : indentation, out skip_next_command);
+            if(no_indent) {
+                output[out_line] = output[out_line] + parsed;
+        	}
+            else output.add(parsed);
+            if(skip_next_command) x++;
+        }
+
+        // Returns whether command at x,y in program should not be on its own line.
+        bool get_no_indent (Gee.ArrayList<Gee.ArrayList<Command>> program, int x, int y) {
+            return keyword_level > 0 || param_level > 0 || (x > 0 && program[y][x - 1].id[0] == '2');
+        }
+
+        string parse_short_args(string id, string function, string default_params,
+                                Gee.ArrayList<Gee.ArrayList<Command>> program,
+                                int x, int y, string indentation, out bool skip_next_command, out bool wrote_default = null) {
             // Can check next icon
             bool check_next_icon = x + 1 < program[y].size;
+
+            skip_next_command = false;
+            wrote_default = false;
+
             string parsed = "";
-            if (f.id == "5_img" && program[y][x].data != "") {
-                parsed = indentation + f.function + "('" + program[y][x].data.replace("'", """\'""") + "')";
+            if (id == "5_img" && program[y][x].data != "") {
+                parsed = indentation + function + "('" + program[y][x].data.replace("'", """\'""") + "')";
             }
             else if (check_next_icon && program[y][x + 1].id == "(") {
-                parsed = indentation + f.function;
+                parsed = indentation + function;
             }
             else if (check_next_icon && (program[y][x + 1].id == "int" || program[y][x+1].id == "obj")){
-                parsed = indentation + f.function + "(" + program[y][x+1].data + ")";
+                parsed = indentation + function + "(" + program[y][x+1].data + ")";
                 skip_next_command = true;
             }
             else if (check_next_icon && program[y][x + 1].id == "str"){
-                parsed = indentation + f.function + "('" + program[y][x+1].data.replace("'", """\'""") + "')";
+                parsed = indentation + function + "('" + program[y][x+1].data.replace("'", """\'""") + "')";
                 skip_next_command = true;
             }
             else if (check_next_icon && program[y][x + 1].id[0] == '4') {
                 if (program[y][x + 1].id == "4_color" && program[y][x + 1].data != "") {
-                    parsed = indentation + f.function + "(" + program[y][x+1].data.substring(3) + ")";
+                    parsed = indentation + function + "(" + program[y][x+1].data.substring(3) + ")";
                 }
                 else {
                     try {
                         var si = find_simple_icon(program[y][x+1].id);
-                        parsed = indentation + f.function + "(" + si.code + ")";
+                        parsed = indentation + function + "(" + si.code + ")";
                     }
                     catch (FileError e) {}
                 }
                 skip_next_command = true;
             }
             else {
-                parsed = indentation + f.function + "(" + f.default_params + ")";
+                parsed = indentation + function + "(" + default_params + ")";
+                wrote_default = true;
             }
-            // Return functions
-            bool after_dot = x > 0 && program[y][x - 1].id == "2_.";
-            if(program[y][x].id[0] == '5' || after_dot) {
-                if (param_level > 0 || after_dot)
-                    output[out_line] = output[out_line] + parsed.replace("\t", "");
-                else
-                    output[out_line] = output[out_line] + parsed;
-        	}
-            else output.add(parsed);
-            if(skip_next_command) x++;
+            return parsed;
         }
 
         CompilerSimpleIcon find_simple_icon (string id) throws FileError {
