@@ -226,6 +226,25 @@ namespace Turtlico.SceneEditor {
         }
 
         [GtkCallback]
+        bool on_sprites_view_button_press_event (Gdk.EventButton event) {
+            if (event.button == Gdk.BUTTON_SECONDARY) {
+                var path = sprites_view.get_path_at_pos((int)event.x, (int)event.y);
+                if (path == null) return false;
+                string sprite;
+                Gtk.TreeIter iter;
+                if (!sprites_store.get_iter(out iter, path)) return false;
+                sprites_store.get(iter, SpritesViewCols.NAME, out sprite, -1);
+
+                programview.paste_data(
+                        @"5_img;./$(sprite)~".replace("~", ProgramBuffer.str_mark_utf8));
+                var toplevel = programview.get_toplevel();
+                if (toplevel is Gtk.Window)
+                    ((Gtk.Window)toplevel).present();
+            }
+            return false;
+        }
+
+        [GtkCallback]
         void on_sprites_view_drag_begin(Gdk.DragContext context) {
             if (sprites_view.get_selected_items().length() == 0)
                 return;
@@ -403,7 +422,11 @@ namespace Turtlico.SceneEditor {
 		                FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
 		                null);
 		        } catch (Error e) {
-    		        msg(_("Error occurred while loading scenes and sprites"), e.message, Gtk.MessageType.ERROR);
+		            string message = e.message;
+    		        Idle.add(()=>{
+    		            msg(_("Error occurred while loading scenes and sprites"), message, Gtk.MessageType.ERROR);
+    		            return false;
+    		        });
     		        return;
 		        }
 
@@ -436,12 +459,20 @@ namespace Turtlico.SceneEditor {
 			                    var pixbuf_fullres = new Gdk.Pixbuf.from_file(sprite_path);
 			                    sprites_pb_fullres.add(pixbuf_fullres);
 			                } catch (Error e) {
-                                msg(_("Faile to load image '%s'").printf(name), e.message, Gtk.MessageType.ERROR);
+			                    string message = e.message;
+			                    Idle.add(()=>{
+                                    msg(_("Faile to load image '%s'").printf(name), message, Gtk.MessageType.ERROR);
+                                    return false;
+                                });
 			                }
 		                }
 	                }
 	            } catch (Error e) {
-                    msg(_("Error occurred while loading scenes and sprites"), e.message, Gtk.MessageType.ERROR);
+	                string message = e.message;
+	                Idle.add(()=>{
+                        msg(_("Error occurred while loading scenes and sprites"), message, Gtk.MessageType.ERROR);
+                        return false;
+                    });
 	            }
                 Idle.add(()=>{
                     // Load data from async thread to  widgets

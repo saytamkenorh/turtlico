@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="add_scene_btn_img">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-add</property>
+    <property name="tooltip_text" translatable="yes">Add scene</property>
+    <property name="icon_name">list-add</property>
   </object>
   <object class="GtkImage" id="delete_btn_img">
     <property name="visible">True</property>
@@ -57,9 +58,6 @@
     <property name="can_focus">False</property>
     <property name="default_width">1024</property>
     <property name="default_height">680</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkPaned" id="root_paned">
         <property name="visible">True</property>
@@ -216,6 +214,7 @@
                         <property name="column_spacing">3</property>
                         <property name="item_padding">3</property>
                         <property name="activate_on_single_click">True</property>
+                        <signal name="button-press-event" handler="on_sprites_view_button_press_event" swapped="no"/>
                         <signal name="drag-begin" handler="on_sprites_view_drag_begin" swapped="no"/>
                         <signal name="drag-data-get" handler="on_sprites_view_drag_data_get" swapped="no"/>
                         <signal name="drag-end" handler="on_sprites_view_drag_end" swapped="no"/>
@@ -539,6 +538,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </template>
 </interface>
