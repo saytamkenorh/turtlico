@@ -93,6 +93,8 @@ namespace Turtlico {
         [GtkChild]
         Gtk.MenuItem popup_menu_help;
         [GtkChild]
+        Gtk.MenuItem popup_menu_autocomplete;
+        [GtkChild]
         Gtk.MenuItem popup_menu_copy;
         [GtkChild]
         Gtk.MenuItem popup_menu_cut;
@@ -580,6 +582,7 @@ namespace Turtlico {
                 bool selection = buffer.selection_phase == SelectionPhase.BLOCK_SELECTED;
                 popup_menu_edit.visible = icon_at_pointer && !selection;
                 popup_menu_help.visible = icon_at_pointer;
+                popup_menu_autocomplete.visible = icon_at_pointer;
                 popup_menu_copy.visible = icon_at_pointer && selection;
                 popup_menu_cut.visible = icon_at_pointer && selection;
                 popup_menu_sep.visible = icon_at_pointer;
@@ -622,6 +625,10 @@ namespace Turtlico {
         [GtkCallback]
         void on_popup_menu_help_activate(Gtk.MenuItem item) {
             icon_help();
+        }
+        [GtkCallback]
+        void on_popup_menu_autocomplete_activate(Gtk.MenuItem item) {
+            autocomplete();
         }
 
         bool on_key_press_event(Gdk.EventKey key_event) {
@@ -727,6 +734,18 @@ namespace Turtlico {
             } catch (Error e) {
                 debug("Cannot open help: " + e.message);
             }
+        }
+
+        void autocomplete() {
+            Gdk.Point item;
+            if(!get_icon_at_pointer(out item)) return;
+            string snippet = buffer.program[item.y][item.x].draw_params.snippet;
+            if (snippet == null) return;
+
+            try {
+                buffer.program[item.y].remove_at(item.x);
+                buffer.paste_icons_string(snippet, ref item.x, ref item.y, basic_mode, auto_indent);
+            } catch (Error e) {critical(e.message);}
         }
 
         void icon_data_dialog() {

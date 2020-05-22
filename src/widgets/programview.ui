@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 
+<!-- Generated with glade 3.36.0 
 
 Copyright (C) 2018 matyas5
 
@@ -47,9 +47,6 @@ Author: matyas5
     <property name="default_width">100</property>
     <property name="default_height">50</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -84,9 +81,6 @@ Author: matyas5
             <property name="position">0</property>
           </packing>
         </child>
-        <child>
-          <placeholder/>
-        </child>
         <child type="center">
           <object class="GtkSpinButton" id="num_chooser_dialog_spin_button">
             <property name="visible">True</property>
@@ -104,11 +98,17 @@ Author: matyas5
             <property name="position">2</property>
           </packing>
         </child>
+        <child>
+          <placeholder/>
+        </child>
       </object>
     </child>
     <action-widgets>
       <action-widget response="0">button1</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkColorChooserDialog" id="color_dialog">
     <property name="can_focus">False</property>
@@ -174,9 +174,6 @@ Author: matyas5
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <signal name="key-press-event" handler="on_key_dialog_key_press_event" swapped="no"/>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -270,6 +267,9 @@ Author: matyas5
     <action-widgets>
       <action-widget response="0">button4</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkMessageDialog" id="messageDialog">
     <property name="can_focus">False</property>
@@ -323,6 +323,15 @@ Author: matyas5
         <property name="use_underline">True</property>
         <signal name="activate" handler="on_popup_menu_help_activate" swapped="no"/>
         <accelerator key="F1" signal="activate"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="popup_menu_autocomplete">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Autocomplete</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_popup_menu_autocomplete_activate" swapped="no"/>
       </object>
     </child>
     <child>
@@ -408,9 +417,6 @@ Author: matyas5
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Edit Python code</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -466,6 +472,9 @@ Author: matyas5
     <action-widgets>
       <action-widget response="0">button3</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="str_chooser_dialog">
     <property name="can_focus">False</property>
@@ -474,9 +483,6 @@ Author: matyas5
     <property name="default_width">150</property>
     <property name="default_height">50</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -530,6 +536,9 @@ Author: matyas5
     <action-widgets>
       <action-widget response="0">button2</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkDialog" id="type_chooser_dialog">
     <property name="width_request">200</property>
@@ -541,9 +550,6 @@ Author: matyas5
     <property name="default_width">200</property>
     <property name="default_height">150</property>
     <property name="type_hint">dialog</property>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -693,5 +699,8 @@ Author: matyas5
     <action-widgets>
       <action-widget response="0">button</action-widget>
     </action-widgets>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
   </object>
 </interface>

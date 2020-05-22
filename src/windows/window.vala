@@ -596,9 +596,13 @@ namespace Turtlico {
 
                         bool data_only = command.has_member("data-only") ? command.get_boolean_member("data-only") : true;
 
+                        string snippet = null;
+                        if (command.has_member("snippet")) snippet = command.get_string_member("snippet");
+
                         var draw_params = new DrawParams(
                             draw_data, data_color, bg_color, fg_color, data_only,
                             command.get_string_member("?"),
+                            snippet,
                             programview.get_scale_factor());
                         Command c = new Command(command.get_string_member("icon"),
                                                 command.get_string_member("id"), "",

@@ -145,12 +145,13 @@ namespace Turtlico {
 
         public string help;
         public string help_en; // Used for help page opening
+        public string snippet;
 
         public DrawParams (
             bool data_draw,
             Gdk.RGBA data_color, Gdk.RGBA bg_color, Gdk.RGBA fg_color,
             bool data_only,
-            string help,
+            string help, string? snippet,
             float scale)
         {
             this.data_draw = data_draw;
@@ -160,6 +161,7 @@ namespace Turtlico {
             this.data_only = data_only;
             this.help = _(help);
             this.help_en = help;
+            this.snippet = snippet;
             this.scale = scale;
         }
     }
