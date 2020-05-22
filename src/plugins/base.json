@@ -47,7 +47,7 @@
 				{"id":"0_tmr", "icon":"⌚", "?": 'Call a function after n miliseconds' , "type": 0, "func": "ontimer", "params": "" },
 				{"id":"5_numi", "icon":"⌨#", "?": 'Number input' , "type": 5, "func": "numinput", "params": "'Number','Enter a number:'" },
 				{"id":"5_stri", "icon":"⌨\"", "?": 'String input' , "type": 5, "func": "textinput", "params": "'String','Enter a string:'" },
-				{"id":"0_emc", "icon":"👇", "?": 'Connect a function to handle mouse clicks' , "type": 0, "func": "onscreenclick", "params": "" },
+				{"id":"0_emc", "icon":"👇", "?": 'Connect a function to handle mouse clicks' , "type": 0, "func": "tcf_mouseclick", "params": "" },
 				{"id":"0_exit", "icon":"r:0_exit.svg", "?": 'Exit the program', "type": 0, "func": "sys.exit", "params": "0" }
 			]
 		},
@@ -355,6 +355,15 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 	    onkeypress(function, key)"
 		},
 		{
+			"id": "tcf_mouseclick",
+			"code": "def tcf_mouseclick(function=None, btn=1, turtle=None, add=None):\
+	if isinstance(function, Turtle): function.onclick(None); return\
+	if turtle==None:\
+	    onscreenclick(function, btn=btn, add=add)\
+	else:\
+	    turtle.onclick(function, btn=btn, add=add)"
+		},
+		{
 			"id": "tcf_strftime",
 			"code": "def tcf_strftime(time, format='%d/%m/%y %H:%M:%S'):\
 	return datetime.fromtimestamp(time).strftime(format)"
@@ -396,6 +405,12 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 	        "name": 'Mouse click',
 	        "code": "",
 	        "connector": "0_emc;~(;~obj;$name~sep;~int;1~);~",
+	        "params": "x,y"
+	    },
+	    {
+	        "name": 'Mouse click on a turtle',
+	        "code": "",
+	        "connector": "0_emc;~(;~obj;$name~sep;~int;1~sep;~5_gett;~);~",
 	        "params": "x,y"
 	    },
 	    {
