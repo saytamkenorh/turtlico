@@ -53,13 +53,7 @@ namespace Turtlico {
                         add_plugin(_(node.get_object().get_string_member("name")), "r:" + r);
                     }
                 }
-                var plugins_search_dirs = new Gee.ArrayList<string>.wrap(Environment.get_system_data_dirs());
-                plugins_search_dirs.add(Environment.get_user_data_dir());
-#if TURTLICO_FLATPAK
-                plugins_search_dirs.add("/run/host/usr/share");
-#endif
-                foreach (var path in plugins_search_dirs) {
-                    path = path + "/turtlico/plugins";
+                foreach (var path in Command.get_file_plugin_dirs()) {
                     if (FileUtils.test(path, FileTest.IS_DIR)) {
                         Dir dir = Dir.open (path, 0);
 		                string? name = null;

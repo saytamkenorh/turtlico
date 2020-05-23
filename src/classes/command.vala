@@ -55,7 +55,7 @@ namespace Turtlico {
                     this._pixbuf = null;
                 }
             }
-            else if (name.has_prefix("f:") && name.has_suffix(".png")) {
+            else if (name.has_prefix("f:")) {
                 try {
                     string str = name.substring(2);
                     this._pixbuf = new Gdk.Pixbuf.from_file_at_size(
@@ -132,6 +132,18 @@ namespace Turtlico {
                 }
             }
             return parsers.to_array();
+        }
+
+        public static string[] get_file_plugin_dirs () {
+            var plugins_search_dirs = new Gee.ArrayList<string>.wrap(Environment.get_system_data_dirs());
+            plugins_search_dirs.add(Environment.get_user_data_dir());
+#if TURTLICO_FLATPAK
+            plugins_search_dirs.add("/run/host/usr/share");
+#endif
+            for (int i = 0; i < plugins_search_dirs.size; i++) {
+                plugins_search_dirs[i] = Path.build_filename(plugins_search_dirs[i], "/turtlico/plugins");
+            }
+            return plugins_search_dirs.to_array();
         }
     }
 

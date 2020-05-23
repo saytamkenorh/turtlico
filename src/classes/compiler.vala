@@ -133,7 +133,13 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
             modules_to_load = new Gee.LinkedList<string>();
             // Plugins
             foreach(string plugin in enabled_plugins) {
-                modules_to_load.add(Path.get_basename(plugin.replace("r:", "")));
+                string init_module_name = null;
+                if (plugin.has_prefix("r:"))
+                    init_module_name = Path.get_basename(plugin.replace("r:", ""));
+                else
+                    init_module_name = Path.get_basename(Path.get_dirname(plugin));
+                if (modules.contains(init_module_name))
+                    modules_to_load.add(init_module_name);
             }
 
             var global_variables = new Gee.LinkedList<string>(); // Variables that are available in every method
@@ -354,10 +360,14 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
             // Load modules
             // Resolve dependencies
             foreach (var module in modules_to_load.to_array()) {
-                module_add_deps(modules[module], modules_to_load);
+                if (modules.contains(module))
+                    module_add_deps(modules[module], modules_to_load);
+                else
+                    warning(@"Module '$module' was not found in the module list!");
             }
             foreach (var module in modules_to_load) {
-                output.insert(1, modules[module].code);
+                if (modules.contains(module))
+                    output.insert(1, modules[module].code);
             }
 
             output.add("listen();done()");
@@ -369,8 +379,12 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
         private void module_add_deps (CompilerModule module, Gee.LinkedList<string> modules_to_load) {
             foreach (string dep in module.deps) {
                 if (!modules_to_load.contains(dep)) {
-                    modules_to_load.add(dep);
-                    module_add_deps(modules[dep], modules_to_load);
+                    if (modules.contains(dep)) {
+                        modules_to_load.add(dep);
+                        module_add_deps(modules[dep], modules_to_load);
+                    } else {
+                        warning(@"Dependency '$dep' of module $(module.id) was not found in the module list!");
+                    }
                 }
             }
         }

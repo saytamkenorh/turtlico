@@ -117,8 +117,12 @@ namespace Turtlico {
                 dostream.put_string("\n");
             }
             foreach(string plugin in enabled_plugins) {
-                plugin = plugin.replace(Command.PLUGIN_RESOURCES, "");
-                plugin = plugin.replace("/tk/turtlico/Turtlico/", "");
+                if (plugin.has_prefix("r:")) {
+                    plugin = plugin.replace(Command.PLUGIN_RESOURCES, "");
+                    plugin = plugin.replace("/tk/turtlico/Turtlico/", "");
+                } else {
+                    plugin = "f:" + Path.get_basename(Path.get_dirname(plugin));
+                }
                 dostream.put_string("plugin,");
                 dostream.put_string(plugin + ",;");
             }
@@ -183,11 +187,23 @@ namespace Turtlico {
                             plugin = plugin.replace("/tk/turtlico/Turtlico/", "");
                             try {
                                 if ((plugin.has_prefix("r:") && resources_get_info(
-                                        Command.PLUGIN_RESOURCES + plugin.substring(2, -1), ResourceLookupFlags.NONE, null, null))
-                                    || FileUtils.test(plugin, FileTest.EXISTS))
+                                        Command.PLUGIN_RESOURCES + plugin.substring(2, -1), ResourceLookupFlags.NONE, null, null)))
                                 {
                                     enabled_plugins.add(plugin);
-                                } else {throw new IOError.INVALID_DATA("");};
+                                }
+                                else if (plugin.has_prefix("f:")) {
+                                    bool found = false;
+                                    foreach (var dir in Command.get_file_plugin_dirs()) {
+                                        string plugin_path = Path.build_filename(dir, plugin.substring(2, -1), "commands.json");
+                                        if (FileUtils.test(plugin_path, FileTest.EXISTS))
+                                        {
+                                            enabled_plugins.add(plugin_path);
+                                            found = true ;break;
+                                        }
+                                    }
+                                    if (!found) throw new IOError.INVALID_DATA("");
+                                }
+                                else {throw new IOError.INVALID_DATA("");};
                             } catch {
                                 if (!ingore_errors)
                                     throw new IOError.INVALID_DATA(_("Cannot load plugin %s.".printf(plugin)));
