@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-26 17:34+0200\n"
+"POT-Creation-Date: 2020-05-28 12:53+0200\n"
 "PO-Revision-Date: 2020-04-26 18:03+0200\n"
 "Last-Translator: matyas5 <>\n"
 "Language-Team: Deutsch <>\n"
@@ -20,12 +20,8 @@ msgstr ""
 "X-Generator: Gtranslator 3.36.0\n"
 
 #: data/tk.turtlico.Turtlico.desktop.in:3
-#: data/tk.turtlico.Turtlico.appdata.xml.in:4 src/windows/window.ui:209
+#: data/tk.turtlico.Turtlico.appdata.xml.in:4 src/windows/window.ui:223
 msgid "Turtlico"
-msgstr ""
-
-#: data/tk.turtlico.Turtlico.desktop.in:9
-msgid "tk.turtlico.Turtlico"
 msgstr ""
 
 #: data/tk.turtlico.Turtlico.appdata.xml.in:5
@@ -98,7 +94,11 @@ msgstr ""
 msgid "Failed to load command def file: "
 msgstr ""
 
-#: src/classes/compiler.vala:303
+#: src/classes/compiler.vala:211
+msgid "Functions must start on a separate line!"
+msgstr ""
+
+#: src/classes/compiler.vala:375
 msgid "Generated code:\n"
 msgstr ""
 
@@ -145,32 +145,32 @@ msgstr ""
 msgid "Update failed"
 msgstr ""
 
-#: src/classes/program-buffer.vala:193
+#: src/classes/program-buffer.vala:209
 #, c-format
 msgid "Cannot load plugin %s."
 msgstr ""
 
 #. Add command
-#: src/classes/program-buffer.vala:203
+#: src/classes/program-buffer.vala:219
 msgid "Failed to open the file. Error on line: "
 msgstr ""
 
-#: src/classes/program-buffer.vala:222
+#: src/classes/program-buffer.vala:238
 msgid "The file to load contains an unkown command!\n"
 msgstr ""
 
-#: src/classes/program-buffer.vala:223
+#: src/classes/program-buffer.vala:239
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
 "Command ID: "
 msgstr ""
 
-#: src/classes/program-buffer.vala:512
+#: src/classes/program-buffer.vala:528
 msgid "Please save the project first."
 msgstr ""
 
-#: src/classes/program-buffer.vala:521
+#: src/classes/program-buffer.vala:537
 msgid "Cannot insert the image: "
 msgstr ""
 
@@ -219,7 +219,7 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-#: src/plugins/base.json:15 src/widgets/programview.ui:615
+#: src/plugins/base.json:15 src/widgets/programview.ui:631
 msgid "String"
 msgstr ""
 
@@ -251,7 +251,7 @@ msgstr ""
 msgid "Left parenthesis"
 msgstr ""
 
-#: src/plugins/base.json:23 src/plugins/base.json:81
+#: src/plugins/base.json:23 src/plugins/base.json:86
 msgid "Argument separator (Comma)"
 msgstr ""
 
@@ -296,7 +296,8 @@ msgid "Load scene (file)"
 msgstr ""
 
 #: src/plugins/base.json:34
-msgid "Image"
+#, fuzzy
+msgid "Image file"
 msgstr "Bild"
 
 #: src/plugins/base.json:35
@@ -344,384 +345,402 @@ msgid "Turbo mode"
 msgstr ""
 
 #: src/plugins/base.json:45
-msgid "Camera properties (x, y, [width], [height])"
+msgid "Camera properties"
 msgstr ""
 
 #: src/plugins/base.json:46
-msgid "Exit the program"
-msgstr ""
-
-#: src/plugins/base.json:52
-msgid "East"
-msgstr "Osten"
-
-#: src/plugins/base.json:53
-msgid "North"
-msgstr "Norden"
-
-#: src/plugins/base.json:54
-msgid "West"
-msgstr "Westen"
-
-#: src/plugins/base.json:55
-msgid "South"
-msgstr "Süden"
-
-#: src/plugins/base.json:56
-msgid "Pi (3.14)"
-msgstr "Pi (3.14)"
-
-#: src/plugins/base.json:57
-msgid "Get x coordinate"
-msgstr ""
-
-#: src/plugins/base.json:58
-msgid "Get y coordinate"
-msgstr ""
-
-#: src/plugins/base.json:59
-msgid "Return True if turtle is shown."
-msgstr ""
-
-#: src/plugins/base.json:60
-msgid "Sine"
-msgstr ""
-
-#: src/plugins/base.json:61
-msgid "Cosine"
-msgstr ""
-
-#: src/plugins/base.json:62
-msgid "Tangent"
-msgstr ""
-
-#: src/plugins/base.json:63
-msgid "Absolute value"
-msgstr ""
-
-#: src/plugins/base.json:64
-msgid "Convert angle from degrees to radians."
-msgstr ""
-
-#: src/plugins/base.json:65
-msgid "Convert angle from radians to degrees."
-msgstr ""
-
-#: src/plugins/base.json:66
-msgid "True"
-msgstr "Richtig"
-
-#: src/plugins/base.json:67
-msgid "False"
-msgstr "Falsch"
-
-#: src/plugins/base.json:68
-msgid "Round a number"
-msgstr ""
-
-#: src/plugins/base.json:69
-msgid "Floor"
-msgstr ""
-
-#: src/plugins/base.json:70
-msgid "Ceil"
-msgstr ""
-
-#: src/plugins/base.json:71
-msgid "Returns square root of n. Use ** for int powers."
-msgstr ""
-
-#: src/plugins/base.json:72
-msgid "Color (property or editable)"
-msgstr ""
-
-#: src/plugins/base.json:73
-msgid "Font (property or editable)"
-msgstr ""
-
-#: src/plugins/base.json:74
-msgid "Key"
-msgstr "Taste"
-
-#: src/plugins/base.json:80
-msgid "Left square bracket"
-msgstr ""
-
-#: src/plugins/base.json:82
-msgid "Right square bracket"
-msgstr ""
-
-#: src/plugins/base.json:83
-msgid "Delete an object"
-msgstr ""
-
-#: src/plugins/base.json:84
-msgid "Append an item to a list"
-msgstr ""
-
-#: src/plugins/base.json:85
-msgid "Insert an item to a list"
-msgstr ""
-
-#: src/plugins/base.json:86
-msgid "Clear list"
-msgstr ""
-
-#: src/plugins/base.json:87
-msgid ""
-"Finds index of the occurence of an item in a list or in a string (list, "
-"item, start, direction)"
-msgstr ""
-
-#: src/plugins/base.json:88
-msgid "Converts a string into lower case"
-msgstr ""
-
-#: src/plugins/base.json:89
-msgid "Converts a string into upper case"
-msgstr ""
-
-#: src/plugins/base.json:90
-msgid "Splits the string at the specified separator, and returns a list"
-msgstr ""
-
-#: src/plugins/base.json:91
-msgid "Replaces a specified phrase with another specified phrase"
-msgstr ""
-
-#: src/plugins/base.json:92
-msgid "If statement"
-msgstr "Falls"
-
-#: src/plugins/base.json:93
-msgid "Else"
-msgstr ""
-
-#: src/plugins/base.json:94
-msgid "Begin block of commands"
-msgstr ""
-
-#: src/plugins/base.json:95
-msgid "Equals"
-msgstr "ist"
-
-#: src/plugins/base.json:96
-msgid "Not equals"
-msgstr "ist nicht"
-
-#: src/plugins/base.json:97
-msgid "is less than"
-msgstr ""
-
-#: src/plugins/base.json:98
-msgid "is greater than"
-msgstr ""
-
-#: src/plugins/base.json:99
-msgid "and"
-msgstr "und"
-
-#: src/plugins/base.json:100
-msgid "or"
-msgstr "oder"
-
-#: src/plugins/base.json:101
-msgid "negation"
-msgstr ""
-
-#: src/plugins/base.json:102
-msgid "Define a method"
-msgstr ""
-
-#: src/plugins/base.json:103
-msgid "Return a value"
-msgstr ""
-
-#: src/plugins/base.json:104
-msgid "Repeat block of commands"
-msgstr ""
-
-#: src/plugins/base.json:105
-msgid "For loop"
-msgstr ""
-
-#: src/plugins/base.json:106
-msgid "Is item in a list? / For all items in a collection."
-msgstr ""
-
-#: src/plugins/base.json:107
-msgid "Repeat while the condition is true"
-msgstr ""
-
-#: src/plugins/base.json:108
-msgid "Break out of a loop"
-msgstr ""
-
-#: src/plugins/base.json:109
-msgid "Continue with next iteration of a loop"
-msgstr ""
-
-#: src/plugins/base.json:110
-msgid "Object"
-msgstr ""
-
-#: src/plugins/base.json:111
-msgid "Use variable as a global one"
-msgstr ""
-
-#: src/plugins/base.json:112
-msgid "Assign value to a variable"
-msgstr ""
-
-#: src/plugins/base.json:113
-msgid "Increase value by"
-msgstr ""
-
-#: src/plugins/base.json:114
-msgid "Decrease value by"
-msgstr ""
-
-#: src/plugins/base.json:115
-msgid "Dot (use to access properties of an object)"
-msgstr ""
-
-#: src/plugins/base.json:116
-msgid "Plus"
-msgstr ""
-
-#: src/plugins/base.json:117
-msgid "Minus"
-msgstr ""
-
-#: src/plugins/base.json:118
-msgid "Multiply"
-msgstr ""
-
-#: src/plugins/base.json:119
-msgid "Divide"
-msgstr ""
-
-#: src/plugins/base.json:120
-msgid "Modulo"
-msgstr ""
-
-#: src/plugins/base.json:121
-msgid "Type conversion"
-msgstr ""
-
-#: src/plugins/base.json:122
-msgid "Direct Python code"
-msgstr ""
-
-#: src/plugins/base.json:123
-msgid "Random number"
-msgstr ""
-
-#: src/plugins/base.json:124
-msgid "Return list of numbers in specified range"
-msgstr ""
-
-#: src/plugins/base.json:125
-msgid "Connect a function to handle mouse clicks"
-msgstr ""
-
-#: src/plugins/base.json:126
 msgid "Connect a function to handle key presses"
 msgstr ""
 
-#: src/plugins/base.json:127
+#: src/plugins/base.json:47
 msgid "Call a function after n miliseconds"
 msgstr ""
 
-#: src/plugins/base.json:128
+#: src/plugins/base.json:48
 msgid "Number input"
 msgstr ""
 
-#: src/plugins/base.json:129
+#: src/plugins/base.json:49
 msgid "String input"
 msgstr ""
 
+#: src/plugins/base.json:50
+msgid "Connect a function to handle mouse clicks"
+msgstr ""
+
+#: src/plugins/base.json:51
+msgid "Exit the program"
+msgstr ""
+
+#: src/plugins/base.json:57
+msgid "East"
+msgstr "Osten"
+
+#: src/plugins/base.json:58
+msgid "North"
+msgstr "Norden"
+
+#: src/plugins/base.json:59
+msgid "West"
+msgstr "Westen"
+
+#: src/plugins/base.json:60
+msgid "South"
+msgstr "Süden"
+
+#: src/plugins/base.json:61
+msgid "Pi (3.14)"
+msgstr "Pi (3.14)"
+
+#: src/plugins/base.json:62
+msgid "Get x coordinate"
+msgstr ""
+
+#: src/plugins/base.json:63
+msgid "Get y coordinate"
+msgstr ""
+
+#: src/plugins/base.json:64
+msgid "Return True if turtle is shown."
+msgstr ""
+
+#: src/plugins/base.json:65
+msgid "Sine"
+msgstr ""
+
+#: src/plugins/base.json:66
+msgid "Cosine"
+msgstr ""
+
+#: src/plugins/base.json:67
+msgid "Tangent"
+msgstr ""
+
+#: src/plugins/base.json:68
+msgid "Absolute value"
+msgstr ""
+
+#: src/plugins/base.json:69
+msgid "Convert angle from degrees to radians."
+msgstr ""
+
+#: src/plugins/base.json:70
+msgid "Convert angle from radians to degrees."
+msgstr ""
+
+#: src/plugins/base.json:71
+msgid "True"
+msgstr "Richtig"
+
+#: src/plugins/base.json:72
+msgid "False"
+msgstr "Falsch"
+
+#: src/plugins/base.json:73
+msgid "Round a number"
+msgstr ""
+
+#: src/plugins/base.json:74
+msgid "Floor"
+msgstr ""
+
+#: src/plugins/base.json:75
+msgid "Ceil"
+msgstr ""
+
+#: src/plugins/base.json:76
+msgid "Returns square root of n. Use ** for int powers."
+msgstr ""
+
+#: src/plugins/base.json:77
+msgid "Color (property or editable)"
+msgstr ""
+
+#: src/plugins/base.json:78
+msgid "Font (property or editable)"
+msgstr ""
+
+#: src/plugins/base.json:79
+msgid "Key"
+msgstr "Taste"
+
+#: src/plugins/base.json:85
+msgid "Left square bracket"
+msgstr ""
+
+#: src/plugins/base.json:87
+msgid "Right square bracket"
+msgstr ""
+
+#: src/plugins/base.json:88
+msgid "Delete an object"
+msgstr ""
+
+#: src/plugins/base.json:89
+msgid "Append an item to a list"
+msgstr ""
+
+#: src/plugins/base.json:90
+msgid "Insert an item to a list"
+msgstr ""
+
+#: src/plugins/base.json:91
+msgid "Clear list"
+msgstr ""
+
+#: src/plugins/base.json:92
+msgid "Finds index of the occurence of an item in a list or in a string"
+msgstr ""
+
+#: src/plugins/base.json:93
+msgid "Converts a string into lower case"
+msgstr ""
+
+#: src/plugins/base.json:94
+msgid "Converts a string into upper case"
+msgstr ""
+
+#: src/plugins/base.json:95
+msgid "Splits the string at the specified separator, and returns a list"
+msgstr ""
+
+#: src/plugins/base.json:96
+msgid "Replaces a specified phrase with another specified phrase"
+msgstr ""
+
+#: src/plugins/base.json:97
+msgid "If statement"
+msgstr "Falls"
+
+#: src/plugins/base.json:98
+msgid "Else"
+msgstr ""
+
+#: src/plugins/base.json:99
+msgid "Begin block of commands"
+msgstr ""
+
+#: src/plugins/base.json:100
+msgid "Equals"
+msgstr "ist"
+
+#: src/plugins/base.json:101
+msgid "Not equals"
+msgstr "ist nicht"
+
+#: src/plugins/base.json:102
+msgid "is less than"
+msgstr ""
+
+#: src/plugins/base.json:103
+msgid "is greater than"
+msgstr ""
+
+#: src/plugins/base.json:104
+msgid "and"
+msgstr "und"
+
+#: src/plugins/base.json:105
+msgid "or"
+msgstr "oder"
+
+#: src/plugins/base.json:106
+msgid "negation"
+msgstr ""
+
+#: src/plugins/base.json:107
+msgid "Define a method"
+msgstr ""
+
+#: src/plugins/base.json:108
+msgid "Return a value"
+msgstr ""
+
+#: src/plugins/base.json:109
+msgid "Repeat block of commands"
+msgstr ""
+
+#: src/plugins/base.json:110
+msgid "For loop"
+msgstr ""
+
+#: src/plugins/base.json:111
+msgid "Is item in a list? / For all items in a collection."
+msgstr ""
+
+#: src/plugins/base.json:112
+msgid "Repeat while the condition is true"
+msgstr ""
+
+#: src/plugins/base.json:113
+msgid "Break out of a loop"
+msgstr ""
+
+#: src/plugins/base.json:114
+msgid "Continue with next iteration of a loop"
+msgstr ""
+
+#: src/plugins/base.json:115
+msgid "Object"
+msgstr ""
+
+#: src/plugins/base.json:116
+msgid "Use variable as a global one"
+msgstr ""
+
+#: src/plugins/base.json:117
+msgid "Assign value to a variable"
+msgstr ""
+
+#: src/plugins/base.json:118
+msgid "Increase value by"
+msgstr ""
+
+#: src/plugins/base.json:119
+msgid "Decrease value by"
+msgstr ""
+
+#: src/plugins/base.json:120
+msgid "Dot (use to access properties of an object)"
+msgstr ""
+
+#: src/plugins/base.json:121
+msgid "Plus"
+msgstr ""
+
+#: src/plugins/base.json:122
+msgid "Minus"
+msgstr ""
+
+#: src/plugins/base.json:123
+msgid "Multiply"
+msgstr ""
+
+#: src/plugins/base.json:124
+msgid "Divide"
+msgstr ""
+
+#: src/plugins/base.json:125
+msgid "Modulo"
+msgstr ""
+
+#: src/plugins/base.json:126
+msgid "Type conversion"
+msgstr ""
+
+#: src/plugins/base.json:127
+msgid "Direct Python code"
+msgstr ""
+
+#: src/plugins/base.json:128
+msgid "As type"
+msgstr ""
+
+#: src/plugins/base.json:129
+msgid "Random number"
+msgstr ""
+
 #: src/plugins/base.json:130
-msgid "Converts a character to an int value"
+msgid "Return list of numbers in specified range"
 msgstr ""
 
 #: src/plugins/base.json:131
+msgid "Converts a character to an int value"
+msgstr ""
+
+#: src/plugins/base.json:132
 msgid "Converts an int value to a character"
 msgstr ""
 
-#: src/plugins/base.json:137
-msgid "Read all lines of a file"
+#: src/plugins/base.json:133
+msgid "Try"
 msgstr ""
 
-#: src/plugins/base.json:138
-msgid "Write lines to a file"
+#: src/plugins/base.json:134
+msgid "Except"
 msgstr ""
 
-#: src/plugins/base.json:139
-msgid "File dialog"
-msgstr ""
-
-#: src/plugins/base.json:140
-msgid "Check file exists"
+#: src/plugins/base.json:135
+msgid "Raise exception"
 msgstr ""
 
 #: src/plugins/base.json:141
-msgid "Check directory exists"
+msgid "Read all lines of a file"
 msgstr ""
 
 #: src/plugins/base.json:142
-msgid "Delete file or directory"
+msgid "Write lines to a file"
 msgstr ""
 
 #: src/plugins/base.json:143
-msgid "Get files in DIRECTORY"
+msgid "File dialog"
 msgstr ""
 
 #: src/plugins/base.json:144
-msgid "Get subdirs in DIRECTORY"
+msgid "Check file exists"
 msgstr ""
 
 #: src/plugins/base.json:145
-msgid "Get parent directory / the directory the item is located in"
+msgid "Check directory exists"
 msgstr ""
 
 #: src/plugins/base.json:146
-msgid "Get file name from path"
+msgid "Delete file or directory"
 msgstr ""
 
 #: src/plugins/base.json:147
-msgid "Get current timestamp"
+msgid "Get files in DIRECTORY"
 msgstr ""
 
 #: src/plugins/base.json:148
-msgid "Convert timestamp to string (time, format)"
+msgid "Get subdirs in DIRECTORY"
 msgstr ""
 
 #: src/plugins/base.json:149
-msgid "Convert string to timestamp (string time, format)"
+msgid "Get parent directory / the directory the item is located in"
 msgstr ""
 
-#: src/plugins/base.json:378
+#: src/plugins/base.json:150
+msgid "Get file name from path"
+msgstr ""
+
+#: src/plugins/base.json:151
+msgid "Get current timestamp"
+msgstr ""
+
+#: src/plugins/base.json:152
+msgid "Convert timestamp to string"
+msgstr ""
+
+#: src/plugins/base.json:153
+msgid "Convert string to timestamp"
+msgstr ""
+
+#: src/plugins/base.json:393
 msgid "Key press"
 msgstr ""
 
-#: src/plugins/base.json:384
+#: src/plugins/base.json:399
 msgid "Specified key press"
 msgstr ""
 
-#: src/plugins/base.json:390
+#: src/plugins/base.json:405
 msgid "Mouse click"
 msgstr ""
 
-#: src/plugins/base.json:396
+#: src/plugins/base.json:411
+msgid "Mouse click on a turtle"
+msgstr ""
+
+#: src/plugins/base.json:417
 msgid "Timer"
 msgstr ""
 
-#: src/plugins/base.json:402
+#: src/plugins/base.json:423
 msgid "Circular collision"
 msgstr ""
 
-#: src/plugins/base.json:408
+#: src/plugins/base.json:429
 msgid "Rectangle collision"
 msgstr ""
 
@@ -817,9 +836,9 @@ msgstr ""
 msgid "Enter a number"
 msgstr ""
 
-#: src/widgets/programview.ui:67 src/widgets/programview.ui:194
-#: src/widgets/programview.ui:418 src/widgets/programview.ui:484
-#: src/widgets/programview.ui:551
+#: src/widgets/programview.ui:64 src/widgets/programview.ui:191
+#: src/widgets/programview.ui:434 src/widgets/programview.ui:500
+#: src/widgets/programview.ui:567
 msgid "Done"
 msgstr ""
 
@@ -827,7 +846,7 @@ msgstr ""
 msgid "Select key"
 msgstr ""
 
-#: src/widgets/programview.ui:238
+#: src/widgets/programview.ui:235
 msgid "Press any key to select value of the icon"
 msgstr ""
 
@@ -835,59 +854,67 @@ msgstr ""
 msgid "Edit value"
 msgstr ""
 
-#: src/widgets/programview.ui:328
+#: src/widgets/programview.ui:322 src/windows/window.ui:174
+msgid "Help"
+msgstr ""
+
+#: src/widgets/programview.ui:332
+msgid "Autocomplete"
+msgstr ""
+
+#: src/widgets/programview.ui:347
 msgid "Copy"
 msgstr ""
 
-#: src/widgets/programview.ui:338
+#: src/widgets/programview.ui:357
 msgid "Paste"
 msgstr ""
 
-#: src/widgets/programview.ui:348
+#: src/widgets/programview.ui:367
 msgid "Cut"
 msgstr ""
 
-#: src/widgets/programview.ui:358
+#: src/widgets/programview.ui:377
 msgid "Comment block"
 msgstr ""
 
-#: src/widgets/programview.ui:367
+#: src/widgets/programview.ui:386
 msgid "Uncomment block"
 msgstr ""
 
-#: src/widgets/programview.ui:382 src/windows/window.ui:288
+#: src/widgets/programview.ui:401 src/windows/window.ui:299
 msgid "Undo"
 msgstr ""
 
-#: src/widgets/programview.ui:391 src/windows/window.ui:305
+#: src/widgets/programview.ui:410 src/windows/window.ui:316
 msgid "Redo"
 msgstr ""
 
-#: src/widgets/programview.ui:399
+#: src/widgets/programview.ui:418
 msgid "Edit Python code"
 msgstr ""
 
-#: src/widgets/programview.ui:462
+#: src/widgets/programview.ui:481
 msgid "Enter a string"
 msgstr ""
 
-#: src/widgets/programview.ui:528
+#: src/widgets/programview.ui:547
 msgid "Select data type"
 msgstr ""
 
-#: src/widgets/programview.ui:584
+#: src/widgets/programview.ui:600
 msgid "Integer"
 msgstr ""
 
-#: src/widgets/programview.ui:599
+#: src/widgets/programview.ui:615
 msgid "Float"
 msgstr ""
 
-#: src/widgets/programview.ui:631
+#: src/widgets/programview.ui:647
 msgid "Custom"
 msgstr ""
 
-#: src/widgets/programview.ui:661
+#: src/widgets/programview.ui:677
 msgid "Enter name of your custom data type"
 msgstr ""
 
@@ -929,11 +956,11 @@ msgstr ""
 msgid "Dark icons"
 msgstr ""
 
-#: src/windows/functions-dialog.ui:9 src/windows/window.ui:441
+#: src/windows/functions-dialog.ui:9 src/windows/window.ui:452
 msgid "Functions"
 msgstr ""
 
-#: src/windows/functions-dialog.ui:108 src/windows/scene-editor-window.ui:260
+#: src/windows/functions-dialog.ui:108 src/windows/scene-editor-window.ui:259
 msgid "Name:"
 msgstr ""
 
@@ -945,11 +972,11 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: src/windows/functions-dialog.vala:163
+#: src/windows/functions-dialog.vala:182
 msgid "Use this function"
 msgstr ""
 
-#: src/windows/program-settings.ui:7 src/windows/window.ui:477
+#: src/windows/program-settings.ui:7 src/windows/window.ui:488
 msgid "Project settings"
 msgstr ""
 
@@ -973,60 +1000,60 @@ msgstr ""
 msgid "Please open it manually at following address:"
 msgstr ""
 
-#: src/windows/program-settings.vala:82
+#: src/windows/program-settings.vala:78
 msgid "Failed to load list of additional modules"
 msgstr ""
 
-#: src/windows/program-settings.vala:102
+#: src/windows/program-settings.vala:98
 msgid "Icon count: "
 msgstr ""
 
-#: src/windows/program-settings.vala:103
+#: src/windows/program-settings.vala:99
 msgid "Icon count without whitespace and comments: "
 msgstr ""
 
-#: src/windows/scene-editor-window.ui:85
-msgid "Scenes"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:105
-msgid "New scene name"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:118
+#: src/windows/scene-editor-window.ui:8 src/windows/scene-editor-window.ui:116
 msgid "Add scene"
 msgstr ""
 
-#: src/windows/scene-editor-window.ui:191
+#: src/windows/scene-editor-window.ui:83
+msgid "Scenes"
+msgstr ""
+
+#: src/windows/scene-editor-window.ui:103
+msgid "New scene name"
+msgstr ""
+
+#: src/windows/scene-editor-window.ui:189
 msgid "Sprites"
 msgstr ""
 
-#: src/windows/scene-editor-window.ui:284 src/windows/window.ui:270
+#: src/windows/scene-editor-window.ui:283 src/windows/window.ui:281
 #: src/windows/window.vala:315
 msgid "Save"
 msgstr "Speichern"
 
-#: src/windows/scene-editor-window.ui:302
+#: src/windows/scene-editor-window.ui:301
 msgid "Delete"
 msgstr ""
 
-#: src/windows/scene-editor-window.ui:395
+#: src/windows/scene-editor-window.ui:394
 msgid "Properties"
 msgstr ""
 
-#: src/windows/scene-editor-window.ui:439
+#: src/windows/scene-editor-window.ui:438
 msgid "Width:"
 msgstr ""
 
-#: src/windows/scene-editor-window.ui:451
+#: src/windows/scene-editor-window.ui:450
 msgid "Height:"
 msgstr ""
 
-#: src/windows/scene-editor-window.ui:492
+#: src/windows/scene-editor-window.ui:491
 msgid "Remove"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:144 src/windows/window.ui:459
+#: src/windows/scene-editor-window.vala:144 src/windows/window.ui:470
 msgid "Scene editor"
 msgstr ""
 
@@ -1042,45 +1069,45 @@ msgstr ""
 msgid "Cannot delete the scene"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:303
+#: src/windows/scene-editor-window.vala:322
 msgid "Scene"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:329
+#: src/windows/scene-editor-window.vala:348
 msgid "Cannot load the scene"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:339
+#: src/windows/scene-editor-window.vala:358
 msgid "Cannot save the scene"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:377
+#: src/windows/scene-editor-window.vala:396
 msgid "Would you like to save your changes before closing the scene?"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:378 src/windows/window.vala:745
+#: src/windows/scene-editor-window.vala:397 src/windows/window.vala:758
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:380 src/windows/window.vala:747
+#: src/windows/scene-editor-window.vala:399 src/windows/window.vala:760
 msgid "Yes"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:381 src/windows/window.vala:748
+#: src/windows/scene-editor-window.vala:400 src/windows/window.vala:761
 msgid "No"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:382 src/windows/window.vala:316
-#: src/windows/window.vala:350 src/windows/window.vala:749
+#: src/windows/scene-editor-window.vala:401 src/windows/window.vala:316
+#: src/windows/window.vala:350 src/windows/window.vala:762
 msgid "Cancel"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:406
-#: src/windows/scene-editor-window.vala:444
+#: src/windows/scene-editor-window.vala:427
+#: src/windows/scene-editor-window.vala:473
 msgid "Error occurred while loading scenes and sprites"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:439
+#: src/windows/scene-editor-window.vala:464
 #, c-format
 msgid "Faile to load image '%s'"
 msgstr ""
@@ -1101,19 +1128,19 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: src/windows/window.ui:174
+#: src/windows/window.ui:188
 msgid "About Turtlico"
 msgstr ""
 
-#: src/windows/window.ui:234
+#: src/windows/window.ui:245
 msgid "Run program"
 msgstr "Starte das Programm"
 
-#: src/windows/window.ui:252
+#: src/windows/window.ui:263
 msgid "Open program"
 msgstr "Programm öffnen"
 
-#: src/windows/window.ui:321
+#: src/windows/window.ui:332
 msgid "Drop items here to delete them"
 msgstr ""
 
@@ -1152,18 +1179,18 @@ msgid ""
 "Unavailable commands will be removed."
 msgstr ""
 
-#: src/windows/window.vala:453
+#: src/windows/window.vala:462
 msgid "Please save the program before opening the scene editor."
 msgstr ""
 
-#: src/windows/window.vala:483
+#: src/windows/window.vala:492
 msgid "Would you like to continue loading anyway and ignore further errors?"
 msgstr ""
 
-#: src/windows/window.vala:744
+#: src/windows/window.vala:757
 msgid "Would you like to save your changes before closing the program?"
 msgstr ""
 
-#: src/windows/window.vala:765
+#: src/windows/window.vala:778
 msgid "Unnamed"
 msgstr ""
