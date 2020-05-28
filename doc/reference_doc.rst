@@ -149,7 +149,6 @@ The example usage is "command(parameter, parameter)".
 
 Argument separator (Comma)
 ==========================
-See `here <#left-parenthesis>`_.
 
 Right parenthesis
 =================
@@ -213,9 +212,10 @@ Get or set the background picture of the screen
 
 Load scene (file)
 =================
+If no scene specified this will only clear current scene.
 
 **Parameters**
-``STRING`` Path to scene file.
+``STRING`` Path to scene file. (default: None)
 
 Image file
 ==========
@@ -340,6 +340,70 @@ Camera properties
 
 ``NUMBER`` "hegiht" Height of the program window. (optional)
 
+
+Connect a function to handle key presses
+========================================
+You can also use the functions dialog to create a new method and connect key preess signal to it automatically.
+
+**Parameters**
+
+``FUNCTION`` Callback. This is called when "key" is pressed.
+
+``KEY`` "key" See `See <#key>`_.
+
+Call a function after n miliseconds
+===================================
+Calls a function after n miliseconds.
+You can put this command at the end of the callback and then call it once manually to call it repeatedly.
+
+**Parameters**
+
+``FUNCTION`` Callback. A function with no arguments.
+
+``NUMBER`` Number of milliseconds to call the function after.
+
+Number input
+============
+Pop up a dialog window for input of a number.
+
+**Parameters**
+
+``STRING`` Title of the window. (default: 'Number')
+
+``STRING`` Prompt text. (default: 'Enter a number:')
+
+``NUMBER`` "default" Default number. (optional)
+
+``NUMBER`` "minval" Min value. (optional)
+
+``NUMBER`` "maxval" Max value. (optional)
+
+String input
+============
+Pop up a dialog window for input of a string.
+
+**Parameters**
+
+``STRING`` Title of the window. (default: 'String')
+
+``STRING`` Prompt text. (default: 'Enter a string:')
+
+Connect a function to handle mouse clicks
+=========================================
+You can also use the functions dialog to create a new method and connect mouse click signal to it automatically.
+
+If "function" is None all event bindings are removed.
+If "function" is a turtle object all events bindings are removed from it.
+
+**Parameters**
+
+``FUNCTION`` "function" Callback. Two variables - x and y are passed to tihs function. (default: None)
+
+``NUMBER`` "btn" Number of the mouse-button. Defaults to left mouse button. (default: 1)
+
+``TURTLE`` "turtle" If not None the callback will be called only if user clicked on the specified turtle. (default: None)
+
+``BOOL`` "add" If True, a new binding will be added, otherwise it will replace a former binding. (optional)
 
 Exit the program
 ================
@@ -747,6 +811,9 @@ Direct Python code
 ==================
 This icon represents custom Python code that you can change by editing the value of this icon.
 
+As type
+=======
+
 Random number
 =============
 Return a ranom number in range.
@@ -766,65 +833,6 @@ Return list of numbers in specified range
 
 ``NUMBER`` End (default: 100)
 
-Connect a function to handle mouse clicks
-=========================================
-You can also use the functions dialog to create a new method and connect mouse click signal to it automatically.
-
-**Parameters**
-
-``FUNCTION`` Callback. Two variables - x and y are passed to tihs function.
-
-``NUMBER`` "num" Number of the mouse-button. Defaults to left mouse button. (default: 1)
-
-``BOOL`` "add" If True, a new binding will be added, otherwise it will replace a former binding. (optional)
-
-Connect a function to handle key presses
-========================================
-You can also use the functions dialog to create a new method and connect key preess signal to it automatically.
-
-**Parameters**
-
-``FUNCTION`` Callback. This is called when "key" is pressed.
-
-``KEY`` "key" See `See <#key>`_.
-
-Call a function after n miliseconds
-===================================
-Calls a function after n miliseconds.
-You can put this command at the end of the callback and then call it once manually to call it repeatedly.
-
-**Parameters**
-
-``FUNCTION`` Callback. A function with no arguments.
-
-``NUMBER`` Number of milliseconds to call the function after.
-
-Number input
-============
-Pop up a dialog window for input of a number.
-
-**Parameters**
-
-``STRING`` Title of the window. (default: 'Number')
-
-``STRING`` Prompt text. (default: 'Enter a number:')
-
-``NUMBER`` "default" Default number. (optional)
-
-``NUMBER`` "minval" Min value. (optional)
-
-``NUMBER`` "maxval" Max value. (optional)
-
-String input
-============
-Pop up a dialog window for input of a string.
-
-**Parameters**
-
-``STRING`` Title of the window. (default: 'String')
-
-``STRING`` Prompt text. (default: 'Enter a string:')
-
 Converts a character to an int value
 ====================================
 Returns an integer represeting the character.
@@ -842,6 +850,16 @@ Returns a string representing a character whose Unicode code point is an integer
 **Parameters**
 
 ``NUMBER`` Int value of the character.
+
+Try
+===
+Commands that are placed inside Try can raise exceptions that are then handled by `Except <#except>`__ without crashing the whole program.
+
+Except
+======
+
+Raise exception
+===============
 
 Read all lines of a file
 ========================

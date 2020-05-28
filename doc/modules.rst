@@ -93,6 +93,9 @@ Every module contains categories - groups that are shown in the right menu of th
 
 Modules are blocks of commands that are represented by a single icon. You need to define the module and a corresponding command. The command should be type 0 or 5.
 
+If the module name is same as name of the plugin directory or it is a GReosource file name then the module will be always loaded.
+To this kind of modules you can put imports and the other inicialisation stuff.
+
 Properties:
 
 - ``id`` - The ID of the module. This must be same as the ``func`` property of the corresponding command.
@@ -144,6 +147,7 @@ Basic properties:
 - ``icon`` - The icon of the command (see Icon specification).
 - ``?`` - Basic short description of the icon.
 - ``type`` - The type of the command. See below.
+- ``snippet`` - Block of code in string format that is inserted at position of the command when autocomplete is performed.
 
 **Command types**
 
