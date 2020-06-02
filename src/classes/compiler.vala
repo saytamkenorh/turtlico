@@ -126,7 +126,7 @@ from tempfile import NamedTemporaryFile
 from PIL import Image
 import math, random, os, time, sys
 from datetime import datetime
-color('black');speed(1);title('Turtle');colormode(255);shape('turtle')
+color('black');speed(1);title('Turtle');colormode(255);shape('turtle'); listen()
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Generated code
 """);
@@ -370,7 +370,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     output.insert(1, modules[module].code);
             }
 
-            output.add("listen();done()");
+            output.add("done()");
             string ret = string.joinv("\n", output.to_array());
             debug(_("Generated code:\n") + ret);
             return ret;
