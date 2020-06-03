@@ -36,7 +36,7 @@
 				{"id":"5_newt", "icon":"🥚", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
 				{"id":"5_gett", "icon":"r:5_gett.png", "?": 'Get the predefined turtle object' , "type": 5, "func": "getturtle", "params": "" },
 				{"id":"5_plcimg", "icon":"r:5_plcimg.svg", "?": 'Place image at the position of the turtle' , "type": 5, "func": "tcf_place_img", "params": "" },
-				{"id":"0_sleep", "icon":"💤", "?": 'Sleep n seconds (freezes window)' , "type": 0, "func": "time.sleep", "params": "1" },
+				{"id":"0_sleep", "icon":"💤", "?": 'Sleep', "type": 0, "func": "tcf_sleep", "params": "", "snippet": "0_sleep;~(;~int;1~sep;~4_true;~);~" },
 				{"id":"0_collision", "icon":"r:0_collision.svg", "?": 'Connect a function to handle collision (in circle collider of specified radius) between two turtles', "type": 0, "func": "tcf_collision", "params": "" },
 				{"id":"tcf_collision_rect", "icon":"r:0_collision_rect.svg", "?": 'Connect a function to handle collision (in rectangle collider of specified size) between two turtles', "type": 0, "func": "tcf_collision_rect", "params": "" },
 				{"id":"0_undo", "icon":"↶", "?": 'Undo the last turtle action', "type": 0, "func": "undo", "params": "" },
@@ -217,6 +217,26 @@
 	else:\
 		turt.setpos(pos())\
 	return turt"
+		},
+		{
+			"id": "tcf_sleep",
+			"code": "def tcf_sleep(seconds=None, block=True):\
+	if seconds == None:\
+		listen(); tcf_sleep_exit = [False, None, None]\
+		def set_exit(key):\
+			getcanvas().unbind('<Key>', tcf_sleep_exit[1])\
+			getcanvas().unbind('<Button-1>', tcf_sleep_exit[2]);\
+			tcf_sleep_exit[0]=True\
+		tcf_sleep_exit[1] = getcanvas().bind('<Key>', set_exit)\
+		tcf_sleep_exit[2] = getcanvas().bind('<Button-1>', set_exit)\
+		while not tcf_sleep_exit[0]:\
+			time.sleep(1/60); getcanvas().update()\
+		return\
+	if block: getcanvas()._root().focus_force()\
+	while seconds > 0:\
+		t=min(seconds, 1/60)\
+		time.sleep(t); seconds-=t; getcanvas().update()\
+	listen()"
 		},
 		{
 		    "id": "tcf_load_scene",

@@ -255,13 +255,13 @@ Place image at the position of the turtle
 
 ``Turtle`` A turtle object to place the image at. (optional)
 
-Sleep n seconds (freezes window)
-================================
-Freezes window for n seconds. During the freez the window does not accept any user input.
+Sleep
+=====
+If "seconds" is None then the program will wait until a key is pressed or mouse is clicked.
 
-**Parameters**
+``NUMBER`` "seconds" Number of seconds to sleep. (default: None)
 
-``NUMBER`` Number of seconds to wait.
+``BOOL`` "block" Block key press events while sleeping. This has no effect if "seconds" is None. (default: True)
 
 Connect a function to handle collision (in circle collider of specified radius) between two turtles
 ===================================================================================================
