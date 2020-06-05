@@ -48,6 +48,7 @@ Gst.init(sys.argv)"
 		},
 		{
 			"id": "tcf_mm_tone",
+			"deps": ["tcf_sleep"],
 			"code": "def tcf_mm_tone(frequency, duration = 500, wait_for_end = True):\
 	if isinstance(frequency, str):\
 	    frequencies = {'C': 261.6, 'D': 293.66, 'E': 329.62, 'F': 349.22, 'G': 391.99, 'A': 440, 'B': 493.88}\
@@ -62,7 +63,7 @@ Gst.init(sys.argv)"
 	    pl.set_state(Gst.State.NULL)\
 	    return False\
 	if wait_for_end:\
-	    time.sleep(duration / 1000); stop()\
+	    tcf_sleep(duration / 1000); stop()\
 	elif duration != 0: ontimer(stop, duration)\
 	return pl"
 		},
