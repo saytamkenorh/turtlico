@@ -414,6 +414,16 @@ namespace Turtlico.SceneEditor {
                 ArrayList<string> scenes = new ArrayList<string>();
                 ArrayList<Sprite?> sprites = new ArrayList<Sprite?>();
                 ArrayList<Gdk.Pixbuf> sprites_pb_fullres = new ArrayList<Gdk.Pixbuf>();
+                // Add default turtle sprite
+                try {
+                    Sprite turtle_sprite = new Sprite();
+                    turtle_sprite.name = "turtle";
+                    var turtle_pixbuf = new Gdk.Pixbuf.from_resource("/tk/turtlico/Turtlico/icons/turtle_sprite.png");
+                    turtle_sprite.icon = turtle_pixbuf;
+                    sprites.add(turtle_sprite);
+			        sprites_pb_fullres.add(turtle_pixbuf);
+                } catch (Error e) {warning(@"Cannot load default turtle sprite: $(e.message)");}
+
                 var dir = File.new_for_path(project_dir_path);
             	FileEnumerator enumerator;
             	try {

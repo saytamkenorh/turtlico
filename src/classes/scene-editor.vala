@@ -53,6 +53,8 @@ namespace Turtlico.SceneEditor {
             height = (int)object.get_int_member("height");
             sprites = new ArrayList<Sprite?>();
 
+            var turtle_sprite = new Gdk.Pixbuf.from_resource("/tk/turtlico/Turtlico/icons/turtle_sprite.png");
+
             object.get_array_member("sprites").foreach_element((array, index, node)=>{
                 Sprite sprite = new Sprite();
                 var sprite_obj = node.get_object();
@@ -60,12 +62,17 @@ namespace Turtlico.SceneEditor {
                 sprite.y = (int)sprite_obj.get_int_member("y");
                 sprite.name = sprite_obj.get_string_member("name");
                 sprite.id = sprite_obj.get_string_member("id");
-                string icon_path = Path.build_path(Path.DIR_SEPARATOR_S, project_dir_path, sprite.name);
-                try {
-                    sprite.icon = new Gdk.Pixbuf.from_file(icon_path);
-                } catch (Error e) {
-                    warning("Cannot load sprite '%s': %s".printf(sprite.name, e.message));
-                    return;
+
+                if (sprite.name == "turtle") {
+                    sprite.icon = turtle_sprite;
+                } else {
+                    try {
+                        string icon_path = Path.build_path(Path.DIR_SEPARATOR_S, project_dir_path, sprite.name);
+                        sprite.icon = new Gdk.Pixbuf.from_file(icon_path);
+                    } catch (Error e) {
+                        warning("Cannot load sprite '%s': %s".printf(sprite.name, e.message));
+                        return;
+                    }
                 }
                 sprites.add(sprite);
             });

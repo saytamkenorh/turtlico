@@ -47,5 +47,6 @@
     <file>time_strf.svg</file>
     <file>time_strp.svg</file>
     <file>multimedia.svg</file>
+    <file>turtle_sprite.png</file>
   </gresource>
 </gresources>
