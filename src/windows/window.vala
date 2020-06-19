@@ -222,6 +222,7 @@ namespace Turtlico {
             about_dialog.set_logo(null);
 #endif
             about_dialog.version = TURTLICO_VERSION;
+            about_dialog.website = turtlico_webpage;
 		}
 
 		void setup_accels (Gtk.Application app) {
@@ -436,7 +437,7 @@ namespace Turtlico {
         [GtkCallback]
         void on_help_btn_clicked () {
             try {
-                Gtk.show_uri_on_window(this, "https://turtlico.tk/doc/en/index.html", Gdk.CURRENT_TIME);
+                Gtk.show_uri_on_window(this, turtlico_webpage + "doc/en/index.html", Gdk.CURRENT_TIME);
             } catch (Error e) {
                 warning("Cannot open on-line help: " + e.message);
             }

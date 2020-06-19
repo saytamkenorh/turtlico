@@ -17,7 +17,7 @@
  */
 
 namespace Turtlico {
-    private const string update_server = "http://turtlico.tk/";
+    private const string turtlico_webpage = "http://turtlico.gitlab.io/";
     private const string[] linux_deps_tools = {"apt", "pacman", "dnf"};
 
     public void linux_check_deps(Gtk.Window win) {
@@ -96,7 +96,7 @@ namespace Turtlico {
 
     public void windows_check_updates(Gtk.Window win) {
         var parser = new Json.Parser();
-        var findex = File.new_for_uri(update_server + "builds.json");
+        var findex = File.new_for_uri(turtlico_webpage + "builds.json");
         try {
             parser.load_from_stream_async.begin(findex.read(), null, (obj, result)=>{
                 try {
@@ -159,7 +159,7 @@ namespace Turtlico {
             pwin.show_all();
             new GLib.Thread<int>(null, ()=>{
                 try {
-                    var remote = File.new_for_uri(update_server + "turtlico-windows.exe");
+                    var remote = File.new_for_uri(turtlico_webpage + "turtlico-windows.exe");
                     string path = Path.build_filename(GLib.Environment.get_tmp_dir() , "turtlico-windows.exe").replace("\\", "/");
                     var local = File.new_for_path(path);
                     remote.copy(local, FileCopyFlags.OVERWRITE, null, (current, total)=>{

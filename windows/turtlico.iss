@@ -4,7 +4,7 @@
 #define MyAppName "Turtlico"
 #define MyAppVersion "0.4"
 #define MyAppPublisher "Matyas Hronek"
-#define MyAppURL "https://turtlico.tk"
+#define MyAppURL "https://turtlico.gitlab.io"
 #define MyAppExeName "bin\turtlico.exe"
 
 [Setup]

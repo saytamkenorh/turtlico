@@ -727,7 +727,7 @@ namespace Turtlico {
 	        if (GLib.FileUtils.test(docdir, GLib.FileTest.IS_DIR))
 	            url = "file://" + docdir;
 	        else
-	            url = "https://turtlico.tk/doc";
+	            url = turtlico_webpage + "doc";
 
             try {
                 Gtk.show_uri_on_window((Gtk.Window)this.get_toplevel(), "%s/en/reference_doc.html#%s".printf(url, name), Gdk.CURRENT_TIME);
