@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-28 12:53+0200\n"
-"PO-Revision-Date: 2020-05-28 12:55+0200\n"
+"POT-Creation-Date: 2020-06-19 14:10+0200\n"
+"PO-Revision-Date: 2020-06-19 14:15+0200\n"
 "Last-Translator: matyas5 <>\n"
 "Language-Team: Czech <>\n"
 "Language: cs\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Gtranslator 3.36.0\n"
 
 #: data/io.gitlab.Turtlico.desktop.in:3
-#: data/io.gitlab.Turtlico.appdata.xml.in:4 src/windows/window.ui:223
+#: data/io.gitlab.Turtlico.appdata.xml.in:4 src/windows/window.ui:222
 msgid "Turtlico"
 msgstr "Turtlico"
 
@@ -41,10 +41,30 @@ msgid "Turtlico main window"
 msgstr "Hlavní okno aplikace Turtlico"
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:24
-msgid "New major release."
+msgid "This release contains bug fixes and new features:"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:28
+msgid "Added scenes"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:29
+msgid "Added functions dialog"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:30
+msgid "Improved help"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:31
+msgid "Many other smaller improvements"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:37
+msgid "New major release."
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:44
 msgid "Initial release."
 msgstr ""
 
@@ -329,8 +349,8 @@ msgid "Place image at the position of the turtle"
 msgstr "Vyčarovat obrázek na pozici želvy"
 
 #: src/plugins/base.json:39
-msgid "Sleep n seconds (freezes window)"
-msgstr "Spi n sekund (zmrazí okno)"
+msgid "Sleep"
+msgstr "Čekej"
 
 #: src/plugins/base.json:40
 msgid ""
@@ -732,31 +752,31 @@ msgstr "Převést čas na řetězec"
 msgid "Convert string to timestamp"
 msgstr "Převést řetězec na čas"
 
-#: src/plugins/base.json:393
+#: src/plugins/base.json:413
 msgid "Key press"
 msgstr "Stisk klávesy"
 
-#: src/plugins/base.json:399
+#: src/plugins/base.json:419
 msgid "Specified key press"
 msgstr "Stisk specifikované klávesy"
 
-#: src/plugins/base.json:405
+#: src/plugins/base.json:425
 msgid "Mouse click"
 msgstr "Kliknutí myši"
 
-#: src/plugins/base.json:411
+#: src/plugins/base.json:431
 msgid "Mouse click on a turtle"
 msgstr "Kliknutí myši na želvu"
 
-#: src/plugins/base.json:417
+#: src/plugins/base.json:437
 msgid "Timer"
 msgstr "Časovač"
 
-#: src/plugins/base.json:423
+#: src/plugins/base.json:443
 msgid "Circular collision"
 msgstr "Kruhová kolize"
 
-#: src/plugins/base.json:429
+#: src/plugins/base.json:449
 msgid "Rectangle collision"
 msgstr "Obdélníková kolize"
 
@@ -872,7 +892,7 @@ msgstr "Stiskněte libovolnou klávesu k nastavení hodnoty ikony"
 msgid "Edit value"
 msgstr "Editovat"
 
-#: src/widgets/programview.ui:322 src/windows/window.ui:174
+#: src/widgets/programview.ui:322 src/windows/window.ui:173
 msgid "Help"
 msgstr "Nápověda"
 
@@ -900,11 +920,11 @@ msgstr "Zakomentovat blok"
 msgid "Uncomment block"
 msgstr "Odkomentovat blok"
 
-#: src/widgets/programview.ui:401 src/windows/window.ui:299
+#: src/widgets/programview.ui:401 src/windows/window.ui:298
 msgid "Undo"
 msgstr "Zpět"
 
-#: src/widgets/programview.ui:410 src/windows/window.ui:316
+#: src/widgets/programview.ui:410 src/windows/window.ui:315
 msgid "Redo"
 msgstr "Znovu"
 
@@ -976,7 +996,7 @@ msgstr "Tmavý režim"
 msgid "Dark icons"
 msgstr "Tmavé ikony"
 
-#: src/windows/functions-dialog.ui:9 src/windows/window.ui:452
+#: src/windows/functions-dialog.ui:9 src/windows/window.ui:451
 msgid "Functions"
 msgstr "Funkce"
 
@@ -996,7 +1016,7 @@ msgstr "Nic"
 msgid "Use this function"
 msgstr "Použít tuto funkci"
 
-#: src/windows/program-settings.ui:7 src/windows/window.ui:488
+#: src/windows/program-settings.ui:7 src/windows/window.ui:487
 msgid "Project settings"
 msgstr "Nastavení projektu"
 
@@ -1048,8 +1068,8 @@ msgstr "Jméno pro novou scénu"
 msgid "Sprites"
 msgstr "Sprity"
 
-#: src/windows/scene-editor-window.ui:283 src/windows/window.ui:281
-#: src/windows/window.vala:315
+#: src/windows/scene-editor-window.ui:283 src/windows/window.ui:280
+#: src/windows/window.vala:316
 msgid "Save"
 msgstr "Uložit"
 
@@ -1073,7 +1093,7 @@ msgstr "Výška:"
 msgid "Remove"
 msgstr "Odstranit"
 
-#: src/windows/scene-editor-window.vala:144 src/windows/window.ui:470
+#: src/windows/scene-editor-window.vala:144 src/windows/window.ui:469
 msgid "Scene editor"
 msgstr "Editor scén"
 
@@ -1105,95 +1125,95 @@ msgstr "Nelze uložit scénu"
 msgid "Would you like to save your changes before closing the scene?"
 msgstr "Přereje si uložit změny před zavřením scény?"
 
-#: src/windows/scene-editor-window.vala:397 src/windows/window.vala:758
+#: src/windows/scene-editor-window.vala:397 src/windows/window.vala:759
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr "Jinak budou neuložené změny ztraceny!"
 
-#: src/windows/scene-editor-window.vala:399 src/windows/window.vala:760
+#: src/windows/scene-editor-window.vala:399 src/windows/window.vala:761
 msgid "Yes"
 msgstr "Ano"
 
-#: src/windows/scene-editor-window.vala:400 src/windows/window.vala:761
+#: src/windows/scene-editor-window.vala:400 src/windows/window.vala:762
 msgid "No"
 msgstr "Ne"
 
-#: src/windows/scene-editor-window.vala:401 src/windows/window.vala:316
-#: src/windows/window.vala:350 src/windows/window.vala:762
+#: src/windows/scene-editor-window.vala:401 src/windows/window.vala:317
+#: src/windows/window.vala:351 src/windows/window.vala:763
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/windows/scene-editor-window.vala:427
-#: src/windows/scene-editor-window.vala:473
+#: src/windows/scene-editor-window.vala:437
+#: src/windows/scene-editor-window.vala:483
 msgid "Error occurred while loading scenes and sprites"
 msgstr "Vyskytla se chyba během načítání scén a spritů"
 
-#: src/windows/scene-editor-window.vala:464
+#: src/windows/scene-editor-window.vala:474
 #, c-format
 msgid "Faile to load image '%s'"
 msgstr "Nelze načíst obrázek '%s'"
 
-#: src/windows/window.ui:97
+#: src/windows/window.ui:96
 msgid "New project"
 msgstr "Nový projekt"
 
-#: src/windows/window.ui:111
+#: src/windows/window.ui:110
 msgid "Save as"
 msgstr "Uložit jako"
 
-#: src/windows/window.ui:136
+#: src/windows/window.ui:135
 msgid "Show/hide search dialog"
 msgstr "Zobrazit/skrýt hledání"
 
-#: src/windows/window.ui:160
+#: src/windows/window.ui:159
 msgid "Preferences"
 msgstr "Předvolby"
 
-#: src/windows/window.ui:188
+#: src/windows/window.ui:187
 msgid "About Turtlico"
 msgstr "O Turtlico"
 
-#: src/windows/window.ui:245
+#: src/windows/window.ui:244
 msgid "Run program"
 msgstr "Spustit program"
 
-#: src/windows/window.ui:263
+#: src/windows/window.ui:262
 msgid "Open program"
 msgstr "Otevřít program"
 
-#: src/windows/window.ui:332
+#: src/windows/window.ui:331
 msgid "Drop items here to delete them"
 msgstr "Sem přetáhněte příkazy ke smazání"
 
-#: src/windows/window.vala:303
+#: src/windows/window.vala:304
 msgid "Failed to save the program"
 msgstr "Nepodařilo se uložit program"
 
-#: src/windows/window.vala:308
+#: src/windows/window.vala:309
 msgid "Project saved."
 msgstr "Projekt uložen."
 
-#: src/windows/window.vala:313 src/windows/window.vala:318
-#: src/windows/window.vala:347 src/windows/window.vala:352
+#: src/windows/window.vala:314 src/windows/window.vala:319
+#: src/windows/window.vala:348 src/windows/window.vala:353
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/windows/window.vala:325 src/windows/window.vala:359
+#: src/windows/window.vala:326 src/windows/window.vala:360
 msgid "Turtlico project (*.tcp)"
 msgstr "Projekt Turtlico (*.tcp)"
 
-#: src/windows/window.vala:340
+#: src/windows/window.vala:341
 msgid "Program saved."
 msgstr "Program uložen."
 
-#: src/windows/window.vala:349
+#: src/windows/window.vala:350
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/windows/window.vala:403
+#: src/windows/window.vala:404
 msgid "Would you really like to apply these changes?"
 msgstr "Opravdu chcete aplikovat tyto změny?"
 
-#: src/windows/window.vala:404
+#: src/windows/window.vala:405
 msgid ""
 "The program contains commands that are only available from a plugin. "
 "Unavailable commands will be removed."
@@ -1201,21 +1221,24 @@ msgstr ""
 "Program obsahuje příkazy, které jsou dostupné pouze z přídavného modulu. "
 "Nedostupné příkazy budou odstraněny."
 
-#: src/windows/window.vala:462
+#: src/windows/window.vala:463
 msgid "Please save the program before opening the scene editor."
 msgstr "Uložte prosím program před otevřením editoru scén."
 
-#: src/windows/window.vala:492
+#: src/windows/window.vala:493
 msgid "Would you like to continue loading anyway and ignore further errors?"
 msgstr "Přejete si pokračovat v načítání a ignorovat další chyby?"
 
-#: src/windows/window.vala:757
+#: src/windows/window.vala:758
 msgid "Would you like to save your changes before closing the program?"
 msgstr "Přereje si uložit změny před zavřením programu?"
 
-#: src/windows/window.vala:778
+#: src/windows/window.vala:779
 msgid "Unnamed"
 msgstr "Bez názvu"
+
+#~ msgid "Sleep n seconds (freezes window)"
+#~ msgstr "Spi n sekund (zmrazí okno)"
 
 #~ msgid "Camera properties (x, y, [width], [height])"
 #~ msgstr "Nastavení kamery (x, y, [šířka], [výška])"
