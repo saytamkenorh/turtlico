@@ -14,7 +14,7 @@ Creating custom plugins
 =======================
 
 Every set of commands has its own file.
-Turtlico loads these files from data dirs (eg. ``/usr/share/turtlico/plugins``) and also from GResources with prefix ``/tk/turtlico/Turtlico``.
+Turtlico loads these files from data dirs (eg. ``/usr/share/turtlico/plugins``) and also from GResources with prefix ``/io/gitlab/Turtlico``.
 Plugins can also contain custom icons.
 
 Plugins loaded from filesystem
@@ -35,7 +35,7 @@ The most often ones are listed here:
 |                    | ``~/.local/share/turtlico/plugins``                       |
 +--------------------+-----------------------------------------------------------+
 | **Linux (Flatpak)**| ``/usr/share/turtlico/plugins``                           |
-|                    | ``~/.var/app/tk.turtlico.Turtlico/data/turtlico/plugins`` |
+|                    | ``~/.var/app/io.gitlab.Turtlico/data/turtlico/plugins`` |
 +--------------------+-----------------------------------------------------------+
 
 **Basic plugin folder structure**
@@ -50,10 +50,10 @@ GResources plugins
 ==================
 This is mostly used by the internal Turtlico plugins.
 
-Plugin file resource has to be installed as a child of path ``/tk/turtlico/Turtlico``.
+Plugin file resource has to be installed as a child of path ``/io/gitlab/Turtlico``.
 Unlike plugins loaded from filesystem GResources plugin file should be named like the plugin itself eg. ``example.json``.
 
-Icon files has to be children of ``/tk/turtlico/Turtlico/icons``.
+Icon files has to be children of ``/io/gitlab/Turtlico/icons``.
 
 Format of plugin files
 ======================
@@ -165,5 +165,5 @@ Icon specification
 There are three options to specify icons in plugin files:
 
 1. Plain text - use text and/or emoji to make the icon simple to understand
-2. GResources - Loads icon from Turtlico resources(``/tk/turtlico/Turtlico/icons/*``). It must start with ``"r:"``. Eg. ``r:example_icon.png``.
+2. GResources - Loads icon from Turtlico resources(``/io/gitlab/Turtlico/icons/*``). It must start with ``"r:"``. Eg. ``r:example_icon.png``.
 3. Local file - Loads PNG icon from plugin dir. It must start with ``"f:"``. Eg. ``f:example_icon.png``.

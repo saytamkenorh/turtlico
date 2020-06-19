@@ -49,4 +49,4 @@ obj,update_ui,;(,,;),,;nl,,;
 0_ekey,,;(,,;obj,seek_backward,;sep,,;key,Left,;),,;nl,,;
 0_ekey,,;(,,;obj,seek_forward,;sep,,;key,Right,;),,;nl,,;
 nl,,;
-plugin,r:/tk/turtlico/Turtlico/mm.json,;
+plugin,r:mm.json,;

@@ -23,7 +23,7 @@
 extern const string TURTLICO_VERSION;
 
 namespace Turtlico {
-	[GtkTemplate (ui = "/tk/turtlico/Turtlico/windows/app-settings.ui")]
+	[GtkTemplate (ui = "/io/gitlab/Turtlico/windows/app-settings.ui")]
 	class AppSettings : Gtk.Window {
         [GtkChild]
         Gtk.Switch dark_mode_switch;
@@ -40,7 +40,7 @@ namespace Turtlico {
         Gtk.Label csd_label;
         #endif
 
-        Settings settings = new Settings("tk.turtlico.Turtlico");
+        Settings settings = new Settings("io.gitlab.Turtlico");
 
         public AppSettings () {
             dark_mode_switch.active = settings.get_boolean("dark-mode");

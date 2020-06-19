@@ -14,7 +14,7 @@ under certain conditions; see [COPYING](./COPYING) for details.
 Turtlico supports Windows and Linux. <br>
 **[Download the latest release on the official website](https://turtlico.gitlab.io/#downloads)**
 
-<a href='https://flathub.org/apps/details/tk.turtlico.Turtlico'><img width='240' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-i-en.png'/></a>
+<a href='https://flathub.org/apps/details/io.gitlab.Turtlico'><img width='240' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-i-en.png'/></a>
 
 ## Development
 

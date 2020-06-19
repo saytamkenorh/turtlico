@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/tk/turtlico/Turtlico/icons">
+  <gresource prefix="/io/gitlab/Turtlico/icons">
     <file>0_ht.png</file>
     <file>0_st.png</file>
     <file>0_bf.svg</file>

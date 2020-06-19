@@ -20,7 +20,7 @@
 
 namespace Turtlico {
     public class Debugger : Object{
-        Settings settings = new Settings("tk.turtlico.Turtlico");
+        Settings settings = new Settings("io.gitlab.Turtlico");
 
         public bool debug_running { get; set; }
         Cancellable debug_cancellable = new Cancellable();

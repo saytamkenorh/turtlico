@@ -19,16 +19,16 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
 "X-Generator: Gtranslator 3.36.0\n"
 
-#: data/tk.turtlico.Turtlico.desktop.in:3
-#: data/tk.turtlico.Turtlico.appdata.xml.in:4 src/windows/window.ui:223
+#: data/io.gitlab.Turtlico.desktop.in:3
+#: data/io.gitlab.Turtlico.appdata.xml.in:4 src/windows/window.ui:223
 msgid "Turtlico"
 msgstr "Turtlico"
 
-#: data/tk.turtlico.Turtlico.appdata.xml.in:5
+#: data/io.gitlab.Turtlico.appdata.xml.in:5
 msgid "The easy programming tool"
 msgstr "Nástroj pro lehké programování"
 
-#: data/tk.turtlico.Turtlico.appdata.xml.in:7
+#: data/io.gitlab.Turtlico.appdata.xml.in:7
 msgid ""
 "Turtlico is a tool for learning programming basics. You can create programs "
 "with icons."
@@ -36,31 +36,31 @@ msgstr ""
 "Turtlico je nástroj pro učení se základů programování. Můžete vytvářet "
 "programy pomocí ikon."
 
-#: data/tk.turtlico.Turtlico.appdata.xml.in:16
+#: data/io.gitlab.Turtlico.appdata.xml.in:16
 msgid "Turtlico main window"
 msgstr "Hlavní okno aplikace Turtlico"
 
-#: data/tk.turtlico.Turtlico.appdata.xml.in:24
+#: data/io.gitlab.Turtlico.appdata.xml.in:24
 msgid "New major release."
 msgstr ""
 
-#: data/tk.turtlico.Turtlico.appdata.xml.in:31
+#: data/io.gitlab.Turtlico.appdata.xml.in:31
 msgid "Initial release."
 msgstr ""
 
-#: data/tk.turtlico.Turtlico.gschema.xml:6
+#: data/io.gitlab.Turtlico.gschema.xml:6
 msgid "Enable dark mode"
 msgstr "Povolit tmavý režim"
 
-#: data/tk.turtlico.Turtlico.gschema.xml:7
+#: data/io.gitlab.Turtlico.gschema.xml:7
 msgid "If enabled, the app interface will use the dark theme."
 msgstr "Pokud je zapnuto, rozhraní aplikace použije tmavý motiv"
 
-#: data/tk.turtlico.Turtlico.gschema.xml:13
+#: data/io.gitlab.Turtlico.gschema.xml:13
 msgid "Enable dark icons"
 msgstr "Povolit tmavé ikony"
 
-#: data/tk.turtlico.Turtlico.gschema.xml:14
+#: data/io.gitlab.Turtlico.gschema.xml:14
 msgid ""
 "If enabled, the icons are drawn with dark background instead of light one. "
 "This results into better constrast."
@@ -68,21 +68,21 @@ msgstr ""
 "Když povoleno, tak ikony mají tmavé pozadí místo světlého. To může zvýšit "
 "kontrast."
 
-#: data/tk.turtlico.Turtlico.gschema.xml:20
+#: data/io.gitlab.Turtlico.gschema.xml:20
 msgid "Write debug data to output files"
 msgstr "Zapisovat data ladění do výstupních souborů"
 
-#: data/tk.turtlico.Turtlico.gschema.xml:21
+#: data/io.gitlab.Turtlico.gschema.xml:21
 msgid "If enabled, Turtlico writes to output files marks to help track errors."
 msgstr ""
 "Pokud povoleno, Turtlico zapisuje do výstupních souborů značky, které "
 "pomáhají sledovat chyby."
 
-#: data/tk.turtlico.Turtlico.gschema.xml:27 src/windows/app-settings.ui:127
+#: data/io.gitlab.Turtlico.gschema.xml:27 src/windows/app-settings.ui:127
 msgid "Automatic indentation"
 msgstr "Automatické odsazování"
 
-#: data/tk.turtlico.Turtlico.gschema.xml:28
+#: data/io.gitlab.Turtlico.gschema.xml:28
 msgid ""
 "If enabled, the app inserts automatically tabulators on new line when enter "
 "icon is dropped into the program."
@@ -90,11 +90,11 @@ msgstr ""
 "Pokud je povoleno, tak aplikace automaticky vkládá tabulátory na novou "
 "řádku, když je do programu vložen Enter."
 
-#: data/tk.turtlico.Turtlico.gschema.xml:34
+#: data/io.gitlab.Turtlico.gschema.xml:34
 msgid "Left sidebar pinned"
 msgstr "Připnutí levého postranního panelu"
 
-#: data/tk.turtlico.Turtlico.gschema.xml:38 src/windows/app-settings.ui:140
+#: data/io.gitlab.Turtlico.gschema.xml:38 src/windows/app-settings.ui:140
 msgid "Use client side decoration"
 msgstr "Použít dekorování na straně klienta"
 

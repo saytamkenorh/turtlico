@@ -53,7 +53,7 @@ namespace Turtlico.SceneEditor {
             height = (int)object.get_int_member("height");
             sprites = new ArrayList<Sprite?>();
 
-            var turtle_sprite = new Gdk.Pixbuf.from_resource("/tk/turtlico/Turtlico/icons/turtle_sprite.png");
+            var turtle_sprite = new Gdk.Pixbuf.from_resource("/io/gitlab/Turtlico/icons/turtle_sprite.png");
 
             object.get_array_member("sprites").foreach_element((array, index, node)=>{
                 Sprite sprite = new Sprite();

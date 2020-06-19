@@ -26,7 +26,7 @@ namespace Turtlico {
         ID
     }
 
-	[GtkTemplate (ui = "/tk/turtlico/Turtlico/windows/window.ui")]
+	[GtkTemplate (ui = "/io/gitlab/Turtlico/windows/window.ui")]
 	public class Window : Gtk.ApplicationWindow {
         [GtkChild]
         Gtk.Box toolbar_box;
@@ -79,7 +79,7 @@ namespace Turtlico {
             }
         }
 
-        Settings settings = new Settings("tk.turtlico.Turtlico");
+        Settings settings = new Settings("io.gitlab.Turtlico");
 
         [GtkChild]
         Gtk.Image left_bar_btn_img;
@@ -98,7 +98,7 @@ namespace Turtlico {
 
 		public Window (Gtk.Application app) {
 			Object (application: app);
-            string icon_file = Path.build_filename(Path.get_dirname(Environment.get_current_dir()), "share/icons/hicolor/256x256/apps/tk.turtlico.Turtlico.png");
+            string icon_file = Path.build_filename(Path.get_dirname(Environment.get_current_dir()), "share/icons/hicolor/256x256/apps/io.gitlab.Turtlico.png");
             try {
 
                 if (FileUtils.test(icon_file, FileTest.IS_REGULAR))
@@ -107,7 +107,7 @@ namespace Turtlico {
             // CSS
             var screen = this.get_screen ();
             var css_provider = new Gtk.CssProvider();
-            css_provider.load_from_resource("/tk/turtlico/Turtlico/windows/window.css");
+            css_provider.load_from_resource("/io/gitlab/Turtlico/windows/window.css");
             Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
 
 			// cmd view
@@ -217,7 +217,7 @@ namespace Turtlico {
 		void setup_about_dialog () {
 		    about_dialog.set_transient_for(this);
 #if TURTLICO_FLATPAK
-            about_dialog.set_logo_icon_name("tk.turtlico.Turtlico");
+            about_dialog.set_logo_icon_name("io.gitlab.Turtlico");
 #else
             about_dialog.set_logo(null);
 #endif
@@ -546,7 +546,7 @@ namespace Turtlico {
                             Gdk.Pixbuf pixbuf;
                             if (icon.has_prefix("r:")) {
                                 pixbuf = new Gdk.Pixbuf.from_resource_at_scale(
-                                    "/tk/turtlico/Turtlico/icons/" + icon.substring(2),
+                                    "/io/gitlab/Turtlico/icons/" + icon.substring(2),
                                     24 * get_scale_factor(), 24 * get_scale_factor(), true);
                             }
                             else {

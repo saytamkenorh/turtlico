@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-	<id>tk.turtlico.Turtlico.desktop</id>
+	<id>io.gitlab.Turtlico.desktop</id>
   <name>Turtlico</name>
   <summary>The easy programming tool</summary>
   <description>
@@ -16,7 +16,7 @@
       <caption>Turtlico main window</caption>
     </screenshot>
 	​</screenshots>
-  <launchable type="desktop-id">tk.turtlico.Turtlico.desktop</launchable>
+  <launchable type="desktop-id">io.gitlab.Turtlico.desktop</launchable>
 
   <releases>
     <release version="0.4" date="2020-06-21">

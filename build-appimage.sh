@@ -1,7 +1,7 @@
 #!/bin/bash
 
 projectname="turtlico"
-projectid="tk.turtlico.Turtlico"
+projectid="io.gitlab.Turtlico"
 srcdir=$(pwd)/$line
 builddir="$srcdir/build/meson"
 installdir="$srcdir/build/install"

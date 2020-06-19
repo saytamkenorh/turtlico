@@ -119,7 +119,7 @@ namespace Turtlico {
             foreach(string plugin in enabled_plugins) {
                 if (plugin.has_prefix("r:")) {
                     plugin = plugin.replace(Command.PLUGIN_RESOURCES, "");
-                    plugin = plugin.replace("/tk/turtlico/Turtlico/", "");
+                    plugin = plugin.replace("/io/gitlab/Turtlico/", "");
                 } else {
                     plugin = "f:" + Path.get_basename(Path.get_dirname(plugin));
                 }
@@ -184,7 +184,7 @@ namespace Turtlico {
                         if (!enabled_plugins.contains(props[1])) {
                             string plugin = props[1];
                             plugin = plugin.replace(Command.PLUGIN_RESOURCES, "");
-                            plugin = plugin.replace("/tk/turtlico/Turtlico/", "");
+                            plugin = plugin.replace("/io/gitlab/Turtlico/", "");
                             try {
                                 if ((plugin.has_prefix("r:") && resources_get_info(
                                         Command.PLUGIN_RESOURCES + plugin.substring(2, -1), ResourceLookupFlags.NONE, null, null)))

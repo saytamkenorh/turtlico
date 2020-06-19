@@ -1,6 +1,6 @@
-data/tk.turtlico.Turtlico.desktop.in
-data/tk.turtlico.Turtlico.appdata.xml.in
-data/tk.turtlico.Turtlico.gschema.xml
+data/io.gitlab.Turtlico.desktop.in
+data/io.gitlab.Turtlico.appdata.xml.in
+data/io.gitlab.Turtlico.gschema.xml
 src/classes/command.vala
 src/classes/compiler.vala
 src/classes/debugger.vala

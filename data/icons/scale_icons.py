@@ -8,10 +8,10 @@ inputf = "./source.svg"
 dir = os.path.join(sys.argv[1], "scalable")
 if not os.path.isdir(dir):
 	os.mkdir(dir)
-os.system("cp {} {}".format(inputf, dir + "/tk.turtlico.Turtlico.svg"))
+os.system("cp {} {}".format(inputf, dir + "/io.gitlab.Turtlico.svg"))
 
 for s in sizes:
 	dir = os.path.join(sys.argv[1], str(s) + "x" + str(s))
 	if not os.path.isdir(dir):
 		os.mkdir(dir)
-	os.system("inkscape --without-gui --file={} --export-png='{}' -w {} -h {}".format(inputf, dir + "/tk.turtlico.Turtlico.png", s, s))
+	os.system("inkscape --without-gui --file={} --export-png='{}' -w {} -h {}".format(inputf, dir + "/io.gitlab.Turtlico.png", s, s))

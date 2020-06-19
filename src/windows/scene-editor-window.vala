@@ -32,7 +32,7 @@ namespace Turtlico.SceneEditor {
         NAME
     }
 
-	[GtkTemplate (ui = "/tk/turtlico/Turtlico/windows/scene-editor-window.ui")]
+	[GtkTemplate (ui = "/io/gitlab/Turtlico/windows/scene-editor-window.ui")]
 	public class Window : Gtk.Window {
 	    [GtkChild]
 	    Gtk.ListStore scenes_store;
@@ -418,7 +418,7 @@ namespace Turtlico.SceneEditor {
                 try {
                     Sprite turtle_sprite = new Sprite();
                     turtle_sprite.name = "turtle";
-                    var turtle_pixbuf = new Gdk.Pixbuf.from_resource("/tk/turtlico/Turtlico/icons/turtle_sprite.png");
+                    var turtle_pixbuf = new Gdk.Pixbuf.from_resource("/io/gitlab/Turtlico/icons/turtle_sprite.png");
                     turtle_sprite.icon = turtle_pixbuf;
                     sprites.add(turtle_sprite);
 			        sprites_pb_fullres.add(turtle_pixbuf);

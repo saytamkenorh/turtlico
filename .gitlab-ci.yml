@@ -1,5 +1,5 @@
 variables:
-    APP_ID: "tk.turtlico.Turtlico"
+    APP_ID: "io.gitlab.Turtlico"
     BUNDLE_FILENAME: "turtlico-master.flatpak"
     WINDOWS_INSTALLER_BASENAME: "turtlico-master-setup"
 

@@ -18,7 +18,7 @@
 
 namespace Turtlico {
     public class Command {
-        public const string PLUGIN_RESOURCES = "/tk/turtlico/Turtlico/plugins/";
+        public const string PLUGIN_RESOURCES = "/io/gitlab/Turtlico/plugins/";
 
         private string _name;
         public string name {get { return _name;}}
@@ -47,7 +47,7 @@ namespace Turtlico {
                 try {
                     string str = name.substring(2);
                     this._pixbuf = new Gdk.Pixbuf.from_resource_at_scale(
-                        "/tk/turtlico/Turtlico/icons/" + str,
+                        "/io/gitlab/Turtlico/icons/" + str,
                         (int)(50 * draw_params.scale), (int)(35 * draw_params.scale), true);
                     this._name = str;
                 }
@@ -117,7 +117,7 @@ namespace Turtlico {
                     var parser = new Json.Parser();
                     if (file.has_prefix("r:")) {
                         string path = file.substring(2);
-                        path = path.replace("/tk/turtlico/Turtlico/", ""); // Backward compatibility
+                        path = path.replace("/io/gitlab/Turtlico/", ""); // Backward compatibility
                         path = PLUGIN_RESOURCES + path;
                         var stream = GLib.resources_open_stream(path, GLib.ResourceLookupFlags.NONE);
                         parser.load_from_stream(stream);
