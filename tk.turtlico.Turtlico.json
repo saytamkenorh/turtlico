@@ -126,13 +126,13 @@
             "name": "python3-Pillow",
             "buildsystem": "simple",
             "build-commands": [
-                "LDFLAGS=-L`echo /usr/lib/${FLATPAK_ARCH}-linux-*` pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} Pillow"
+                "LDFLAGS=-L`echo /usr/lib/${FLATPAK_ARCH}-linux-*` pip3 install --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} Pillow"
             ],
             "sources": [
                 {
                     "type": "file",
-                    "url": "https://files.pythonhosted.org/packages/39/47/f28067b187dd664d205f75b07dcc6e0e95703e134008a14814827eebcaab/Pillow-7.0.0.tar.gz",
-                    "sha256": "4d9ed9a64095e031435af120d3c910148067087541131e82b3e8db302f4c8946"
+                    "url": "https://files.pythonhosted.org/packages/ce/ef/e793f6ffe245c960c42492d0bb50f8d14e2ba223f1922a5c3c81569cec44/Pillow-7.1.2.tar.gz",
+                    "sha256": "a0b49960110bc6ff5fead46013bcb8825d101026d466f3a4de3476defe0fb0dd"
                 }
             ]
         },
@@ -140,7 +140,7 @@
             "name": "python3-gpiozero",
             "buildsystem": "simple",
             "build-commands": [
-                "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} gpiozero"
+                "pip3 install --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} gpiozero"
             ],
             "sources": [
                 {
