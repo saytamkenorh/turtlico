@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Turtlico"
-#define MyAppVersion "0.4"
+#define MyAppVersion "0.5"
 #define MyAppPublisher "Matyas Hronek"
 #define MyAppURL "https://turtlico.gitlab.io"
 #define MyAppExeName "bin\turtlico.exe"
