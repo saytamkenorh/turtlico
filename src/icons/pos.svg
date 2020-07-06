@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50" height="35" version="1.1" viewBox="0 0 13.229 9.2604" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs>
+		<linearGradient id="linearGradient15478" x1="6.0762" x2="8.4222" y1="6.132" y2="6.132" gradientTransform="matrix(1.0003 0 0 1.0001 .92523 -.13309)" gradientUnits="userSpaceOnUse" spreadMethod="reflect">
+			<stop stop-color="#7e4723" offset="0"/>
+			<stop stop-color="#dda481" offset="1"/>
+		</linearGradient>
+		<linearGradient id="linearGradient15494" x1="5.8582" x2="9.0189" y1="3.2125" y2="3.2125" gradientTransform="matrix(.79179 0 0 .98945 1.8562 -.14707)" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#f00" offset="0"/>
+			<stop stop-color="#ff7070" offset="1"/>
+		</linearGradient>
+	</defs>
+	<g stroke="#000">
+		<g transform="matrix(.99974 0 0 .99989 -.92499 .13308)" shape-rendering="auto" stroke-width=".26463" style="paint-order:stroke fill markers">
+			<path d="m6.0854 8.4667v-7.1437" color="#000000" color-rendering="auto" dominant-baseline="auto" fill="#784421" image-rendering="auto" solid-color="#000000" stop-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+			<path d="m5.5566 1.3223v7.1445h1.0586v-7.1445z" color="#000000" color-rendering="auto" dominant-baseline="auto" fill="url(#linearGradient15478)" image-rendering="auto" solid-color="#000000" stop-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;font-variation-settings:normal;inline-size:0;isolation:auto;mix-blend-mode:normal;paint-order:stroke fill markers;shape-margin:0;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+		</g>
+		<path transform="matrix(1.6917 0 0 1.4651 -5.4308 -1.5315)" d="m5.9531 4.8729v-3.3208l2.8759 1.6604z" fill="url(#linearGradient15494)" fill-rule="evenodd" stroke-width=".16806" style="paint-order:normal"/>
+	</g>
+</svg>

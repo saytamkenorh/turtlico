@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/io/gitlab/Turtlico/icons">
-    <file>0_ht.png</file>
-    <file>0_st.png</file>
+    <file>0_go.svg</file>
+    <file>0_seth.svg</file>
+    <file>0_speed.svg</file>
+    <file>pos.svg</file>
+    <file>0_penc.svg</file>
+    <file>0_pp.svg</file>
+    <file>0_ht.svg</file>
+    <file>0_st.svg</file>
+    <file>0_wr.svg</file>
     <file>0_bf.svg</file>
     <file>0_ef.svg</file>
     <file>0_cs.svg</file>
     <file>5_screen_c.svg</file>
     <file>0_scene.svg</file>
+    <file>5_img.svg</file>
+    <file>0_ds.svg</file>
+    <file>newt.svg</file>
     <file>5_screen_i.svg</file>
     <file>3_r.svg</file>
-    <file>5_gett.png</file>
+    <file>rep.svg</file>
+    <file>5_gett.svg</file>
     <file>5_plcimg.svg</file>
     <file>0_collision.svg</file>
     <file>0_collision_rect.svg</file>
-    <file>turbo.png</file>
+    <file>turbo.svg</file>
     <file>screenprop.svg</file>
+    <file>tmr.svg</file>
+    <file>emc.svg</file>
     <file>0_exit.svg</file>
     <file>key.svg</file>
     <file>true.svg</file>

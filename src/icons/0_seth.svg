@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50" height="35" version="1.1" viewBox="0 0 13.229 9.2604" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs>
+		<linearGradient id="linearGradient913">
+			<stop stop-color="#2c5aa0" offset="0"/>
+			<stop stop-color="#80b3ff" offset="1"/>
+		</linearGradient>
+		<linearGradient id="linearGradient915" x1="4.9818" x2="8.1018" y1="8.2105" y2="2.9843" gradientTransform="translate(0 .52917)" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient913"/>
+	</defs>
+	<g transform="translate(0 -.52917)" fill="url(#linearGradient915)" stroke="#000" stroke-width=".26458">
+		<g>
+			<rect x="5.4731" y="4.8947" width="1.6858" height="2.9104" stroke-linecap="square" style="paint-order:stroke fill markers"/>
+			<path d="m6.9043 5.288 1.4124-2.3037-2.4712 1.3436z" style="paint-order:stroke fill markers"/>
+			<ellipse cx="8.5596" cy="2.7781" rx=".28096" ry=".26458" stroke-linecap="square" style="paint-order:stroke fill markers"/>
+		</g>
+		<path d="m9.0701 5.5274c-0.44006 0.42583-1.0558 0.69041-1.7372 0.69041-1.3375 1e-7 -2.4217-1.0191-2.4217-2.2763 0-0.64399 0.2845-1.2255 0.7418-1.6396 1.7605 1.6549 2.8678 2.6936 3.4171 3.2255z" stroke-linecap="square" style="paint-order:stroke fill markers"/>
+		<rect x="4.6302" y="7.8051" width="3.4396" height=".79375" stroke-linecap="square" style="paint-order:stroke fill markers"/>
+	</g>
+</svg>

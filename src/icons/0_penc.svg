@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50" height="35" version="1.1" viewBox="0 0 13.229 9.2604" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs>
+		<linearGradient id="b-5" x1="-137.75" x2="-137.78" y1="257.94" y2="255.63" gradientTransform="matrix(.90896 -.52547 .52479 .91015 -1.1844 -14.841)" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#005ae0" offset="0"/>
+			<stop stop-color="#80b3ff" offset="1"/>
+		</linearGradient>
+		<linearGradient id="a-6" x1="8.289" x2="7.5122" y1="289.94" y2="288.57" gradientTransform="matrix(1.0496 0 0 1.0509 -1.1844 -14.841)" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#80b3ff" offset="0"/>
+			<stop stop-color="#97d2ff" offset="1"/>
+		</linearGradient>
+		<linearGradient id="linearGradient6548" x1="2.6458" x2="10.583" y1="8.4667" y2="8.4667" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#fdf200" offset="0"/>
+			<stop stop-color="#00ff03" stop-opacity=".74902" offset=".25"/>
+			<stop stop-color="#00e0ff" stop-opacity=".49804" offset=".5"/>
+			<stop stop-color="#f0f" stop-opacity=".74902" offset=".75"/>
+			<stop stop-color="#f00" offset="1"/>
+		</linearGradient>
+	</defs>
+	<rect x="2.6458" y="8.2021" width="7.9375" height=".52917" fill="url(#linearGradient6548)" style="mix-blend-mode:normal;paint-order:stroke fill markers"/>
+	<g transform="matrix(.95277 0 0 .95152 1.1285 -273.62)" stroke-linecap="round" stroke-width=".29184">
+		<path d="m5.741 289.39c0.50524-0.30331 0.64077 0.0113 0.84539 0.36099l3.0939 5.3011c0.10231 0.17528 0.021692 0.82088-0.10669 0.90471-0.11066 0.0715-0.7431-0.18565-0.84541-0.36094l-3.0939-5.3011c-0.20462-0.35059-0.43864-0.57727 0.10671-0.90474z" fill="url(#b-5)" stroke="#003380" style="paint-order:stroke markers fill"/>
+		<path d="m5.4545 287.99c0.78399 0.91689 1.4748 2.0614 2.0228 3.0143 0.071663 0.14636-1.0956 0.73029-1.1741 0.71376-0.078564-0.0165-1.0048-1.6884-1.0989-1.8682-0.054455-0.10417-0.63259-1.1499-0.55843-1.3643 0.077891-0.15419 0.70981-0.5358 0.80869-0.49556z" fill="url(#a-6)" stroke="#003380" stroke-linejoin="round" style="paint-order:stroke markers fill"/>
+		<path d="m9.6832 295.04c0.10231 0.17538 0.22092 1.306 0.1014 1.3837-0.11952 0.0775-0.97278-0.6486-1.0751-0.8239 0.48431-0.31702 0.6813-0.41863 0.97369-0.55977z" fill="#ececec" stroke="#b3b3b3" style="paint-order:stroke markers fill"/>
+	</g>
+	<ellipse cx="10.448" cy="8.4593" rx=".11665" ry=".11589" style="paint-order:stroke markers fill"/>
+</svg>
