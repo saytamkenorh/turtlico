@@ -709,10 +709,18 @@ namespace Turtlico {
             }
         }
 
-        void icon_help() {
+        void icon_help () {
             Gdk.Point item;
             if(!get_icon_at_pointer(out item)) return;
-            string name = buffer.program[item.y][item.x].draw_params.help_en;
+            try {
+                show_help_for (buffer.program[item.y][item.x].id);
+            } catch (Error e) {
+                debug ("Cannot open help: " + e.message);
+            }
+        }
+
+        public void show_help_for (string id) throws FileError {
+            string name = buffer.find_command_by_id (id).draw_params.help_en;
             name = name.down();
             string[] invalid_chars = {"(", ")", ".", "~", "?", "#", ":", ","};
             foreach (var ch in invalid_chars) {

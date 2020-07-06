@@ -40,6 +40,8 @@ namespace Turtlico {
         Gtk.Box categories_box;
         [GtkChild]
         Gtk.IconView cmd_view;
+        private double cmd_view_mx;
+        private double cmd_view_my;
         [GtkChild]
         Gtk.ScrolledWindow cmd_view_sw;
         [GtkChild]
@@ -279,6 +281,32 @@ namespace Turtlico {
 	    [GtkCallback]
         void on_cmd_view_scale_factor_notify () {
             load_commands();
+        }
+
+        [GtkCallback]
+        bool on_cmd_view_motion_notify_event (Gdk.EventMotion event) {
+            cmd_view_mx = event.x;
+            cmd_view_my = event.y;
+            return Gdk.EVENT_PROPAGATE;
+        }
+
+        [GtkCallback]
+        bool on_cmd_view_key_press_event (Gdk.EventKey event) {
+            if (event.keyval == Gdk.Key.F1) {
+                var path = cmd_view.get_path_at_pos((int)cmd_view_mx, (int)cmd_view_my);
+                if (path == null)
+                    return Gdk.EVENT_PROPAGATE;
+                            Gtk.TreeIter selected_iter;
+                cmd_view.get_model().get_iter(out selected_iter, path);
+                string id;
+                cmd_view.get_model().get(selected_iter, CmdViewCols.ID, out id);
+                try {
+                    programview.show_help_for (id);
+                } catch (Error e) {
+                    debug ("Cannot open help: " + e.message);
+                }
+            }
+            return Gdk.EVENT_PROPAGATE;
         }
 
 		[GtkCallback]

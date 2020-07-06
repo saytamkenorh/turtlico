@@ -513,7 +513,8 @@
                   <object class="GtkIconView" id="cmd_view">
                     <property name="name">cmdView</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_KEY_PRESS_MASK | GDK_STRUCTURE_MASK</property>
                     <property name="margin">6</property>
                     <property name="item_width">50</property>
                     <property name="row_spacing">2</property>
@@ -523,6 +524,8 @@
                     <signal name="drag-begin" handler="on_cmd_view_drag_begin" swapped="no"/>
                     <signal name="drag-data-get" handler="on_cmd_view_drag_data_get" swapped="no"/>
                     <signal name="drag-end" handler="on_cmd_view_drag_end" swapped="no"/>
+                    <signal name="key-press-event" handler="on_cmd_view_key_press_event" swapped="no"/>
+                    <signal name="motion-notify-event" handler="on_cmd_view_motion_notify_event" swapped="no"/>
                     <signal name="notify::scale-factor" handler="on_cmd_view_scale_factor_notify" swapped="no"/>
                     <style>
                       <class name="cmdView"/>
