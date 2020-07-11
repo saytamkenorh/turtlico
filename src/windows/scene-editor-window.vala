@@ -302,6 +302,9 @@ namespace Turtlico.SceneEditor {
 		[GtkCallback]
 		void on_selected_sprite_changed () {
 		    if (scene_view.selected_sprite == null) return;
+		    if (selected_sprite.text.contains(".")) {
+		        selected_sprite.text = selected_sprite.text.replace(".", "");
+		    }
 		    scene_view.set_sprite_id(scene_view.selected_sprite, selected_sprite.get_text());
 		}
 

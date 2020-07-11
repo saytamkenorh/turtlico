@@ -234,7 +234,7 @@ namespace Turtlico.SceneEditor {
                     }
                 }
             }
-            string id = "%s%d".printf(name, n);
+            string id = "%s%d".printf(name.replace(".", ""), n);
             sprite.id = id;
             sprite.x = x_to_turtle(x);
             sprite.y = y_to_turtle(y);
@@ -262,7 +262,7 @@ namespace Turtlico.SceneEditor {
         }
         public void set_sprite_id (Sprite s, string id) {
             if (id == s.id) return;
-            s.id = id; scene_changed(); queue_draw();
+            s.id = id.replace(".", ""); scene_changed(); queue_draw();
         }
     }
 }
