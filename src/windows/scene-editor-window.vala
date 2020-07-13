@@ -469,17 +469,14 @@ namespace Turtlico.SceneEditor {
                                 var sprite_path = Path.build_path (Path.DIR_SEPARATOR_S, project_dir_path, name);
                                 var pixbuf = new Gdk.Pixbuf.from_file_at_size (
                                     sprite_path, SPRITES_PREVIEW_SIZE, SPRITES_PREVIEW_SIZE);
+                                var pixbuf_fullres = new Gdk.Pixbuf.from_file (sprite_path);
                                 s.name = name;
                                 s.icon = pixbuf;
                                 sprites.add (s);
-                                var pixbuf_fullres = new Gdk.Pixbuf.from_file (sprite_path);
                                 sprites_pb_fullres.add (pixbuf_fullres);
                             } catch (Error e) {
                                 string message = e.message;
-                                Idle.add (() => {
-                                    msg (_("Faile to load image '%s'").printf (name), message, Gtk.MessageType.ERROR);
-                                    return false;
-                                });
+                                debug ("Failed to load image '%s': '%s'".printf (name, message));
                             }
                         }
                     }
@@ -517,6 +514,8 @@ namespace Turtlico.SceneEditor {
                         // Load full size sprite Pixbufs into scene view
                         scene_view.sprites.set (sprite.name, sprites_pb_fullres[i]);
                     }
+                    // Reload images of old sprites
+                    scene_view.reload_resources ();
 
                     return Source.REMOVE;
                 });

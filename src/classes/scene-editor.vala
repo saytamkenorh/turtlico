@@ -23,8 +23,8 @@ using Gee;
 namespace Turtlico.SceneEditor {
     public class Sprite {
         public Gdk.Pixbuf icon;
-        public string name;
-        public string id;
+        public string name; // Name of the image file
+        public string id; // ID that can be used in the program
         public int x;
         public int y;
     }

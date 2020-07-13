@@ -266,5 +266,17 @@ namespace Turtlico.SceneEditor {
             if (id == s.id) return;
             s.id = id.replace (".", ""); scene_changed (); queue_draw ();
         }
+
+        public void reload_resources () {
+            if (scene == null)
+                return;
+            foreach (var sprite in scene.sprites) {
+                if (sprites.contains(sprite.name))
+                    sprite.icon = sprites[sprite.name];
+                else
+                    sprite.icon = sprites["turtle"];
+            }
+            queue_draw ();
+        }
     }
 }
