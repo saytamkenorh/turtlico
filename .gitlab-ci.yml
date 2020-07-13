@@ -19,6 +19,11 @@ flatpak:
         - ${BUNDLE_FILENAME}
         expire_in: 1 month
 
+lint:
+    image: "valalang/lint:latest"
+    script:
+    - io.elementary.vala-lint src
+
 .shared_windows_runners:
     tags:
     - shared-windows
