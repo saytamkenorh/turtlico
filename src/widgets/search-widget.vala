@@ -26,27 +26,27 @@ namespace Turtlico {
         [GtkChild]
         Gtk.ScrolledWindow replace_entry_sw;
 
-        public ProgramView find_entry = new ProgramView();
-        public ProgramView replace_entry = new ProgramView();
+        public ProgramView find_entry = new ProgramView ();
+        public ProgramView replace_entry = new ProgramView ();
         private ProgramView programview;
 
         public SearchWidget (ProgramView programview) {
             this.programview = programview;
-            find_entry_sw.add(find_entry);
+            find_entry_sw.add (find_entry);
             find_entry.basic_mode = true;
-            //find_entry.show();
-            replace_entry_sw.add(replace_entry);
+            //find_entry.show ();
+            replace_entry_sw.add (replace_entry);
             replace_entry.basic_mode = true;
         }
 
         [GtkCallback]
-        void on_find_next_btn_clicked() {
-            find_next();
+        void on_find_next_btn_clicked () {
+            find_next ();
         }
 
         [GtkCallback]
-        void on_find_prev_btn_clicked() {
-            find_prev();
+        void on_find_prev_btn_clicked () {
+            find_prev ();
         }
 
         [GtkCallback]
@@ -56,25 +56,25 @@ namespace Turtlico {
                 return;
             if (replace_entry.buffer.program.size == 0)
                 return;
-            programview.buffer.replace(replace_entry.buffer.program[0]);
-            find_next();
+            programview.buffer.replace (replace_entry.buffer.program[0]);
+            find_next ();
         }
 
         [GtkCallback]
         void on_replace_all_btn_clicked () {
             if (find_entry.buffer.program.size == 0) return;
             if (replace_entry.buffer.program.size == 0) return;
-            programview.buffer.replace_all(find_entry.buffer.program[0], replace_entry.buffer.program[0]);
+            programview.buffer.replace_all (find_entry.buffer.program[0], replace_entry.buffer.program[0]);
         }
 
         void find_next () {
             if (find_entry.buffer.program.size == 0) return;
-            programview.buffer.search(find_entry.buffer.program[0]);
+            programview.buffer.search (find_entry.buffer.program[0]);
         }
 
         void find_prev () {
             if (find_entry.buffer.program.size == 0) return;
-            programview.buffer.search(find_entry.buffer.program[0], true);
+            programview.buffer.search (find_entry.buffer.program[0], true);
         }
     }
 }

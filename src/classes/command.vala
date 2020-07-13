@@ -43,10 +43,10 @@ namespace Turtlico {
             this._draw_params = draw_params;
             this.module_dir = module_dir;
 
-            if (name.has_prefix("r:")) {
+            if (name.has_prefix ("r:")) {
                 try {
-                    string str = name.substring(2);
-                    this._pixbuf = new Gdk.Pixbuf.from_resource_at_scale(
+                    string str = name.substring (2);
+                    this._pixbuf = new Gdk.Pixbuf.from_resource_at_scale (
                         "/io/gitlab/Turtlico/icons/" + str,
                         (int)(50 * draw_params.scale), (int)(35 * draw_params.scale), true);
                     this._name = str;
@@ -55,11 +55,11 @@ namespace Turtlico {
                     this._pixbuf = null;
                 }
             }
-            else if (name.has_prefix("f:")) {
+            else if (name.has_prefix ("f:")) {
                 try {
-                    string str = name.substring(2);
-                    this._pixbuf = new Gdk.Pixbuf.from_file_at_size(
-                        Path.build_filename(module_dir, str),
+                    string str = name.substring (2);
+                    this._pixbuf = new Gdk.Pixbuf.from_file_at_size (
+                        Path.build_filename (module_dir, str),
                         (int)(50 * draw_params.scale), (int)(35 * draw_params.scale));
                     this._name = str;
                 }
@@ -78,21 +78,21 @@ namespace Turtlico {
          *
         */
         public Command set_data (string new_data, string resource_dir) {
-            var c = new Command(this.name, this.id, new_data, this.draw_params, this.module_dir);
+            var c = new Command (this.name, this.id, new_data, this.draw_params, this.module_dir);
             if (this.id == "5_img") {
-                if (new_data.has_suffix(".png") ||
-                    new_data.has_suffix(".bmp") ||
-                    new_data.has_suffix(".gif"))
-                {
+                if (new_data.has_suffix (".png") ||
+                    new_data.has_suffix (".bmp") ||
+                    new_data.has_suffix (".gif")) {
                     // Get Image thumbnail
                     try {
                         string path = new_data;
-                        if (path.has_prefix("./")) {
-                            path = Path.build_filename(resource_dir, path.substring(2));
+                        if (path.has_prefix ("./")) {
+                            path = Path.build_filename (resource_dir, path.substring (2));
                         }
-                        var pb = new Gdk.Pixbuf.from_file_at_size(path, (int)(35 * draw_params.scale), (int)(25 * draw_params.scale));
+                        var pb = new Gdk.Pixbuf.from_file_at_size (path,
+                            (int)(35 * draw_params.scale), (int)(25 * draw_params.scale));
                         c._pixbuf = pb;
-                    } catch (Error e) {c._pixbuf = null; debug(e.message);}
+                    } catch (Error e) {c._pixbuf = null; debug (e.message);}
                 }
                 else
                     c._pixbuf = null;
@@ -105,45 +105,45 @@ namespace Turtlico {
         /*
          * Creates a parsers that can be used to load commands defs
         */
-        public static Json.Parser[] create_parsers(string[] enabled_plugins) {
+        public static Json.Parser[] create_parsers (string[] enabled_plugins) {
             // Load paths
-            Gee.ArrayList<string> command_files = new Gee.ArrayList<string>();
-            command_files.add("r:base.json");
-            command_files.add_all_array(enabled_plugins);
+            Gee.ArrayList<string> command_files = new Gee.ArrayList<string> ();
+            command_files.add ("r:base.json");
+            command_files.add_all_array (enabled_plugins);
             // Load commands
-            Gee.ArrayList<Json.Parser> parsers = new Gee.ArrayList<Json.Parser>();
-            foreach(string file in command_files) {
+            Gee.ArrayList<Json.Parser> parsers = new Gee.ArrayList<Json.Parser> ();
+            foreach (string file in command_files) {
                 try {
-                    var parser = new Json.Parser();
-                    if (file.has_prefix("r:")) {
-                        string path = file.substring(2);
-                        path = path.replace("/io/gitlab/Turtlico/", ""); // Backward compatibility
+                    var parser = new Json.Parser ();
+                    if (file.has_prefix ("r:")) {
+                        string path = file.substring (2);
+                        path = path.replace ("/io/gitlab/Turtlico/", ""); // Backward compatibility
                         path = PLUGIN_RESOURCES + path;
-                        var stream = GLib.resources_open_stream(path, GLib.ResourceLookupFlags.NONE);
-                        parser.load_from_stream(stream);
+                        var stream = GLib.resources_open_stream (path, GLib.ResourceLookupFlags.NONE);
+                        parser.load_from_stream (stream);
                     }
                     else {
-                        parser.load_from_file(file);
+                        parser.load_from_file (file);
                     }
-                    parsers.add(parser);
+                    parsers.add (parser);
                 }
                 catch (Error e) {
-                    debug(_("Failed to load command def file: ") + e.message);
+                    debug (_("Failed to load command def file: ") + e.message);
                 }
             }
-            return parsers.to_array();
+            return parsers.to_array ();
         }
 
         public static string[] get_file_plugin_dirs () {
-            var plugins_search_dirs = new Gee.ArrayList<string>.wrap(Environment.get_system_data_dirs());
-            plugins_search_dirs.add(Environment.get_user_data_dir());
+            var plugins_search_dirs = new Gee.ArrayList<string>.wrap (Environment.get_system_data_dirs ());
+            plugins_search_dirs.add (Environment.get_user_data_dir ());
 #if TURTLICO_FLATPAK
-            plugins_search_dirs.add("/run/host/usr/share");
+            plugins_search_dirs.add ("/run/host/usr/share");
 #endif
             for (int i = 0; i < plugins_search_dirs.size; i++) {
-                plugins_search_dirs[i] = Path.build_filename(plugins_search_dirs[i], "/turtlico/plugins");
+                plugins_search_dirs[i] = Path.build_filename (plugins_search_dirs[i], "/turtlico/plugins");
             }
-            return plugins_search_dirs.to_array();
+            return plugins_search_dirs.to_array ();
         }
     }
 
@@ -164,8 +164,8 @@ namespace Turtlico {
             Gdk.RGBA data_color, Gdk.RGBA bg_color, Gdk.RGBA fg_color,
             bool data_only,
             string help, string? snippet,
-            float scale)
-        {
+            float scale
+        ) {
             this.data_draw = data_draw;
             this.data_color = data_color;
             this.bg_color = bg_color;
