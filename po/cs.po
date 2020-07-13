@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 14:10+0200\n"
-"PO-Revision-Date: 2020-06-19 14:15+0200\n"
+"POT-Creation-Date: 2020-07-13 20:12+0200\n"
+"PO-Revision-Date: 2020-07-13 20:13+0200\n"
 "Last-Translator: matyas5 <>\n"
 "Language-Team: Czech <>\n"
 "Language: cs\n"
@@ -122,28 +122,28 @@ msgstr "Použít dekorování na straně klienta"
 msgid "Failed to load command def file: "
 msgstr "Selhalo načtení souboru s definicemi příkazů: "
 
-#: src/classes/compiler.vala:211
+#: src/classes/compiler.vala:210
 msgid "Functions must start on a separate line!"
 msgstr "Funkce musí začínat za zvláštním řádku!"
 
-#: src/classes/compiler.vala:375
+#: src/classes/compiler.vala:368
 msgid "Generated code:\n"
 msgstr "Vygenerovaný kód:\n"
 
-#: src/classes/debugger.vala:131
+#: src/classes/debugger.vala:135
 msgid "stderr of child process:\n"
 msgstr "stderr podprocesu:\n"
 
 #. We show line numbers indexed from 1 to user
-#: src/classes/debugger.vala:161
+#: src/classes/debugger.vala:168
 msgid "Error occurred at line "
 msgstr "Chyba se vyskytla na řádku "
 
-#: src/classes/debugger.vala:166
+#: src/classes/debugger.vala:173
 msgid "Program crashed"
 msgstr "Program selhal"
 
-#: src/classes/package-service.vala:59
+#: src/classes/package-service.vala:60
 msgid ""
 "Turtlico detected missing dependencies that are required to run Turtlico "
 "programs"
@@ -151,45 +151,44 @@ msgstr ""
 "Turtlico detekovalo chybějící závislosti, které jsou požadované pro běh "
 "programu vytvořených v aplikaci Turtlico"
 
-#: src/classes/package-service.vala:60
+#: src/classes/package-service.vala:61
 msgid "Would you like to install them now?"
 msgstr "Chcete je nainstalovat nyní?"
 
-#: src/classes/package-service.vala:111 src/classes/package-service.vala:115
+#: src/classes/package-service.vala:112 src/classes/package-service.vala:116
 msgid "Cannot check for updates: "
 msgstr "Nelze zkontrolovat aktualizace"
 
-#: src/classes/package-service.vala:143
+#: src/classes/package-service.vala:144
 msgid "Turtlico update available"
 msgstr "Aktualizace aplikace Turtlico je dostupná"
 
-#: src/classes/package-service.vala:144
+#: src/classes/package-service.vala:145
 msgid "Would you like to install it now?"
 msgstr "Přejete si jí nainstalovat nyní?"
 
-#: src/classes/package-service.vala:151
-msgid "Downloading update installer..."
-msgstr "Stahuji aktualizační soubor..."
+#: src/classes/package-service.vala:152
+msgid "Downloading update installer"
+msgstr "Stahuji aktualizační soubor"
 
-#: src/classes/package-service.vala:182
+#: src/classes/package-service.vala:184
 msgid "Update failed"
 msgstr "Aktualizace selhala"
 
-#: src/classes/program-buffer.vala:209
+#: src/classes/program-buffer.vala:212
 #, c-format
 msgid "Cannot load plugin %s."
 msgstr "Nelze načíst plugin %s."
 
-#. Add command
-#: src/classes/program-buffer.vala:219
+#: src/classes/program-buffer.vala:223
 msgid "Failed to open the file. Error on line: "
 msgstr "Nepodařilo se načíst program. Chyba je na řádce: "
 
-#: src/classes/program-buffer.vala:238
+#: src/classes/program-buffer.vala:242
 msgid "The file to load contains an unkown command!\n"
 msgstr "Soubor obsahuje neznámý příkaz!\n"
 
-#: src/classes/program-buffer.vala:239
+#: src/classes/program-buffer.vala:244
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
@@ -199,19 +198,19 @@ msgstr ""
 "verzí programu.\n"
 "ID příkazu: "
 
-#: src/classes/program-buffer.vala:528
+#: src/classes/program-buffer.vala:539
 msgid "Please save the project first."
 msgstr "Nejdříve prosím uložze projekt."
 
-#: src/classes/program-buffer.vala:537
+#: src/classes/program-buffer.vala:548
 msgid "Cannot insert the image: "
 msgstr "Nelze vložit obrázek: "
 
-#: src/main.vala:41
+#: src/main.vala:43
 msgid "Writes compiled program to FILE"
 msgstr "Uloží zkompilovaný program do SOUBORU"
 
-#: src/main.vala:72
+#: src/main.vala:74
 #, c-format
 msgid "Cannot save the output file: %s\n"
 msgstr "Nepodařilo se uložit výsledný soubor: %s\n"
@@ -1069,7 +1068,7 @@ msgid "Sprites"
 msgstr "Sprity"
 
 #: src/windows/scene-editor-window.ui:283 src/windows/window.ui:280
-#: src/windows/window.vala:316
+#: src/windows/window.vala:351
 msgid "Save"
 msgstr "Uložit"
 
@@ -1093,61 +1092,61 @@ msgstr "Výška:"
 msgid "Remove"
 msgstr "Odstranit"
 
-#: src/windows/scene-editor-window.vala:144 src/windows/window.ui:469
+#: src/windows/scene-editor-window.vala:142 src/windows/window.ui:469
 msgid "Scene editor"
 msgstr "Editor scén"
 
-#: src/windows/scene-editor-window.vala:185
+#: src/windows/scene-editor-window.vala:183
 msgid "Do you really wish to delete the scene?"
 msgstr "Opravdu si přejete smazat tuto scénu?"
 
-#: src/windows/scene-editor-window.vala:186
+#: src/windows/scene-editor-window.vala:184
 msgid "This cannot be undone."
 msgstr "Toto nelze vrátit zpět."
 
-#: src/windows/scene-editor-window.vala:194
+#: src/windows/scene-editor-window.vala:192
 msgid "Cannot delete the scene"
 msgstr "Nelze smazat scénu"
 
-#: src/windows/scene-editor-window.vala:322
+#: src/windows/scene-editor-window.vala:325
 msgid "Scene"
 msgstr "Scéna"
 
-#: src/windows/scene-editor-window.vala:348
+#: src/windows/scene-editor-window.vala:351
 msgid "Cannot load the scene"
 msgstr "Nelze načíst scénu"
 
-#: src/windows/scene-editor-window.vala:358
+#: src/windows/scene-editor-window.vala:361
 msgid "Cannot save the scene"
 msgstr "Nelze uložit scénu"
 
-#: src/windows/scene-editor-window.vala:396
+#: src/windows/scene-editor-window.vala:399
 msgid "Would you like to save your changes before closing the scene?"
-msgstr "Přereje si uložit změny před zavřením scény?"
+msgstr "Přejete si uložit změny před zavřením scény?"
 
-#: src/windows/scene-editor-window.vala:397 src/windows/window.vala:759
+#: src/windows/scene-editor-window.vala:400 src/windows/window.vala:799
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr "Jinak budou neuložené změny ztraceny!"
 
-#: src/windows/scene-editor-window.vala:399 src/windows/window.vala:761
+#: src/windows/scene-editor-window.vala:402 src/windows/window.vala:801
 msgid "Yes"
 msgstr "Ano"
 
-#: src/windows/scene-editor-window.vala:400 src/windows/window.vala:762
+#: src/windows/scene-editor-window.vala:403 src/windows/window.vala:802
 msgid "No"
 msgstr "Ne"
 
-#: src/windows/scene-editor-window.vala:401 src/windows/window.vala:317
-#: src/windows/window.vala:351 src/windows/window.vala:763
+#: src/windows/scene-editor-window.vala:404 src/windows/window.vala:352
+#: src/windows/window.vala:386 src/windows/window.vala:803
 msgid "Cancel"
 msgstr "Zrušit"
 
-#: src/windows/scene-editor-window.vala:437
-#: src/windows/scene-editor-window.vala:483
+#: src/windows/scene-editor-window.vala:442
+#: src/windows/scene-editor-window.vala:489
 msgid "Error occurred while loading scenes and sprites"
 msgstr "Vyskytla se chyba během načítání scén a spritů"
 
-#: src/windows/scene-editor-window.vala:474
+#: src/windows/scene-editor-window.vala:480
 #, c-format
 msgid "Faile to load image '%s'"
 msgstr "Nelze načíst obrázek '%s'"
@@ -1184,56 +1183,57 @@ msgstr "Otevřít program"
 msgid "Drop items here to delete them"
 msgstr "Sem přetáhněte příkazy ke smazání"
 
-#: src/windows/window.vala:304
+#: src/windows/window.vala:339
 msgid "Failed to save the program"
 msgstr "Nepodařilo se uložit program"
 
-#: src/windows/window.vala:309
+#: src/windows/window.vala:344
 msgid "Project saved."
 msgstr "Projekt uložen."
 
-#: src/windows/window.vala:314 src/windows/window.vala:319
-#: src/windows/window.vala:348 src/windows/window.vala:353
+#: src/windows/window.vala:349 src/windows/window.vala:354
+#: src/windows/window.vala:383 src/windows/window.vala:388
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/windows/window.vala:326 src/windows/window.vala:360
+#: src/windows/window.vala:361 src/windows/window.vala:395
 msgid "Turtlico project (*.tcp)"
 msgstr "Projekt Turtlico (*.tcp)"
 
-#: src/windows/window.vala:341
+#: src/windows/window.vala:376
 msgid "Program saved."
 msgstr "Program uložen."
 
-#: src/windows/window.vala:350
+#: src/windows/window.vala:385
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/windows/window.vala:404
+#: src/windows/window.vala:437
 msgid "Would you really like to apply these changes?"
 msgstr "Opravdu chcete aplikovat tyto změny?"
 
-#: src/windows/window.vala:405
-msgid ""
-"The program contains commands that are only available from a plugin. "
-"Unavailable commands will be removed."
+#: src/windows/window.vala:439
+msgid "The program contains commands that are only available from a plugin."
 msgstr ""
-"Program obsahuje příkazy, které jsou dostupné pouze z přídavného modulu. "
-"Nedostupné příkazy budou odstraněny."
+"Program obsahuje příkazy, které jsou dostupné pouze z přídavného modulu."
 
-#: src/windows/window.vala:463
+#: src/windows/window.vala:440
+msgid "Unavailable commands will be removed."
+msgstr "Nedostupné příkazy budou odstraněny."
+
+#: src/windows/window.vala:498
 msgid "Please save the program before opening the scene editor."
 msgstr "Uložte prosím program před otevřením editoru scén."
 
-#: src/windows/window.vala:493
+#: src/windows/window.vala:528
 msgid "Would you like to continue loading anyway and ignore further errors?"
 msgstr "Přejete si pokračovat v načítání a ignorovat další chyby?"
 
-#: src/windows/window.vala:758
+#: src/windows/window.vala:798
 msgid "Would you like to save your changes before closing the program?"
 msgstr "Přereje si uložit změny před zavřením programu?"
 
-#: src/windows/window.vala:779
+#: src/windows/window.vala:819
 msgid "Unnamed"
 msgstr "Bez názvu"
 

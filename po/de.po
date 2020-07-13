@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 14:10+0200\n"
-"PO-Revision-Date: 2020-04-26 18:03+0200\n"
+"POT-Creation-Date: 2020-07-13 20:12+0200\n"
+"PO-Revision-Date: 2020-07-13 20:13+0200\n"
 "Last-Translator: matyas5 <>\n"
 "Language-Team: Deutsch <>\n"
 "Language: de\n"
@@ -114,91 +114,90 @@ msgstr ""
 msgid "Failed to load command def file: "
 msgstr ""
 
-#: src/classes/compiler.vala:211
+#: src/classes/compiler.vala:210
 msgid "Functions must start on a separate line!"
 msgstr ""
 
-#: src/classes/compiler.vala:375
+#: src/classes/compiler.vala:368
 msgid "Generated code:\n"
 msgstr ""
 
-#: src/classes/debugger.vala:131
+#: src/classes/debugger.vala:135
 msgid "stderr of child process:\n"
 msgstr ""
 
 #. We show line numbers indexed from 1 to user
-#: src/classes/debugger.vala:161
+#: src/classes/debugger.vala:168
 msgid "Error occurred at line "
 msgstr ""
 
-#: src/classes/debugger.vala:166
+#: src/classes/debugger.vala:173
 msgid "Program crashed"
 msgstr ""
 
-#: src/classes/package-service.vala:59
+#: src/classes/package-service.vala:60
 msgid ""
 "Turtlico detected missing dependencies that are required to run Turtlico "
 "programs"
 msgstr ""
 
-#: src/classes/package-service.vala:60
+#: src/classes/package-service.vala:61
 msgid "Would you like to install them now?"
 msgstr ""
 
-#: src/classes/package-service.vala:111 src/classes/package-service.vala:115
+#: src/classes/package-service.vala:112 src/classes/package-service.vala:116
 msgid "Cannot check for updates: "
 msgstr ""
 
-#: src/classes/package-service.vala:143
+#: src/classes/package-service.vala:144
 msgid "Turtlico update available"
 msgstr ""
 
-#: src/classes/package-service.vala:144
+#: src/classes/package-service.vala:145
 msgid "Would you like to install it now?"
 msgstr ""
 
-#: src/classes/package-service.vala:151
-msgid "Downloading update installer..."
+#: src/classes/package-service.vala:152
+msgid "Downloading update installer"
 msgstr ""
 
-#: src/classes/package-service.vala:182
+#: src/classes/package-service.vala:184
 msgid "Update failed"
 msgstr ""
 
-#: src/classes/program-buffer.vala:209
+#: src/classes/program-buffer.vala:212
 #, c-format
 msgid "Cannot load plugin %s."
 msgstr ""
 
-#. Add command
-#: src/classes/program-buffer.vala:219
+#: src/classes/program-buffer.vala:223
 msgid "Failed to open the file. Error on line: "
 msgstr ""
 
-#: src/classes/program-buffer.vala:238
+#: src/classes/program-buffer.vala:242
 msgid "The file to load contains an unkown command!\n"
 msgstr ""
 
-#: src/classes/program-buffer.vala:239
+#: src/classes/program-buffer.vala:244
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
 "Command ID: "
 msgstr ""
 
-#: src/classes/program-buffer.vala:528
+#: src/classes/program-buffer.vala:539
 msgid "Please save the project first."
 msgstr ""
 
-#: src/classes/program-buffer.vala:537
+#: src/classes/program-buffer.vala:548
 msgid "Cannot insert the image: "
 msgstr ""
 
-#: src/main.vala:41
+#: src/main.vala:43
 msgid "Writes compiled program to FILE"
 msgstr ""
 
-#: src/main.vala:72
+#: src/main.vala:74
 #, c-format
 msgid "Cannot save the output file: %s\n"
 msgstr ""
@@ -316,7 +315,6 @@ msgid "Load scene (file)"
 msgstr ""
 
 #: src/plugins/base.json:34
-#, fuzzy
 msgid "Image file"
 msgstr "Bild"
 
@@ -1049,7 +1047,7 @@ msgid "Sprites"
 msgstr ""
 
 #: src/windows/scene-editor-window.ui:283 src/windows/window.ui:280
-#: src/windows/window.vala:316
+#: src/windows/window.vala:351
 msgid "Save"
 msgstr "Speichern"
 
@@ -1073,61 +1071,61 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:144 src/windows/window.ui:469
+#: src/windows/scene-editor-window.vala:142 src/windows/window.ui:469
 msgid "Scene editor"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:185
+#: src/windows/scene-editor-window.vala:183
 msgid "Do you really wish to delete the scene?"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:186
+#: src/windows/scene-editor-window.vala:184
 msgid "This cannot be undone."
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:194
+#: src/windows/scene-editor-window.vala:192
 msgid "Cannot delete the scene"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:322
+#: src/windows/scene-editor-window.vala:325
 msgid "Scene"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:348
+#: src/windows/scene-editor-window.vala:351
 msgid "Cannot load the scene"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:358
+#: src/windows/scene-editor-window.vala:361
 msgid "Cannot save the scene"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:396
+#: src/windows/scene-editor-window.vala:399
 msgid "Would you like to save your changes before closing the scene?"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:397 src/windows/window.vala:759
+#: src/windows/scene-editor-window.vala:400 src/windows/window.vala:799
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:399 src/windows/window.vala:761
+#: src/windows/scene-editor-window.vala:402 src/windows/window.vala:801
 msgid "Yes"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:400 src/windows/window.vala:762
+#: src/windows/scene-editor-window.vala:403 src/windows/window.vala:802
 msgid "No"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:401 src/windows/window.vala:317
-#: src/windows/window.vala:351 src/windows/window.vala:763
+#: src/windows/scene-editor-window.vala:404 src/windows/window.vala:352
+#: src/windows/window.vala:386 src/windows/window.vala:803
 msgid "Cancel"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:437
-#: src/windows/scene-editor-window.vala:483
+#: src/windows/scene-editor-window.vala:442
+#: src/windows/scene-editor-window.vala:489
 msgid "Error occurred while loading scenes and sprites"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:474
+#: src/windows/scene-editor-window.vala:480
 #, c-format
 msgid "Faile to load image '%s'"
 msgstr ""
@@ -1164,53 +1162,55 @@ msgstr "Programm öffnen"
 msgid "Drop items here to delete them"
 msgstr ""
 
-#: src/windows/window.vala:304
+#: src/windows/window.vala:339
 msgid "Failed to save the program"
 msgstr ""
 
-#: src/windows/window.vala:309
+#: src/windows/window.vala:344
 msgid "Project saved."
 msgstr ""
 
-#: src/windows/window.vala:314 src/windows/window.vala:319
-#: src/windows/window.vala:348 src/windows/window.vala:353
+#: src/windows/window.vala:349 src/windows/window.vala:354
+#: src/windows/window.vala:383 src/windows/window.vala:388
 msgid "Select file"
 msgstr ""
 
-#: src/windows/window.vala:326 src/windows/window.vala:360
+#: src/windows/window.vala:361 src/windows/window.vala:395
 msgid "Turtlico project (*.tcp)"
 msgstr ""
 
-#: src/windows/window.vala:341
+#: src/windows/window.vala:376
 msgid "Program saved."
 msgstr ""
 
-#: src/windows/window.vala:350
+#: src/windows/window.vala:385
 msgid "Open"
 msgstr ""
 
-#: src/windows/window.vala:404
+#: src/windows/window.vala:437
 msgid "Would you really like to apply these changes?"
 msgstr ""
 
-#: src/windows/window.vala:405
-msgid ""
-"The program contains commands that are only available from a plugin. "
-"Unavailable commands will be removed."
+#: src/windows/window.vala:439
+msgid "The program contains commands that are only available from a plugin."
 msgstr ""
 
-#: src/windows/window.vala:463
+#: src/windows/window.vala:440
+msgid "Unavailable commands will be removed."
+msgstr ""
+
+#: src/windows/window.vala:498
 msgid "Please save the program before opening the scene editor."
 msgstr ""
 
-#: src/windows/window.vala:493
+#: src/windows/window.vala:528
 msgid "Would you like to continue loading anyway and ignore further errors?"
 msgstr ""
 
-#: src/windows/window.vala:758
+#: src/windows/window.vala:798
 msgid "Would you like to save your changes before closing the program?"
 msgstr ""
 
-#: src/windows/window.vala:779
+#: src/windows/window.vala:819
 msgid "Unnamed"
 msgstr ""
