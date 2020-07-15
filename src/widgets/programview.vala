@@ -829,9 +829,9 @@ namespace Turtlico {
                 str_chooser_dialog.run ();
                 str_chooser_dialog.hide ();
                 var c = buffer.program[item.y][item.x].set_data (str_chooser_dialog_entry.text, buffer.resource_dir);
-                if (buffer.program[item.y][item.x].id == "5_img" && c.data.strip() == "") {
+                if (buffer.program[item.y][item.x].id == "5_img" && c.data.strip () == "") {
                     try {
-                        c =  buffer.find_command_by_id ("5_img");
+                        c = buffer.find_command_by_id ("5_img");
                     } catch {}
                 }
                 buffer.program[item.y][item.x] = c;
