@@ -35,7 +35,7 @@ The most often ones are listed here:
 |                    | ``~/.local/share/turtlico/plugins``                       |
 +--------------------+-----------------------------------------------------------+
 | **Linux (Flatpak)**| ``/usr/share/turtlico/plugins``                           |
-|                    | ``~/.var/app/io.gitlab.Turtlico/data/turtlico/plugins`` |
+|                    | ``~/.var/app/io.gitlab.Turtlico/data/turtlico/plugins``   |
 +--------------------+-----------------------------------------------------------+
 
 **Basic plugin folder structure**
