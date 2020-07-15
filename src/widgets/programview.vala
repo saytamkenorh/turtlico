@@ -26,6 +26,9 @@ namespace Turtlico {
         { "STRING", 0, DnDTarget.STRING },
         { "text/plain", 0, DnDTarget.STRING },
     };
+    private const string[] EDITABLE_ICONS = {
+        "int", "str", "obj", "#", "5_img", "tc", "python", "4_color", "4_font", "key"
+    };
 
     [GtkTemplate (ui = "/io/gitlab/Turtlico/widgets/programview.ui")]
     public class ProgramView : Gtk.DrawingArea {
@@ -245,6 +248,7 @@ namespace Turtlico {
                 }
                 set_drag_source_active (true);
             }
+            grab_focus ();
             Gtk.drag_finish (context, success, false, time);
         }
 
@@ -361,6 +365,7 @@ namespace Turtlico {
                         color.parse (c.data);
                         Gdk.cairo_set_source_rgba (cr, color);
                     }
+                    else if (c.id == "5_img") text = "";
                     else text = c.name;
                     var layout = draw_icon_new_layout (text, font, width);
                     Pango.cairo_show_layout (cr, layout);
@@ -589,9 +594,14 @@ namespace Turtlico {
             }
             if (event.button == Gdk.BUTTON_SECONDARY) {
                 start_dnd_copy = false;
-                bool icon_at_pointer = get_icon_at_pointer ();
+                Gdk.Point icon_at_pointer_point;
+                bool icon_at_pointer = get_icon_at_pointer (out icon_at_pointer_point);
                 bool selection = buffer.selection_phase == SelectionPhase.BLOCK_SELECTED;
                 popup_menu_edit.visible = icon_at_pointer && !selection;
+                if (icon_at_pointer) {
+                    popup_menu_edit.sensitive = strv_contains (
+                        EDITABLE_ICONS, buffer.program[icon_at_pointer_point.y][icon_at_pointer_point.x].id);
+                }
                 popup_menu_help.visible = icon_at_pointer;
                 popup_menu_autocomplete.visible = icon_at_pointer;
                 popup_menu_copy.visible = icon_at_pointer && selection;
@@ -818,8 +828,14 @@ namespace Turtlico {
                 str_chooser_dialog.set_transient_for ((Gtk.Window)get_toplevel ());
                 str_chooser_dialog.run ();
                 str_chooser_dialog.hide ();
-                buffer.program[item.y][item.x] =
-                    buffer.program[item.y][item.x].set_data (str_chooser_dialog_entry.text, buffer.resource_dir);
+                var c = buffer.program[item.y][item.x].set_data (str_chooser_dialog_entry.text, buffer.resource_dir);
+                if (buffer.program[item.y][item.x].id == "5_img" && c.data.strip() == "") {
+                    try {
+                        c =  buffer.find_command_by_id ("5_img");
+                    } catch {}
+                }
+                buffer.program[item.y][item.x] = c;
+
                 queue_draw (); buffer.backup_program ();
                 break;
             case "tc":
