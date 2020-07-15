@@ -33,7 +33,7 @@
 				{"id":"0_scene", "icon":"r:0_scene.svg", "?": 'Load scene (file)' , "type": 0, "func": "tcf_load_scene", "params": "" },
 				{"id":"5_img", "icon":"r:5_img.svg", "?": 'Image file' , "type": 0, "func": "tcf_get_image", "params": "", "data-draw": true, "data-only": false, "data-color": "#000000" },
 				{"id":"0_ds", "icon":"r:0_ds.svg", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "'turtle'" },
-				{"id":"5_newt", "icon":"r:newt.svg", "?": 'Create new turtle' , "type": 5, "func": "Turtle", "params": "" },
+				{"id":"5_newt", "icon":"r:newt.svg", "?": 'Create new turtle' , "type": 5, "func": "tcf_newt", "params": "" },
 				{"id":"5_gett", "icon":"r:5_gett.svg", "?": 'Get the predefined turtle object' , "type": 5, "func": "getturtle", "params": "" },
 				{"id":"5_plcimg", "icon":"r:5_plcimg.svg", "?": 'Place image at the position of the turtle' , "type": 5, "func": "tcf_place_img", "params": "" },
 				{"id":"0_sleep", "icon":"💤", "?": 'Sleep', "type": 0, "func": "tcf_sleep", "params": "", "snippet": "0_sleep;~(;~int;1~sep;~4_true;~);~" },
@@ -277,6 +277,13 @@ def tcf_load_scene(path=None):\
 		else:\
 			register_shape(path)\
 	return path"
+		},
+		{
+			"id": "tcf_newt",
+			"code": "def tcf_newt():\
+	t = Turtle()\
+	t.shape('turtle')\
+	return t"
 		},
 		{
 			"id": "tcf_collision",
