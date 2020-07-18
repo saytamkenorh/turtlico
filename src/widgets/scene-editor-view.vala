@@ -224,19 +224,20 @@ namespace Turtlico.SceneEditor {
             sprite.icon = sprites[name];
 
             // Choose id
+            string id = name.replace (".", "");
             int n = 0;
             bool id_exists = true;
-            while (id_exists) {
+            while (id_exists && n < int.MAX) {
                 id_exists = false;
                 foreach (var s in scene.sprites) {
-                    if (s.id == "%s%d".printf (name, n)) {
+                    if (s.id == "%s%d".printf (id, n)) {
                         n++;
                         id_exists = true;
                         break;
                     }
                 }
             }
-            string id = "%s%d".printf (name.replace (".", ""), n);
+            id = id + n.to_string ();
             sprite.id = id;
             sprite.x = x_to_turtle (x);
             sprite.y = y_to_turtle (y);
