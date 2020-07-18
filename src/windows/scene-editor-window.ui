@@ -44,6 +44,16 @@
       <column type="gchararray"/>
     </columns>
   </object>
+  <object class="GtkImage" id="sprite_move_down_btn_img">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">go-down-symbolic</property>
+  </object>
+  <object class="GtkImage" id="sprite_move_up_btn_img">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">go-up-symbolic</property>
+  </object>
   <object class="GtkListStore" id="sprites_store">
     <columns>
       <!-- column-name icon -->
@@ -249,7 +259,7 @@
               <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">5</property>
+                <property name="margin_start">5</property>
                 <property name="margin_top">3</property>
                 <property name="spacing">5</property>
                 <child>
@@ -337,7 +347,7 @@
                   <object class="GtkScrolledWindow" id="scene_view_sw">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_right">3</property>
+                    <property name="margin_end">3</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <placeholder/>
@@ -353,7 +363,7 @@
                     <property name="width_request">100</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">3</property>
+                    <property name="margin_start">3</property>
                     <property name="row_spacing">5</property>
                     <property name="column_spacing">5</property>
                     <child>
@@ -499,7 +509,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
-                        <property name="top_attach">5</property>
+                        <property name="top_attach">6</property>
                       </packing>
                     </child>
                     <child>
@@ -513,6 +523,62 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <child>
+                          <object class="GtkButton" id="sprite_move_down_btn">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Move the sprite to the lower layer</property>
+                            <property name="image">sprite_move_down_btn_img</property>
+                            <signal name="clicked" handler="on_sprite_move_down_btn_clicked" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="sprite_move_up_btn">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Move the sprite to the upper layer</property>
+                            <property name="image">sprite_move_up_btn_img</property>
+                            <signal name="clicked" handler="on_sprite_move_up_btn_clicked" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <style>
+                          <class name="linked"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Layer:</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">5</property>
                       </packing>
                     </child>
                     <child>

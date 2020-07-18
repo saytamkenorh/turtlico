@@ -62,6 +62,10 @@ namespace Turtlico.SceneEditor {
         [GtkChild]
         Gtk.SpinButton prop_h;
         [GtkChild]
+        Gtk.Button sprite_move_down_btn;
+        [GtkChild]
+        Gtk.Button sprite_move_up_btn;
+        [GtkChild]
         Gtk.Button remove_sprite_btn;
 
         SceneEditor.View scene_view;
@@ -296,6 +300,17 @@ namespace Turtlico.SceneEditor {
             scene_view.set_scene_height (prop_h.get_value_as_int ());
         }
         [GtkCallback]
+        void on_sprite_move_up_btn_clicked () {
+            scene_view.selection_move_up ();
+            set_sprite_move_layer_sensitive (scene_view.selected_sprite);
+        }
+
+        [GtkCallback]
+        void on_sprite_move_down_btn_clicked () {
+            scene_view.selection_move_down ();
+            set_sprite_move_layer_sensitive (scene_view.selected_sprite);
+        }
+        [GtkCallback]
         void on_remove_sprite_btn_clicked () {
             scene_view.selection_delete ();
         }
@@ -311,12 +326,9 @@ namespace Turtlico.SceneEditor {
         void on_scene_view_selection_changed (Sprite? sprite) {
             // Nothing selected -> show scene properties
             bool scene_properties = sprite == null;
-            prop_x.set_editable (!scene_properties);
-            prop_y.set_editable (!scene_properties);
+            set_sprite_ui_sensitive (!scene_properties);
             prop_w.set_editable (scene_properties);
             prop_h.set_editable (scene_properties);
-            selected_sprite.sensitive = !scene_properties;
-            remove_sprite_btn.sensitive = !scene_properties;
             if (sprite == null) {
                 prop_x.set_value (0);
                 prop_y.set_value (0);
@@ -325,16 +337,18 @@ namespace Turtlico.SceneEditor {
                 selected_sprite.set_text (_("Scene"));
                 return;
             }
-            prop_x.adjustment.lower = -scene.width / 2;
-            prop_x.adjustment.upper = scene.width + sprite.icon.get_width () / 2;
+            prop_x.adjustment.lower = scene_view.sprite_clamp_x (int.MIN, sprite);
+            prop_x.adjustment.upper = scene_view.sprite_clamp_x (int.MAX, sprite);
             prop_x.set_value (sprite.x);
 
-            prop_y.adjustment.lower = -scene.height / 2;
-            prop_y.adjustment.upper = scene.height + sprite.icon.get_height () / 2;
+            prop_y.adjustment.lower = scene_view.sprite_clamp_y (int.MIN, sprite);
+            prop_y.adjustment.upper = scene_view.sprite_clamp_y (int.MAX, sprite);
             prop_y.set_value (sprite.y);
 
             prop_w.set_value (sprite.icon.get_width ());
             prop_h.set_value (sprite.icon.get_height ());
+
+            set_sprite_move_layer_sensitive (sprite);
 
             selected_sprite.set_text (sprite.id);
         }
@@ -375,12 +389,28 @@ namespace Turtlico.SceneEditor {
             if (!sensitive) {
                 // Properties must be activated by selecting a sprite/scene
                 // This is done in by handling selection change (View) signal when scene is loaded
-                prop_x.set_editable (false); prop_y.set_editable (false);
-                prop_w.set_editable (false); prop_h.set_editable (false);
-                remove_sprite_btn.sensitive = false;
-                selected_sprite.sensitive = false;
+                set_sprite_ui_sensitive (false);
                 scene_name_entry.set_text ("");
             }
+        }
+
+        void set_sprite_ui_sensitive (bool sensitive) {
+            prop_x.editable = sensitive;
+            prop_y.editable = sensitive;
+            prop_w.editable = sensitive;
+            prop_h.editable = sensitive;
+            selected_sprite.sensitive = sensitive;
+            remove_sprite_btn.sensitive = sensitive;
+            selected_sprite.sensitive = sensitive;
+            sprite_move_down_btn.sensitive = sensitive;
+            sprite_move_up_btn.sensitive = sensitive;
+        }
+
+        // Disables button that cannot be used for a specified sprite
+        void set_sprite_move_layer_sensitive (Sprite sprite) {
+            int i = scene_view.scene.get_sprite_layer (sprite);
+            sprite_move_down_btn.sensitive = i > 0;
+            sprite_move_up_btn.sensitive = i < scene_view.scene.sprites.size - 1;
         }
 
         public override bool delete_event (Gdk.EventAny event) {

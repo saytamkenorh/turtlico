@@ -112,6 +112,17 @@ namespace Turtlico.SceneEditor {
             generator.set_root (root);
             generator.to_file (scene_file.get_path ());
         }
+
+        public int get_sprite_layer (Sprite sprite) {
+            return sprites.index_of (sprite);
+        }
+
+        public void swap_sprites_at_layers (int a, int b) {
+            var temp = sprites[a];
+            sprites[a] = sprites[b];
+            sprites[b] = temp;
+        }
+
         public static string get_basename_file (File file) {
             return get_basename (file.get_basename ());
         }
