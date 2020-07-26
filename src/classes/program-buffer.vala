@@ -340,7 +340,7 @@ namespace Turtlico {
             string data = "";
             int c = 0;
             selection_foreach ((p) => {
-                data += program[p.y][p.x].id + ";" + program[p.y][p.x].data + str_mark_utf8;
+                data += program[p.y][p.x].id + ";" + program[p.y][p.x].data.replace ("\\", "\\\\") + str_mark_utf8;
                 c++;
             });
             command_count = c;
@@ -590,7 +590,7 @@ namespace Turtlico {
                     }
                     else {
                         if (cmd.size >= 2)
-                            c = c.set_data (cmd[1], resource_dir);
+                            c = c.set_data (compress_unicode (cmd[1]), resource_dir);
                         program[y].insert (x, c);
                     }
                     redraw_required ();
@@ -607,6 +607,41 @@ namespace Turtlico {
 
         public bool check_coord_valid (int x, int y) {
             return (x >= 0 && y >= 0 && y < program.size && x < program[y].size);
+        }
+
+        private string _compress_unicode (owned string data, int length, string indicator) {
+            int index;
+            int start = 0;
+            while (true) {
+                index = data.index_of (indicator, start);
+                if (index < 0) break;
+                // Ignore escaped backslashes
+                if (index > 0 && data[index - 1] == '\\') {
+                    start = index + 1;
+                    continue;
+                }
+                if (index + length + 1 < data.length) {
+    	            string ch = data.substring (index + 2, length);
+    	            long code = long.parse("0x" + ch);
+    	            if (code != 0) {
+    	                unichar uch = (unichar)(code);
+                        data = data.substring (0, index) + uch.to_string() + data.substring (index + length + 2, -1);
+                    } else {
+                        data = data.substring (0, index) + data.substring (index + 2, -1);
+                    }
+                } else {
+                    break;
+                }
+            }
+            return data;
+        }
+
+        private string compress_unicode (owned string data) {
+            // Converts the \u stuff
+            data = _compress_unicode (data, 4, "\\u");
+            data = _compress_unicode (data, 8, "\\U");
+            data = data.replace ("\\\\", "\\");
+            return data;
         }
     }
 }

@@ -232,8 +232,9 @@ namespace Turtlico {
                 y = y / CELL_HEIGHT;
                 x = mouse_to_program_x (x / CELL_WIDTH, y);
                 try {
+                    var data = selection_data.get_text();
                     success = buffer.paste_icons_string (
-                        selection_data.get_text (), ref x, ref y, basic_mode, auto_indent);
+                        data, ref x, ref y, basic_mode, auto_indent);
                     if (selection_data.get_text () == "tc") {
                         icon_data_dialog_tc (x, y);
                     }
@@ -248,8 +249,23 @@ namespace Turtlico {
                 }
                 set_drag_source_active (true);
             }
-            grab_focus ();
+            set_focus ();
             Gtk.drag_finish (context, success, false, time);
+        }
+
+        private void set_focus () {
+            var scrollable = get_parent () as Gtk.Scrollable;
+            double hadjustment = 0;
+            double vadjustment = 0;
+            if (scrollable != null) {
+                hadjustment = scrollable.get_hadjustment ().get_value ();
+                vadjustment = scrollable.get_vadjustment ().get_value ();
+            }
+            grab_focus ();
+            if (scrollable != null) {
+                scrollable.get_hadjustment ().set_value (hadjustment);
+                scrollable.get_vadjustment ().set_value (vadjustment);
+            }
         }
 
         public override bool draw (Cairo.Context cr) {
@@ -397,7 +413,7 @@ namespace Turtlico {
             if (!c.draw_params.data_draw || c.id == "python" || c.id == "4_color")
                 width = 1;
             else
-                width = c.data.length / 7 + 1;
+                width = c.data.char_count() / 7 + 1;
             return width;
         }
 
@@ -523,7 +539,7 @@ namespace Turtlico {
         }
 
         bool on_button_press_event (Gdk.EventButton event) {
-            grab_focus ();
+            set_focus ();
             var modifiers = Gtk.accelerator_get_default_mod_mask ();
             // Selection
             if (event.button == Gdk.BUTTON_PRIMARY) {
