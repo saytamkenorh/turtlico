@@ -321,10 +321,11 @@ namespace Turtlico.SceneEditor {
             if (scene == null)
                 return;
             foreach (var sprite in scene.sprites) {
-                if (sprites.contains (sprite.name))
+                if (sprites.contains (sprite.name)) {
                     sprite.icon = sprites[sprite.name];
-                else
+                } else {
                     sprite.icon = sprites["turtle"];
+                }
             }
             queue_draw ();
         }

@@ -232,7 +232,7 @@ namespace Turtlico {
                 y = y / CELL_HEIGHT;
                 x = mouse_to_program_x (x / CELL_WIDTH, y);
                 try {
-                    var data = selection_data.get_text();
+                    var data = selection_data.get_text ();
                     success = buffer.paste_icons_string (
                         data, ref x, ref y, basic_mode, auto_indent);
                     if (selection_data.get_text () == "tc") {
@@ -413,7 +413,7 @@ namespace Turtlico {
             if (!c.draw_params.data_draw || c.id == "python" || c.id == "4_color")
                 width = 1;
             else
-                width = c.data.char_count() / 7 + 1;
+                width = c.data.char_count () / 7 + 1;
             return width;
         }
 

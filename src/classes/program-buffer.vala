@@ -621,11 +621,11 @@ namespace Turtlico {
                     continue;
                 }
                 if (index + length + 1 < data.length) {
-    	            string ch = data.substring (index + 2, length);
-    	            long code = long.parse("0x" + ch);
-    	            if (code != 0) {
-    	                unichar uch = (unichar)(code);
-                        data = data.substring (0, index) + uch.to_string() + data.substring (index + length + 2, -1);
+                    string ch = data.substring (index + 2, length);
+                    long code = long.parse ("0x" + ch);
+                    if (code != 0) {
+                        unichar uch = (unichar)(code);
+                        data = data.substring (0, index) + uch.to_string () + data.substring (index + length + 2, -1);
                     } else {
                         data = data.substring (0, index) + data.substring (index + 2, -1);
                     }

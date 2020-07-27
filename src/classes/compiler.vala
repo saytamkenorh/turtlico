@@ -125,7 +125,8 @@ from tempfile import NamedTemporaryFile
 from PIL import Image
 import math, random, os, time, sys
 from datetime import datetime
-color('black');speed(1);title('Turtle');colormode(255);shape('turtle'); listen()
+color('black');speed(1);title('Turtle');colormode(255);shape('turtle');listen()
+last_scene = None
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Generated code
 """);

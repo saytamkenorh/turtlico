@@ -93,17 +93,9 @@ namespace Turtlico.SceneEditor {
             notify["scene-file"].connect (update_window_title);
             scene_file = null;
             scene_changed = false;
-            // Scene view
-            scene_view = new SceneEditor.View (programview);
-            scene_view_sw.add (scene_view);
-            scene_view.selection_changed.connect (on_scene_view_selection_changed);
-            scene_view.selection_moved.connect (() => {
-                if (scene_view.selected_sprite == null) return;
-                prop_x.set_value (scene_view.selected_sprite.x);
-                prop_y.set_value (scene_view.selected_sprite.y);
-            });
-            scene_view.scene_changed.connect (() => {scene_changed=true;});
-            scene_view.show_all ();
+            scenes_store.set_sort_column_id (ScenesViewCols.NAME, Gtk.SortType.ASCENDING);
+
+            init_scene_view ();
 
             string basename = project_file.get_basename ();
             project_dir_path = Path.get_dirname (project_file.get_path ());
@@ -140,6 +132,20 @@ namespace Turtlico.SceneEditor {
                 Gdk.ModifierType.BUTTON1_MASK,
                 DND_TARGET_LIST, // Defined in program view
                 Gdk.DragAction.COPY);
+        }
+
+        void init_scene_view () {
+            // Scene view
+            scene_view = new SceneEditor.View (programview);
+            scene_view_sw.add (scene_view);
+            scene_view.selection_changed.connect (on_scene_view_selection_changed);
+            scene_view.selection_moved.connect (() => {
+                if (scene_view.selected_sprite == null) return;
+                prop_x.set_value (scene_view.selected_sprite.x);
+                prop_y.set_value (scene_view.selected_sprite.y);
+            });
+            scene_view.scene_changed.connect (() => {scene_changed=true;});
+            scene_view.show_all ();
         }
 
         void update_window_title () {
