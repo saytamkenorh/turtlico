@@ -57,7 +57,7 @@ Sets the heading angle of the turtle.
 Speed
 =====
 
-Set the speed of the turtle to a value in range 0..10.
+Set the speed of the turtle to an integer value (float values are rounded) in range 0..10.
 Zero represents the fastest speed (no animations).
 Otherwise greater number means faster speed.
 If input is smaller than 0.5 or greater than 10 the speed is set to zero.
@@ -102,7 +102,13 @@ Set pen color
 
 Set color of Turtle's pen. Without any parameters the color is set to black.
 
-**Variants (overloads)**
+**Parameters**
+
+``COLOR`` Pen color.
+
+``COLOR`` Fill color.
+
+**Color specification options**
 
 ``STRING`` Color string, such as "red", "yellow", or "#33cc8c"
 
@@ -132,7 +138,7 @@ Return or set the pen’s attributes. All the parameters are optional.
 
 ``NUMBER`` "pensize" Size of line that is Turtle drawing.
 
-``NUMBER`` "speed" `See Speed <#speed>`_
+``NUMBER`` "speed" See `Speed <#speed>`_.
 
 ``STRING``  "resizemode" Adaption of the turtle’s appearance. Possible values: "auto" or "user" or "noresize"
 
@@ -215,6 +221,7 @@ Load scene (file)
 If no scene specified this will only clear current scene.
 
 **Parameters**
+
 ``STRING`` Path to scene file. (default: None)
 
 Image file
@@ -323,9 +330,13 @@ Turbo mode can hide turtle actions from the user. This is useful for example whe
 
 	2 - Full - Set maximal turtle speed and disable screen updating. (User cannot see any action)
 
+	3 - Doesn't mess with the default turtle. You can still use "do_no_render" parameter. (useful when using scenes)
+
 	(default: False)
 
 ``BOOL`` "do_not_render" Disables screen updating. This is automatically set to True when "turbo" is level 2. (default: False)
+
+``TURTLE`` "t" Use this turtle instead of the default one (when changing turtle speed).
 
 Camera properties
 =================
@@ -412,21 +423,21 @@ Exit the program
 
 ``NUMBER`` Program return code. (default: 0)
 
-East
-====
-0°.
+East (0°)
+=========
+Direction constant.
 
-North
-=====
-90°.
+North (90°)
+===========
+Direction constant.
 
-West
-====
-180°.
+West (180°)
+===========
+Direction constant.
 
-South
-=====
-270°.
+South (270°)
+============
+Direction constant.
 
 Pi (3.14)
 =========
@@ -513,6 +524,40 @@ For getting int powers you can use `** <#multiply>`_:
 .. image:: figures/int-powers.png
     :align: left
 
+Returns the lowest value
+========================
+
+Returns the lowest value from specified numbers. You can either pass an array or pass the numbers as individual arguments.
+
+**Variants (overloads)**
+
+``NUMBER[]`` The numbers.
+
+|
+
+``NUMBER`` First number.
+
+``NUMBER`` Second number.
+
+``NUMBER`` ...
+
+Returns the highest value
+=========================
+
+Returns the highest value from specified numbers. You can either pass an array or pass the numbers as individual arguments.
+
+**Variants (overloads)**
+
+``NUMBER[]`` The numbers.
+
+|
+
+``NUMBER`` First number.
+
+``NUMBER`` Second number.
+
+``NUMBER`` ...
+
 Color (property or editable)
 ============================
 This icon represents a color. You can edit it by pressing F2. If no color is set it represents color property.
@@ -526,6 +571,11 @@ Represents a font description string. Press F2 to edit.
 Key
 ===
 Represents a key. Press F2 to edit.
+
+Last loaded scene
+=================
+
+The name of the last scene that was loaded using the `Load scene (file) <#load-scene-file>__` command.
 
 Left square bracket
 ===================
