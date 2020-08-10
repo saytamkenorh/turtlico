@@ -63,7 +63,15 @@ namespace Turtlico {
                         if (command.get_int_member ("type") == 0 || command.get_int_member ("type") == 5) {
                             CompilerFunction f = new CompilerFunction ();
                             f.id = command.get_string_member ("id");
+                            if (!command.has_member ("func")) {
+                                debug (@"Command $(f.id) does not have func property.");
+                                return;
+                            }
                             f.function = command.get_string_member ("func");
+                            if (!command.has_member ("params")) {
+                                debug (@"Command $(f.id) does not have params property.");
+                                return;
+                            }
                             f.default_params = command.get_string_member ("params");
                             functions.add (f);
                         }
@@ -126,7 +134,7 @@ from PIL import Image
 import math, random, os, time, sys
 from datetime import datetime
 color('black');speed(1);title('Turtle');colormode(255);shape('turtle');listen()
-last_scene = None
+tcf_last_scene = None
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Generated code
 """);
@@ -445,6 +453,10 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                     }
                     catch (FileError e) {}
                 }
+                skip_next_command = true;
+            }
+            else if (check_next_icon && program[y][x + 1].id == "5_img") {
+                parsed = indentation + function + "(tcf_get_image('" + program[y][x + 1].data.replace ("'", """\'""") + "'))";
                 skip_next_command = true;
             }
             else {

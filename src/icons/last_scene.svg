@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50" height="35" version="1.1" viewBox="0 0 13.229 9.2604" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<defs>
+		<radialGradient id="a" cx="6.6662" cy="292.26" r="1.5335" gradientTransform="matrix(.99954 .030335 -.044792 1.4759 13.092 -139.36)" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#f00" offset="0"/>
+			<stop stop-color="#ff735f" offset="1"/>
+		</radialGradient>
+		<linearGradient id="b" x1="2.0986" x2="11.201" y1="294.98" y2="289.31" gradientTransform="translate(-1.8155e-8 1.4421e-6)" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#0be" offset="0"/>
+			<stop stop-color="#87e6ff" offset="1"/>
+		</linearGradient>
+		<radialGradient id="radialGradient862" cx="7.9569" cy="290.58" r="2.0593" gradientTransform="matrix(1 0 0 1.9072 3.6272 -263.67)" gradientUnits="userSpaceOnUse" xlink:href="#linearGradient860"/>
+		<linearGradient id="linearGradient860">
+			<stop stop-color="#f00" offset="0"/>
+			<stop stop-color="#f55" offset="1"/>
+		</linearGradient>
+	</defs>
+	<g transform="translate(0 -287.74)" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+		<rect x="1.4551" y="289.2" width="10.319" height="6.35" rx=".1497" ry=".14996" fill="url(#b)" stroke="#000" stroke-linecap="round" stroke-width=".26458" style="paint-order:stroke fill markers"/>
+		<path d="m6.5378 292.02 1.457-2.2961 1.4535 2.2961h-0.73851v2.731h-1.4334v-2.731z" fill="url(#a)" stroke-width=".26458" style="paint-order:stroke fill markers"/>
+		<g transform="matrix(.58361 0 0 .58361 .33879 122.67)" fill="url(#radialGradient862)" stroke="#000" stroke-width=".45336" style="paint-order:stroke fill markers" aria-label="?">
+			<path d="m7.1585 293.19h1.049v1.3126h-1.049zm1.018-0.75964h-0.98702v-0.79582q0-0.52193 0.14469-0.85782 0.14469-0.3359 0.60978-0.78031l0.46509-0.45992q0.29455-0.27389 0.42375-0.51677 0.13436-0.24287 0.13436-0.49609 0-0.45992-0.34106-0.74414-0.3359-0.28422-0.894-0.28422-0.40824 0-0.87333 0.18087-0.45992 0.18087-0.96118 0.5271v-0.97151q0.48576-0.29456 0.98185-0.43925 0.50126-0.1447 1.0335-0.1447 0.95084 0 1.5244 0.50126 0.57877 0.50126 0.57877 1.3229 0 0.39274-0.18603 0.7493-0.18603 0.3514-0.65112 0.79582l-0.45475 0.44441q-0.24288 0.24288-0.34623 0.38241-0.098185 0.13435-0.13953 0.26355-0.031006 0.10852-0.046509 0.26354-0.015503 0.15503-0.015503 0.42375z" fill="url(#radialGradient862)" stroke="#000" stroke-width=".45336" style="paint-order:stroke fill markers"/>
+		</g>
+	</g>
+</svg>
