@@ -389,6 +389,24 @@ Author: matyas5
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="popup_menu_indent">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Indent block</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_popup_menu_indent_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="popup_menu_unindent">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Unindent block</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_popup_menu_unindent_activate" swapped="no"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

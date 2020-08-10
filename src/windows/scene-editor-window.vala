@@ -94,6 +94,7 @@ namespace Turtlico.SceneEditor {
             scene_file = null;
             scene_changed = false;
             scenes_store.set_sort_column_id (ScenesViewCols.NAME, Gtk.SortType.ASCENDING);
+            sprites_store.set_sort_column_id (SpritesViewCols.NAME, Gtk.SortType.ASCENDING);
 
             init_scene_view ();
 

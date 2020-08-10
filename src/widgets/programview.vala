@@ -107,6 +107,10 @@ namespace Turtlico {
         Gtk.MenuItem popup_menu_comment;
         [GtkChild]
         Gtk.MenuItem popup_menu_uncomment;
+        [GtkChild]
+        Gtk.MenuItem popup_menu_indent;
+        [GtkChild]
+        Gtk.MenuItem popup_menu_unindent;
         // Render
         Pango.FontDescription font = new Pango.FontDescription ();
         Pango.FontDescription small_font = new Pango.FontDescription ();
@@ -625,6 +629,8 @@ namespace Turtlico {
                 popup_menu_sep.visible = icon_at_pointer;
                 popup_menu_comment.visible = selection;
                 popup_menu_uncomment.visible = selection;
+                popup_menu_indent.visible = selection;
+                popup_menu_unindent.visible = selection;
                 popup_menu_widget.popup_at_pointer (null);
             }
             return false;
@@ -666,6 +672,14 @@ namespace Turtlico {
         [GtkCallback]
         void on_popup_menu_autocomplete_activate (Gtk.MenuItem item) {
             autocomplete ();
+        }
+        [GtkCallback]
+        void on_popup_menu_indent_activate (Gtk.MenuItem item) {
+            buffer.selection_indent ();
+        }
+        [GtkCallback]
+        void on_popup_menu_unindent_activate (Gtk.MenuItem item) {
+            buffer.selection_unindent ();
         }
 
         bool on_key_press_event (Gdk.EventKey key_event) {

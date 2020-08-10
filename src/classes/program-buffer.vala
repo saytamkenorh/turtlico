@@ -383,6 +383,30 @@ namespace Turtlico {
             backup_program ();
         }
 
+        public void selection_indent () {
+            Command tab;
+            try {
+                tab = find_command_by_id ("tab");
+            } catch {return;}
+            for (int line = selection_start.y; line <= selection_end.y; line++) {
+                program[line].insert (0, tab);
+            }
+            selection_phase = SelectionPhase.NOTHING_SELECTED;
+            redraw_required ();
+            backup_program ();
+        }
+
+        public void selection_unindent () {
+            for (int line = selection_start.y; line <= selection_end.y; line++) {
+                if (program[line].size > 0 && program[line][0].id == "tab") {
+                    program[line].remove_at (0);
+                }
+            }
+            selection_phase = SelectionPhase.NOTHING_SELECTED;
+            redraw_required ();
+            backup_program ();
+        }
+
         public void selection_select (int start_x, int start_y, int end_x, int end_y) {
             Gdk.Point selection_start = Gdk.Point ();
             selection_start.x = start_x; selection_start.y = start_y;
