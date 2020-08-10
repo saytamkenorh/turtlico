@@ -138,7 +138,8 @@ namespace Turtlico {
                         // Show error dialog
                         if (_stderr != null && _stderr != "") {
                             if (_stderr.contains ("turtle.Terminator") ||
-                                _stderr.contains ("_tkinter.TclError: invalid command name")
+                                _stderr.contains ("_tkinter.TclError: invalid command name") ||
+                                _stderr.has_prefix ("invalid command name")
                             ) {
                                 return false;
                             }
