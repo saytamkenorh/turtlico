@@ -770,6 +770,19 @@ namespace Turtlico {
             }
         }
 
+        public static string get_help_url () {
+            string url;
+
+            string cd = GLib.Environment.get_current_dir ();
+            string prefix = GLib.Path.get_dirname (cd);
+            string docdir = GLib.Path.build_path (Path.DIR_SEPARATOR_S, prefix, "share", "doc", "turtlico");
+            if (GLib.FileUtils.test (docdir, GLib.FileTest.IS_DIR))
+                url = "file://" + docdir + "/en";
+            else
+                url = TURTLICO_WEBPAGE + "doc" + "/en";
+            return url;
+        }
+
         public void show_help_for (string id) throws FileError {
             string name = buffer.find_command_by_id (id).draw_params.help_en;
             name = name.down ();
@@ -778,19 +791,11 @@ namespace Turtlico {
                 name = name.replace (ch, "");
             }
             name = name.replace (" ", "-").replace ("/", "-");
-            string url;
-
-            string cd = GLib.Environment.get_current_dir ();
-            string prefix = GLib.Path.get_dirname (cd);
-            string docdir = GLib.Path.build_path (Path.DIR_SEPARATOR_S, prefix, "share", "doc", "turtlico");
-            if (GLib.FileUtils.test (docdir, GLib.FileTest.IS_DIR))
-                url = "file://" + docdir;
-            else
-                url = TURTLICO_WEBPAGE + "doc";
+            var url = get_help_url ();
 
             try {
                 Gtk.show_uri_on_window ((Gtk.Window)this.get_toplevel (),
-                    "%s/en/reference_doc.html#%s".printf (url, name), Gdk.CURRENT_TIME);
+                    "%s/reference_doc.html#%s".printf (url, name), Gdk.CURRENT_TIME);
             } catch (Error e) {
                 debug ("Cannot open help: " + e.message);
             }
