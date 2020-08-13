@@ -472,7 +472,7 @@ namespace Turtlico {
         [GtkCallback]
         void on_help_btn_clicked () {
             try {
-                Gtk.show_uri_on_window (this, ProgramView.get_help_url() + "/index.html", Gdk.CURRENT_TIME);
+                Gtk.show_uri_on_window (this, ProgramView.get_help_url () + "/index.html", Gdk.CURRENT_TIME);
             } catch (Error e) {
                 warning ("Cannot open help: " + e.message);
             }
