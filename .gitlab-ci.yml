@@ -12,7 +12,7 @@ flatpak:
             - '.flatpak-builder/downloads'
             - '.flatpak-builder/git'
     script:
-        - flatpak-builder --repo=repo --force-clean _build ${APP_ID}.yaml
+        - flatpak-builder --repo=repo --force-clean _build ${APP_ID}.json
         - flatpak build-bundle ./repo ${BUNDLE_FILENAME} ${APP_ID}
     artifacts:
         paths:
