@@ -18,6 +18,8 @@
 
 extern const string LOCALE_DIR;
 
+const string TURTLICO_RESOURCES = "/io/gitlab/Turtlico/";
+
 int main (string[] args) {
     Intl.setlocale (LocaleCategory.ALL, "");
     Intl.bind_textdomain_codeset ("turtlico", "UTF-8");

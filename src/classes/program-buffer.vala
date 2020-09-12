@@ -59,6 +59,12 @@ namespace Turtlico {
         public bool save_history = true;
 
         public ProgramBuffer () {
+            init_enabled_plugins ();
+        }
+
+        private void init_enabled_plugins () {
+            enabled_plugins.clear ();
+            enabled_plugins.add ("r:base.json");
         }
 
         public void undo () {
@@ -119,7 +125,7 @@ namespace Turtlico {
             foreach (string plugin in enabled_plugins) {
                 if (plugin.has_prefix ("r:")) {
                     plugin = plugin.replace (Command.PLUGIN_RESOURCES, "");
-                    plugin = plugin.replace ("/io/gitlab/Turtlico/", "");
+                    plugin = plugin.replace ("/io/gitlab/Turtlico/", ""); // Backward compatibility
                 } else {
                     plugin = "f:" + Path.get_basename (Path.get_dirname (plugin));
                 }
@@ -138,7 +144,7 @@ namespace Turtlico {
             bool plugins_only, bool ingore_errors = false
         ) throws IOError {
             program.clear ();
-            enabled_plugins.clear ();
+            init_enabled_plugins ();
             var distream = new DataInputStream (istream);
             size_t data_read = 0;
             string line = null;
@@ -186,7 +192,7 @@ namespace Turtlico {
                         if (!enabled_plugins.contains (props[1])) {
                             string plugin = props[1];
                             plugin = plugin.replace (Command.PLUGIN_RESOURCES, "");
-                            plugin = plugin.replace ("/io/gitlab/Turtlico/", "");
+                            plugin = plugin.replace ("/tk/turtlico/Turtlico/", "");
                             try {
                                 if ((plugin.has_prefix ("r:") &&
                                     resources_get_info (Command.PLUGIN_RESOURCES + plugin.substring (2, -1),

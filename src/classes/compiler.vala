@@ -128,14 +128,6 @@ namespace Turtlico {
         public string compile (Gee.ArrayList<Gee.ArrayList<Command>> program, bool write_line_hints = true ) {
             output = new Gee.ArrayList<string> ();
             output.add ("""#!/usr/bin/python3
-from turtle import *
-from tempfile import NamedTemporaryFile
-from PIL import Image
-import math, random, os, time, sys
-from datetime import datetime
-color('black');speed(1);title('Turtle');colormode(255);shape('turtle');listen()
-tcf_last_scene = None
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # Generated code
 """);
             modules_to_load = new Gee.LinkedList<string> ();
@@ -369,7 +361,10 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                 else
                     warning (@"Module '$module' was not found in the module list!");
             }
-            foreach (var module in modules_to_load) {
+            // Modules should be inserted into the code in the same order as they are in the modules_to_load list
+            // The main module (with imports) of a plugin must be placed before methods of the plugin
+            for (int i = modules_to_load.size - 1; i >= 0; i--) {
+                var module = modules_to_load[i];
                 if (modules.contains (module))
                     output.insert (1, modules[module].code);
             }

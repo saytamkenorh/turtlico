@@ -107,11 +107,6 @@ namespace Turtlico {
                 if (FileUtils.test (icon_file, FileTest.IS_REGULAR))
                     set_default_icon_from_file (icon_file);
             } catch {}
-            // CSS
-            var screen = this.get_screen ();
-            var css_provider = new Gtk.CssProvider ();
-            css_provider.load_from_resource ("/io/gitlab/Turtlico/windows/window.css");
-            Gtk.StyleContext.add_provider_for_screen (screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
 
             // cmd view
             setup_cmd_view ();

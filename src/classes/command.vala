@@ -18,7 +18,7 @@
 
 namespace Turtlico {
     public class Command {
-        public const string PLUGIN_RESOURCES = "/io/gitlab/Turtlico/plugins/";
+        public const string PLUGIN_RESOURCES = TURTLICO_RESOURCES + "plugins/";
 
         private string _name;
         public string name {get { return _name;}}
@@ -47,7 +47,7 @@ namespace Turtlico {
                 try {
                     string str = name.substring (2);
                     this._pixbuf = new Gdk.Pixbuf.from_resource_at_scale (
-                        "/io/gitlab/Turtlico/icons/" + str,
+                        TURTLICO_RESOURCES + "icons/" + str,
                         (int)(50 * draw_params.scale), (int)(35 * draw_params.scale), true);
                     this._name = str;
                 }
@@ -106,13 +106,9 @@ namespace Turtlico {
          * Creates a parsers that can be used to load commands defs
         */
         public static Json.Parser[] create_parsers (string[] enabled_plugins) {
-            // Load paths
-            Gee.ArrayList<string> command_files = new Gee.ArrayList<string> ();
-            command_files.add ("r:base.json");
-            command_files.add_all_array (enabled_plugins);
             // Load commands
             Gee.ArrayList<Json.Parser> parsers = new Gee.ArrayList<Json.Parser> ();
-            foreach (string file in command_files) {
+            foreach (string file in enabled_plugins) {
                 try {
                     var parser = new Json.Parser ();
                     if (file.has_prefix ("r:")) {

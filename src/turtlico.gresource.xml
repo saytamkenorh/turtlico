@@ -12,7 +12,6 @@
     <file>windows/functions-dialog.ui</file>
     <file>windows/program-settings.ui</file>
     <file>windows/scene-editor-window.ui</file>
-    <file>windows/window.css</file>
     <file>windows/window.ui</file>
   </gresource>
 </gresources>
