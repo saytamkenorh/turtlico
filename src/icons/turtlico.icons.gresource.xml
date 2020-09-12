@@ -30,6 +30,7 @@
     <file>tmr.svg</file>
     <file>emc.svg</file>
     <file>0_exit.svg</file>
+    <file>none.svg</file>
     <file>key.svg</file>
     <file>last_scene.svg</file>
     <file>true.svg</file>
@@ -43,6 +44,7 @@
     <file>1_while.svg</file>
     <file>python.svg</file>
     <file>5_range.svg</file>
+    <file>mdlist.svg</file>
     <file>3_exc.svg</file>
     <file>3_rs.svg</file>
     <file>raspberrypi.svg</file>

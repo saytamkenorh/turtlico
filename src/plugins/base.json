@@ -76,6 +76,7 @@
 				{"id":"5_sqrt", "icon":"sqrt", "?": 'Returns square root of n. Use ** for int powers.', "type": 5, "func": "math.sqrt", "params": ""},
 				{"id":"5_mmin", "icon":"min", "?": 'Returns the lowest value', "type": 5, "func": "min", "params": ""},
 				{"id":"5_mmax", "icon":"max", "?": 'Returns the highest value', "type": 5, "func": "max", "params": ""},
+				{"id":"4_none", "icon":"r:none.svg", "?": 'None' , "type": 4, "c":"None"},
 				{"id":"4_color", "icon":"🎨", "?": 'Color (property or editable)' , "type": -1, "c":"color"},
 				{"id":"4_font", "icon":"Aa", "?": 'Font (property or editable)' , "type": 4, "c":"font", "data-draw": true},
 				{"id":"key", "icon":"r:key.svg", "?": 'Key', "type": -1, "data-draw": true, "data-only": false},
@@ -133,6 +134,7 @@
 				{"id":"5_range", "icon":"r:5_range.svg", "?": 'Return list of numbers in specified range' , "type": 5, "func": "range", "params": "1, 10" },
 				{"id":"5_ord", "icon":"a→#", "?": 'Converts a character to an int value' , "type": 5, "func": "ord", "params": "" },
 				{"id":"5_chr", "icon":"#→a", "?": 'Converts an int value to a character' , "type": 5, "func": "chr", "params": "" },
+				{"id":"0_mdlist", "icon":"r:mdlist.svg", "?": 'Create multidimensional list' , "type": 5, "func": "tcf_mdlist", "params": "" },
 				{"id":"3_try", "icon":"try:", "?": 'Try', "type": 3, "c": "try:", "fg-color": "rgb(0, 0, 128)", "snippet": "3_try;~nl;~tab;~nl;~3_exc;~obj;Exception~as;~obj;e~:;~nl;~tab;~"},
 				{"id":"3_exc", "icon":"r:3_exc.svg", "?": 'Except', "type": 6, "c": "except", "fg-color": "rgb(0, 0, 128)"},
 				{"id":"3_rs", "icon":"r:3_rs.svg", "?": 'Raise exception', "type": 6, "c": "raise", "fg-color": "rgb(0, 0, 128)"}
@@ -369,6 +371,15 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 		if list[i] == item:\
 			return i\
 	return -1"
+		},
+		{
+			"id": "tcf_mdlist",
+			"code": "def tcf_mdlist(default_value, *size):\
+	if len(size) < 1:\
+		raise Exception('The list must have at least one dimension.')\
+	if len(size) == 1:\
+		return [default_value] * size[0]\
+	return [tcf_mdlist(default_value, *size[1:]) for i in range(size[0])]"
 		},
 		{
 			"id": "tcf_turbo",
