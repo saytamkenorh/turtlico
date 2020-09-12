@@ -558,6 +558,13 @@ Returns the highest value from specified numbers. You can either pass an array o
 
 ``NUMBER`` ...
 
+None
+====
+
+None is used to define a null value or no value at all.
+It is not the same as 0, False or an emtpy string.
+It is a datatype of its own (NoneType).
+
 Color (property or editable)
 ============================
 This icon represents a color. You can edit it by pressing F2. If no color is set it represents color property.
@@ -872,7 +879,7 @@ Return a ranom number in range.
 
 ``NUMBER`` Minimum (default: 0)
 
-``NUMBER`` Maximum (default: 100)
+``NUMBER`` Maximum (default: 100, excluding)
 
 Return list of numbers in specified range
 =========================================
@@ -900,6 +907,9 @@ Returns a string representing a character whose Unicode code point is an integer
 **Parameters**
 
 ``NUMBER`` Int value of the character.
+
+Create multidimensional list
+============================
 
 Try
 ===

@@ -242,8 +242,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                         }
                         else if ((check_next_icon &&
                         (program[y][x + 1].id[0] == '2' || program[y][x + 1].id[0] == '('))
-                        || output[out_line] == "")
-                        {
+                        || output[out_line] == ""
+                        ) {
                             output.add (indentation + program[y][x].data);
                         }
                         else {
@@ -458,7 +458,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                 skip_next_command = true;
             }
             else if (check_next_icon && program[y][x + 1].id == "5_img") {
-                parsed = indentation + function + "(tcf_get_image('" + program[y][x + 1].data.replace ("'", """\'""") + "'))";
+                parsed = (indentation + function +
+                    "(tcf_get_image('" + program[y][x + 1].data.replace ("'", """\'""") + "'))");
                 skip_next_command = true;
             }
             else {
