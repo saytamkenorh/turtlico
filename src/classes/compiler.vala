@@ -240,8 +240,10 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
                         if (get_no_indent (program, x, y) || (x > 0 && program[y][x - 1].id == "3_def")) {
                             output[out_line] = output[out_line] + program[y][x].data;
                         }
-                        else if (check_next_icon &&
-                        (program[y][x + 1].id[0] == '2' || program[y][x + 1].id[0] == '(')) {
+                        else if ((check_next_icon &&
+                        (program[y][x + 1].id[0] == '2' || program[y][x + 1].id[0] == '('))
+                        || output[out_line] == "")
+                        {
                             output.add (indentation + program[y][x].data);
                         }
                         else {
