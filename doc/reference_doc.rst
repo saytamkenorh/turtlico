@@ -340,12 +340,16 @@ Turbo mode can hide turtle actions from the user. This is useful for example whe
 
 Camera properties
 =================
+Changes position of the "camera" and also resizes the window of the program.
+
+If "x" and "y" is not given then this command will just only resize the window.
+If "width" or "height" is greater than the size of the screen then scrollbars are shown. Otherwise they are hidden.
 
 **Parameters**
 
-``NUMBER`` "x" X coordinate of camera.
+``NUMBER`` "x" X coordinate of camera. (optional)
 
-``NUMBER`` "y" Y coordinate of camera.
+``NUMBER`` "y" Y coordinate of camera. (optional)
 
 ``NUMBER`` "width" Width of the program window. (optional)
 
@@ -910,6 +914,17 @@ Returns a string representing a character whose Unicode code point is an integer
 
 Create multidimensional list
 ============================
+Creates a multidimensional list (multidimensional array/list of lists).
+This can be used for example to store a grid of numbers.
+The list must have at least one dimension.
+
+**Parameters**
+
+``OBJECT`` The initial value for all cells.
+
+``NUMBER`` Size of the first dimension of the list.
+
+``NUMBER`` ...
 
 Try
 ===

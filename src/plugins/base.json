@@ -42,7 +42,7 @@
 				{"id":"0_undo", "icon":"↶", "?": 'Undo the last turtle action', "type": 0, "func": "undo", "params": "" },
 				{"id":"0_circle", "icon":"◯", "?": 'Circle' , "type": 0, "func": "circle", "params": "" },
 				{"id":"0_turbo", "icon":"r:turbo.svg", "?": 'Turbo mode' , "type": 0, "func": "tcf_turbo", "params": "" },
-				{"id":"5_screenp", "icon":"r:screenprop.svg", "?": 'Camera properties' , "type": 5, "func": "tcf_screenprop", "params": "" },
+				{"id":"5_screenp", "icon":"r:screenprop.svg", "?": 'Camera properties' , "type": 5, "func": "tcf_screenprop", "params": "", "snippet": "5_screenp;~(;~obj;width~2_assign;~int;1280~sep;~obj;height~2_assign;~int;720~);~" },
 				{"id":"0_ekey", "icon":"⌨", "?": 'Connect a function to handle key presses' , "type": 0, "func": "tcf_keypress", "params": "" },
 				{"id":"0_tmr", "icon":"r:tmr.svg", "?": 'Call a function after n miliseconds' , "type": 0, "func": "ontimer", "params": "" },
 				{"id":"5_numi", "icon":"⌨#", "?": 'Number input' , "type": 5, "func": "numinput", "params": "'Number','Enter a number:'", "snippet": "5_numi;~(;~str;Number~sep;~str;Enter a number:~sep;~int;50~sep;~int;0~sep;~int;100~);~" },
@@ -272,7 +272,7 @@ def tcf_load_scene(path=None):\
 		with open(path) as f:\
 		    scene = json.loads(f.read())\
 		setup(width=scene['width'], height=scene['height'], startx=None, starty=None)\
-		screensize(scene['width'] * 0.9, scene['height'] * 0.9)\
+		screensize(scene['width'] - 10, scene['height'] - 10)\
 	for t in tcf_scene_turtles:\
 		if t in globals(): del globals()[t]\
 		del t\
@@ -442,6 +442,9 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 			"id": "tcf_screenprop",
 			"code": "def tcf_screenprop(cam_x = None, cam_y = None, width=None, height=None):\
 	if width != None and height != None: setup(width, height, None, None)\
+	if cam_x == None or cam_y == None:\
+		screensize(width - 20, height - 20)\
+		return\
 	global tcf_cam_x; global tcf_cam_y\
 	if cam_x == None: return (tcf_cam_x, tcf_cam_y)\
 	tcf_cam_x = int(cam_x); tcf_cam_y = int(cam_y)\
