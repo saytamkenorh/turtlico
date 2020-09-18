@@ -30,12 +30,14 @@ namespace Turtlico {
     public class ProgramBuffer : Object {
         public ArrayList<Command> commands = new ArrayList<Command> ();
         public ArrayList<ArrayList<Command>> program = new ArrayList<ArrayList<Command>> ();
+        public bool run_in_console = false;
+
+        // List of enabled plugins (default {"r:0turtle.json", "r:base.json"})
+        public ArrayList<string> enabled_plugins = new ArrayList<string> ();
 
         private ArrayList<ArrayList<ArrayList<Command>>> history = new ArrayList<ArrayList<ArrayList<Command>>> ();
         private int history_index = 0;
         public int history_buffer_size = 20;
-
-        public ArrayList<string> enabled_plugins = new ArrayList<string> ();
 
         private bool _program_changed = true;
         public bool program_changed {
@@ -52,6 +54,8 @@ namespace Turtlico {
 
         public static string str_mark = ((char)31).to_string (); //Unit separator
         public static string str_mark_utf8 = "~";
+        public const int FILE_VERSION = 1;
+        private const string TURTLE_PLUGIN = "r:0turtle.json";
 
         public signal void redraw_required ();
         public signal void scroll_to_selection ();
@@ -129,9 +133,10 @@ namespace Turtlico {
                 } else {
                     plugin = "f:" + Path.get_basename (Path.get_dirname (plugin));
                 }
-                dostream.put_string ("plugin,");
-                dostream.put_string (plugin + ",;");
+                dostream.put_string (@"plugin,$(plugin),;");
             }
+            dostream.put_string (@"fver,$(FILE_VERSION),;");
+            dostream.put_string (@"fconsole,$(run_in_console.to_string()),;");
             program_changed = false;
         }
 
@@ -145,6 +150,8 @@ namespace Turtlico {
         ) throws IOError {
             program.clear ();
             init_enabled_plugins ();
+            int file_vesrion = 0;
+
             var distream = new DataInputStream (istream);
             size_t data_read = 0;
             string line = null;
@@ -198,7 +205,8 @@ namespace Turtlico {
                                     resources_get_info (Command.PLUGIN_RESOURCES + plugin.substring (2, -1),
                                     ResourceLookupFlags.NONE, null, null))
                                 ) {
-                                    enabled_plugins.add (plugin);
+                                    if (!enabled_plugins.contains (plugin))
+                                        enabled_plugins.add (plugin);
                                 }
                                 else if (plugin.has_prefix ("f:")) {
                                     bool found = false;
@@ -206,7 +214,8 @@ namespace Turtlico {
                                         string plugin_path = Path.build_filename (
                                             dir, plugin.substring (2, -1), "commands.json");
                                         if (FileUtils.test (plugin_path, FileTest.EXISTS)) {
-                                            enabled_plugins.add (plugin_path);
+                                            if (!enabled_plugins.contains (plugin_path))
+                                                enabled_plugins.add (plugin_path);
                                             found = true; break;
                                         }
                                     }
@@ -218,6 +227,16 @@ namespace Turtlico {
                                     throw new IOError.INVALID_DATA (_("Cannot load plugin %s.".printf (plugin)));
                             }
                         }
+                        continue;
+                    }
+                    // File version
+                    else if (props[0] == "fver") {
+                        file_vesrion = int.parse (props[1]);
+                        continue;
+                    }
+                    // Run program in console
+                    else if (props[0] == "fconsole") {
+                        run_in_console = bool.parse (props[1]);
                         continue;
                     }
                     else if (plugins_only) {
@@ -255,6 +274,11 @@ namespace Turtlico {
                 if (program[y].size == 0) {program.remove_at (y);}
 
             } while (line != null);
+
+            if (file_vesrion == 0 && !enabled_plugins.contains (TURTLE_PLUGIN)) {
+                enabled_plugins.add (TURTLE_PLUGIN);
+            }
+
             redraw_required ();
             // History
             history.clear ();
@@ -267,7 +291,8 @@ namespace Turtlico {
         public void new_program () {
             resource_dir = "";
             program.clear ();
-            enabled_plugins.clear ();
+            init_enabled_plugins ();
+            enabled_plugins.add ("r:0turtle.json");
             redraw_required ();
             // History
             history.clear ();
@@ -455,7 +480,9 @@ namespace Turtlico {
 
         public void insert_new_line (int x, int y, bool auto_indent) {
             var new_line = new Gee.ArrayList<Turtlico.Command> ();
-            new_line.add (commands[0]);
+            try {
+                new_line.add (find_command_by_id ("nl"));
+            } catch {}
             program.insert (y + 1, new_line);
             // Get commands beyond the dropped new line
             var beyond = new Gee.ArrayList<Command>.wrap (program[y].slice (x, program[y].size - 1).to_array ());
@@ -468,7 +495,9 @@ namespace Turtlico {
                 // Get number of tabs on current line
                 int n = 0;
                 while (n < program[y].size && program[y][n].id == "tab") {
-                    new_line.insert (0, commands[1]);
+                    try {
+                        new_line.insert (0, find_command_by_id ("tab"));
+                    } catch {}
                     n++;
                 }
             }
@@ -585,6 +614,10 @@ namespace Turtlico {
                     data.add (new Gee.ArrayList<string>.wrap (c.split (";", 2)));
                 }
             }
+            Command cmd_new_line;
+            try {
+                cmd_new_line = find_command_by_id ("nl");
+            } catch {return false;}
             for (int index = data.size - 1; index >= 0; index--) {
                 Gee.ArrayList<string> cmd = data[index];
                 if (cmd.size < 1) {
@@ -601,7 +634,7 @@ namespace Turtlico {
                         }
                         else {
                             var new_line = new Gee.ArrayList<Turtlico.Command> ();
-                            new_line.add (commands[0]);
+                            new_line.add (cmd_new_line);
                             y = program.size; program.add (new_line);
                             if (c.id == "nl") { program_changed = true; continue; }
                         }

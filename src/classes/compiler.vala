@@ -53,6 +53,10 @@ namespace Turtlico {
             foreach (var parser in parsers) {
                 // Get the root node:
                 Json.Node node = parser.get_root ();
+                if (!node.get_object ().has_member ("categories")) {
+                    critical ("Error in plugin: \"categories\" entry not found!");
+                    continue;
+                }
                 // For all commands in all categories
                 var categories = node.get_object ().get_array_member ("categories");
                 categories.foreach_element ((array, index_, category_node)=>{
@@ -87,22 +91,24 @@ namespace Turtlico {
                         //debug(command.get_string_member("id"));
                     });
                 });
-                var modules = node.get_object ().get_array_member ("modules");
-                modules.foreach_element ((array, index_, module_node) => {
-                    var module = module_node.get_object ();
-                    CompilerModule f = new CompilerModule ();
-                    f.id = module.get_string_member ("id");
-                    f.code = module.get_string_member ("code");
-                    Gee.ArrayList<string> deps = new Gee.ArrayList<string> ();
-                    if (module.has_member ("deps")) {
-                        var dependencies = module.get_array_member ("deps");
-                        dependencies.foreach_element ((array, dep_index, dep_node) => {
-                            deps.add (dep_node.get_string ());
-                        });
-                    }
-                    f.deps = deps.to_array ();
-                    this.modules.set (f.id, f);
-                });
+                if (node.get_object ().has_member ("modules")) {
+                    var modules = node.get_object ().get_array_member ("modules");
+                    modules.foreach_element ((array, index_, module_node) => {
+                        var module = module_node.get_object ();
+                        CompilerModule f = new CompilerModule ();
+                        f.id = module.get_string_member ("id");
+                        f.code = module.get_string_member ("code");
+                        Gee.ArrayList<string> deps = new Gee.ArrayList<string> ();
+                        if (module.has_member ("deps")) {
+                            var dependencies = module.get_array_member ("deps");
+                            dependencies.foreach_element ((array, dep_index, dep_node) => {
+                                deps.add (dep_node.get_string ());
+                            });
+                        }
+                        f.deps = deps.to_array ();
+                        this.modules.set (f.id, f);
+                    });
+                }
             }
         }
 
@@ -111,18 +117,6 @@ namespace Turtlico {
             f.id = command.get_string_member ("id");
             f.code = command.get_string_member ("c");
             return f;
-        }
-
-        public int out_line_to_src_line (
-            Gee.ArrayList<Gee.ArrayList<Command>> program, int i) {
-
-            string[] src = compile (program).split ("\n");
-            if (i < src.length) {
-                while (i > 0 && !src[i].has_prefix ("# Line: "))
-                    i--;
-                return int.parse (src[i].replace ("# Line: ", ""));
-            }
-            return -1;
         }
 
         public string compile (Gee.ArrayList<Gee.ArrayList<Command>> program, bool write_line_hints = true ) {
@@ -369,7 +363,8 @@ namespace Turtlico {
                     output.insert (1, modules[module].code);
             }
 
-            output.add ("done()");
+            if (strv_contains (enabled_plugins, "r:0turtle.json"))
+                output.add ("done()");
             string ret = string.joinv ("\n", output.to_array ());
             debug (_("Generated code:\n") + ret);
             return ret;

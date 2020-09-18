@@ -27,6 +27,36 @@ namespace Turtlico {
 
         public signal void on_error (string title, string message);
 
+        // Launcher that catches errors from the user-written program
+        // and translates error line numbers
+        private static string python_launcher = "
+def get_source_line (line, lines):
+    for i in range(line - 1, -1, -1):
+        if i >= len(lines):
+            continue
+        if lines[i].startswith('# Line: '):
+            return (int(lines[i][8:]) + 1)
+    return -1
+try:
+    exec(open('%1s').read(), {'__file__':'%1s'})
+except SyntaxError as e:
+    import sys
+    lines = open('%1s').readlines()
+    print('%2s'.format('Syntax error', get_source_line(e.lineno, lines)), file=sys.stderr)
+except Exception as e:
+    import sys, traceback
+    lines = open('%1s').readlines()
+    exception_type, exception_object, exception_traceback = sys.exc_info()
+    trace = traceback.extract_tb(exception_traceback)
+    i = len(trace) - 1
+    line_number = -1
+    while i >= 0 and line_number == -1:
+        line_number = get_source_line(trace[i][1], lines)
+        i-=1
+    message = str(e).strip()
+    if message != '':
+        print('%2s'.format(e, line_number), file=sys.stderr)";
+
         public void stop () {
             debug_cancellable.cancel ();
         }
@@ -46,16 +76,7 @@ namespace Turtlico {
                     path = output_file.get_path () + ".py";
                 else
                     path = Path.build_filename (Environment.get_user_cache_dir (), "turtlico_output.py");
-                // Save generated program
-                var file = File.new_for_path (path);
-                if (file.query_exists ()) {file.delete ();}
-                var dos = new DataOutputStream (file.create (FileCreateFlags.NONE));
-                uint8[] data = output.data;
-                long written = 0;
-                while (written < data.length) {
-                    // sum of the bytes of 'data' that already have been written to the stream
-                    written += dos.write (data[written:data.length]);
-                }
+                write_to_file (path, output.data);
                 // RUN
                 new GLib.Thread<int> (null, () => {
                     string _stderr = "";
@@ -71,7 +92,21 @@ namespace Turtlico {
                             GLib.Process.spawn_command_line_sync ("chmod +x '" + path + "'");
                             argv.add ("python3");
 #endif
-                        argv.add (path);
+                        string err_template = _("{}\\nError occured on line {}.");
+                        // The string is probably too large for printf because it causes Turtlico to crash
+                        // string python_launcher = python_launcher.printf (path, err_template);
+                        string python_launcher = python_launcher.replace ("%1s", path).replace ("%2s", err_template);
+
+                        if (buffer.run_in_console) {
+                            argv.add_all_array ({"-m", "idlelib", "-t", "Turtlico"});
+                            string exit_string = _("Press enter to close the window");
+                            python_launcher += @"
+print('----------------------'); input('$exit_string')
+import os, signal; os.kill(os.getppid(), signal.SIGTERM)";
+                        }
+                        argv.add ("-c");
+                        argv.add (python_launcher);
+
                         bool use_launcher = true;
 #if WINDOWS
                         if (!Win32.check_windows_version (10, 0, 0, Win32.OSType.ANY)) {
@@ -83,38 +118,32 @@ namespace Turtlico {
                                 SubprocessFlags.STDERR_PIPE | SubprocessFlags.STDOUT_PIPE);
                             launcher.setenv ("G_MESSAGES_DEBUG", "", true);
                             launcher.setenv ("PYTHONUNBUFFERED", "x", true);
-                            subprocess = launcher.spawnv (argv.to_array ());
+                            var argv_array = argv.to_array ().copy ();
+                            subprocess = launcher.spawnv (argv_array);
                         }
                         else {
                             // Windows 8 and older
                             subprocess = new Subprocess (
                                 SubprocessFlags.STDERR_PIPE | SubprocessFlags.STDOUT_PIPE, "python3w", path);
                         }
-                        dise = new DataInputStream (subprocess.get_stderr_pipe ());
-                        // Force program exit on error
-                        dise.read_line_async.begin (Priority.DEFAULT, debug_cancellable, (obj, res) => {
-                            try {
-                                _stderr = dise.read_line_async.end (res);
-                                _stderr += "\n";
-                            } catch (Error e) {}
-                            string read = "";
-                            bool indent = false;
-                            // Wait for complete error report before killing the program
-                            while (read != null) {
-                                try {
-                                    if (read.has_prefix (" ")) indent = true;
-                                    else if (indent) break;
-                                    read = dise.read_line ();
-                                    _stderr += read;
-                                    _stderr += "\n";
-                                } catch (Error e) {}
-                            }
-                            debug_cancellable.cancel (); // Kill child process
-                        });
                         subprocess.wait (debug_cancellable);
+
+                        string read = "";
+                        dise = new DataInputStream (subprocess.get_stderr_pipe ());
+                        while (read != null) {
+                            try {
+                                read = dise.read_line ();
+                                _stderr += read;
+                                _stderr += "\n";
+                            } catch (Error e) {
+                                read = null;
+                            }
+                        }
+
                         status = subprocess.get_status ();
                     }
                     catch (IOError e) {
+                        // This is called when debug_cancellable is canceled (if the program is stopped by user)
                         if (subprocess != null) {
                             subprocess.force_exit ();
                             try { subprocess.wait (); } catch {}
@@ -126,53 +155,26 @@ namespace Turtlico {
                             on_error (error_msg, "");
                             return false;
                         });
-                        try { dise.close (); } catch {}; dise = null;
                     }
-                    while (dise != null && dise is InputStream && dise.has_pending ()) {
-                        Thread.usleep (1000);
-                    }
-                    try { dise.close (); } catch {}
+                    try { if (dise != null) dise.close (); } catch {}; dise = null;
+
                     debug (_("stderr of child process:\n") + _stderr);
                     Idle.add (() => {
                         debug_running = false;
                         // Show error dialog
-                        if (_stderr != null && _stderr != "") {
-                            if (_stderr.contains ("turtle.Terminator") ||
-                                _stderr.contains ("_tkinter.TclError: invalid command name") ||
-                                _stderr.has_prefix ("invalid command name")
-                            ) {
-                                return false;
-                            }
-                            string error = "";
-                            string [] err_lines = _stderr.split ("\n");
-                            if (err_lines.length >= 3)
-                                error = err_lines[err_lines.length - 2];
-                            else
-                                return false;
-                            // Extracts line
-                            if (settings.get_boolean ("debug-data")) {
-                                Gee.ArrayList<string> words = new Gee.ArrayList<string>.wrap (_stderr.split (" "));
-                                int i = -1;
-                                for (int index = 0; index < words.size; index++) {
-                                    if (words[index].contains (path)) {
-                                        if (index < words.size - 1 && words[index + 1] == "line") {
-                                            i = index + 2;
-                                        }
-                                    }
+                        if (_stderr != null) {
+                            string error = _stderr.dup ().strip ();
+                            if (error != "") {
+                                if (error.contains ("turtle.Terminator") ||
+                                    error.contains ("_tkinter.TclError: invalid command name") ||
+                                    error.has_prefix ("invalid command name")
+                                ) {
+                                    return false;
                                 }
-                                if (i >= 0 && i < words.size) {
-                                    int code_line = int.parse (words[i].replace (",", ""));
-                                    code_line--; // Python indexes lines from 1
-                                    int line = compiler.out_line_to_src_line (buffer.program, code_line);
-                                    if (line >= 0) {
-                                        line++; // We show line numbers indexed from 1 to user
-                                        error += "\n" + _("Error occurred at line ") + line.to_string ();
-                                    }
-                                }
-                            }
 
-                            on_error (_("Program crashed"),
-                                error);
+                                on_error (_("Program crashed"),
+                                    error);
+                            }
                         }
                         return false;
                     });
@@ -182,6 +184,18 @@ namespace Turtlico {
             }
             catch (Error e) {
                 on_error (e.message, "");
+            }
+        }
+
+        private void write_to_file (string path, uint8[] data) throws Error {
+            // Save generated program
+            var file = File.new_for_path (path);
+            if (file.query_exists ()) {file.delete ();}
+            var dos = new DataOutputStream (file.create (FileCreateFlags.NONE));
+            long written = 0;
+            while (written < data.length) {
+                // sum of the bytes of 'data' that already have been written to the stream
+                written += dos.write (data[written:data.length]);
             }
         }
     }

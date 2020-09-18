@@ -130,7 +130,7 @@ namespace Turtlico {
             setup_accels (app);
 
             // Load commands database
-            load_commands ();
+            new_program (false); // load_commands is called in load_settings
 
             load_settings ("");
             settings.changed.connect (load_settings);
@@ -404,7 +404,7 @@ namespace Turtlico {
         [GtkCallback]
         void on_settings_btn_clicked () {
             var previous_state = new Gee.ArrayList<string>.wrap (programview.buffer.enabled_plugins.to_array ());
-            var program_settings = new ProgramSettings (ref programview.buffer.enabled_plugins,
+            var program_settings = new ProgramSettings (programview.buffer,
                 programview.buffer.program);
             program_settings.set_transient_for (this);
             program_settings.run ();
@@ -532,10 +532,11 @@ namespace Turtlico {
             }
         }
 
-        public void new_program () {
+        public void new_program (bool reload_commands = true) {
             current_file = null;
             programview.buffer.new_program ();
-            load_commands ();
+            if (reload_commands)
+                load_commands ();
         }
 
         void load_commands () {
@@ -548,14 +549,15 @@ namespace Turtlico {
             var programview_bg_color = programview.get_style_context ().get_color (Gtk.StateFlags.ACTIVE).to_string ();
             var programview_fg_color = "rgb(255, 255, 255)";
             // Compiler
+            programview.buffer.enabled_plugins.sort ();
             compiler = new Compiler (programview.buffer.enabled_plugins.to_array ());
             // Load from JSON
             var parsers = Command.create_parsers (programview.buffer.enabled_plugins.to_array ());
-            int i = -1;
+            int i = 0;
             foreach (Json.Parser parser in parsers) {
                 // Get module dir
                 string module_dir = "";
-                if (i >= 0) {
+                if (!programview.buffer.enabled_plugins[i].has_prefix ("r:")) {
                     module_dir = Path.get_dirname (programview.buffer.enabled_plugins[i]);
                 }
                 i++;

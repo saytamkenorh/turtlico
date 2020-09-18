@@ -1,54 +1,65 @@
 {
 	"categories": [
 		{
-			"icon": "🐢",
-			"commands": [
+			"icon" : "⚙",
+			"commands" : [
 				{"id":"nl", "icon":"⏎", "?": 'New line (Enter)', "type": -1, "bg-color": "#000000" },
 				{"id":"tab", "icon":"·", "?": 'Tab', "type": -1, "bg-color": "#000000" },
 				{"id":"#", "icon":"#", "?": 'Comment', "type": -1, "data-draw": true, "data-color": "#000000", "fg-color": "#000000", "bg-color": "rgb(255, 233, 140)" },
-				{"id":"0_go", "icon":"r:0_go.svg", "?": 'Go forward', "type": 0, "func": "forward", "params": "30" },
-				{"id":"0_left", "icon":"↺", "?": 'Turn left', "type": 0, "func": "left", "params": "90" },
-				{"id":"0_right", "icon":"↻", "?": 'Turn right', "type": 0, "func": "right", "params": "90" },
-				{"id":"0_seth", "icon":"r:0_seth.svg", "?": 'Set heading angle' ,"type": 0, "func": "setheading", "params": "0" },
-				{"id":"0_speed", "icon":"r:0_speed.svg", "?": 'Speed' ,"type": 0, "func": "speed", "params": "1" },
-				{"id":"int", "icon":"🔢", "?": 'Number', "type": -1, "data-draw": true, "bg-color": "rgb(0, 0, 128)"},
-				{"id":"str", "icon":"🔤", "?": 'String', "type": -1, "data-draw": true, "data-color": "#000000", "bg-color": "rgb(255, 220, 0)" },
-				{"id":"5_len", "icon":"len", "?": 'Length of (string, list etc)', "type": 5, "func": "len", "params": "" },
-				{"id":"0_pos", "icon":"r:pos.svg", "?": 'Set position' ,"type": 0, "func": "setposition", "params": "0, 0" },
-				{"id":"0_penc", "icon":"r:0_penc.svg", "?": 'Set pen color' ,"type": 0, "func": "color", "params": "'black'" },
-				{"id":"0_pu", "icon":"✐", "?": 'Lift the pen up – no drawing when moving.' ,"type": 0, "func": "penup", "params": "" },
-				{"id":"0_pd", "icon":"✎", "?": 'Put the pen down – drawing when moving.' ,"type": 0, "func": "pendown", "params": "" },
-				{"id":"0_pp", "icon":"r:0_pp.svg", "?": 'Pen properties' ,"type": 0, "func": "pen", "params": "", "snippet": "0_pp;~(;~obj;pensize~;~2_assign;~int;10~);~" },
+				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":", "},
 				{"id":"(", "icon":"(", "?": 'Left parenthesis', "type": 4, "c":"(" },
-				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":", " },
 				{"id":")", "icon":")", "?": 'Right parenthesis', "type": 4,  "c":")" },
-				{"id":"0_ht", "icon":"r:0_ht.svg", "?": 'Hide turtle' , "type": 0, "func": "hideturtle", "params": "" },
-				{"id":"0_st", "icon":"r:0_st.svg", "?": 'Show turtle' , "type": 0, "func": "showturtle", "params": "" },
-				{"id":"0_wr", "icon":"r:0_wr.svg", "?": 'Write text on screen' , "type": 0, "func": "write", "params": "", "snippet": "0_wr;~(;~str;text~sep;~4_font;~sep;~obj;align~2_assign;~str;left~);~" },
-				{"id":"0_bf", "icon":"r:0_bf.svg", "?": 'Begin fill' , "type": 0, "func": "begin_fill", "params": "" },
-				{"id":"0_ef", "icon":"r:0_ef.svg", "?": 'End fill - fill the drawn shape' , "type": 0, "func": "end_fill", "params": "" },
-				{"id":"0_cs", "icon":"r:0_cs.svg", "?": 'Clear turtle screen' , "type": 0, "func": "clear", "params": "" },
-				{"id":"5_screen_c", "icon":"r:5_screen_c.svg", "?": 'Get or set the color of the screen' , "type": 5, "func": "bgcolor", "params": "" },
-				{"id":"5_screen_i", "icon":"r:5_screen_i.svg", "?": 'Get or set the background picture of the screen' , "type": 5, "func": "bgpic", "params": "" },
-				{"id":"0_scene", "icon":"r:0_scene.svg", "?": 'Load scene (file)' , "type": 0, "func": "tcf_load_scene", "params": "" },
-				{"id":"5_img", "icon":"r:5_img.svg", "?": 'Image file' , "type": 0, "func": "tcf_get_image", "params": "", "data-draw": true, "data-only": false, "data-color": "#000000" },
-				{"id":"0_ds", "icon":"r:0_ds.svg", "?": 'Set turtle shape' , "type": 0, "func": "shape", "params": "'turtle'" },
-				{"id":"5_newt", "icon":"r:newt.svg", "?": 'Create new turtle' , "type": 5, "func": "tcf_newt", "params": "" },
-				{"id":"5_gett", "icon":"r:5_gett.svg", "?": 'Get the predefined turtle object' , "type": 5, "func": "getturtle", "params": "" },
-				{"id":"5_plcimg", "icon":"r:5_plcimg.svg", "?": 'Place image at the position of the turtle' , "type": 5, "func": "tcf_place_img", "params": "" },
-				{"id":"0_sleep", "icon":"💤", "?": 'Sleep', "type": 0, "func": "tcf_sleep", "params": "", "snippet": "0_sleep;~(;~int;1~sep;~4_true;~);~" },
-				{"id":"0_collision", "icon":"r:0_collision.svg", "?": 'Connect a function to handle collision (in circle collider of specified radius) between two turtles', "type": 0, "func": "tcf_collision", "params": "" },
-				{"id":"tcf_collision_rect", "icon":"r:0_collision_rect.svg", "?": 'Connect a function to handle collision (in rectangle collider of specified size) between two turtles', "type": 0, "func": "tcf_collision_rect", "params": "" },
-				{"id":"0_undo", "icon":"↶", "?": 'Undo the last turtle action', "type": 0, "func": "undo", "params": "" },
-				{"id":"0_circle", "icon":"◯", "?": 'Circle' , "type": 0, "func": "circle", "params": "" },
-				{"id":"0_turbo", "icon":"r:turbo.svg", "?": 'Turbo mode' , "type": 0, "func": "tcf_turbo", "params": "" },
-				{"id":"5_screenp", "icon":"r:screenprop.svg", "?": 'Camera properties' , "type": 5, "func": "tcf_screenprop", "params": "", "snippet": "5_screenp;~(;~obj;width~2_assign;~int;1280~sep;~obj;height~2_assign;~int;720~);~" },
-				{"id":"0_ekey", "icon":"⌨", "?": 'Connect a function to handle key presses' , "type": 0, "func": "tcf_keypress", "params": "" },
-				{"id":"0_tmr", "icon":"r:tmr.svg", "?": 'Call a function after n miliseconds' , "type": 0, "func": "ontimer", "params": "" },
-				{"id":"5_numi", "icon":"⌨#", "?": 'Number input' , "type": 5, "func": "numinput", "params": "'Number','Enter a number:'", "snippet": "5_numi;~(;~str;Number~sep;~str;Enter a number:~sep;~int;50~sep;~int;0~sep;~int;100~);~" },
-				{"id":"5_stri", "icon":"⌨\"", "?": 'String input' , "type": 5, "func": "textinput", "params": "'String','Enter a string:'", "snippet": "5_stri;~(;~str;String~sep;~str;Enter a string:~);~" },
-				{"id":"0_emc", "icon":"r:emc.svg", "?": 'Connect a function to handle mouse clicks' , "type": 0, "func": "tcf_mouseclick", "params": "" },
-				{"id":"0_exit", "icon":"r:0_exit.svg", "?": 'Exit the program', "type": 0, "func": "sys.exit", "params": "0" }
+				{"id":"if", "icon":"❔if", "?": 'If statement', "type": 6, "c":"if", "snippet": "if;~4_true;~:;~nl;~tab;~"},
+				{"id":"else", "icon":"else", "?": 'Else', "type": 3, "c":"else"},
+				{"id":":", "icon":":", "?": 'Begin block of commands', "type": 4, "c":":"},
+				{"id":"&", "icon":"and", "?": 'and', "type": 4, "c":" and "},
+				{"id":"||", "icon":"or", "?": 'or', "type": 4, "c":" or "},
+				{"id":"!", "icon":"not", "?": 'negation', "type": 4, "c":" not "},
+				{"id":"==", "icon":"==", "?": 'Equals', "type": 4, "c":"=="},
+				{"id":"!=", "icon":"!=", "?": 'Not equals', "type": 4, "c":"!="},
+				{"id":"<", "icon":"<", "?": 'is less than', "type": 4, "c":"<"},
+				{"id":">", "icon":">", "?": 'is greater than', "type": 4, "c":">"},
+				{"id":"1_rep", "icon":"r:rep.svg", "?": 'Repeat block of commands', "type": -1, "bg-color": "rgb(200, 0, 0)", "snippet": "1_rep;~int;2~:;~nl;~tab;~"},
+				{"id":"1_for", "icon":"for", "?": 'For loop', "type": 6, "c": "for", "bg-color": "rgb(200, 0, 0)", "snippet": "1_for;~obj;n~in;~5_range;~(;~int;0~sep;~int;10~);~:;~nl;~tab;~"},
+				{"id":"in", "icon":"in", "?": 'Is item in a list? / For all items in a collection.', "type": 4, "c":" in "},
+				{"id":"1_while", "icon":"r:1_while.svg", "?": 'Repeat while the condition is true', "type": 6, "c": "while", "bg-color": "rgb(200, 0, 0)", "snippet": "1_while;~4_true;~:;~nl;~tab;~"},
+				{"id":"3_b", "icon":"🛑", "?": 'Break out of a loop', "type": 3, "c":"break", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"3_c", "icon":"↦", "?": 'Continue with next iteration of a loop', "type": 3, "c":"continue", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"3_def", "icon":"def", "?": 'Define a method', "type": -1, "fg-color": "rgb(0, 0, 128)", "snippet": "3_def;~obj;name~(;~);~:;~nl;~tab;~"},
+				{"id":"3_r", "icon":"r:3_r.svg", "?": 'Return a value', "type": 6, "c":"return", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"[", "icon":"[", "?": 'Left square bracket', "type": 4, "c":"["},
+				{"id":"]", "icon":"]", "?": 'Right square bracket', "type": 4, "c":"]"},
+				{"id":"5_len", "icon":"len", "?": 'Length of (string, list etc)', "type": 5, "func": "len", "params": "" },
+				{"id":"2_del", "icon":"del", "?": 'Delete an object', "type": 3, "c":"del", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"0_apnd", "icon":"r:0_apnd.svg", "?": 'Append an item to a list', "type": 0, "func": "append", "params": "" },
+				{"id":"0_ins", "icon":"r:0_ins.svg", "?": 'Insert an item to a list', "type": 0, "func": "insert", "params": "" },
+				{"id":"0_clr", "icon":"r:0_clr.svg", "?": 'Clear list', "type": 0, "func": "clear", "params": "" },
+				{"id":"5_index", "icon":"r:5_index.svg", "?": 'Finds index of the occurence of an item in a list or in a string', "type": 0, "func": "tcf_index", "params": "" },
+				{"id":"0_slo", "icon":"ab", "?": 'Converts a string into lower case', "type": 0, "func": "lower", "params": "" },
+				{"id":"0_sup", "icon":"AB", "?": 'Converts a string into upper case', "type": 0, "func": "upper", "params": "" },
+				{"id":"0_sspl", "icon":"r:0_sspl.svg", "?": 'Splits the string at the specified separator, and returns a list', "type": 0, "func": "split", "params": "'\\n'" },
+				{"id":"0_srep", "icon":"r:0_srep.svg", "?": 'Replaces a specified phrase with another specified phrase', "type": 0, "func": "replace", "params": "" },
+				{"id":"3_global", "icon":"Glob", "?": 'Use variable as a global one', "type": -1, "c":"global", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"2_assign", "icon":"=", "?": 'Assign value to a variable', "type": 4, "c":"=", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"2_+=", "icon":"↖", "?": 'Increase value by', "type": 4, "c":"+=", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"2_-=", "icon":"↙", "?": 'Decrease value by', "type": 4, "c":"-=", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"2_.", "icon":".", "?": 'Dot (use to access properties of an object)', "type": 4, "c":".", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"3_try", "icon":"try:", "?": 'Try', "type": 3, "c": "try:", "fg-color": "rgb(0, 0, 128)", "snippet": "3_try;~nl;~tab;~nl;~3_exc;~obj;Exception~as;~obj;e~:;~nl;~tab;~"},
+				{"id":"3_exc", "icon":"r:3_exc.svg", "?": 'Except', "type": 6, "c": "except", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"3_rs", "icon":"r:3_rs.svg", "?": 'Raise exception', "type": 6, "c": "raise", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"+", "icon":"+", "?": 'Plus', "type": 4, "c":"+"},
+				{"id":"-", "icon":"-", "?": 'Minus', "type": 4, "c":"-"},
+				{"id":"*", "icon":"*", "?": 'Multiply', "type": 4, "c":"*"},
+				{"id":"/", "icon":"/", "?": 'Divide', "type": 4, "c":"/"},
+				{"id":"%", "icon":"%", "?": 'Modulo', "type": 4, "c":"%"},
+				{"id":"tc", "icon":"🔄", "?": 'Type conversion', "type": -1, "bg-color": "rgb(255, 140, 0)", "data-draw": true, "data-only": false},
+				{"id":"python", "icon":"r:python.svg", "?": 'Direct Python code', "type": -1},
+				{"id":"as", "icon":"as", "?": 'As type', "type": 4, "c": " as ", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"5_rand", "icon":"🎲", "?": 'Random number' , "type": 5, "func": "random.randint", "params": "1, 100" },
+				{"id":"5_range", "icon":"r:5_range.svg", "?": 'Return list of numbers in specified range' , "type": 5, "func": "range", "params": "1, 10" },
+				{"id":"5_ord", "icon":"a→#", "?": 'Converts a character to an int value' , "type": 5, "func": "ord", "params": "" },
+				{"id":"5_chr", "icon":"#→a", "?": 'Converts an int value to a character' , "type": 5, "func": "chr", "params": "" },
+				{"id":"0_mdlist", "icon":"r:mdlist.svg", "?": 'Create multidimensional list' , "type": 5, "func": "tcf_mdlist", "params": "" }
 			]
 		},
 		{
@@ -76,68 +87,13 @@
 				{"id":"5_sqrt", "icon":"sqrt", "?": 'Returns square root of n. Use ** for int powers.', "type": 5, "func": "math.sqrt", "params": ""},
 				{"id":"5_mmin", "icon":"min", "?": 'Returns the lowest value', "type": 5, "func": "min", "params": ""},
 				{"id":"5_mmax", "icon":"max", "?": 'Returns the highest value', "type": 5, "func": "max", "params": ""},
-				{"id":"4_none", "icon":"r:none.svg", "?": 'None' , "type": 4, "c":"None"},
 				{"id":"4_color", "icon":"🎨", "?": 'Color (property or editable)' , "type": -1, "c":"color"},
 				{"id":"4_font", "icon":"Aa", "?": 'Font (property or editable)' , "type": 4, "c":"font", "data-draw": true},
-				{"id":"key", "icon":"r:key.svg", "?": 'Key', "type": -1, "data-draw": true, "data-only": false},
-				{"id":"4_lscene", "icon":"r:last_scene.svg", "?": 'Last loaded scene' , "type": 4, "c":"tcf_last_scene"}
-			]
-		},
-		{
-			"icon" : "⚙",
-			"commands" : [
-				{"id":"[", "icon":"[", "?": 'Left square bracket', "type": 4, "c":"["},
-				{"id":"sep", "icon":",", "?": 'Argument separator (Comma)', "type": 4, "c":", "},
-				{"id":"]", "icon":"]", "?": 'Right square bracket', "type": 4, "c":"]"},
-				{"id":"2_del", "icon":"del", "?": 'Delete an object', "type": 3, "c":"del", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"0_apnd", "icon":"r:0_apnd.svg", "?": 'Append an item to a list', "type": 0, "func": "append", "params": "" },
-				{"id":"0_ins", "icon":"r:0_ins.svg", "?": 'Insert an item to a list', "type": 0, "func": "insert", "params": "" },
-				{"id":"0_clr", "icon":"r:0_clr.svg", "?": 'Clear list', "type": 0, "func": "clear", "params": "" },
-				{"id":"5_index", "icon":"r:5_index.svg", "?": 'Finds index of the occurence of an item in a list or in a string', "type": 0, "func": "tcf_index", "params": "" },
-				{"id":"0_slo", "icon":"ab", "?": 'Converts a string into lower case', "type": 0, "func": "lower", "params": "" },
-				{"id":"0_sup", "icon":"AB", "?": 'Converts a string into upper case', "type": 0, "func": "upper", "params": "" },
-				{"id":"0_sspl", "icon":"r:0_sspl.svg", "?": 'Splits the string at the specified separator, and returns a list', "type": 0, "func": "split", "params": "'\\n'" },
-				{"id":"0_srep", "icon":"r:0_srep.svg", "?": 'Replaces a specified phrase with another specified phrase', "type": 0, "func": "replace", "params": "" },
-				{"id":"if", "icon":"❔if", "?": 'If statement', "type": 6, "c":"if", "snippet": "if;~4_true;~:;~nl;~tab;~"},
-				{"id":"else", "icon":"else", "?": 'Else', "type": 3, "c":"else"},
-				{"id":":", "icon":":", "?": 'Begin block of commands', "type": 4, "c":":"},
-				{"id":"==", "icon":"==", "?": 'Equals', "type": 4, "c":"=="},
-				{"id":"!=", "icon":"!=", "?": 'Not equals', "type": 4, "c":"!="},
-				{"id":"<", "icon":"<", "?": 'is less than', "type": 4, "c":"<"},
-				{"id":">", "icon":">", "?": 'is greater than', "type": 4, "c":">"},
-				{"id":"&", "icon":"and", "?": 'and', "type": 4, "c":" and "},
-				{"id":"||", "icon":"or", "?": 'or', "type": 4, "c":" or "},
-				{"id":"!", "icon":"not", "?": 'negation', "type": 4, "c":" not "},
-				{"id":"3_def", "icon":"def", "?": 'Define a method', "type": -1, "fg-color": "rgb(0, 0, 128)", "snippet": "3_def;~obj;name~(;~);~:;~nl;~tab;~"},
-				{"id":"3_r", "icon":"r:3_r.svg", "?": 'Return a value', "type": 6, "c":"return", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"1_rep", "icon":"r:rep.svg", "?": 'Repeat block of commands', "type": -1, "bg-color": "rgb(200, 0, 0)", "snippet": "1_rep;~int;2~:;~nl;~tab;~"},
-				{"id":"1_for", "icon":"for", "?": 'For loop', "type": 6, "c": "for", "bg-color": "rgb(200, 0, 0)", "snippet": "1_for;~obj;n~in;~5_range;~(;~int;0~sep;~int;10~);~:;~nl;~tab;~"},
-				{"id":"in", "icon":"in", "?": 'Is item in a list? / For all items in a collection.', "type": 4, "c":" in "},
-				{"id":"1_while", "icon":"r:1_while.svg", "?": 'Repeat while the condition is true', "type": 6, "c": "while", "bg-color": "rgb(200, 0, 0)", "snippet": "1_while;~4_true;~:;~nl;~tab;~"},
-				{"id":"3_b", "icon":"🛑", "?": 'Break out of a loop', "type": 3, "c":"break", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"3_c", "icon":"↦", "?": 'Continue with next iteration of a loop', "type": 3, "c":"continue", "fg-color": "rgb(0, 0, 128)"},
+				{"id":"int", "icon":"🔢", "?": 'Number', "type": -1, "data-draw": true, "bg-color": "rgb(0, 0, 128)"},
+				{"id":"str", "icon":"🔤", "?": 'String', "type": -1, "data-draw": true, "data-color": "#000000", "bg-color": "rgb(255, 220, 0)" },
 				{"id":"obj", "icon":"🆔", "?": 'Object', "type": -1, "data-draw": true, "bg-color": "rgb(100, 100, 100)"},
-				{"id":"3_global", "icon":"Glob", "?": 'Use variable as a global one', "type": -1, "c":"global", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"2_assign", "icon":"=", "?": 'Assign value to a variable', "type": 4, "c":"=", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"2_+=", "icon":"↖", "?": 'Increase value by', "type": 4, "c":"+=", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"2_-=", "icon":"↙", "?": 'Decrease value by', "type": 4, "c":"-=", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"2_.", "icon":".", "?": 'Dot (use to access properties of an object)', "type": 4, "c":".", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"+", "icon":"+", "?": 'Plus', "type": 4, "c":"+"},
-				{"id":"-", "icon":"-", "?": 'Minus', "type": 4, "c":"-"},
-				{"id":"*", "icon":"*", "?": 'Multiply', "type": 4, "c":"*"},
-				{"id":"/", "icon":"/", "?": 'Divide', "type": 4, "c":"/"},
-				{"id":"%", "icon":"%", "?": 'Modulo', "type": 4, "c":"%"},
-				{"id":"tc", "icon":"🔄", "?": 'Type conversion', "type": -1, "bg-color": "rgb(255, 140, 0)", "data-draw": true, "data-only": false},
-				{"id":"python", "icon":"r:python.svg", "?": 'Direct Python code', "type": -1},
-				{"id":"as", "icon":"as", "?": 'As type', "type": 4, "c": " as ", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"5_rand", "icon":"🎲", "?": 'Random number' , "type": 5, "func": "random.randint", "params": "1, 100" },
-				{"id":"5_range", "icon":"r:5_range.svg", "?": 'Return list of numbers in specified range' , "type": 5, "func": "range", "params": "1, 10" },
-				{"id":"5_ord", "icon":"a→#", "?": 'Converts a character to an int value' , "type": 5, "func": "ord", "params": "" },
-				{"id":"5_chr", "icon":"#→a", "?": 'Converts an int value to a character' , "type": 5, "func": "chr", "params": "" },
-				{"id":"0_mdlist", "icon":"r:mdlist.svg", "?": 'Create multidimensional list' , "type": 5, "func": "tcf_mdlist", "params": "" },
-				{"id":"3_try", "icon":"try:", "?": 'Try', "type": 3, "c": "try:", "fg-color": "rgb(0, 0, 128)", "snippet": "3_try;~nl;~tab;~nl;~3_exc;~obj;Exception~as;~obj;e~:;~nl;~tab;~"},
-				{"id":"3_exc", "icon":"r:3_exc.svg", "?": 'Except', "type": 6, "c": "except", "fg-color": "rgb(0, 0, 128)"},
-				{"id":"3_rs", "icon":"r:3_rs.svg", "?": 'Raise exception', "type": 6, "c": "raise", "fg-color": "rgb(0, 0, 128)"}
+				{"id":"4_none", "icon":"r:none.svg", "?": 'None' , "type": 4, "c":"None"},
+				{"id":"key", "icon":"r:key.svg", "?": 'Key', "type": -1, "data-draw": true, "data-only": false}
 			]
 		},
 		{
@@ -162,13 +118,9 @@
 	"modules": [
 		{
 			"id": "base.json",
-			"code": "from turtle import *\
-from tempfile import NamedTemporaryFile\
-from PIL import Image\
+			"code": "from tempfile import NamedTemporaryFile\
 import math, random, os, time, sys\
 from datetime import datetime\
-color('black');speed(1);title('Turtle');colormode(255);shape('turtle');listen()\
-tcf_last_scene = None\
 os.chdir(os.path.dirname(os.path.abspath(__file__)))"
 		},
 		{
@@ -224,135 +176,6 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))"
 	else: raise Exception('File or directory {} does not exist!'.format(path))"
 		},
 		{
-			"id": "tcf_place_img",
-			"code": "def tcf_place_img(image, t=None):\
-	turt = Turtle()\
-	turt.shape(image);turt.penup()\
-	if t != None:\
-		turt.setpos(t.pos())\
-	else:\
-		turt.setpos(pos())\
-	return turt"
-		},
-		{
-			"id": "tcf_sleep",
-			"code": "def tcf_sleep(seconds=None, block=True):\
-	if seconds != None and seconds < 0:\
-		seconds = abs(seconds); block=False\
-	if seconds == None:\
-		listen(); tcf_sleep_exit = [False, None, None]\
-		def set_exit(key):\
-			getcanvas().unbind('<Key>', tcf_sleep_exit[1])\
-			getcanvas().unbind('<Button-1>', tcf_sleep_exit[2]);\
-			tcf_sleep_exit[0]=True\
-		tcf_sleep_exit[1] = getcanvas().bind('<Key>', set_exit)\
-		tcf_sleep_exit[2] = getcanvas().bind('<Button-1>', set_exit)\
-		while not tcf_sleep_exit[0]:\
-			time.sleep(1/60); getcanvas().update()\
-		return\
-	if block: getcanvas()._root().focus_force()\
-	while seconds > 0:\
-		t=min(seconds, 1/60)\
-		time.sleep(t); seconds-=t; getcanvas().update()\
-	listen()"
-		},
-		{
-			"id": "tcf_load_scene",
-			"deps": ["tcf_get_image"],
-			"code": "tcf_scene_turtles=[]\
-def tcf_load_scene(path=None):\
-	global tcf_last_scene; tcf_last_scene=path\
-	tracer_n = tracer(); tracer_delay = delay();\
-	import json\
-	if path != None:\
-		if not path.endswith('.tcs'): \
-		    project_name = os.path.basename(os.path.splitext(__file__)[0])\
-		    scene_name = os.path.splitext(project_name)[0]\
-		    path = '{}.{}.tcs'.format(scene_name, path)\
-		with open(path) as f:\
-		    scene = json.loads(f.read())\
-		setup(width=scene['width'], height=scene['height'], startx=None, starty=None)\
-		screensize(scene['width'] - 10, scene['height'] - 10)\
-	for t in tcf_scene_turtles:\
-		if t in globals(): del globals()[t]\
-		del t\
-	clearscreen(); colormode(255); tracer(0, 0)\
-	if 'tcf_collisions' in globals(): tcf_collisions.clear()\
-	if 'tcf_collisions_rect' in globals(): tcf_collisions_rect.clear()\
-	if path == None:\
-		screensize(400, 300)\
-	else:\
-		for s in scene['sprites']:\
-			globals()[s['id']] = Turtle(); turtle = globals()[s['id']]\
-			turtle.penup(); turtle.setpos(s['x'],s['y'])\
-			turtle.shape(tcf_get_image(s['name'])); turtle.penup()\
-			tcf_scene_turtles.append(s['id'])\
-	tracer(tracer_n, tracer_delay)"
-		},
-		{
-			"id": "tcf_get_image",
-			"code": "def tcf_get_image(path):\
-	if not path in getshapes():\
-		if not path.endswith('.gif'):\
-			p = Image.open(path)\
-			output = NamedTemporaryFile(suffix='.gif')\
-			p.save(output, 'GIF')\
-			register_shape(output.name)\
-			return output.name\
-		else:\
-			register_shape(path)\
-	return path"
-		},
-		{
-			"id": "tcf_newt",
-			"code": "def tcf_newt():\
-	t = Turtle()\
-	t.shape('turtle')\
-	return t"
-		},
-		{
-			"id": "tcf_collision",
-			"code": "tcf_collisions=[]\
-def tcf_collision_check():\
-	for c in tcf_collisions:\
-		if not (c[0].isvisible() and c[1].isvisible()):\
-			continue\
-		if c[0].distance(c[1].xcor(), c[1].ycor()) < c[3] + c [4]:\
-			if c[5] != None:\
-				c[2](c[5])\
-			else:\
-				c[2]()\
-	ontimer(tcf_collision_check, 50)\
-tcf_collision_check()\
-def tcf_collision(a, b, callback, collider_size_1=10, collider_size_2=10, user_data=None):\
-	tcf_collisions.append((a, b, callback, collider_size_1, collider_size_2, user_data))"
-		},
-		{
-			"id": "tcf_collision_rect",
-			"code": "tcf_collisions_rect=[]\
-def tcf_collision_check_rect():\
-	for c in tcf_collisions_rect:\
-		if not (c[0].isvisible() and c[1].isvisible()):\
-			continue\
-		f_top_right_x = c[0].xcor()+c[3][0]/2\
-		f_top_right_y = c[0].ycor()+c[3][1]/2\
-		f_bottom_left_x = c[0].xcor()-c[3][0]/2\
-		f_bottom_left_y = c[0].ycor()-c[3][1]/2\
-		s_top_right_x = c[1].xcor()+c[4][0]/2\
-		s_top_right_y = c[1].ycor()+c[4][1]/2\
-		s_bottom_left_x = c[1].xcor()-c[4][0]/2\
-		s_bottom_left_y = c[1].ycor()-c[4][1]/2\
-		if not (f_top_right_x < s_bottom_left_x or f_bottom_left_x > s_top_right_x or f_top_right_y < s_bottom_left_y or f_bottom_left_y > s_top_right_y):\
-			if c[5] != None:\
-				c[2](c[5])\
-			else:\
-				c[2]()\
-	ontimer(tcf_collision_check_rect, 50)\
-tcf_collision_check_rect()\
-def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2=(15, 15), user_data=None):\
-	tcf_collisions_rect.append((a, b, callback, collider_size_1, collider_size_2, user_data))"
-		},
-		{
 			"id": "tcf_subfiles",
 			"code": "def tcf_subfiles(path):\
 	result = []\
@@ -393,42 +216,6 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 	return [tcf_mdlist(default_value, *size[1:]) for i in range(size[0])]"
 		},
 		{
-			"id": "tcf_turbo",
-			"code": "def tcf_turbo(turbo=False, do_not_render=False, t=None):\
-	if turbo == 3: tracer(not do_not_render); return\
-	if turbo == 2: trubo=True; do_not_render=True\
-	delay(0 if turbo else 10)\
-	if t == None: speed(0 if turbo else 1)\
-	else: t.speed(0 if turbo else 1)\
-	tracer(not do_not_render)"
-		},
-		{
-			"id": "tcf_keypress",
-			"code": "def tcf_keypress(function=None, key=None):\
-	if key==None:\
-	    if function == None:\
-	    	getcanvas().unbind('<Key>'); return\
-	    def callback(e):\
-	        mods = []\
-	        if (e.state & 0x4) != 0: mods.append('Control_L')\
-	        if (e.state & 0x8) != 0: mods.append('Alt_L')\
-	        if (e.state & 0x80) != 0: mods.append('Alt_R')\
-	        if (e.state & 0x1) != 0: mods.append('Shift_L')\
-	        function(str(e.keysym), e.char, mods)\
-	    getcanvas().bind('<Key>', callback)\
-	else:\
-	    onkeypress(function, key)"
-		},
-		{
-			"id": "tcf_mouseclick",
-			"code": "def tcf_mouseclick(function=None, btn=1, turtle=None, add=None):\
-	if isinstance(function, Turtle): function.onclick(None); return\
-	if turtle==None:\
-	    onscreenclick(function, btn=btn, add=add)\
-	else:\
-	    turtle.onclick(function, btn=btn, add=add)"
-		},
-		{
 			"id": "tcf_strftime",
 			"code": "def tcf_strftime(time, format='%d/%m/%y %H:%M:%S'):\
 	return datetime.fromtimestamp(time).strftime(format)"
@@ -437,72 +224,7 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 			"id": "tcf_strptime",
 			"code": "def tcf_strptime(string_time, format='%d/%m/%y %H:%M:%S'):\
 	return datetime.timestamp(datetime.strptime(string_time, format))"
-		},
-		{
-			"id": "tcf_screenprop",
-			"code": "def tcf_screenprop(cam_x = None, cam_y = None, width=None, height=None):\
-	if width != None and height != None: setup(width, height, None, None)\
-	if cam_x == None or cam_y == None:\
-		screensize(width - 20, height - 20)\
-		return\
-	global tcf_cam_x; global tcf_cam_y\
-	if cam_x == None: return (tcf_cam_x, tcf_cam_y)\
-	tcf_cam_x = int(cam_x); tcf_cam_y = int(cam_y)\
-	h = window_height(); w = window_width()\
-	screensize(max(abs(tcf_cam_x) * 2 + w, w * 2), max(abs(tcf_cam_y) * 2 + h, h * 2))\
-	global tcf_screenprop_first_run\
-	if tcf_screenprop_first_run:\
-		getcanvas().update(); tcf_screenprop_first_run=False\
-	canvas = getcanvas()\
-	canvas.config(xscrollincrement=1)\
-	canvas.config(yscrollincrement=1)\
-	canvas.xview_scroll(tcf_cam_x, 'units'); canvas.yview_scroll(-tcf_cam_y, 'units')\
-tcf_screenprop_first_run=True"
 		}
-	],
-	"events": [
-	    {
-	        "name": 'Key press',
-	        "code": "",
-	        "connector": "0_ekey;~(;~obj;$name~);~",
-	        "params": "key,char,modifiers"
-	    },
-	    {
-	        "name": 'Specified key press',
-	        "code": "",
-	        "connector": "0_ekey;~(;~obj;$name~sep;~key;$name~);~",
-	        "params": ""
-	    },
-	    {
-	        "name": 'Mouse click',
-	        "code": "",
-	        "connector": "0_emc;~(;~obj;$name~sep;~int;1~);~",
-	        "params": "x,y"
-	    },
-	    {
-	        "name": 'Mouse click on a turtle',
-	        "code": "",
-	        "connector": "0_emc;~(;~obj;$name~sep;~int;1~sep;~5_gett;~);~",
-	        "params": "x,y"
-	    },
-	    {
-	        "name": 'Timer',
-	        "code": "0_tmr;~(;~obj;$name~sep;~int;30~);~",
-	        "connector": "obj;$name~(;~);~",
-	        "params": ""
-	    },
-	    {
-	        "name": 'Circular collision',
-	        "code": "",
-	        "connector": "0_collision;~(;~5_gett;~sep;~obj;other_turle~sep;~obj;$name~sep;~int;10~sep;~int;10~);~",
-	        "params": ""
-	    },
-	    {
-	        "name": 'Rectangle collision',
-	        "code": "",
-	        "connector": "tcf_collision_rect;~(;~5_gett;~sep;~obj;other_turle~sep;~obj;$name~sep;~(;~int;10~sep;~int;10~);~sep;~(;~int;10~sep;~int;10~);~);~",
-	        "params": ""
-	    }
 	]
 }
 

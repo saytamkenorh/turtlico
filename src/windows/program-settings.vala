@@ -26,6 +26,8 @@ namespace Turtlico {
         [GtkChild]
         Gtk.Box plugins_box;
         [GtkChild]
+        Gtk.Switch use_idle_switch;
+        [GtkChild]
         Gtk.Label all_icons_count_label;
         [GtkChild]
         Gtk.Label icons_count_label;
@@ -34,12 +36,16 @@ namespace Turtlico {
         [GtkChild]
         Gtk.Label open_dir_fail_label;
 
-        public Gee.ArrayList<string> plugins_active;
+        protected ProgramBuffer buffer;
+        protected Gee.ArrayList<string> plugins_active;
 
-        public ProgramSettings (ref Gee.ArrayList<string> plugins_active,
+        public ProgramSettings (ProgramBuffer buffer,
             ArrayList<ArrayList<Command>> program
         ) {
-            this.plugins_active = plugins_active;
+            use_idle_switch.set_active (buffer.run_in_console);
+
+            this.buffer = buffer;
+            this.plugins_active = buffer.enabled_plugins;
             // Add plugins
             try {
                 var resources = resources_enumerate_children (Command.PLUGIN_RESOURCES,
@@ -118,6 +124,13 @@ namespace Turtlico {
             plugin_box.show_all ();
             if (plugins_active.contains (file))
                 plugin_switch.set_active (true);
+        }
+
+        [GtkCallback]
+        bool on_use_idle_switch_state_set (Gtk.Switch sw, bool active) {
+            if (buffer != null)
+                buffer.run_in_console = active;
+            return false;
         }
 
         [GtkCallback]
