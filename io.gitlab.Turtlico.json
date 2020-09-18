@@ -1,7 +1,7 @@
 {
     "app-id": "io.gitlab.Turtlico",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "3.36",
+    "runtime-version": "3.38",
     "sdk": "org.gnome.Sdk",
     "command": "turtlico",
     "finish-args": [
@@ -16,7 +16,7 @@
         "--talk-name=ca.desrt.dconf",
         "--device=all",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
-        "--env=PYTHONPATH=/usr/lib/python3.7/site-packages",
+        "--env=PYTHONPATH=/usr/lib/python3.8/site-packages",
         "--env=GPIOZERO_PIN_FACTORY=native"
     ],
     "cleanup": [
@@ -98,7 +98,6 @@
                 "/lib/python*/unittest/test",
                 "/lib/python*/lib-dynload/_*_test.*.so",
                 "/lib/python*/lib-dynload/_test*.*.so",
-                "/lib/python*/idlelib",
                 "*.pyc",
                 "__pycache__",
                 "*.exe"
@@ -106,8 +105,8 @@
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://www.python.org/ftp/python/3.7.7/Python-3.7.7.tar.xz",
-                    "sha256" : "06a0a9f1bf0d8cd1e4121194d666c4e28ddae4dd54346de6c343206599f02136"
+                    "url" : "https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tar.xz",
+                    "sha256" : "e3003ed57db17e617acb382b0cade29a248c6026b1bd8aad1f976e9af66a83b0"
                 }
             ]
         },

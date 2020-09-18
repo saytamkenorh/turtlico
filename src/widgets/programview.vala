@@ -969,6 +969,8 @@ namespace Turtlico {
             switch (font_desc.get_style ()) {
                 case Pango.Style.ITALIC:
                     data += "italic"; break;
+                case Pango.Style.OBLIQUE:
+                    data += "italic"; break;
                 case Pango.Style.NORMAL:
                     data += "normal"; break;
             }
