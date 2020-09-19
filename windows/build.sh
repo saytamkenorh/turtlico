@@ -21,7 +21,7 @@ if grep -q appstream_file "../data/meson.build"; then
 fi
 sed -i 's/^M$//' ./PKGBUILD
 
-MINGW_INSTALLS=mingw64 makepkg-mingw -sCf
+MINGW_INSTALLS=mingw64 makepkg-mingw -sCf || exit 1
 
 echo "Bundling runtime. This will take a while."
 rm -rf ./output
