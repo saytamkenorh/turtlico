@@ -112,11 +112,15 @@ namespace Turtlico {
             Gtk.Switch plugin_switch = new Gtk.Switch ();
             plugin_switch.state_set.connect ((state) => {
                 if (state) {
-                    if (!plugins_active.contains (file))
+                    if (!plugins_active.contains (file)) {
                         plugins_active.add (file);
+                        buffer.program_changed = true;
+                    }
                 }
-                else
+                else if (plugins_active.contains (file)) {
                     plugins_active.remove (file);
+                    buffer.program_changed = true;
+                }
                 return false;
             });
             plugin_box.pack_end (plugin_switch, false, false, 0);
@@ -128,8 +132,10 @@ namespace Turtlico {
 
         [GtkCallback]
         bool on_use_idle_switch_state_set (Gtk.Switch sw, bool active) {
-            if (buffer != null)
+            if (buffer != null) {
                 buffer.run_in_console = active;
+                buffer.program_changed = true;
+            }
             return false;
         }
 
