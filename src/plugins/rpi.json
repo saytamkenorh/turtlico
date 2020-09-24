@@ -2,7 +2,7 @@
 	"name": "Raspberry Pi (gpiozero)",
 	"categories": [
 		{
-			"icon" : "r:raspberrypi.svg",
+			"icon" : "r:rpi/raspberrypi.svg",
 			"commands": [
 				{"id":"5_rpiled", "icon":"LED", "?": 'Connect LED' , "type": 5, "func": "LED", "params": "" },
 				{"id":"5_rpirgb", "icon":"RGB", "?": 'Connect RGB LED' , "type": 5, "func": "RGBLED", "params": "" },
@@ -10,11 +10,11 @@
 				{"id":"5_rpiin", "icon":"IN", "?": 'Connect Input Device' , "type": 5, "func": "SmoothedInputDevice", "params": "" },
 				{"id":"5_rpipwm", "icon":"PWM", "?": 'Connect PWM Output Device' , "type": 5, "func": "PWMOutputDevice", "params": "" },
 				{"id":"5_rpiout", "icon":"OUT", "?": 'Connect Digital Output Device' , "type": 5, "func": "DigitalOutputDevice", "params": "" },
-				{"id":"0_rpion", "icon":"r:0_rpion.svg", "?": 'Turn on device', "type": 0, "func": "on", "params": "" },
-				{"id":"0_rpioff", "icon":"r:0_rpioff.svg", "?": 'Turn off device', "type": 0, "func": "off", "params": "" },
+				{"id":"0_rpion", "icon":"r:rpi/rpion.svg", "?": 'Turn on device', "type": 0, "func": "on", "params": "" },
+				{"id":"0_rpioff", "icon":"r:rpi/rpioff.svg", "?": 'Turn off device', "type": 0, "func": "off", "params": "" },
 				{"id":"0_rpival", "icon":"🔧", "?": 'Value (input and output)', "type": 0, "func": "value", "params": "" },
-				{"id":"0_rpievent", "icon":"r:0_rpievent.svg", "?": 'Connect a function that is called when the device state changes to active', "type": 0, "func": "tcf_rpi_event", "params": "" },
-				{"id":"0_rpieventoff", "icon":"r:0_rpieventoff.svg", "?": 'Connect a function that is called when the device state changes to inactive', "type": 0, "func": "tcf_rpi_event_off", "params": "" }
+				{"id":"0_rpievent", "icon":"r:rpi/rpievent.svg", "?": 'Connect a function that is called when the device state changes to active', "type": 0, "func": "tcf_rpi_event", "params": "" },
+				{"id":"0_rpieventoff", "icon":"r:rpi/rpieventoff.svg", "?": 'Connect a function that is called when the device state changes to inactive', "type": 0, "func": "tcf_rpi_event_off", "params": "" }
 			]
 		}
 	],
