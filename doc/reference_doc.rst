@@ -2,22 +2,6 @@
 Reference documentation
 =======================
 
-New line (Enter)
-================
-
-Tab
-===
-Tabs are used to create blocks of commands. For example it is used in order to specify what commands should happen if a condition is true or what commands should be executed n-times.
-
-.. image:: figures/tabs.png
-    :align: center
-
-Comment
-=======
-
-Comments are icons with an editable label.
-Their purpose is to explain parts of the program.
-
 Go forward
 ==========
 
@@ -66,25 +50,6 @@ If input is smaller than 0.5 or greater than 10 the speed is set to zero.
 **Parameters**
 
 ``NUMBER`` Speed (default: 1)
-
-Number
-======
-
-This editable icon represents an integer number.
-
-String
-======
-This editable icon represents a string.
-
-Length of (string, list etc)
-============================
-
-Gets the length of the object.
-For example, number of items in a collection or count of characters in a string.
-
-**Parameters**
-
-``OBJECT`` The object whose length is to be obtained
 
 Set position
 ============
@@ -148,18 +113,6 @@ Return or set the pen’s attributes. All the parameters are optional.
 
 ``NUMBER`` "tilt" Rotate the turtleshape by angle from its current tilt-angle.
 
-Left parenthesis
-================
-Used to specify parameters of commands.
-The example usage is "command(parameter, parameter)".
-
-Argument separator (Comma)
-==========================
-
-Right parenthesis
-=================
-See `here <#left-parenthesis>`_.
-
 Hide turtle
 ===========
 
@@ -197,6 +150,11 @@ Call this, draw a shape (e.g. rectangle) and then call End fill.
 End fill - fill the drawn shape
 ===============================
 See `Begin fill <#begin-fill>`_.
+
+Last loaded scene
+=================
+
+The name of the last scene that was loaded using the `Load scene (file) <#load-scene-file>__` command.
 
 Clear turtle screen
 ===================
@@ -420,6 +378,372 @@ If "function" is a turtle object all events bindings are removed from it.
 
 ``BOOL`` "add" If True, a new binding will be added, otherwise it will replace a former binding. (optional)
 
+New line (Enter)
+================
+
+Tab
+===
+Tabs are used to create blocks of commands. For example it is used in order to specify what commands should happen if a condition is true or what commands should be executed n-times.
+
+.. image:: figures/tabs.png
+    :align: center
+
+Comment
+=======
+
+Comments are icons with an editable label.
+Their purpose is to explain parts of the program.
+
+Argument separator (Comma)
+==========================
+
+Left parenthesis
+================
+Used to specify parameters of commands.
+The example usage is "command(parameter, parameter)".
+
+Right parenthesis
+=================
+See `here <#left-parenthesis>`_.
+
+If statement
+============
+With if statements you mark blocks of commands that will be executed only if a specified condition is true.
+
+Else
+====
+Happens if condition in if statement was not true.
+See `if statement <#if-statement>`_.
+
+Begin block of commands
+=======================
+See `if statement <#if-statement>`_.
+
+and
+===
+
+or
+==
+
+negation
+========
+
+Equals
+======
+
+Not equals
+==========
+
+is less than
+============
+
+is greater than
+===============
+
+Repeat block of commands
+========================
+
+This is used to repeat block of commands n times. Place a ``NUMBER`` after this command. If no number is specified the cycle will repeat infinitely.
+
+Example (see also `Begin fill <#begin-fill>`__):
+
+.. image:: figures/square-shape-fill.png
+   :align: center
+
+.. figure:: figures/square-shape-fill-result.gif
+   :align: center
+
+   Result
+
+For loop
+========
+With for loop you can execute block of commands for every item in a list. List values are placed in a variable that you can use then.
+
+.. image:: figures/for-loop.png
+   :align: center
+
+Is item in a list? / For all items in a collection.
+===================================================
+Checks wheter item is in a list. It is also used with `for loop <#for-loop>`_.
+
+Repeat while the condition is true
+==================================
+Similiar to `Repeat block of commands <#repeat-block-of-commands>`__ but instead of a number you have to specify a condition.
+
+.. figure:: figures/while-loop.png
+   :align: center
+
+   Create a "wall" up to X coordinate 200.
+
+Break out of a loop
+===================
+Stops iterating current loop and starts executing commands after the loop.
+
+Continue with next iteration of a loop
+======================================
+Skips commands after this and starts next iteration of the loop (or exits to loop if this is the last iteration).
+
+Define a method
+===============
+Methods can be used in order to minimize repeating blocks of code. You can define a method and then call it from different places of the program.
+
+You can also use the functions dialog to create functions and connect events to them with less effort.
+There you can also simply create method usage blocks (`Object <#object>`__ with parenthesis).
+
+.. figure:: figures/function.png
+   :align: left
+
+   Creates an example function called "sum" that returns sum of two numbers.
+
+Return a value
+==============
+
+See `method <#define-a-method>`__.
+
+Left square bracket
+===================
+Square brackets are used create lists and to access list elements by index.
+
+Example usage of list-related commands:
+
+.. image:: figures/lists.png
+    :align: center
+
+Right square bracket
+====================
+See `Left square bracket <#left-square-bracket>`__.
+
+Length of (string, list etc)
+============================
+
+Gets the length of the object.
+For example, number of items in a collection or count of characters in a string.
+
+**Parameters**
+
+``OBJECT`` The object whose length is to be obtained
+
+Delete an object
+================
+Deletes a varibale.
+
+May be also used to remove items from list.
+For more information about lists see `this <#left-square-bracket>`__.
+
+Append an item to a list
+========================
+
+For more information about lists see `this <#left-square-bracket>`__.
+
+**Parameters**
+
+``OBJECT`` The item.
+
+Insert an item to a list
+========================
+
+For more information about lists see `this <#left-square-bracket>`__.
+
+**Parameters**
+
+``NUMBER`` Index.
+
+``OBJECT`` The item.
+
+Clear list
+==========
+Removes all items from the list.
+
+For more information about lists see `this <#left-square-bracket>`__.
+
+Finds index of the occurence of an item in a list or in a string
+================================================================
+Returns -1 if no occurence found.
+
+For more information about lists see `this <#left-square-bracket>`__.
+
+**Parameters**
+
+``LIST`` List to find items in.
+
+``OBJECT`` Item. It could be almost any type.
+
+``NUMBER`` Search start index. (default: 0)
+
+``NUMBER`` Direction of search. (direction: 1)
+
+Converts a string into lower case
+=================================
+Makes the whole string to contain only lower case letters.
+
+**Parameters**
+
+``STRING`` The string.
+
+Converts a string into upper case
+=================================
+Makes the whole string to contain only upper case letters.
+
+**Parameters**
+
+``STRING`` The string.
+
+Splits the string at the specified separator, and returns a list
+================================================================
+Returns the edited string.
+
+**Parameters**
+
+``STRING`` The separator.
+
+Replaces a specified phrase with another specified phrase
+=========================================================
+Returns the edited string.
+
+**Parameters**
+
+``STRING`` Phrase to be replaced.
+
+``STRING`` String to replace the phrase with.
+
+Use variable as a global one
+============================
+Forces specified object to be used as a global variable. Global variables have persistent values all over the program.
+For example if you change value of a global varibale in a function it will affect all occurences of the variable in the code.
+
+If you would assign a value to a global varibale without marking it as global at the start of the function or program the program will only create a new local variable
+that will be destroyed after the functions ends.
+
+**Usage at the start of the program (recommended)**
+
+If you mark variable as global outside of any commands block it will be marked as global automatically in all following functions.
+This means that if you place this at the start of the program the variable will be accessible from anywhere.
+
+.. image:: figures/global-varibales.png
+    :align: center
+
+**Usage at start of functions**
+
+You can also mark variable as global only for specific function. Just place this at the start of the function.
+
+However if you only read from a global variable you don't have to use this command at all but is is recommended to use it in order to make code easier to read.
+
+Assign value to a variable
+==========================
+See `Object <#object>`__.
+
+Increase value by
+=================
+Increases value of a variable by specified amount.
+Example:
+
+.. figure:: figures/increase-value-by.png
+    :align: center
+
+    Increases value of variable "n" by 10
+
+Decrease value by
+=================
+Decreases value of a variable by specified amount.
+Also see `Increase value by <#increase-value-by>`__.
+
+Dot (use to access properties of an object)
+===========================================
+Some objects (e.g. turtles and lists) have properties like varibales or methods. Dot is used in order to access them.
+To look at an example usage check out `Create new turtle <#create-new-turtle>`__.
+
+Try
+===
+Commands that are placed inside Try can raise exceptions that are then handled by `Except <#except>`__ without crashing the whole program.
+
+Except
+======
+
+Raise exception
+===============
+
+Plus
+====
+
+Minus
+=====
+
+Multiply
+========
+
+Divide
+======
+
+Modulo
+======
+
+Type conversion
+===============
+Type conversion is used in order to make value of specified type from another value (e.g. a number from a string).
+
+Example usage (note that the number 100 is a string):
+
+.. image:: figures/type-conversion.png
+    :align: center
+
+Direct Python code
+==================
+This icon represents custom Python code that you can change by editing the value of this icon.
+
+As type
+=======
+
+Random number
+=============
+Return a ranom number in range.
+
+**Parameters**
+
+``NUMBER`` Minimum (default: 0)
+
+``NUMBER`` Maximum (default: 100, excluding)
+
+Return list of numbers in specified range
+=========================================
+
+**Parameters**
+
+``NUMBER`` Start (default: 0)
+
+``NUMBER`` End (default: 100)
+
+Converts a character to an int value
+====================================
+Returns an integer represeting the character.
+The result is a Unicode code point or a value of the byte when the argument is an 8-bit string.
+You can also check out the `Unicode table <https://en.wikipedia.org/wiki/List_of_Unicode_characters#Latin_script>`__ to determine int values of various characters.
+
+**Parameters**
+
+``STRING`` The character. The string must be exactly one character long.
+
+Converts an int value to a character
+====================================
+Returns a string representing a character whose Unicode code point is an integer.
+
+**Parameters**
+
+``NUMBER`` Int value of the character.
+
+Create multidimensional list
+============================
+Creates a multidimensional list (multidimensional array/list of lists).
+This can be used for example to store a grid of numbers.
+The list must have at least one dimension.
+
+**Parameters**
+
+``OBJECT`` The initial value for all cells.
+
+``NUMBER`` Size of the first dimension of the list.
+
+``NUMBER`` ...
+
 Exit the program
 ================
 
@@ -562,13 +886,6 @@ Returns the highest value from specified numbers. You can either pass an array o
 
 ``NUMBER`` ...
 
-None
-====
-
-None is used to define a null value or no value at all.
-It is not the same as 0, False or an emtpy string.
-It is a datatype of its own (NoneType).
-
 Color (property or editable)
 ============================
 This icon represents a color. You can edit it by pressing F2. If no color is set it represents color property.
@@ -579,204 +896,14 @@ Font (property or editable)
 ===========================
 Represents a font description string. Press F2 to edit.
 
-Key
-===
-Represents a key. Press F2 to edit.
-
-Last loaded scene
-=================
-
-The name of the last scene that was loaded using the `Load scene (file) <#load-scene-file>__` command.
-
-Left square bracket
-===================
-Square brackets are used create lists and to access list elements by index.
-
-Example usage of list-related commands:
-
-.. image:: figures/lists.png
-    :align: center
-
-Right square bracket
-====================
-See `Left square bracket <#left-square-bracket>`__.
-
-Delete an object
-================
-Deletes a varibale.
-
-May be also used to remove items from list.
-For more information about lists see `this <#left-square-bracket>`__.
-
-Append an item to a list
-========================
-
-For more information about lists see `this <#left-square-bracket>`__.
-
-**Parameters**
-
-``OBJECT`` The item.
-
-Insert an item to a list
-========================
-
-For more information about lists see `this <#left-square-bracket>`__.
-
-**Parameters**
-
-``NUMBER`` Index.
-
-``OBJECT`` The item.
-
-Clear list
-==========
-Removes all items from the list.
-
-For more information about lists see `this <#left-square-bracket>`__.
-
-Finds index of the occurence of an item in a list or in a string
-================================================================
-Returns -1 if no occurence found.
-
-For more information about lists see `this <#left-square-bracket>`__.
-
-**Parameters**
-
-``LIST`` List to find items in.
-
-``OBJECT`` Item. It could be almost any type.
-
-``NUMBER`` Search start index. (default: 0)
-
-``NUMBER`` Direction of search. (direction: 1)
-
-Converts a string into lower case
-=================================
-Makes the whole string to contain only lower case letters.
-
-**Parameters**
-
-``STRING`` The string.
-
-Converts a string into upper case
-=================================
-Makes the whole string to contain only upper case letters.
-
-**Parameters**
-
-``STRING`` The string.
-
-Splits the string at the specified separator, and returns a list
-================================================================
-Returns the edited string.
-
-**Parameters**
-
-``STRING`` The separator.
-
-Replaces a specified phrase with another specified phrase
-=========================================================
-Returns the edited string.
-
-**Parameters**
-
-``STRING`` Phrase to be replaced.
-
-``STRING`` String to replace the phrase with.
-
-If statement
-============
-With if statements you mark blocks of commands that will be executed only if a specified condition is true.
-
-Else
-====
-Happens if condition in if statement was not true.
-See `if statement <#if-statement>`_.
-
-Begin block of commands
-=======================
-See `if statement <#if-statement>`_.
-
-Equals
+Number
 ======
 
-Not equals
-==========
+This editable icon represents an integer number.
 
-is less than
-============
-
-is greater than
-===============
-
-and
-===
-
-or
-==
-
-negation
-========
-
-Define a method
-===============
-Methods can be used in order to minimize repeating blocks of code. You can define a method and then call it from different places of the program.
-
-You can also use the functions dialog to create functions and connect events to them with less effort.
-There you can also simply create method usage blocks (`Object <#object>`__ with parenthesis).
-
-.. figure:: figures/function.png
-   :align: left
-
-   Creates an example function called "sum" that returns sum of two numbers.
-
-Return a value
-==============
-
-See `method <#define-a-method>`__.
-
-Repeat block of commands
-========================
-
-This is used to repeat block of commands n times. Place a ``NUMBER`` after this command. If no number is specified the cycle will repeat infinitely.
-
-Example (see also `Begin fill <#begin-fill>`__):
-
-.. image:: figures/square-shape-fill.png
-   :align: center
-
-.. figure:: figures/square-shape-fill-result.gif
-   :align: center
-
-   Result
-
-For loop
-========
-With for loop you can execute block of commands for every item in a list. List values are placed in a variable that you can use then.
-
-.. image:: figures/for-loop.png
-   :align: center
-
-Is item in a list? / For all items in a collection.
-===================================================
-Checks wheter item is in a list. It is also used with `for loop <#for-loop>`_.
-
-Repeat while the condition is true
-==================================
-Similiar to `Repeat block of commands <#repeat-block-of-commands>`__ but instead of a number you have to specify a condition.
-
-.. figure:: figures/while-loop.png
-   :align: center
-
-   Create a "wall" up to X coordinate 200.
-
-Break out of a loop
-===================
-Stops iterating current loop and starts executing commands after the loop.
-
-Continue with next iteration of a loop
-======================================
-Skips commands after this and starts next iteration of the loop (or exits to loop if this is the last iteration).
+String
+======
+This editable icon represents a string.
 
 Object
 ======
@@ -798,143 +925,16 @@ You have to assert a value to a variable and then you can use it in following co
 
    Creates a "snail" using line length variable
 
-Use variable as a global one
-============================
-Forces specified object to be used as a global variable. Global variables have persistent values all over the program.
-For example if you change value of a global varibale in a function it will affect all occurences of the variable in the code.
-
-If you would assign a value to a global varibale without marking it as global at the start of the function or program the program will only create a new local variable
-that will be destroyed after the functions ends.
-
-**Usage at the start of the program (recommended)**
-
-If you mark variable as global outside of any commands block it will be marked as global automatically in all following functions.
-This means that if you place this at the start of the program the variable will be accessible from anywhere.
-
-.. image:: figures/global-varibales.png
-    :align: center
-
-**Usage at start of functions**
-
-You can also mark variable as global only for specific function. Just place this at the start of the function.
-
-However if you only read from a global variable you don't have to use this command at all but is is recommended to use it in order to make code easier to read.
-
-Assign value to a variable
-==========================
-See `Object <#object>`__.
-
-Increase value by
-=================
-Increases value of a variable by specified amount.
-Example:
-
-.. figure:: figures/increase-value-by.png
-    :align: center
-
-    Increases value of variable "n" by 10
-
-Decrease value by
-=================
-Decreases value of a variable by specified amount.
-Also see `Increase value by <#increase-value-by>`__.
-
-Dot (use to access properties of an object)
-===========================================
-Some objects (e.g. turtles and lists) have properties like varibales or methods. Dot is used in order to access them.
-To look at an example usage check out `Create new turtle <#create-new-turtle>`__.
-
-Plus
+None
 ====
 
-Minus
-=====
+None is used to define a null value or no value at all.
+It is not the same as 0, False or an emtpy string.
+It is a datatype of its own (NoneType).
 
-Multiply
-========
-
-Divide
-======
-
-Modulo
-======
-
-Type conversion
-===============
-Type conversion is used in order to make value of specified type from another value (e.g. a number from a string).
-
-Example usage (note that the number 100 is a string):
-
-.. image:: figures/type-conversion.png
-    :align: center
-
-Direct Python code
-==================
-This icon represents custom Python code that you can change by editing the value of this icon.
-
-As type
-=======
-
-Random number
-=============
-Return a ranom number in range.
-
-**Parameters**
-
-``NUMBER`` Minimum (default: 0)
-
-``NUMBER`` Maximum (default: 100, excluding)
-
-Return list of numbers in specified range
-=========================================
-
-**Parameters**
-
-``NUMBER`` Start (default: 0)
-
-``NUMBER`` End (default: 100)
-
-Converts a character to an int value
-====================================
-Returns an integer represeting the character.
-The result is a Unicode code point or a value of the byte when the argument is an 8-bit string.
-You can also check out the `Unicode table <https://en.wikipedia.org/wiki/List_of_Unicode_characters#Latin_script>`__ to determine int values of various characters.
-
-**Parameters**
-
-``STRING`` The character. The string must be exactly one character long.
-
-Converts an int value to a character
-====================================
-Returns a string representing a character whose Unicode code point is an integer.
-
-**Parameters**
-
-``NUMBER`` Int value of the character.
-
-Create multidimensional list
-============================
-Creates a multidimensional list (multidimensional array/list of lists).
-This can be used for example to store a grid of numbers.
-The list must have at least one dimension.
-
-**Parameters**
-
-``OBJECT`` The initial value for all cells.
-
-``NUMBER`` Size of the first dimension of the list.
-
-``NUMBER`` ...
-
-Try
+Key
 ===
-Commands that are placed inside Try can raise exceptions that are then handled by `Except <#except>`__ without crashing the whole program.
-
-Except
-======
-
-Raise exception
-===============
+Represents a key. Press F2 to edit.
 
 Read all lines of a file
 ========================
@@ -1118,6 +1118,41 @@ For list of format codes see `Convert timestamp to string <#convert-timestamp-to
 ``NUMBER`` String representing a date/time.
 
 ``STRING`` Format of the string. (default: '%d/%m/%y %H:%M:%S')
+
+Print to console
+================
+
+Writes text to console. You can also use options like `Print to stderr <#print-to-stderr>`__ as parameters.
+
+**Parameters**
+
+``STRING`` The text.
+
+Input from console
+==================
+
+Reads a line from the console.
+
+**Parameters**
+
+``STRING`` "prompt" Text that is printed to console before user input. (optional)
+
+Print to console without newline
+================================
+
+Just like `Print to console <#print-to-console>`__ but doesn't print newline at the end.
+
+**Parameters**
+
+``STRING`` The text.
+
+Print to stderr
+===============
+
+This can be used as a parameter for
+`Print to console <#print-to-console>`__ and `Print to console without newline <#print-to-console-without-newline>`__.
+If it's used the text is written to stderr instead of stdout.
+This makes the text red when running in IDLE and can be useful if other programs are interacting with yours.
 
 Create sound player for a file
 ==============================
