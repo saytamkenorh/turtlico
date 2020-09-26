@@ -3,6 +3,7 @@
   <gresource prefix="/io/gitlab/Turtlico">
     <file>plugins/0turtle.json</file>
     <file>plugins/base.json</file>
+    <file>plugins/console.json</file>
     <file>plugins/mm.json</file>
     <file>plugins/rpi.json</file>
     <file>widgets/programview.css</file>

@@ -1,0 +1,21 @@
+{
+	"name": "Console",
+	"categories": [
+		{
+			"icon": "r:console/console.svg",
+			"commands": [
+				{"id":"0_c_print", "icon":"r:console/console.svg", "?": 'Print to console', "type": 0, "func": "print", "params": "" },
+				{"id":"0_c_input", "icon":"r:console/input.svg", "?": 'Input from console', "type": 5, "func": "input", "params": "" },
+				{"id":"0_c_print_nnl", "icon":"r:console/no_newline.svg", "?": 'Print to console without newline' , "type": 0, "func": "tcf_c_print_nnl", "params": ""},
+				{"id":"0_c_stderr", "icon":"r:console/stderr.svg", "?": 'Print to stderr' , "type": 4, "c":"file=sys.stderr"}
+			]
+		}
+	],
+	"modules": [
+		{
+			"id": "tcf_c_print_nnl",
+			"code": "def tcf_c_print_nnl(text, **kwargs):\
+	print(text, end='', **kwargs)"
+		}
+	]
+}

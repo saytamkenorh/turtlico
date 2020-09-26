@@ -59,6 +59,11 @@
     <file>base/true.svg</file>
     <file>base/while.svg</file>
 
+    <file>console/console.svg</file>
+    <file>console/input.svg</file>
+    <file>console/no_newline.svg</file>
+    <file>console/stderr.svg</file>
+
     <file>mm/multimedia.svg</file>
 
     <file>rpi/raspberrypi.svg</file>
