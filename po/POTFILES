@@ -7,7 +7,9 @@ src/classes/debugger.vala
 src/classes/package-service.vala
 src/classes/program-buffer.vala
 src/main.vala
+src/plugins/0turtle.json
 src/plugins/base.json
+src/plugins/console.json
 src/plugins/mm.json
 src/plugins/rpi.json
 src/widgets/programview.ui

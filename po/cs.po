@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-13 20:19+0200\n"
-"PO-Revision-Date: 2020-08-13 20:22+0200\n"
+"POT-Creation-Date: 2020-09-26 12:12+0200\n"
+"PO-Revision-Date: 2020-09-26 12:13+0200\n"
 "Last-Translator: matyas5 <>\n"
 "Language-Team: Czech <>\n"
 "Language: cs\n"
@@ -118,28 +118,31 @@ msgstr "Připnutí levého postranního panelu"
 msgid "Use client side decoration"
 msgstr "Použít dekorování na straně klienta"
 
-#: src/classes/command.vala:131
+#: src/classes/command.vala:127
 msgid "Failed to load command def file: "
 msgstr "Selhalo načtení souboru s definicemi příkazů: "
 
-#: src/classes/compiler.vala:219
+#: src/classes/compiler.vala:205
 msgid "Functions must start on a separate line!"
 msgstr "Funkce musí začínat za zvláštním řádku!"
 
-#: src/classes/compiler.vala:377
+#: src/classes/compiler.vala:369
 msgid "Generated code:\n"
 msgstr "Vygenerovaný kód:\n"
 
-#: src/classes/debugger.vala:135
+#: src/classes/debugger.vala:95
+msgid "{}\\nError occured on line {}."
+msgstr "{}\\nChyba se vyskytla na řádku {}."
+
+#: src/classes/debugger.vala:102
+msgid "Press enter to close the window"
+msgstr "Stiskněte libovolnou klávesu k zavření okna"
+
+#: src/classes/debugger.vala:161
 msgid "stderr of child process:\n"
 msgstr "stderr podprocesu:\n"
 
-#. We show line numbers indexed from 1 to user
-#: src/classes/debugger.vala:169
-msgid "Error occurred at line "
-msgstr "Chyba se vyskytla na řádku "
-
-#: src/classes/debugger.vala:174
+#: src/classes/debugger.vala:175
 msgid "Program crashed"
 msgstr "Program selhal"
 
@@ -175,20 +178,20 @@ msgstr "Stahuji aktualizační soubor"
 msgid "Update failed"
 msgstr "Aktualizace selhala"
 
-#: src/classes/program-buffer.vala:212
+#: src/classes/program-buffer.vala:227
 #, c-format
 msgid "Cannot load plugin %s."
 msgstr "Nelze načíst plugin %s."
 
-#: src/classes/program-buffer.vala:223
+#: src/classes/program-buffer.vala:248
 msgid "Failed to open the file. Error on line: "
 msgstr "Nepodařilo se načíst program. Chyba je na řádce: "
 
-#: src/classes/program-buffer.vala:242
+#: src/classes/program-buffer.vala:267
 msgid "The file to load contains an unkown command!\n"
 msgstr "Soubor obsahuje neznámý příkaz!\n"
 
-#: src/classes/program-buffer.vala:244
+#: src/classes/program-buffer.vala:269
 msgid ""
 "This might be because of the file was damaged or created by a newer version "
 "of this program.\n"
@@ -198,22 +201,206 @@ msgstr ""
 "verzí programu.\n"
 "ID příkazu: "
 
-#: src/classes/program-buffer.vala:563
+#: src/classes/program-buffer.vala:598
 msgid "Please save the project first."
 msgstr "Nejdříve prosím uložze projekt."
 
-#: src/classes/program-buffer.vala:572
+#: src/classes/program-buffer.vala:607
 msgid "Cannot insert the image: "
 msgstr "Nelze vložit obrázek: "
 
-#: src/main.vala:43
+#: src/main.vala:45
 msgid "Writes compiled program to FILE"
 msgstr "Uloží zkompilovaný program do SOUBORU"
 
-#: src/main.vala:74
+#: src/main.vala:76
 #, c-format
 msgid "Cannot save the output file: %s\n"
 msgstr "Nepodařilo se uložit výsledný soubor: %s\n"
+
+#: src/plugins/0turtle.json:7
+msgid "Go forward"
+msgstr "Popojdi"
+
+#: src/plugins/0turtle.json:8
+msgid "Turn left"
+msgstr "Otočit doleva"
+
+#: src/plugins/0turtle.json:9
+msgid "Turn right"
+msgstr "Otočit doprava"
+
+#: src/plugins/0turtle.json:10
+msgid "Set heading angle"
+msgstr "Nastavit směr"
+
+#: src/plugins/0turtle.json:11
+msgid "Speed"
+msgstr "Rychlost"
+
+#: src/plugins/0turtle.json:12
+msgid "Set position"
+msgstr "Nastavit pozici"
+
+#: src/plugins/0turtle.json:13
+msgid "Set pen color"
+msgstr "Nastav barvu"
+
+#: src/plugins/0turtle.json:14
+msgid "Lift the pen up – no drawing when moving."
+msgstr "Zvednout pero - nekreslit při pohybu"
+
+#: src/plugins/0turtle.json:15
+msgid "Put the pen down – drawing when moving."
+msgstr "Položit pero - kreslit při pohybu"
+
+#: src/plugins/0turtle.json:16
+msgid "Pen properties"
+msgstr "Vlastnosti pera"
+
+#: src/plugins/0turtle.json:17
+msgid "Hide turtle"
+msgstr "Skrýt želvu"
+
+#: src/plugins/0turtle.json:18
+msgid "Show turtle"
+msgstr "Zviditelnit želvu"
+
+#: src/plugins/0turtle.json:19
+msgid "Write text on screen"
+msgstr "Napiš text na obrazovku"
+
+#: src/plugins/0turtle.json:20
+msgid "Begin fill"
+msgstr "Začátek vyplněného obrazce"
+
+#: src/plugins/0turtle.json:21
+msgid "End fill - fill the drawn shape"
+msgstr "Konec vyplněného obrazce"
+
+#: src/plugins/0turtle.json:22
+msgid "Last loaded scene"
+msgstr "Poslední načtená scéna"
+
+#: src/plugins/0turtle.json:23
+msgid "Clear turtle screen"
+msgstr "Smazat obrazovku želvy"
+
+#: src/plugins/0turtle.json:24
+msgid "Get or set the color of the screen"
+msgstr "Získat nebo nastavit barvu obrazovky"
+
+#: src/plugins/0turtle.json:25
+msgid "Get or set the background picture of the screen"
+msgstr "Získat nebo nastavit obrázek pozadí obrazovky"
+
+#: src/plugins/0turtle.json:26
+msgid "Load scene (file)"
+msgstr "Načíst scénu (soubor)"
+
+#: src/plugins/0turtle.json:27
+msgid "Image file"
+msgstr "Obrázek"
+
+#: src/plugins/0turtle.json:28
+msgid "Set turtle shape"
+msgstr "Nastav vzhled želvy"
+
+#: src/plugins/0turtle.json:29
+msgid "Create new turtle"
+msgstr "Vytvořit novou želvu"
+
+#: src/plugins/0turtle.json:30
+msgid "Get the predefined turtle object"
+msgstr "Získat objekt předdefinované želvy"
+
+#: src/plugins/0turtle.json:31
+msgid "Place image at the position of the turtle"
+msgstr "Vyčarovat obrázek na pozici želvy"
+
+#: src/plugins/0turtle.json:32
+msgid "Sleep"
+msgstr "Čekej"
+
+#: src/plugins/0turtle.json:33
+msgid ""
+"Connect a function to handle collision (in circle collider of specified "
+"radius) between two turtles"
+msgstr ""
+"Připojit funkci pro detekování kolize (v kruhovém collideru se zadaným "
+"poloměrem) mezi dvěma želvami."
+
+#: src/plugins/0turtle.json:34
+msgid ""
+"Connect a function to handle collision (in rectangle collider of specified "
+"size) between two turtles"
+msgstr ""
+"Připojit funkci pro detekování kolize (v obdélníkovém collideru se zadanými "
+"rozměry) mezi dvěma želvami."
+
+#: src/plugins/0turtle.json:35
+msgid "Undo the last turtle action"
+msgstr "Vrátit poslední akci želvy"
+
+#: src/plugins/0turtle.json:36
+msgid "Circle"
+msgstr "Kružnice"
+
+#: src/plugins/0turtle.json:37
+msgid "Turbo mode"
+msgstr "Turbo režim"
+
+#: src/plugins/0turtle.json:38
+msgid "Camera properties"
+msgstr "Vlastnosti kamery"
+
+#: src/plugins/0turtle.json:39
+msgid "Connect a function to handle key presses"
+msgstr "Připojte funkci pro zachycení stisků specifikované klávesy"
+
+#: src/plugins/0turtle.json:40
+msgid "Call a function after n miliseconds"
+msgstr "Zavolat funkci po n milisekundách"
+
+#: src/plugins/0turtle.json:41
+msgid "Number input"
+msgstr "Číselný vstup"
+
+#: src/plugins/0turtle.json:42
+msgid "String input"
+msgstr "Řetězcový vstup"
+
+#: src/plugins/0turtle.json:43
+msgid "Connect a function to handle mouse clicks"
+msgstr "Připojte funkci pro zachycení klikání myší"
+
+#: src/plugins/0turtle.json:248
+msgid "Key press"
+msgstr "Stisk klávesy"
+
+#: src/plugins/0turtle.json:254
+msgid "Specified key press"
+msgstr "Stisk specifikované klávesy"
+
+#: src/plugins/0turtle.json:260
+msgid "Mouse click"
+msgstr "Kliknutí myši"
+
+#: src/plugins/0turtle.json:266
+msgid "Mouse click on a turtle"
+msgstr "Kliknutí myši na želvu"
+
+#: src/plugins/0turtle.json:272
+msgid "Timer"
+msgstr "Časovač"
+
+#: src/plugins/0turtle.json:278
+msgid "Circular collision"
+msgstr "Kruhová kolize"
+
+#: src/plugins/0turtle.json:284
+msgid "Rectangle collision"
+msgstr "Obdélníková kolize"
 
 #: src/plugins/base.json:6
 msgid "New line (Enter)"
@@ -228,568 +415,408 @@ msgid "Comment"
 msgstr "Komentář"
 
 #: src/plugins/base.json:9
-msgid "Go forward"
-msgstr "Popojdi"
-
-#: src/plugins/base.json:10
-msgid "Turn left"
-msgstr "Otočit doleva"
-
-#: src/plugins/base.json:11
-msgid "Turn right"
-msgstr "Otočit doprava"
-
-#: src/plugins/base.json:12
-msgid "Set heading angle"
-msgstr "Nastavit směr"
-
-#: src/plugins/base.json:13
-msgid "Speed"
-msgstr "Rychlost"
-
-#: src/plugins/base.json:14
-msgid "Number"
-msgstr "Číslo"
-
-#: src/plugins/base.json:15 src/widgets/programview.ui:649
-msgid "String"
-msgstr "Řetězec"
-
-#: src/plugins/base.json:16
-msgid "Length of (string, list etc)"
-msgstr "Délka objektu (řetězec, list atd.)"
-
-#: src/plugins/base.json:17
-msgid "Set position"
-msgstr "Nastavit pozici"
-
-#: src/plugins/base.json:18
-msgid "Set pen color"
-msgstr "Nastav barvu"
-
-#: src/plugins/base.json:19
-msgid "Lift the pen up – no drawing when moving."
-msgstr "Zvednout pero - nekreslit při pohybu"
-
-#: src/plugins/base.json:20
-msgid "Put the pen down – drawing when moving."
-msgstr "Položit pero - kreslit při pohybu"
-
-#: src/plugins/base.json:21
-msgid "Pen properties"
-msgstr "Vlastnosti pera"
-
-#: src/plugins/base.json:22
-msgid "Left parenthesis"
-msgstr "Levá závorka"
-
-#: src/plugins/base.json:23 src/plugins/base.json:89
 msgid "Argument separator (Comma)"
 msgstr "Oddělovač argumentů (čárka)"
 
-#: src/plugins/base.json:24
+#: src/plugins/base.json:10
+msgid "Left parenthesis"
+msgstr "Levá závorka"
+
+#: src/plugins/base.json:11
 msgid "Right parenthesis"
 msgstr "Pravá závorka"
 
-#: src/plugins/base.json:25
-msgid "Hide turtle"
-msgstr "Skrýt želvu"
-
-#: src/plugins/base.json:26
-msgid "Show turtle"
-msgstr "Zviditelnit želvu"
-
-#: src/plugins/base.json:27
-msgid "Write text on screen"
-msgstr "Napiš text na obrazovku"
-
-#: src/plugins/base.json:28
-msgid "Begin fill"
-msgstr "Začátek vyplněného obrazce"
-
-#: src/plugins/base.json:29
-msgid "End fill - fill the drawn shape"
-msgstr "Konec vyplněného obrazce"
-
-#: src/plugins/base.json:30
-msgid "Clear turtle screen"
-msgstr "Smazat obrazovku želvy"
-
-#: src/plugins/base.json:31
-msgid "Get or set the color of the screen"
-msgstr "Získat nebo nastavit barvu obrazovky"
-
-#: src/plugins/base.json:32
-msgid "Get or set the background picture of the screen"
-msgstr "Získat nebo nastavit obrázek pozadí obrazovky"
-
-#: src/plugins/base.json:33
-msgid "Load scene (file)"
-msgstr "Načíst scénu (soubor)"
-
-#: src/plugins/base.json:34
-msgid "Image file"
-msgstr "Obrázek"
-
-#: src/plugins/base.json:35
-msgid "Set turtle shape"
-msgstr "Nastav vzhled želvy"
-
-#: src/plugins/base.json:36
-msgid "Create new turtle"
-msgstr "Vytvořit novou želvu"
-
-#: src/plugins/base.json:37
-msgid "Get the predefined turtle object"
-msgstr "Získat objekt předdefinované želvy"
-
-#: src/plugins/base.json:38
-msgid "Place image at the position of the turtle"
-msgstr "Vyčarovat obrázek na pozici želvy"
-
-#: src/plugins/base.json:39
-msgid "Sleep"
-msgstr "Čekej"
-
-#: src/plugins/base.json:40
-msgid ""
-"Connect a function to handle collision (in circle collider of specified "
-"radius) between two turtles"
-msgstr ""
-"Připojit funkci pro detekování kolize (v kruhovém collideru se zadaným "
-"poloměrem) mezi dvěma želvami."
-
-#: src/plugins/base.json:41
-msgid ""
-"Connect a function to handle collision (in rectangle collider of specified "
-"size) between two turtles"
-msgstr ""
-"Připojit funkci pro detekování kolize (v obdélníkovém collideru se zadanými "
-"rozměry) mezi dvěma želvami."
-
-#: src/plugins/base.json:42
-msgid "Undo the last turtle action"
-msgstr "Vrátit poslední akci želvy"
-
-#: src/plugins/base.json:43
-msgid "Circle"
-msgstr "Kružnice"
-
-#: src/plugins/base.json:44
-msgid "Turbo mode"
-msgstr "Turbo režim"
-
-#: src/plugins/base.json:45
-msgid "Camera properties"
-msgstr "Vlastnosti kamery"
-
-#: src/plugins/base.json:46
-msgid "Connect a function to handle key presses"
-msgstr "Připojte funkci pro zachycení stisků specifikované klávesy"
-
-#: src/plugins/base.json:47
-msgid "Call a function after n miliseconds"
-msgstr "Zavolat funkci po n milisekundách"
-
-#: src/plugins/base.json:48
-msgid "Number input"
-msgstr "Číselný vstup"
-
-#: src/plugins/base.json:49
-msgid "String input"
-msgstr "Řetězcový vstup"
-
-#: src/plugins/base.json:50
-msgid "Connect a function to handle mouse clicks"
-msgstr "Připojte funkci pro zachycení klikání myší"
-
-#: src/plugins/base.json:51
-msgid "Exit the program"
-msgstr "Ukončit program"
-
-#: src/plugins/base.json:57
-msgid "East (0°)"
-msgstr "Východ (0°)"
-
-#: src/plugins/base.json:58
-msgid "North (90°)"
-msgstr "Sever (90°)"
-
-#: src/plugins/base.json:59
-msgid "West (180°)"
-msgstr "Západ (180°)"
-
-#: src/plugins/base.json:60
-msgid "South (270°)"
-msgstr "Jih (270°)"
-
-#: src/plugins/base.json:61
-msgid "Pi (3.14)"
-msgstr "Pi (3.14)"
-
-#: src/plugins/base.json:62
-msgid "Get x coordinate"
-msgstr "Pozice X"
-
-#: src/plugins/base.json:63
-msgid "Get y coordinate"
-msgstr "Pozice Y"
-
-#: src/plugins/base.json:64
-msgid "Return True if turtle is shown."
-msgstr "Vrátí pravdu (True), pokud se želva viditelná."
-
-#: src/plugins/base.json:65
-msgid "Sine"
-msgstr "Sinus"
-
-#: src/plugins/base.json:66
-msgid "Cosine"
-msgstr "Cosinus"
-
-#: src/plugins/base.json:67
-msgid "Tangent"
-msgstr "Tangens"
-
-#: src/plugins/base.json:68
-msgid "Absolute value"
-msgstr "Absolutní hodnota"
-
-#: src/plugins/base.json:69
-msgid "Convert angle from degrees to radians."
-msgstr "Převede úhel ze stupňů na radiány."
-
-#: src/plugins/base.json:70
-msgid "Convert angle from radians to degrees."
-msgstr "Převede úhel z radiánů na stupně"
-
-#: src/plugins/base.json:71
-msgid "True"
-msgstr "True (Pravda)"
-
-#: src/plugins/base.json:72
-msgid "False"
-msgstr "Nepravda"
-
-#: src/plugins/base.json:73
-msgid "Round a number"
-msgstr "Zaokrouhlit číslo"
-
-#: src/plugins/base.json:74
-msgid "Floor"
-msgstr "Nejbližší nižší celé číslo"
-
-#: src/plugins/base.json:75
-msgid "Ceil"
-msgstr "Nejbližší vyšší celé číslo"
-
-#: src/plugins/base.json:76
-msgid "Returns square root of n. Use ** for int powers."
-msgstr "Vrátí druhou mocninu n. Pro ostatní mocniny použijte **"
-
-#: src/plugins/base.json:77
-msgid "Returns the lowest value"
-msgstr "Nejmenší hodnota"
-
-#: src/plugins/base.json:78
-msgid "Returns the highest value"
-msgstr "Největší hodnota"
-
-#: src/plugins/base.json:79
-msgid "Color (property or editable)"
-msgstr "Barva (vlastnost nebo upravitelná hodnota)"
-
-#: src/plugins/base.json:80
-msgid "Font (property or editable)"
-msgstr "Písmo (vlastnost nebo upravitelná hodnota)"
-
-#: src/plugins/base.json:81
-msgid "Key"
-msgstr "Klávesa"
-
-#: src/plugins/base.json:82
-msgid "Last loaded scene"
-msgstr "Poslední načtená scéna"
-
-#: src/plugins/base.json:88
-msgid "Left square bracket"
-msgstr "Levá hranatá závorka"
-
-#: src/plugins/base.json:90
-msgid "Right square bracket"
-msgstr "Pravá hranatá závorka"
-
-#: src/plugins/base.json:91
-msgid "Delete an object"
-msgstr "Smazat objekt"
-
-#: src/plugins/base.json:92
-msgid "Append an item to a list"
-msgstr "Přidat položku"
-
-#: src/plugins/base.json:93
-msgid "Insert an item to a list"
-msgstr "Vložit položku"
-
-#: src/plugins/base.json:94
-msgid "Clear list"
-msgstr "Vymazat list"
-
-#: src/plugins/base.json:95
-msgid "Finds index of the occurence of an item in a list or in a string"
-msgstr "Najde index výskytu položky v listu nebo řetězci"
-
-#: src/plugins/base.json:96
-msgid "Converts a string into lower case"
-msgstr "Převede řetězec na malá písmena"
-
-#: src/plugins/base.json:97
-msgid "Converts a string into upper case"
-msgstr "Převede řetězec na velká písmena"
-
-#: src/plugins/base.json:98
-msgid "Splits the string at the specified separator, and returns a list"
-msgstr "Rozdělí řetězec podle oddělovače a vrátí list"
-
-#: src/plugins/base.json:99
-msgid "Replaces a specified phrase with another specified phrase"
-msgstr "Nahradí jeden řetězec za druhý"
-
-#: src/plugins/base.json:100
+#: src/plugins/base.json:12
 msgid "If statement"
 msgstr "Když"
 
-#: src/plugins/base.json:101
+#: src/plugins/base.json:13
 msgid "Else"
 msgstr "Jinak"
 
-#: src/plugins/base.json:102
+#: src/plugins/base.json:14
 msgid "Begin block of commands"
 msgstr "Začátek bloku příkazů"
 
-#: src/plugins/base.json:103
-msgid "Equals"
-msgstr "se rovná"
-
-#: src/plugins/base.json:104
-msgid "Not equals"
-msgstr "se nerovná"
-
-#: src/plugins/base.json:105
-msgid "is less than"
-msgstr "je menší než"
-
-#: src/plugins/base.json:106
-msgid "is greater than"
-msgstr "je větší než"
-
-#: src/plugins/base.json:107
+#: src/plugins/base.json:15
 msgid "and"
 msgstr "a zároveň"
 
-#: src/plugins/base.json:108
+#: src/plugins/base.json:16
 msgid "or"
 msgstr "nebo"
 
-#: src/plugins/base.json:109
+#: src/plugins/base.json:17
 msgid "negation"
 msgstr "negace"
 
-#: src/plugins/base.json:110
-msgid "Define a method"
-msgstr "Definice metody"
+#: src/plugins/base.json:18
+msgid "Equals"
+msgstr "se rovná"
 
-#: src/plugins/base.json:111
-msgid "Return a value"
-msgstr "Vrátit hodnotu"
+#: src/plugins/base.json:19
+msgid "Not equals"
+msgstr "se nerovná"
 
-#: src/plugins/base.json:112
+#: src/plugins/base.json:20
+msgid "is less than"
+msgstr "je menší než"
+
+#: src/plugins/base.json:21
+msgid "is greater than"
+msgstr "je větší než"
+
+#: src/plugins/base.json:22
 msgid "Repeat block of commands"
 msgstr "Opakovat blok příkazů"
 
-#: src/plugins/base.json:113
+#: src/plugins/base.json:23
 msgid "For loop"
 msgstr "Cyklus For"
 
-#: src/plugins/base.json:114
+#: src/plugins/base.json:24
 msgid "Is item in a list? / For all items in a collection."
 msgstr "Je položka v listu? / Pro všechny položky v kolekci."
 
-#: src/plugins/base.json:115
+#: src/plugins/base.json:25
 msgid "Repeat while the condition is true"
 msgstr "Opakovat dokud je podmínka pravdivá"
 
-#: src/plugins/base.json:116
+#: src/plugins/base.json:26
 msgid "Break out of a loop"
 msgstr "Přerušit cyklus"
 
-#: src/plugins/base.json:117
+#: src/plugins/base.json:27
 msgid "Continue with next iteration of a loop"
 msgstr "Pokračovat další iterací cyklu (continue)"
 
-#: src/plugins/base.json:118
-msgid "Object"
-msgstr "Objekt"
+#: src/plugins/base.json:28
+msgid "Define a method"
+msgstr "Definice metody"
 
-#: src/plugins/base.json:119
+#: src/plugins/base.json:29
+msgid "Return a value"
+msgstr "Vrátit hodnotu"
+
+#: src/plugins/base.json:30
+msgid "Left square bracket"
+msgstr "Levá hranatá závorka"
+
+#: src/plugins/base.json:31
+msgid "Right square bracket"
+msgstr "Pravá hranatá závorka"
+
+#: src/plugins/base.json:32
+msgid "Length of (string, list etc)"
+msgstr "Délka objektu (řetězec, list atd.)"
+
+#: src/plugins/base.json:33
+msgid "Delete an object"
+msgstr "Smazat objekt"
+
+#: src/plugins/base.json:34
+msgid "Append an item to a list"
+msgstr "Přidat položku"
+
+#: src/plugins/base.json:35
+msgid "Insert an item to a list"
+msgstr "Vložit položku"
+
+#: src/plugins/base.json:36
+msgid "Clear list"
+msgstr "Vymazat list"
+
+#: src/plugins/base.json:37
+msgid "Finds index of the occurence of an item in a list or in a string"
+msgstr "Najde index výskytu položky v listu nebo řetězci"
+
+#: src/plugins/base.json:38
+msgid "Converts a string into lower case"
+msgstr "Převede řetězec na malá písmena"
+
+#: src/plugins/base.json:39
+msgid "Converts a string into upper case"
+msgstr "Převede řetězec na velká písmena"
+
+#: src/plugins/base.json:40
+msgid "Splits the string at the specified separator, and returns a list"
+msgstr "Rozdělí řetězec podle oddělovače a vrátí list"
+
+#: src/plugins/base.json:41
+msgid "Replaces a specified phrase with another specified phrase"
+msgstr "Nahradí jeden řetězec za druhý"
+
+#: src/plugins/base.json:42
 msgid "Use variable as a global one"
 msgstr "Použít název jako globální proměnnou"
 
-#: src/plugins/base.json:120
+#: src/plugins/base.json:43
 msgid "Assign value to a variable"
 msgstr "Přiřadit hodnotu do proměnné"
 
-#: src/plugins/base.json:121
+#: src/plugins/base.json:44
 msgid "Increase value by"
 msgstr "Zvýšit hodnotu proměnné o"
 
-#: src/plugins/base.json:122
+#: src/plugins/base.json:45
 msgid "Decrease value by"
 msgstr "Snížit hodnotu proměnné o"
 
-#: src/plugins/base.json:123
+#: src/plugins/base.json:46
 msgid "Dot (use to access properties of an object)"
 msgstr "Tečka (přístup k vlastnostem objektu)"
 
-#: src/plugins/base.json:124
-msgid "Plus"
-msgstr "Plus"
-
-#: src/plugins/base.json:125
-msgid "Minus"
-msgstr "Mínus"
-
-#: src/plugins/base.json:126
-msgid "Multiply"
-msgstr "Krát"
-
-#: src/plugins/base.json:127
-msgid "Divide"
-msgstr "Děleno"
-
-#: src/plugins/base.json:128
-msgid "Modulo"
-msgstr "Zbytek po dělení (modulo)"
-
-#: src/plugins/base.json:129
-msgid "Type conversion"
-msgstr "Konverze typu"
-
-#: src/plugins/base.json:130
-msgid "Direct Python code"
-msgstr "Přímý Python kód"
-
-#: src/plugins/base.json:131
-msgid "As type"
-msgstr "Jako typ"
-
-#: src/plugins/base.json:132
-msgid "Random number"
-msgstr "Náhodné číslo"
-
-#: src/plugins/base.json:133
-msgid "Return list of numbers in specified range"
-msgstr "Vrátí list čísel v zadaném rozsahu"
-
-#: src/plugins/base.json:134
-msgid "Converts a character to an int value"
-msgstr "Převede znak na číslo"
-
-#: src/plugins/base.json:135
-msgid "Converts an int value to a character"
-msgstr "Převede číslo na znak"
-
-#: src/plugins/base.json:136
+#: src/plugins/base.json:47
 msgid "Try"
 msgstr "Zkus"
 
-#: src/plugins/base.json:137
+#: src/plugins/base.json:48
 msgid "Except"
 msgstr "Očekávej výjimku"
 
-#: src/plugins/base.json:138
+#: src/plugins/base.json:49
 msgid "Raise exception"
 msgstr "Vyvovat výjimku"
 
-#: src/plugins/base.json:144
+#: src/plugins/base.json:50
+msgid "Plus"
+msgstr "Plus"
+
+#: src/plugins/base.json:51
+msgid "Minus"
+msgstr "Mínus"
+
+#: src/plugins/base.json:52
+msgid "Multiply"
+msgstr "Krát"
+
+#: src/plugins/base.json:53
+msgid "Divide"
+msgstr "Děleno"
+
+#: src/plugins/base.json:54
+msgid "Modulo"
+msgstr "Zbytek po dělení (modulo)"
+
+#: src/plugins/base.json:55
+msgid "Type conversion"
+msgstr "Konverze typu"
+
+#: src/plugins/base.json:56
+msgid "Direct Python code"
+msgstr "Přímý Python kód"
+
+#: src/plugins/base.json:57
+msgid "As type"
+msgstr "Jako typ"
+
+#: src/plugins/base.json:58
+msgid "Random number"
+msgstr "Náhodné číslo"
+
+#: src/plugins/base.json:59
+msgid "Return list of numbers in specified range"
+msgstr "Vrátí list čísel v zadaném rozsahu"
+
+#: src/plugins/base.json:60
+msgid "Converts a character to an int value"
+msgstr "Převede znak na číslo"
+
+#: src/plugins/base.json:61
+msgid "Converts an int value to a character"
+msgstr "Převede číslo na znak"
+
+#: src/plugins/base.json:62
+msgid "Create multidimensional list"
+msgstr "Vytvořit vícerozměrný list"
+
+#: src/plugins/base.json:63
+msgid "Exit the program"
+msgstr "Ukončit program"
+
+#: src/plugins/base.json:69
+msgid "East (0°)"
+msgstr "Východ (0°)"
+
+#: src/plugins/base.json:70
+msgid "North (90°)"
+msgstr "Sever (90°)"
+
+#: src/plugins/base.json:71
+msgid "West (180°)"
+msgstr "Západ (180°)"
+
+#: src/plugins/base.json:72
+msgid "South (270°)"
+msgstr "Jih (270°)"
+
+#: src/plugins/base.json:73
+msgid "Pi (3.14)"
+msgstr "Pi (3.14)"
+
+#: src/plugins/base.json:74
+msgid "Get x coordinate"
+msgstr "Pozice X"
+
+#: src/plugins/base.json:75
+msgid "Get y coordinate"
+msgstr "Pozice Y"
+
+#: src/plugins/base.json:76
+msgid "Return True if turtle is shown."
+msgstr "Vrátí pravdu (True), pokud se želva viditelná."
+
+#: src/plugins/base.json:77
+msgid "Sine"
+msgstr "Sinus"
+
+#: src/plugins/base.json:78
+msgid "Cosine"
+msgstr "Cosinus"
+
+#: src/plugins/base.json:79
+msgid "Tangent"
+msgstr "Tangens"
+
+#: src/plugins/base.json:80
+msgid "Absolute value"
+msgstr "Absolutní hodnota"
+
+#: src/plugins/base.json:81
+msgid "Convert angle from degrees to radians."
+msgstr "Převede úhel ze stupňů na radiány."
+
+#: src/plugins/base.json:82
+msgid "Convert angle from radians to degrees."
+msgstr "Převede úhel z radiánů na stupně"
+
+#: src/plugins/base.json:83
+msgid "True"
+msgstr "True (Pravda)"
+
+#: src/plugins/base.json:84
+msgid "False"
+msgstr "Nepravda"
+
+#: src/plugins/base.json:85
+msgid "Round a number"
+msgstr "Zaokrouhlit číslo"
+
+#: src/plugins/base.json:86
+msgid "Floor"
+msgstr "Nejbližší nižší celé číslo"
+
+#: src/plugins/base.json:87
+msgid "Ceil"
+msgstr "Nejbližší vyšší celé číslo"
+
+#: src/plugins/base.json:88
+msgid "Returns square root of n. Use ** for int powers."
+msgstr "Vrátí druhou mocninu n. Pro ostatní mocniny použijte **"
+
+#: src/plugins/base.json:89
+msgid "Returns the lowest value"
+msgstr "Nejmenší hodnota"
+
+#: src/plugins/base.json:90
+msgid "Returns the highest value"
+msgstr "Největší hodnota"
+
+#: src/plugins/base.json:91
+msgid "Color (property or editable)"
+msgstr "Barva (vlastnost nebo upravitelná hodnota)"
+
+#: src/plugins/base.json:92
+msgid "Font (property or editable)"
+msgstr "Písmo (vlastnost nebo upravitelná hodnota)"
+
+#: src/plugins/base.json:93
+msgid "Number"
+msgstr "Číslo"
+
+#: src/plugins/base.json:94 src/widgets/programview.ui:649
+msgid "String"
+msgstr "Řetězec"
+
+#: src/plugins/base.json:95
+msgid "Object"
+msgstr "Objekt"
+
+#: src/plugins/base.json:96 src/windows/functions-dialog.ui:143
+msgid "None"
+msgstr "Nic"
+
+#: src/plugins/base.json:97
+msgid "Key"
+msgstr "Klávesa"
+
+#: src/plugins/base.json:103
 msgid "Read all lines of a file"
 msgstr "Přečti všechny řádky ze souboru"
 
-#: src/plugins/base.json:145
+#: src/plugins/base.json:104
 msgid "Write lines to a file"
 msgstr "Zapiš řádky do souboru"
 
-#: src/plugins/base.json:146
+#: src/plugins/base.json:105
 msgid "File dialog"
 msgstr "Otevře dialog pro výběr/uložení souboru"
 
-#: src/plugins/base.json:147
+#: src/plugins/base.json:106
 msgid "Check file exists"
 msgstr "Zjistit existenci souboru"
 
-#: src/plugins/base.json:148
+#: src/plugins/base.json:107
 msgid "Check directory exists"
 msgstr "Zjistit existenci složky"
 
-#: src/plugins/base.json:149
+#: src/plugins/base.json:108
 msgid "Delete file or directory"
 msgstr "Smaž soubor nebo složku"
 
-#: src/plugins/base.json:150
+#: src/plugins/base.json:109
 msgid "Get files in DIRECTORY"
 msgstr "Získat soubory ve SLOŽCE"
 
-#: src/plugins/base.json:151
+#: src/plugins/base.json:110
 msgid "Get subdirs in DIRECTORY"
 msgstr "Získat podsložky ve SLOŽCE"
 
-#: src/plugins/base.json:152
+#: src/plugins/base.json:111
 msgid "Get parent directory / the directory the item is located in"
 msgstr "Získat nadřazený adresář / adresář ve kterém se položka nachází"
 
-#: src/plugins/base.json:153
+#: src/plugins/base.json:112
 msgid "Get file name from path"
 msgstr "Získat název souboru z cesty"
 
-#: src/plugins/base.json:154
+#: src/plugins/base.json:113
 msgid "Get current timestamp"
 msgstr "Získat aktuální čas"
 
-#: src/plugins/base.json:155
+#: src/plugins/base.json:114
 msgid "Convert timestamp to string"
 msgstr "Převést čas na řetězec"
 
-#: src/plugins/base.json:156
+#: src/plugins/base.json:115
 msgid "Convert string to timestamp"
 msgstr "Převést řetězec na čas"
 
-#: src/plugins/base.json:440
-msgid "Key press"
-msgstr "Stisk klávesy"
+#: src/plugins/console.json:7
+msgid "Print to console"
+msgstr "Napiš do konzole"
 
-#: src/plugins/base.json:446
-msgid "Specified key press"
-msgstr "Stisk specifikované klávesy"
+#: src/plugins/console.json:8
+msgid "Input from console"
+msgstr "Vstup z konzole"
 
-#: src/plugins/base.json:452
-msgid "Mouse click"
-msgstr "Kliknutí myši"
+#: src/plugins/console.json:9
+msgid "Print to console without newline"
+msgstr "Napsat do konzole bez ukončení novou řádkou"
 
-#: src/plugins/base.json:458
-msgid "Mouse click on a turtle"
-msgstr "Kliknutí myši na želvu"
-
-#: src/plugins/base.json:464
-msgid "Timer"
-msgstr "Časovač"
-
-#: src/plugins/base.json:470
-msgid "Circular collision"
-msgstr "Kruhová kolize"
-
-#: src/plugins/base.json:476
-msgid "Rectangle collision"
-msgstr "Obdélníková kolize"
+#: src/plugins/console.json:10
+msgid "Print to stderr"
+msgstr "Výstup do stderr"
 
 #: src/plugins/mm.json:7
 msgid "Create sound player for a file"
@@ -1027,10 +1054,6 @@ msgstr "Jméno:"
 msgid "Connected event:"
 msgstr "Připojená událost:"
 
-#: src/windows/functions-dialog.ui:143
-msgid "None"
-msgstr "Nic"
-
 #: src/windows/functions-dialog.vala:182
 msgid "Use this function"
 msgstr "Použít tuto funkci"
@@ -1039,35 +1062,39 @@ msgstr "Použít tuto funkci"
 msgid "Project settings"
 msgstr "Nastavení projektu"
 
-#: src/windows/program-settings.ui:47
+#: src/windows/program-settings.ui:44
 msgid "Additional commands"
 msgstr "Přídavné příkazy (doplňky)"
 
-#: src/windows/program-settings.ui:76
+#: src/windows/program-settings.ui:73
 msgid "Open plugins folder"
 msgstr "Otevřít složku s doplňky"
 
 #: src/windows/program-settings.ui:93
+msgid "Run the program in IDLE"
+msgstr "Spouštět program v IDLE"
+
+#: src/windows/program-settings.ui:126
 msgid "Statistics"
 msgstr "Statistiky"
 
-#: src/windows/program-settings.ui:142
+#: src/windows/program-settings.ui:178
 msgid "Cannot open plugins folder"
 msgstr "Nelze otevřít složku s doplňky"
 
-#: src/windows/program-settings.ui:190
+#: src/windows/program-settings.ui:223
 msgid "Please open it manually at following address:"
 msgstr "Otevřete ji prosím manuálně (adresa):"
 
-#: src/windows/program-settings.vala:78
+#: src/windows/program-settings.vala:84
 msgid "Failed to load list of additional modules"
 msgstr "Selhalo načtení listu přídavných příkazů"
 
-#: src/windows/program-settings.vala:98
+#: src/windows/program-settings.vala:104
 msgid "Icon count: "
 msgstr "Počet ikon: "
 
-#: src/windows/program-settings.vala:99
+#: src/windows/program-settings.vala:105
 msgid "Icon count without whitespace and comments: "
 msgstr "Počet ikon bez bílých znaků a komentářů: "
 
@@ -1088,7 +1115,7 @@ msgid "Sprites"
 msgstr "Sprity"
 
 #: src/windows/scene-editor-window.ui:293 src/windows/window.ui:280
-#: src/windows/window.vala:351
+#: src/windows/window.vala:346
 msgid "Save"
 msgstr "Uložit"
 
@@ -1156,20 +1183,20 @@ msgstr "Nelze uložit scénu"
 msgid "Would you like to save your changes before closing the scene?"
 msgstr "Přejete si uložit změny před zavřením scény?"
 
-#: src/windows/scene-editor-window.vala:437 src/windows/window.vala:799
+#: src/windows/scene-editor-window.vala:437 src/windows/window.vala:796
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr "Jinak budou neuložené změny ztraceny!"
 
-#: src/windows/scene-editor-window.vala:439 src/windows/window.vala:801
+#: src/windows/scene-editor-window.vala:439 src/windows/window.vala:798
 msgid "Yes"
 msgstr "Ano"
 
-#: src/windows/scene-editor-window.vala:440 src/windows/window.vala:802
+#: src/windows/scene-editor-window.vala:440 src/windows/window.vala:799
 msgid "No"
 msgstr "Ne"
 
-#: src/windows/scene-editor-window.vala:441 src/windows/window.vala:352
-#: src/windows/window.vala:386 src/windows/window.vala:803
+#: src/windows/scene-editor-window.vala:441 src/windows/window.vala:347
+#: src/windows/window.vala:381 src/windows/window.vala:800
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -1210,95 +1237,56 @@ msgstr "Otevřít program"
 msgid "Drop items here to delete them"
 msgstr "Sem přetáhněte příkazy ke smazání"
 
-#: src/windows/window.vala:339
+#: src/windows/window.vala:334
 msgid "Failed to save the program"
 msgstr "Nepodařilo se uložit program"
 
-#: src/windows/window.vala:344
+#: src/windows/window.vala:339
 msgid "Project saved."
 msgstr "Projekt uložen."
 
-#: src/windows/window.vala:349 src/windows/window.vala:354
-#: src/windows/window.vala:383 src/windows/window.vala:388
+#: src/windows/window.vala:344 src/windows/window.vala:349
+#: src/windows/window.vala:378 src/windows/window.vala:383
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/windows/window.vala:361 src/windows/window.vala:395
+#: src/windows/window.vala:356 src/windows/window.vala:390
 msgid "Turtlico project (*.tcp)"
 msgstr "Projekt Turtlico (*.tcp)"
 
-#: src/windows/window.vala:376
+#: src/windows/window.vala:371
 msgid "Program saved."
 msgstr "Program uložen."
 
-#: src/windows/window.vala:385
+#: src/windows/window.vala:380
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/windows/window.vala:437
+#: src/windows/window.vala:432
 msgid "Would you really like to apply these changes?"
 msgstr "Opravdu chcete aplikovat tyto změny?"
 
-#: src/windows/window.vala:439
+#: src/windows/window.vala:434
 msgid "The program contains commands that are only available from a plugin."
 msgstr ""
 "Program obsahuje příkazy, které jsou dostupné pouze z přídavného modulu."
 
-#: src/windows/window.vala:440
+#: src/windows/window.vala:435
 msgid "Unavailable commands will be removed."
 msgstr "Nedostupné příkazy budou odstraněny."
 
-#: src/windows/window.vala:498
+#: src/windows/window.vala:493
 msgid "Please save the program before opening the scene editor."
 msgstr "Uložte prosím program před otevřením editoru scén."
 
-#: src/windows/window.vala:528
+#: src/windows/window.vala:523
 msgid "Would you like to continue loading anyway and ignore further errors?"
 msgstr "Přejete si pokračovat v načítání a ignorovat další chyby?"
 
-#: src/windows/window.vala:798
+#: src/windows/window.vala:795
 msgid "Would you like to save your changes before closing the program?"
 msgstr "Přereje si uložit změny před zavřením programu?"
 
-#: src/windows/window.vala:819
+#: src/windows/window.vala:816
 msgid "Unnamed"
 msgstr "Bez názvu"
-
-#~ msgid "East"
-#~ msgstr "Východ"
-
-#~ msgid "North"
-#~ msgstr "Sever"
-
-#~ msgid "West"
-#~ msgstr "Západ"
-
-#~ msgid "South"
-#~ msgstr "Jih"
-
-#, c-format
-#~ msgid "Faile to load image '%s'"
-#~ msgstr "Nelze načíst obrázek '%s'"
-
-#~ msgid "Sleep n seconds (freezes window)"
-#~ msgstr "Spi n sekund (zmrazí okno)"
-
-#~ msgid "Camera properties (x, y, [width], [height])"
-#~ msgstr "Nastavení kamery (x, y, [šířka], [výška])"
-
-#~ msgid "Application settings"
-#~ msgstr "Nastavení aplikace"
-
-#~ msgid "Failed to open the program"
-#~ msgstr "Nepodařilo se otevřít program"
-
-#, fuzzy
-#~ msgid "Added automatic indentation support."
-#~ msgstr "Automatické odsazování"
-
-#, fuzzy
-#~ msgid "Added support for commenting blocks of commands."
-#~ msgstr "Opakovat blok příkazů"
-
-#~ msgid "stdout of child process:\n"
-#~ msgstr "stdout podprocesu:\n"
