@@ -60,6 +60,9 @@ namespace Turtlico {
         [GtkChild]
         Gtk.AboutDialog about_dialog;
 
+        [GtkChild]
+        Gtk.Button scene_editor_btn;
+
         public Compiler compiler; // Initialized in load_commands
         Debugger debugger = new Debugger ();
         SearchWidget search_widget;
@@ -669,6 +672,8 @@ namespace Turtlico {
             rb.clicked ();
             rb = (Gtk.RadioButton)categories_box.get_children ().nth_data (0);
             rb.clicked ();
+
+            scene_editor_btn.visible = programview.buffer.enabled_plugins.contains ("r:0turtle.json");
         }
 
         void msg (string text, string secondary_text = "", Gtk.MessageType type = Gtk.MessageType.INFO) {
