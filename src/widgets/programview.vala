@@ -114,6 +114,7 @@ namespace Turtlico {
         // Render
         Pango.FontDescription font = new Pango.FontDescription ();
         Pango.FontDescription small_font = new Pango.FontDescription ();
+        Gdk.RGBA color_cell;
         Gdk.RGBA color_high_contrast_cell;
         Gdk.RGBA color_black;
 
@@ -137,6 +138,7 @@ namespace Turtlico {
             small_font.set_family ("Monospace");
             small_font.set_weight (Pango.Weight.THIN);
             small_font.set_size (9 * Pango.SCALE);
+            color_cell = style_context.get_color (Gtk.StateFlags.ACTIVE);
             color_high_contrast_cell.parse ("rgb(50,50,50)");
             color_black.parse ("rgb(0,0,0)");
             // Widgets
@@ -353,16 +355,18 @@ namespace Turtlico {
             // Size by the length of data
             int width = get_icon_width (c);
             // Background
-            if (high_contrast && c.draw_params.bg_color != color_black)
+            if (high_contrast && c.definition.bg_color != color_black)
                 Gdk.cairo_set_source_rgba (cr, color_high_contrast_cell);
+            else if (c.definition.bg_color != null)
+                Gdk.cairo_set_source_rgba (cr, c.definition.bg_color);
             else
-                Gdk.cairo_set_source_rgba (cr, c.draw_params.bg_color);
+                Gdk.cairo_set_source_rgba (cr, color_cell);
             cr.rectangle (x, y, CELL_WIDTH * width, CELL_HEIGHT);
             cr.fill ();
 
             // Draw icon
             // Does not draw icon if icon draw params are set to data only but it will draw icon if data is empty
-            if (!(c.draw_params.data_draw && c.draw_params.data_only) || c.data == "") {
+            if (!(c.definition.data_draw && c.definition.data_only) || c.data == "") {
                 if (c.pixbuf != null) {
                     // Pixbuf icon
                     Cairo.Surface pb = Gdk.cairo_surface_create_from_pixbuf (
@@ -371,13 +375,13 @@ namespace Turtlico {
                         x + CELL_WIDTH * width / 2 - c.pixbuf.width / get_scale_factor () / 2,
                         y + CELL_HEIGHT / 2 - c.pixbuf.height / get_scale_factor () / 2);
                     cr.paint ();
-                    if (!c.draw_params.data_draw)
+                    if (!c.definition.data_draw)
                         return 1;
                 }
                 else {
                     // Emoji icon
                     cr.move_to (x, y + 5); // Center of the icon
-                    Gdk.cairo_set_source_rgba (cr, c.draw_params.fg_color); // Foreground color
+                    Gdk.cairo_set_source_rgba (cr, c.definition.fg_color); // Foreground color
                     string text;
                     if (c.id == "4_color" && c.data != "") {
                         text = "⬤";
@@ -386,18 +390,18 @@ namespace Turtlico {
                         Gdk.cairo_set_source_rgba (cr, color);
                     }
                     else if (c.id == "5_img") text = "";
-                    else text = c.name;
+                    else text = c.icon_path;
                     var layout = draw_icon_new_layout (text, font, width);
                     Pango.cairo_show_layout (cr, layout);
                 }
             }
             // Draw data
             cr.move_to (x, y + 5); // Center of the icon
-            if (c.draw_params.data_draw && c.data != "") {
-                if (!c.draw_params.data_only)
+            if (c.definition.data_draw && c.data != "") {
+                if (!c.definition.data_only)
                     cr.move_to (x, y + CELL_HEIGHT - 15); // Draw data under the icon if we draw both
                 Pango.Layout data_layout = draw_icon_new_layout (c.data, small_font, width);
-                Gdk.cairo_set_source_rgba (cr, c.draw_params.data_color);
+                Gdk.cairo_set_source_rgba (cr, c.definition.data_color);
                 Pango.cairo_show_layout (cr, data_layout);
             }
             return width;
@@ -414,7 +418,7 @@ namespace Turtlico {
 
         private int get_icon_width (Command c) {
             int width;
-            if (!c.draw_params.data_draw || c.id == "python" || c.id == "4_color")
+            if (!c.definition.data_draw || c.id == "python" || c.id == "4_color")
                 width = 1;
             else
                 width = c.data.char_count () / 7 + 1;
@@ -784,7 +788,7 @@ namespace Turtlico {
         }
 
         public void show_help_for (string id) throws FileError {
-            string name = buffer.find_command_by_id (id).draw_params.help_en;
+            string name = buffer.find_command_by_id (id).definition.help_en;
             name = name.down ();
             string[] invalid_chars = {"(", ")", ".", "~", "?", "#", ":", ","};
             foreach (var ch in invalid_chars) {
@@ -804,7 +808,7 @@ namespace Turtlico {
         void autocomplete () {
             Gdk.Point item;
             if (!get_icon_at_pointer (out item)) return;
-            string snippet = buffer.program[item.y][item.x].draw_params.snippet;
+            string snippet = buffer.program[item.y][item.x].definition.snippet;
             if (snippet == null) return;
 
             try {

@@ -95,7 +95,8 @@ except Exception as e:
                         string err_template = _("{}\\nError occured on line {}.");
                         // The string is probably too large for printf because it causes Turtlico to crash
                         // string python_launcher = python_launcher.printf (path, err_template);
-                        string python_launcher = python_launcher.replace ("%1s", path.replace ("\\", "/")).replace ("%2s", err_template);
+                        string python_launcher = python_launcher.replace (
+                            "%1s", path.replace ("\\", "/")).replace ("%2s", err_template);
 
                         if (buffer.run_in_console) {
                             argv.add_all_array ({"-m", "idlelib", "-t", "Turtlico"});

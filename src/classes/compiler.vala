@@ -49,7 +49,7 @@ namespace Turtlico {
 
         public Compiler (string[] enabled_plugins) {
             this.enabled_plugins = enabled_plugins;
-            var parsers = Command.create_parsers (enabled_plugins);
+            var parsers = CommandCategory.create_parsers (enabled_plugins);
             foreach (var parser in parsers) {
                 // Get the root node:
                 Json.Node node = parser.get_root ();

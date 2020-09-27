@@ -61,7 +61,7 @@ namespace Turtlico {
                         add_plugin (_(node.get_object ().get_string_member ("name")), "r:" + r);
                     }
                 }
-                foreach (var path in Command.get_file_plugin_dirs ()) {
+                foreach (var path in CommandCategory.get_file_plugin_dirs ()) {
                     if (FileUtils.test (path, FileTest.IS_DIR)) {
                         Dir dir = Dir.open (path, 0);
                         string? name = null;

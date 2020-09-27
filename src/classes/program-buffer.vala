@@ -210,7 +210,7 @@ namespace Turtlico {
                                 }
                                 else if (plugin.has_prefix ("f:")) {
                                     bool found = false;
-                                    foreach (var dir in Command.get_file_plugin_dirs ()) {
+                                    foreach (var dir in CommandCategory.get_file_plugin_dirs ()) {
                                         string plugin_path = Path.build_filename (
                                             dir, plugin.substring (2, -1), "commands.json");
                                         if (FileUtils.test (plugin_path, FileTest.EXISTS)) {
@@ -266,7 +266,7 @@ namespace Turtlico {
                         if (!ingore_errors) {
                             string message = _("The file to load contains an unkown command!\n");
                             message +=
-                                _("This might be because of the file was damaged or created by a newer version of this program.\nCommand ID: ") + props[0];
+                                _("This might be because of the file was damaged or created by a newer version of this program.\nCommand ID: ") + props[0]; // vala-lint=line-length
                             throw new IOError.INVALID_DATA (message);
                         }
                     }

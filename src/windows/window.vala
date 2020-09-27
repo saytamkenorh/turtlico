@@ -200,7 +200,7 @@ namespace Turtlico {
                 x = programview.mouse_to_program_x (x, y);
                 if (x >= 0 && y >= 0 && programview.buffer.program.size > y && programview.buffer.program[y].size > x) {
                     status_label.label = (x + 1).to_string () + ":" + (y + 1).to_string () +
-                        " " + programview.buffer.program[y][x].draw_params.help;
+                        " " + programview.buffer.program[y][x].definition.help;
                 }
                 else {
                     status_label.label = "";
@@ -548,125 +548,61 @@ namespace Turtlico {
             programview.buffer.commands.clear ();
             search_widget.find_entry.buffer.commands.clear ();
             search_widget.replace_entry.buffer.commands.clear ();
-            // Get default icon color
-            var programview_bg_color = programview.get_style_context ().get_color (Gtk.StateFlags.ACTIVE).to_string ();
-            var programview_fg_color = "rgb(255, 255, 255)";
             // Compiler
             programview.buffer.enabled_plugins.sort ();
             compiler = new Compiler (programview.buffer.enabled_plugins.to_array ());
-            // Load from JSON
-            var parsers = Command.create_parsers (programview.buffer.enabled_plugins.to_array ());
-            int i = 0;
-            foreach (Json.Parser parser in parsers) {
-                // Get module dir
-                string module_dir = "";
-                if (!programview.buffer.enabled_plugins[i].has_prefix ("r:")) {
-                    module_dir = Path.get_dirname (programview.buffer.enabled_plugins[i]);
+
+            // Load categories
+            var categories = CommandCategory.get_command_categories (
+                programview.buffer.enabled_plugins.to_array (), get_scale_factor ());
+            foreach (var category in categories) {
+                // Create widgets
+                var string_type = typeof (string);
+                Gtk.ListStore ls = new Gtk.ListStore (3, typeof (Gdk.Pixbuf), string_type, string_type);
+                var button = new Gtk.RadioButton (null);
+                if (category.icon != null) {
+                    Cairo.Surface img = Gdk.cairo_surface_create_from_pixbuf (
+                                category.icon, get_scale_factor (), get_window ());
+                    button.image = new Gtk.Image.from_surface (img);
                 }
-                i++;
-
-                // Get the root node:
-                Json.Node node = parser.get_root ();
-                // For all commands in all categories
-                var categories = node.get_object ().get_array_member ("categories");
-                categories.foreach_element ((array, index_, category_node) => {
-                    // Create widgets
-                    var string_type = typeof (string);
-                    Gtk.ListStore ls = new Gtk.ListStore (3, typeof (Gdk.Pixbuf), string_type, string_type);
-                    string icon = category_node.get_object ().get_string_member ("icon");
-                    var button = new Gtk.RadioButton (null);
-
-                    if (icon.has_prefix ("f:") || icon.has_prefix ("r:")) {
-                        try {
-                            Gdk.Pixbuf pixbuf;
-                            if (icon.has_prefix ("r:")) {
-                                pixbuf = new Gdk.Pixbuf.from_resource_at_scale (
-                                    "/io/gitlab/Turtlico/icons/" + icon.substring (2),
-                                    24 * get_scale_factor (), 24 * get_scale_factor (), true);
-                            }
-                            else {
-                                pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                                    Path.build_filename (module_dir, icon.substring (2)),
-                                    24 * get_scale_factor (), 24 * get_scale_factor ());
-                            }
-                            Cairo.Surface img = Gdk.cairo_surface_create_from_pixbuf (
-                                pixbuf, get_scale_factor (), get_window ());
-                            button.image = new Gtk.Image.from_surface (img);
-                        } catch (Error e) {}
-                    }
-                    else
-                        button.label = icon;
-                    button.can_focus = false;
-                    button.set_mode (false);
-                    if (categories_box.get_children ().length () > 0) {
-                        Gtk.RadioButton rb = (Gtk.RadioButton)categories_box.get_children ().nth_data (0);
-                        button.join_group (rb);
-                    }
-                    button.clicked.connect ((btn) => {
-                        cmd_view.set_model (ls);
-                        cmd_view_sw.show ();
-                        // FIXME: This hack is used in order to prevent
-                        // invisibility of icons after DnD data receive.
-                        // It should be fixed in a more proper way.
-                        Gtk.Allocation al;
-                        cmd_view.get_allocation (out al);
-                        cmd_view.size_allocate (al);
-                    });
-                    categories_box.pack_start (button, false, false);
-                    // Add commands to prograview and liststore
-                    var commands = category_node.get_object ().get_array_member ("commands");
-                    commands.foreach_element ((array, index_, command_node) => {
-                        // Parse one command
-                        Json.Object command = command_node.get_object ();
-
-                        bool draw_data = command.has_member ("data-draw") ?
-                            command.get_boolean_member ("data-draw") : false;
-
-                        Gdk.RGBA data_color = Gdk.RGBA ();
-                        data_color.parse (command.has_member ("data-color") ?
-                            command.get_string_member ("data-color") : "#ffffff");
-
-                        Gdk.RGBA bg_color = Gdk.RGBA ();
-                        bg_color.parse (command.has_member ("bg-color") ?
-                            command.get_string_member ("bg-color"): programview_bg_color);
-
-                        Gdk.RGBA fg_color = Gdk.RGBA ();
-                        fg_color.parse (command.has_member ("fg-color") ?
-                            command.get_string_member ("fg-color") : programview_fg_color);
-
-                        bool data_only = command.has_member ("data-only") ?
-                            command.get_boolean_member ("data-only") : true;
-
-                        string snippet = null;
-                        if (command.has_member ("snippet")) snippet = command.get_string_member ("snippet");
-
-                        var draw_params = new DrawParams (
-                            draw_data, data_color, bg_color, fg_color, data_only,
-                            command.get_string_member ("?"),
-                            snippet,
-                            programview.get_scale_factor ());
-                        Command c = new Command (command.get_string_member ("icon"),
-                                                command.get_string_member ("id"), "",
-                                                draw_params, module_dir);
-                        //debug(command.get_string_member("icon"));
-                        programview.buffer.commands.add (c);
-                        search_widget.find_entry.buffer.commands.add (c);
-                        search_widget.replace_entry.buffer.commands.add (c);
-                        Gtk.TreeIter iter;
-                        ls.append (out iter);
-                        ArrayList<ArrayList<Command>> clist = new ArrayList<ArrayList<Command>> ();
-                        clist.add (new ArrayList<Command>.wrap ({c}));
-                        var surface = programview.get_dnd_surface (clist);
-                        var pixbuf = Gdk.pixbuf_get_from_surface (surface, 0, 0,
-                            surface.get_width (), surface.get_height ());
-                        ls.set (iter,
-                            CmdViewCols.PIXBUF, pixbuf,
-                            CmdViewCols.HELP, c.draw_params.help,
-                            CmdViewCols.ID, c.id);
-                    });
+                else
+                    button.label = category.icon_path;
+                button.can_focus = false;
+                button.set_mode (false);
+                if (categories_box.get_children ().length () > 0) {
+                    Gtk.RadioButton rb = (Gtk.RadioButton)categories_box.get_children ().nth_data (0);
+                    button.join_group (rb);
+                }
+                button.clicked.connect ((btn) => {
+                    cmd_view.set_model (ls);
+                    cmd_view_sw.show ();
+                    // FIXME: This hack is used in order to prevent
+                    // invisibility of icons after DnD data receive.
+                    // It should be fixed in a more proper way.
+                    Gtk.Allocation al;
+                    cmd_view.get_allocation (out al);
+                    cmd_view.size_allocate (al);
                 });
+                categories_box.pack_start (button, false, false);
+                // Load commands
+                foreach (var c in category.commands) {
+                    programview.buffer.commands.add (c);
+                    search_widget.find_entry.buffer.commands.add (c);
+                    search_widget.replace_entry.buffer.commands.add (c);
+                    Gtk.TreeIter iter;
+                    ls.append (out iter);
+                    ArrayList<ArrayList<Command>> clist = new ArrayList<ArrayList<Command>> ();
+                    clist.add (new ArrayList<Command>.wrap ({c}));
+                    var surface = programview.get_dnd_surface (clist);
+                    var pixbuf = Gdk.pixbuf_get_from_surface (surface, 0, 0,
+                        surface.get_width (), surface.get_height ());
+                    ls.set (iter,
+                        CmdViewCols.PIXBUF, pixbuf,
+                        CmdViewCols.HELP, c.definition.help,
+                        CmdViewCols.ID, c.id);
+                }
             }
-            // end foreach
+
             categories_box.show_all ();
             Gtk.RadioButton rb = (Gtk.RadioButton)categories_box.get_children ().nth_data (1);
             rb.clicked ();

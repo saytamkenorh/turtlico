@@ -66,7 +66,7 @@ namespace Turtlico {
             // Load event types
             rb_none.clicked ();
             event_type_box.get_children ().foreach ((child) => {child.destroy ();});
-            var parsers = Command.create_parsers (programview.buffer.enabled_plugins.to_array ());
+            var parsers = CommandCategory.create_parsers (programview.buffer.enabled_plugins.to_array ());
             foreach (Json.Parser parser in parsers) {
                 // Get the root node:
                 Json.Node node = parser.get_root ();
