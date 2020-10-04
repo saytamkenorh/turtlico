@@ -110,6 +110,8 @@
 				{"id":"5_subdirs", "icon":"r:base/subdirs.svg", "?": 'Get subdirs in DIRECTORY' , "type": 5, "func": "tcf_subdirs", "params": "" },
 				{"id":"5_dirname", "icon":"r:base/dirname.svg", "?": 'Get parent directory / the directory the item is located in' , "type": 5, "func": "os.path.dirname", "params": "" },
 				{"id":"5_basename", "icon":"r:base/basename.svg", "?": 'Get file name from path' , "type": 5, "func": "os.path.basename", "params": "" },
+				{"id":"0_runc", "icon":"r:base/runc.svg", "?": 'Run system command' , "type": 5, "func": "os.system", "params": "" },
+				{"id":"0_runf", "icon":"r:base/runf.svg", "?": 'Open file in default program' , "type": 5, "func": "tcf_runf", "params": "" },
 				{"id":"5_time", "icon":"r:base/time.svg", "?": 'Get current timestamp' , "type": 5, "func": "time.time", "params": "" },
 				{"id":"5_timestrf", "icon":"r:base/time_strf.svg", "?": 'Convert timestamp to string' , "type": 5, "func": "tcf_strftime", "params": "" },
 				{"id":"5_timestrp", "icon":"r:base/time_strp.svg", "?": 'Convert string to timestamp' , "type": 5, "func": "tcf_strptime", "params": "" }
@@ -175,6 +177,21 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))"
 		import shutil\
 		shutil.rmtree(path)\
 	else: raise Exception('File or directory {} does not exist!'.format(path))"
+		},
+		{
+			"id": "tcf_runf",
+			"code": "def tcf_runf(file):\
+	import subprocess\
+	if sys.platform.startswith('linux'):\
+		from gi.repository import Gio\
+		result = 1\
+		file = Gio.File.new_for_commandline_arg(file)\
+		result = int(not Gio.AppInfo.launch_default_for_uri(file.get_uri(), None))\
+	else:\
+		result = subprocess.run(['start', '', file], shell=True).returncode\
+	if result != 0:\
+		raise Exception('\\nFile opening failed.')
+		"
 		},
 		{
 			"id": "tcf_subfiles",
