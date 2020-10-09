@@ -1021,6 +1021,22 @@ Returns name of the file at path. E.g. for '/home/user' this returns 'user'.
 
 ``STRING`` Path.
 
+Run system command
+==================
+Runs a command in system shell.
+
+**Parameters**
+
+``STRING`` The command.
+
+Open file in default program
+============================
+Opens a file in the program that is associated with the file type. The path can be also an URL.
+
+**Parameters**
+
+``STRING`` Path to the file or an URL.
+
 Get current timestamp
 =====================
 Return the time in seconds since the epoch as a float.
