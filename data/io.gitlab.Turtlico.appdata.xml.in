@@ -19,6 +19,21 @@
   <launchable type="desktop-id">io.gitlab.Turtlico.desktop</launchable>
 
   <releases>
+      <release version="0.5" date="2020-10-25">
+      <description>
+        <p>
+          This release contains bug fixes and new features:
+        </p>
+        <ul>
+          <li>Improved layer support in scenes</li>
+          <li>Added Last loaded scene variable</li>
+          <li>Commands that can open files and run commands were added to file IO page</li>
+          <li>Support for console porgrams</li>
+          <li>Added support for running programs in IDLE (you can see console ouput)</li>
+          <li>Many other smaller improvements, under the hood changes and bug fixes</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.4" date="2020-06-21">
       <description>
         <p>
