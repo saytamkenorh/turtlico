@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-26 12:12+0200\n"
-"PO-Revision-Date: 2020-09-26 12:13+0200\n"
+"POT-Creation-Date: 2020-10-25 13:57+0100\n"
+"PO-Revision-Date: 2020-10-25 13:45+0100\n"
 "Last-Translator: matyas5 <>\n"
 "Language-Team: Czech <>\n"
 "Language: cs\n"
@@ -41,30 +41,57 @@ msgid "Turtlico main window"
 msgstr "Hlavní okno aplikace Turtlico"
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:24
+#: data/io.gitlab.Turtlico.appdata.xml.in:39
 msgid "This release contains bug fixes and new features:"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:28
-msgid "Added scenes"
+msgid "Improved layer support in scenes"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:29
-msgid "Added functions dialog"
-msgstr ""
+#, fuzzy
+msgid "Added Last loaded scene variable"
+msgstr "Poslední načtená scéna"
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:30
-msgid "Improved help"
+msgid ""
+"Commands that can open files and run commands were added to file IO page"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:31
-msgid "Many other smaller improvements"
+msgid "Support for console porgrams"
 msgstr ""
 
-#: data/io.gitlab.Turtlico.appdata.xml.in:37
-msgid "New major release."
+#: data/io.gitlab.Turtlico.appdata.xml.in:32
+msgid "Added support for running programs in IDLE (you can see console ouput)"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:33
+msgid "Many other smaller improvements, under the hood changes and bug fixes"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:43
+msgid "Added scenes"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:44
+msgid "Added functions dialog"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:45
+msgid "Improved help"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:46
+msgid "Many other smaller improvements"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:52
+msgid "New major release."
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:59
 msgid "Initial release."
 msgstr ""
 
@@ -118,7 +145,7 @@ msgstr "Připnutí levého postranního panelu"
 msgid "Use client side decoration"
 msgstr "Použít dekorování na straně klienta"
 
-#: src/classes/command.vala:127
+#: src/classes/command.vala:150
 msgid "Failed to load command def file: "
 msgstr "Selhalo načtení souboru s definicemi příkazů: "
 
@@ -134,15 +161,15 @@ msgstr "Vygenerovaný kód:\n"
 msgid "{}\\nError occured on line {}."
 msgstr "{}\\nChyba se vyskytla na řádku {}."
 
-#: src/classes/debugger.vala:102
+#: src/classes/debugger.vala:103
 msgid "Press enter to close the window"
 msgstr "Stiskněte libovolnou klávesu k zavření okna"
 
-#: src/classes/debugger.vala:161
+#: src/classes/debugger.vala:162
 msgid "stderr of child process:\n"
 msgstr "stderr podprocesu:\n"
 
-#: src/classes/debugger.vala:175
+#: src/classes/debugger.vala:176
 msgid "Program crashed"
 msgstr "Program selhal"
 
@@ -791,14 +818,22 @@ msgid "Get file name from path"
 msgstr "Získat název souboru z cesty"
 
 #: src/plugins/base.json:113
+msgid "Run system command"
+msgstr "Spustit systémový příkaz"
+
+#: src/plugins/base.json:114
+msgid "Open file in default program"
+msgstr "Otevřít soubor ve výchozím programu"
+
+#: src/plugins/base.json:115
 msgid "Get current timestamp"
 msgstr "Získat aktuální čas"
 
-#: src/plugins/base.json:114
+#: src/plugins/base.json:116
 msgid "Convert timestamp to string"
 msgstr "Převést čas na řetězec"
 
-#: src/plugins/base.json:115
+#: src/plugins/base.json:117
 msgid "Convert string to timestamp"
 msgstr "Převést řetězec na čas"
 
@@ -1115,7 +1150,7 @@ msgid "Sprites"
 msgstr "Sprity"
 
 #: src/windows/scene-editor-window.ui:293 src/windows/window.ui:280
-#: src/windows/window.vala:346
+#: src/windows/window.vala:349
 msgid "Save"
 msgstr "Uložit"
 
@@ -1183,20 +1218,20 @@ msgstr "Nelze uložit scénu"
 msgid "Would you like to save your changes before closing the scene?"
 msgstr "Přejete si uložit změny před zavřením scény?"
 
-#: src/windows/scene-editor-window.vala:437 src/windows/window.vala:796
+#: src/windows/scene-editor-window.vala:437 src/windows/window.vala:737
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr "Jinak budou neuložené změny ztraceny!"
 
-#: src/windows/scene-editor-window.vala:439 src/windows/window.vala:798
+#: src/windows/scene-editor-window.vala:439 src/windows/window.vala:739
 msgid "Yes"
 msgstr "Ano"
 
-#: src/windows/scene-editor-window.vala:440 src/windows/window.vala:799
+#: src/windows/scene-editor-window.vala:440 src/windows/window.vala:740
 msgid "No"
 msgstr "Ne"
 
-#: src/windows/scene-editor-window.vala:441 src/windows/window.vala:347
-#: src/windows/window.vala:381 src/windows/window.vala:800
+#: src/windows/scene-editor-window.vala:441 src/windows/window.vala:350
+#: src/windows/window.vala:384 src/windows/window.vala:741
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -1237,56 +1272,56 @@ msgstr "Otevřít program"
 msgid "Drop items here to delete them"
 msgstr "Sem přetáhněte příkazy ke smazání"
 
-#: src/windows/window.vala:334
+#: src/windows/window.vala:337
 msgid "Failed to save the program"
 msgstr "Nepodařilo se uložit program"
 
-#: src/windows/window.vala:339
+#: src/windows/window.vala:342
 msgid "Project saved."
 msgstr "Projekt uložen."
 
-#: src/windows/window.vala:344 src/windows/window.vala:349
-#: src/windows/window.vala:378 src/windows/window.vala:383
+#: src/windows/window.vala:347 src/windows/window.vala:352
+#: src/windows/window.vala:381 src/windows/window.vala:386
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-#: src/windows/window.vala:356 src/windows/window.vala:390
+#: src/windows/window.vala:359 src/windows/window.vala:393
 msgid "Turtlico project (*.tcp)"
 msgstr "Projekt Turtlico (*.tcp)"
 
-#: src/windows/window.vala:371
+#: src/windows/window.vala:374
 msgid "Program saved."
 msgstr "Program uložen."
 
-#: src/windows/window.vala:380
+#: src/windows/window.vala:383
 msgid "Open"
 msgstr "Otevřít"
 
-#: src/windows/window.vala:432
+#: src/windows/window.vala:435
 msgid "Would you really like to apply these changes?"
 msgstr "Opravdu chcete aplikovat tyto změny?"
 
-#: src/windows/window.vala:434
+#: src/windows/window.vala:437
 msgid "The program contains commands that are only available from a plugin."
 msgstr ""
 "Program obsahuje příkazy, které jsou dostupné pouze z přídavného modulu."
 
-#: src/windows/window.vala:435
+#: src/windows/window.vala:438
 msgid "Unavailable commands will be removed."
 msgstr "Nedostupné příkazy budou odstraněny."
 
-#: src/windows/window.vala:493
+#: src/windows/window.vala:496
 msgid "Please save the program before opening the scene editor."
 msgstr "Uložte prosím program před otevřením editoru scén."
 
-#: src/windows/window.vala:523
+#: src/windows/window.vala:526
 msgid "Would you like to continue loading anyway and ignore further errors?"
 msgstr "Přejete si pokračovat v načítání a ignorovat další chyby?"
 
-#: src/windows/window.vala:795
+#: src/windows/window.vala:736
 msgid "Would you like to save your changes before closing the program?"
 msgstr "Přereje si uložit změny před zavřením programu?"
 
-#: src/windows/window.vala:816
+#: src/windows/window.vala:757
 msgid "Unnamed"
 msgstr "Bez názvu"

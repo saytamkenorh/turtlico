@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-26 12:12+0200\n"
+"POT-Creation-Date: 2020-10-25 13:57+0100\n"
 "PO-Revision-Date: 2020-09-26 12:24+0200\n"
 "Last-Translator: matyas5 <>\n"
 "Language-Team: Deutsch <>\n"
@@ -39,30 +39,56 @@ msgid "Turtlico main window"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:24
+#: data/io.gitlab.Turtlico.appdata.xml.in:39
 msgid "This release contains bug fixes and new features:"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:28
-msgid "Added scenes"
+msgid "Improved layer support in scenes"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:29
-msgid "Added functions dialog"
+msgid "Added Last loaded scene variable"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:30
-msgid "Improved help"
+msgid ""
+"Commands that can open files and run commands were added to file IO page"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:31
-msgid "Many other smaller improvements"
+msgid "Support for console porgrams"
 msgstr ""
 
-#: data/io.gitlab.Turtlico.appdata.xml.in:37
-msgid "New major release."
+#: data/io.gitlab.Turtlico.appdata.xml.in:32
+msgid "Added support for running programs in IDLE (you can see console ouput)"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:33
+msgid "Many other smaller improvements, under the hood changes and bug fixes"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:43
+msgid "Added scenes"
 msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:44
+msgid "Added functions dialog"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:45
+msgid "Improved help"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:46
+msgid "Many other smaller improvements"
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:52
+msgid "New major release."
+msgstr ""
+
+#: data/io.gitlab.Turtlico.appdata.xml.in:59
 msgid "Initial release."
 msgstr ""
 
@@ -110,7 +136,7 @@ msgstr ""
 msgid "Use client side decoration"
 msgstr ""
 
-#: src/classes/command.vala:127
+#: src/classes/command.vala:150
 msgid "Failed to load command def file: "
 msgstr ""
 
@@ -126,15 +152,15 @@ msgstr ""
 msgid "{}\\nError occured on line {}."
 msgstr ""
 
-#: src/classes/debugger.vala:102
+#: src/classes/debugger.vala:103
 msgid "Press enter to close the window"
 msgstr ""
 
-#: src/classes/debugger.vala:161
+#: src/classes/debugger.vala:162
 msgid "stderr of child process:\n"
 msgstr ""
 
-#: src/classes/debugger.vala:175
+#: src/classes/debugger.vala:176
 msgid "Program crashed"
 msgstr ""
 
@@ -774,14 +800,23 @@ msgid "Get file name from path"
 msgstr ""
 
 #: src/plugins/base.json:113
-msgid "Get current timestamp"
+msgid "Run system command"
 msgstr ""
 
 #: src/plugins/base.json:114
+#, fuzzy
+msgid "Open file in default program"
+msgstr "Programm öffnen"
+
+#: src/plugins/base.json:115
+msgid "Get current timestamp"
+msgstr ""
+
+#: src/plugins/base.json:116
 msgid "Convert timestamp to string"
 msgstr ""
 
-#: src/plugins/base.json:115
+#: src/plugins/base.json:117
 msgid "Convert string to timestamp"
 msgstr ""
 
@@ -1094,7 +1129,7 @@ msgid "Sprites"
 msgstr ""
 
 #: src/windows/scene-editor-window.ui:293 src/windows/window.ui:280
-#: src/windows/window.vala:346
+#: src/windows/window.vala:349
 msgid "Save"
 msgstr "Speichern"
 
@@ -1162,20 +1197,20 @@ msgstr ""
 msgid "Would you like to save your changes before closing the scene?"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:437 src/windows/window.vala:796
+#: src/windows/scene-editor-window.vala:437 src/windows/window.vala:737
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:439 src/windows/window.vala:798
+#: src/windows/scene-editor-window.vala:439 src/windows/window.vala:739
 msgid "Yes"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:440 src/windows/window.vala:799
+#: src/windows/scene-editor-window.vala:440 src/windows/window.vala:740
 msgid "No"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:441 src/windows/window.vala:347
-#: src/windows/window.vala:381 src/windows/window.vala:800
+#: src/windows/scene-editor-window.vala:441 src/windows/window.vala:350
+#: src/windows/window.vala:384 src/windows/window.vala:741
 msgid "Cancel"
 msgstr ""
 
@@ -1216,56 +1251,56 @@ msgstr "Programm öffnen"
 msgid "Drop items here to delete them"
 msgstr ""
 
-#: src/windows/window.vala:334
+#: src/windows/window.vala:337
 msgid "Failed to save the program"
 msgstr ""
 
-#: src/windows/window.vala:339
+#: src/windows/window.vala:342
 msgid "Project saved."
 msgstr ""
 
-#: src/windows/window.vala:344 src/windows/window.vala:349
-#: src/windows/window.vala:378 src/windows/window.vala:383
+#: src/windows/window.vala:347 src/windows/window.vala:352
+#: src/windows/window.vala:381 src/windows/window.vala:386
 msgid "Select file"
 msgstr ""
 
-#: src/windows/window.vala:356 src/windows/window.vala:390
+#: src/windows/window.vala:359 src/windows/window.vala:393
 msgid "Turtlico project (*.tcp)"
 msgstr ""
 
-#: src/windows/window.vala:371
+#: src/windows/window.vala:374
 msgid "Program saved."
 msgstr ""
 
-#: src/windows/window.vala:380
+#: src/windows/window.vala:383
 msgid "Open"
 msgstr ""
 
-#: src/windows/window.vala:432
+#: src/windows/window.vala:435
 msgid "Would you really like to apply these changes?"
 msgstr ""
 
-#: src/windows/window.vala:434
+#: src/windows/window.vala:437
 msgid "The program contains commands that are only available from a plugin."
 msgstr ""
 
-#: src/windows/window.vala:435
+#: src/windows/window.vala:438
 msgid "Unavailable commands will be removed."
 msgstr ""
 
-#: src/windows/window.vala:493
+#: src/windows/window.vala:496
 msgid "Please save the program before opening the scene editor."
 msgstr ""
 
-#: src/windows/window.vala:523
+#: src/windows/window.vala:526
 msgid "Would you like to continue loading anyway and ignore further errors?"
 msgstr ""
 
-#: src/windows/window.vala:795
+#: src/windows/window.vala:736
 msgid "Would you like to save your changes before closing the program?"
 msgstr ""
 
-#: src/windows/window.vala:816
+#: src/windows/window.vala:757
 msgid "Unnamed"
 msgstr ""
 
