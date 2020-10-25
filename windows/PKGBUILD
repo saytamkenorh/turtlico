@@ -29,6 +29,7 @@ build() {
 	CFLAGS=-Wl,-subsystem,windows meson ../ ./build --prefix ${MINGW_PREFIX} --libdir lib
 	cd ./build
 	ninja
+	ninja test
 }
 
 

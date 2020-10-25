@@ -84,16 +84,20 @@ cd $srcdir
 tmp=`mktemp -d`
 tar -I zstd -xf ./mingw-w64-x86_64-turtlico-* -C $tmp
 cd $tmp
-cp -r $PWD/mingw64/bin "$srcdir/output"
-cp -r $PWD/mingw64/share "$srcdir/output"
+cp -r $PWD/mingw64/tools/msys64/mingw64/bin "$srcdir/output"
+cp -r $PWD/mingw64/tools/msys64/mingw64/share "$srcdir/output"
 cd $srcdir
 rm -rf $tmp
 
 # Post-inst procedures
-glib-compile-schemas "$srcdir/output/share/glib-2.0/schemas"
-rm "$srcdir/output/bin/glib-compile-schemas.exe"
+"$bindir/glib-compile-schemas.exe" "$srcdir/output/share/glib-2.0/schemas" || exit 1
+rm "$bindir/glib-compile-schemas.exe"
 "$bindir/update-mime-database.exe" "$srcdir/output/share/mime"
-rm "$srcdir/output/bin/update-mime-database"*
+rm "$bindir/update-mime-database"*
+
+# Test created executable
+echo "Compiling test file..."
+"$bindir/turtlico.exe" --compile="/dev/null" "../doc/examples/turtle-star.tcp"  || exit 1
 
 # Create ISS file
 rootdir=$(dirname $srcdir) # Get the root dir of the project
