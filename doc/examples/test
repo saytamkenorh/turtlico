@@ -2,9 +2,11 @@
 import sys, os, tempfile
 from subprocess import call
 
-data_dir = os.path.join(os.path.dirname(os.path.dirname(sys.argv[2])), "data")
+data_dir = os.path.join(os.path.dirname(os.path.dirname(sys.argv[2])), 'data')
+libturtlico_dir = os.path.join(os.path.dirname(sys.argv[1]), 'libturtlico')
 call(["glib-compile-schemas", data_dir, "--targetdir=" + sys.argv[4]])
 env = os.environ.copy()
+env["PATH"] += os.pathsep + libturtlico_dir 
 env["GSETTINGS_SCHEMA_DIR"] = sys.argv[4]
 
 for file in os.listdir(sys.argv[2]):

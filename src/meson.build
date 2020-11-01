@@ -55,7 +55,6 @@ if build_machine.system() == 'windows'
   turtlico_sources += win.compile_resources('turtlico.rc')
 endif
 
-
 gnome = import('gnome')
 
 turtlico_sources += gnome.compile_resources('turtlico-resources',

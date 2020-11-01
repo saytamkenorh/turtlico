@@ -9,7 +9,7 @@ pacman -Su --noconfirm
 pkglist=$(cat ./pkglist.txt | sed ':a;N;$!ba;s/\n/ /g')
 pkglist="$pkglist $BUILD_DEPS"
 pkglist=$(echo $pkglist | sed "s/[^ ]* */$MINGW_PREFIX-&/g")
-pkglist="tar $pkglist" # Packages required for this script
+pkglist="tar mingw-w64-x86_64-gobject-introspection $pkglist" # Build deps
 pacman -S $pkglist --needed --noconfirm
 
 rm -rf ./build
