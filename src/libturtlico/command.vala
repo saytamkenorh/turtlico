@@ -17,6 +17,8 @@
  */
 
 namespace Turtlico {
+    public const string TURTLICO_RESOURCES = "/io/gitlab/Turtlico/";
+
     public class Command {
         public const string PLUGIN_RESOURCES = TURTLICO_RESOURCES + "plugins/";
 
@@ -128,7 +130,7 @@ namespace Turtlico {
         /*
          * Creates a parsers that can be used to load commands defs
         */
-        public static Json.Parser[] create_parsers (string[] enabled_plugins) {
+        public static Json.Parser[] create_parsers (string[] enabled_plugins) throws FileError {
             // Load commands
             Gee.ArrayList<Json.Parser> parsers = new Gee.ArrayList<Json.Parser> ();
             foreach (string file in enabled_plugins) {
@@ -147,13 +149,16 @@ namespace Turtlico {
                     parsers.add (parser);
                 }
                 catch (Error e) {
-                    debug (_("Failed to load command def file: ") + e.message);
+                    throw new FileError.ACCES (_("Failed to load command def file: ") + e.message);
                 }
             }
             return parsers.to_array ();
         }
 
-        public static Gee.ArrayList<CommandCategory> get_command_categories (string[] plugins, int icon_scale) {
+        public static Gee.ArrayList<CommandCategory> get_command_categories (
+            string[] plugins,
+            int icon_scale
+        ) throws FileError {
             var output_categories = new Gee.ArrayList<CommandCategory> ();
             var parsers = create_parsers (plugins);
             var default_fg_color = "rgb(255, 255, 255)";

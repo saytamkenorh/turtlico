@@ -47,7 +47,7 @@ namespace Turtlico {
         uint param_level = 0;
         uint keyword_level = 0; // Detects whether compiler is reading a condition (if, for, while)
 
-        public Compiler (string[] enabled_plugins) {
+        public Compiler (string[] enabled_plugins) throws FileError {
             this.enabled_plugins = enabled_plugins;
             var parsers = CommandCategory.create_parsers (enabled_plugins);
             foreach (var parser in parsers) {

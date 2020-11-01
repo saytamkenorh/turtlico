@@ -550,11 +550,22 @@ namespace Turtlico {
             search_widget.replace_entry.buffer.commands.clear ();
             // Compiler
             programview.buffer.enabled_plugins.sort ();
-            compiler = new Compiler (programview.buffer.enabled_plugins.to_array ());
+            try {
+                compiler = new Compiler (programview.buffer.enabled_plugins.to_array ());
+            } catch (FileError e) {
+                debug (e.message);
+                return;
+            }
 
             // Load categories
-            var categories = CommandCategory.get_command_categories (
-                programview.buffer.enabled_plugins.to_array (), get_scale_factor ());
+            Gee.ArrayList<CommandCategory> categories;
+            try {
+                categories = CommandCategory.get_command_categories (
+                    programview.buffer.enabled_plugins.to_array (), get_scale_factor ());
+            } catch (FileError e) {
+                debug (e.message);
+                return;
+            }
             foreach (var category in categories) {
                 // Create widgets
                 var string_type = typeof (string);
