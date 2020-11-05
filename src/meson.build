@@ -48,21 +48,13 @@ turtlico_sources = [
   'windows/program-settings.vala',
   'windows/scene-editor-window.vala',
   'windows/window.vala',
+  resources,
 ]
 
 if build_machine.system() == 'windows'
   win = import('windows')
   turtlico_sources += win.compile_resources('turtlico.rc')
 endif
-
-gnome = import('gnome')
-
-turtlico_sources += gnome.compile_resources('turtlico-resources',
-  'turtlico.gresource.xml',
-  c_name: 'turtlico'
-)
-
-subdir('icons')
 
 turtlico_executable = executable('turtlico', turtlico_sources,
   vala_args: '--target-glib=2.50',  dependencies: turtlico_deps,

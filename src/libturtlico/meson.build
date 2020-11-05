@@ -1,6 +1,7 @@
 libturtlico_sources = [
    'command.vala',
    'compiler.vala',
+   resources_plugins,
 ]
 
 libturtlico_deps = [

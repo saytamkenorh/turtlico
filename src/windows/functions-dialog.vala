@@ -19,7 +19,7 @@
  */
 
 namespace Turtlico {
-    [GtkTemplate (ui = "/io/gitlab/Turtlico/windows/functions-dialog.ui")]
+    [GtkTemplate (ui = "/io/gitlab/Turtlico/ui/functions-dialog.ui")]
     class FunctionsDialog : Gtk.Dialog {
         protected ProgramView programview;
         [GtkChild]

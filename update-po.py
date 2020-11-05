@@ -7,11 +7,11 @@ import json, os
 import subprocess
 
 files = [
-    './src/plugins/0turtle.json',
-    './src/plugins/base.json',
-    './src/plugins/console.json',
-    './src/plugins/rpi.json',
-    './src/plugins/mm.json'
+    './data/plugins/0turtle.json',
+    './data/plugins/base.json',
+    './data/plugins/console.json',
+    './data/plugins/rpi.json',
+    './data/plugins/mm.json'
 ]
 original_data = []
 src_dir = os.path.dirname(os.path.realpath(__file__))

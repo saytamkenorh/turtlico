@@ -21,7 +21,7 @@
 using Gee;
 
 namespace Turtlico {
-    [GtkTemplate (ui = "/io/gitlab/Turtlico/windows/program-settings.ui")]
+    [GtkTemplate (ui = "/io/gitlab/Turtlico/ui/program-settings.ui")]
     class ProgramSettings : Gtk.Dialog {
         [GtkChild]
         Gtk.Box plugins_box;

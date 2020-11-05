@@ -25,7 +25,7 @@ namespace Turtlico {
         ID
     }
 
-    [GtkTemplate (ui = "/io/gitlab/Turtlico/windows/window.ui")]
+    [GtkTemplate (ui = "/io/gitlab/Turtlico/ui/window.ui")]
     public class Window : Gtk.ApplicationWindow {
         [GtkChild]
         Gtk.Box toolbar_box;

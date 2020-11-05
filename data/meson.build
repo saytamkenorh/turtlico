@@ -44,3 +44,14 @@ endif
 
 install_data('io.gitlab.Turtlico.xml',
 	     install_dir : join_paths(get_option('datadir'),'mime/packages'))
+
+
+gnome = import('gnome')
+
+resource_files = files('turtlico.gresource.xml')
+resources = gnome.compile_resources('io.gitlab.Turtlico', resource_files,
+  c_name: 'turtlico'
+)
+
+subdir('plugins')
+

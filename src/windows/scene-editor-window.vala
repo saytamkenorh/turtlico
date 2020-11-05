@@ -30,7 +30,7 @@ namespace Turtlico.SceneEditor {
         NAME
     }
 
-    [GtkTemplate (ui = "/io/gitlab/Turtlico/windows/scene-editor-window.ui")]
+    [GtkTemplate (ui = "/io/gitlab/Turtlico/ui/scene-editor-window.ui")]
     public class Window : Gtk.Window {
         [GtkChild]
         Gtk.ListStore scenes_store;

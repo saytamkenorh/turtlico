@@ -23,7 +23,7 @@
 using Gee;
 
 namespace Turtlico.SceneEditor {
-    [GtkTemplate (ui = "/io/gitlab/Turtlico/widgets/scene-editor-view.ui")]
+    [GtkTemplate (ui = "/io/gitlab/Turtlico/ui/scene-editor-view.ui")]
     class View : Gtk.DrawingArea {
         private Scene _scene = null;
         public Scene scene {

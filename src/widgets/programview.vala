@@ -30,7 +30,7 @@ namespace Turtlico {
         "int", "str", "obj", "#", "5_img", "tc", "python", "4_color", "4_font", "key"
     };
 
-    [GtkTemplate (ui = "/io/gitlab/Turtlico/widgets/programview.ui")]
+    [GtkTemplate (ui = "/io/gitlab/Turtlico/ui/programview.ui")]
     public class ProgramView : Gtk.DrawingArea {
         public const int CELL_WIDTH = 50;
         public const int CELL_HEIGHT = 35;
@@ -130,7 +130,7 @@ namespace Turtlico {
             var style_context = get_style_context ();
             style_context.add_class ("TurtlicoProgramView");
             css_provider.parsing_error.connect ((s, e)=>{debug (e.message);});
-            css_provider.load_from_resource (TURTLICO_RESOURCES + "widgets/programview.css");
+            css_provider.load_from_resource (TURTLICO_RESOURCES + "css/programview.css");
             style_context.add_provider (css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             // Render
             font.set_weight (Pango.Weight.BOLD);

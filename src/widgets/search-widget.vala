@@ -19,7 +19,7 @@
  */
 
 namespace Turtlico {
-    [GtkTemplate (ui = "/io/gitlab/Turtlico/widgets/search-widget.ui")]
+    [GtkTemplate (ui = "/io/gitlab/Turtlico/ui/search-widget.ui")]
     class SearchWidget : Gtk.Box {
         [GtkChild]
         Gtk.ScrolledWindow find_entry_sw;

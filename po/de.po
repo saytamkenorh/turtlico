@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: turtlico\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-25 13:57+0100\n"
+"POT-Creation-Date: 2020-11-05 20:32+0100\n"
 "PO-Revision-Date: 2020-09-26 12:24+0200\n"
 "Last-Translator: matyas5 <>\n"
 "Language-Team: Deutsch <>\n"
@@ -19,8 +19,8 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2\n"
 "X-Generator: Gtranslator 3.36.0\n"
 
-#: data/io.gitlab.Turtlico.desktop.in:3
-#: data/io.gitlab.Turtlico.appdata.xml.in:4 src/windows/window.ui:222
+#: data/io.gitlab.Turtlico.appdata.xml.in:4
+#: data/io.gitlab.Turtlico.desktop.in:3 data/ui/window.ui:222
 msgid "Turtlico"
 msgstr ""
 
@@ -36,60 +36,6 @@ msgstr ""
 
 #: data/io.gitlab.Turtlico.appdata.xml.in:16
 msgid "Turtlico main window"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:24
-#: data/io.gitlab.Turtlico.appdata.xml.in:39
-msgid "This release contains bug fixes and new features:"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:28
-msgid "Improved layer support in scenes"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:29
-msgid "Added Last loaded scene variable"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:30
-msgid ""
-"Commands that can open files and run commands were added to file IO page"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:31
-msgid "Support for console porgrams"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:32
-msgid "Added support for running programs in IDLE (you can see console ouput)"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:33
-msgid "Many other smaller improvements, under the hood changes and bug fixes"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:43
-msgid "Added scenes"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:44
-msgid "Added functions dialog"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:45
-msgid "Improved help"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:46
-msgid "Many other smaller improvements"
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:52
-msgid "New major release."
-msgstr ""
-
-#: data/io.gitlab.Turtlico.appdata.xml.in:59
-msgid "Initial release."
 msgstr ""
 
 #: data/io.gitlab.Turtlico.gschema.xml:6
@@ -118,7 +64,7 @@ msgstr ""
 msgid "If enabled, Turtlico writes to output files marks to help track errors."
 msgstr ""
 
-#: data/io.gitlab.Turtlico.gschema.xml:27 src/windows/app-settings.ui:127
+#: data/io.gitlab.Turtlico.gschema.xml:27 data/ui/app-settings.ui:127
 msgid "Automatic indentation"
 msgstr ""
 
@@ -132,20 +78,958 @@ msgstr ""
 msgid "Left sidebar pinned"
 msgstr ""
 
-#: data/io.gitlab.Turtlico.gschema.xml:38 src/windows/app-settings.ui:140
+#: data/io.gitlab.Turtlico.gschema.xml:38 data/ui/app-settings.ui:140
 msgid "Use client side decoration"
 msgstr ""
 
-#: src/classes/command.vala:150
-msgid "Failed to load command def file: "
+#: data/plugins/0turtle.json:7
+msgid "Go forward"
+msgstr "Geh geradeaus"
+
+#: data/plugins/0turtle.json:8
+msgid "Turn left"
+msgstr "Nach links"
+
+#: data/plugins/0turtle.json:9
+msgid "Turn right"
+msgstr "Nach rechts"
+
+#: data/plugins/0turtle.json:10
+msgid "Set heading angle"
 msgstr ""
 
-#: src/classes/compiler.vala:205
-msgid "Functions must start on a separate line!"
+#: data/plugins/0turtle.json:11
+msgid "Speed"
 msgstr ""
 
-#: src/classes/compiler.vala:369
-msgid "Generated code:\n"
+#: data/plugins/0turtle.json:12
+msgid "Set position"
+msgstr ""
+
+#: data/plugins/0turtle.json:13
+msgid "Set pen color"
+msgstr ""
+
+#: data/plugins/0turtle.json:14
+msgid "Lift the pen up – no drawing when moving."
+msgstr ""
+
+#: data/plugins/0turtle.json:15
+msgid "Put the pen down – drawing when moving."
+msgstr ""
+
+#: data/plugins/0turtle.json:16
+msgid "Pen properties"
+msgstr ""
+
+#: data/plugins/0turtle.json:17
+msgid "Hide turtle"
+msgstr "Verstecke die Turtle"
+
+#: data/plugins/0turtle.json:18
+msgid "Show turtle"
+msgstr "Zeige die Turtle"
+
+#: data/plugins/0turtle.json:19
+msgid "Write text on screen"
+msgstr ""
+
+#: data/plugins/0turtle.json:20
+msgid "Begin fill"
+msgstr ""
+
+#: data/plugins/0turtle.json:21
+msgid "End fill - fill the drawn shape"
+msgstr ""
+
+#: data/plugins/0turtle.json:22
+msgid "Last loaded scene"
+msgstr ""
+
+#: data/plugins/0turtle.json:23
+msgid "Clear turtle screen"
+msgstr "Lösche den Bildschrim"
+
+#: data/plugins/0turtle.json:24
+msgid "Get or set the color of the screen"
+msgstr ""
+
+#: data/plugins/0turtle.json:25
+msgid "Get or set the background picture of the screen"
+msgstr ""
+
+#: data/plugins/0turtle.json:26
+msgid "Load scene (file)"
+msgstr ""
+
+#: data/plugins/0turtle.json:27
+msgid "Image file"
+msgstr "Bild"
+
+#: data/plugins/0turtle.json:28
+msgid "Set turtle shape"
+msgstr ""
+
+#: data/plugins/0turtle.json:29
+msgid "Create new turtle"
+msgstr "Neue Turtle"
+
+#: data/plugins/0turtle.json:30
+msgid "Get the predefined turtle object"
+msgstr ""
+
+#: data/plugins/0turtle.json:31
+msgid "Place image at the position of the turtle"
+msgstr ""
+
+#: data/plugins/0turtle.json:32
+msgid "Sleep"
+msgstr "Schlaf"
+
+#: data/plugins/0turtle.json:33
+msgid ""
+"Connect a function to handle collision (in circle collider of specified "
+"radius) between two turtles"
+msgstr ""
+
+#: data/plugins/0turtle.json:34
+msgid ""
+"Connect a function to handle collision (in rectangle collider of specified "
+"size) between two turtles"
+msgstr ""
+
+#: data/plugins/0turtle.json:35
+msgid "Undo the last turtle action"
+msgstr ""
+
+#: data/plugins/0turtle.json:36
+msgid "Circle"
+msgstr ""
+
+#: data/plugins/0turtle.json:37
+msgid "Turbo mode"
+msgstr ""
+
+#: data/plugins/0turtle.json:38
+msgid "Camera properties"
+msgstr ""
+
+#: data/plugins/0turtle.json:39
+msgid "Connect a function to handle key presses"
+msgstr ""
+
+#: data/plugins/0turtle.json:40
+msgid "Call a function after n miliseconds"
+msgstr ""
+
+#: data/plugins/0turtle.json:41
+msgid "Number input"
+msgstr ""
+
+#: data/plugins/0turtle.json:42
+msgid "String input"
+msgstr ""
+
+#: data/plugins/0turtle.json:43
+msgid "Connect a function to handle mouse clicks"
+msgstr ""
+
+#: data/plugins/0turtle.json:248
+msgid "Key press"
+msgstr ""
+
+#: data/plugins/0turtle.json:254
+msgid "Specified key press"
+msgstr ""
+
+#: data/plugins/0turtle.json:260
+msgid "Mouse click"
+msgstr ""
+
+#: data/plugins/0turtle.json:266
+msgid "Mouse click on a turtle"
+msgstr ""
+
+#: data/plugins/0turtle.json:272
+msgid "Timer"
+msgstr ""
+
+#: data/plugins/0turtle.json:278
+msgid "Circular collision"
+msgstr ""
+
+#: data/plugins/0turtle.json:284
+msgid "Rectangle collision"
+msgstr ""
+
+#: data/plugins/base.json:6
+msgid "New line (Enter)"
+msgstr "Eingabetaste"
+
+#: data/plugins/base.json:7
+msgid "Tab"
+msgstr "Tab"
+
+#: data/plugins/base.json:8
+msgid "Comment"
+msgstr "Kommentar"
+
+#: data/plugins/base.json:9
+msgid "Argument separator (Comma)"
+msgstr ""
+
+#: data/plugins/base.json:10
+msgid "Left parenthesis"
+msgstr ""
+
+#: data/plugins/base.json:11
+msgid "Right parenthesis"
+msgstr ""
+
+#: data/plugins/base.json:12
+msgid "If statement"
+msgstr "Falls"
+
+#: data/plugins/base.json:13
+msgid "Else"
+msgstr ""
+
+#: data/plugins/base.json:14
+msgid "Begin block of commands"
+msgstr ""
+
+#: data/plugins/base.json:15
+msgid "and"
+msgstr "und"
+
+#: data/plugins/base.json:16
+msgid "or"
+msgstr "oder"
+
+#: data/plugins/base.json:17
+msgid "negation"
+msgstr ""
+
+#: data/plugins/base.json:18
+msgid "Equals"
+msgstr "ist"
+
+#: data/plugins/base.json:19
+msgid "Not equals"
+msgstr "ist nicht"
+
+#: data/plugins/base.json:20
+msgid "is less than"
+msgstr ""
+
+#: data/plugins/base.json:21
+msgid "is greater than"
+msgstr ""
+
+#: data/plugins/base.json:22
+msgid "Repeat block of commands"
+msgstr ""
+
+#: data/plugins/base.json:23
+msgid "For loop"
+msgstr ""
+
+#: data/plugins/base.json:24
+msgid "Is item in a list? / For all items in a collection."
+msgstr ""
+
+#: data/plugins/base.json:25
+msgid "Repeat while the condition is true"
+msgstr ""
+
+#: data/plugins/base.json:26
+msgid "Break out of a loop"
+msgstr ""
+
+#: data/plugins/base.json:27
+msgid "Continue with next iteration of a loop"
+msgstr ""
+
+#: data/plugins/base.json:28
+msgid "Define a method"
+msgstr ""
+
+#: data/plugins/base.json:29
+msgid "Return a value"
+msgstr ""
+
+#: data/plugins/base.json:30
+msgid "Left square bracket"
+msgstr ""
+
+#: data/plugins/base.json:31
+msgid "Right square bracket"
+msgstr ""
+
+#: data/plugins/base.json:32
+msgid "Length of (string, list etc)"
+msgstr ""
+
+#: data/plugins/base.json:33
+msgid "Delete an object"
+msgstr ""
+
+#: data/plugins/base.json:34
+msgid "Append an item to a list"
+msgstr ""
+
+#: data/plugins/base.json:35
+msgid "Insert an item to a list"
+msgstr ""
+
+#: data/plugins/base.json:36
+msgid "Clear list"
+msgstr ""
+
+#: data/plugins/base.json:37
+msgid "Finds index of the occurence of an item in a list or in a string"
+msgstr ""
+
+#: data/plugins/base.json:38
+msgid "Converts a string into lower case"
+msgstr ""
+
+#: data/plugins/base.json:39
+msgid "Converts a string into upper case"
+msgstr ""
+
+#: data/plugins/base.json:40
+msgid "Splits the string at the specified separator, and returns a list"
+msgstr ""
+
+#: data/plugins/base.json:41
+msgid "Replaces a specified phrase with another specified phrase"
+msgstr ""
+
+#: data/plugins/base.json:42
+msgid "Use variable as a global one"
+msgstr ""
+
+#: data/plugins/base.json:43
+msgid "Assign value to a variable"
+msgstr ""
+
+#: data/plugins/base.json:44
+msgid "Increase value by"
+msgstr ""
+
+#: data/plugins/base.json:45
+msgid "Decrease value by"
+msgstr ""
+
+#: data/plugins/base.json:46
+msgid "Dot (use to access properties of an object)"
+msgstr ""
+
+#: data/plugins/base.json:47
+msgid "Try"
+msgstr ""
+
+#: data/plugins/base.json:48
+msgid "Except"
+msgstr ""
+
+#: data/plugins/base.json:49
+msgid "Raise exception"
+msgstr ""
+
+#: data/plugins/base.json:50
+msgid "Plus"
+msgstr ""
+
+#: data/plugins/base.json:51
+msgid "Minus"
+msgstr ""
+
+#: data/plugins/base.json:52
+msgid "Multiply"
+msgstr ""
+
+#: data/plugins/base.json:53
+msgid "Divide"
+msgstr ""
+
+#: data/plugins/base.json:54
+msgid "Modulo"
+msgstr ""
+
+#: data/plugins/base.json:55
+msgid "Type conversion"
+msgstr ""
+
+#: data/plugins/base.json:56
+msgid "Direct Python code"
+msgstr ""
+
+#: data/plugins/base.json:57
+msgid "As type"
+msgstr ""
+
+#: data/plugins/base.json:58
+msgid "Random number"
+msgstr ""
+
+#: data/plugins/base.json:59
+msgid "Return list of numbers in specified range"
+msgstr ""
+
+#: data/plugins/base.json:60
+msgid "Converts a character to an int value"
+msgstr ""
+
+#: data/plugins/base.json:61
+msgid "Converts an int value to a character"
+msgstr ""
+
+#: data/plugins/base.json:62
+msgid "Create multidimensional list"
+msgstr ""
+
+#: data/plugins/base.json:63
+msgid "Exit the program"
+msgstr "Beenden das Programm"
+
+#: data/plugins/base.json:69
+msgid "East (0°)"
+msgstr ""
+
+#: data/plugins/base.json:70
+msgid "North (90°)"
+msgstr ""
+
+#: data/plugins/base.json:71
+msgid "West (180°)"
+msgstr ""
+
+#: data/plugins/base.json:72
+msgid "South (270°)"
+msgstr ""
+
+#: data/plugins/base.json:73
+msgid "Pi (3.14)"
+msgstr "Pi (3.14)"
+
+#: data/plugins/base.json:74
+msgid "Get x coordinate"
+msgstr ""
+
+#: data/plugins/base.json:75
+msgid "Get y coordinate"
+msgstr ""
+
+#: data/plugins/base.json:76
+msgid "Return True if turtle is shown."
+msgstr ""
+
+#: data/plugins/base.json:77
+msgid "Sine"
+msgstr ""
+
+#: data/plugins/base.json:78
+msgid "Cosine"
+msgstr ""
+
+#: data/plugins/base.json:79
+msgid "Tangent"
+msgstr ""
+
+#: data/plugins/base.json:80
+msgid "Absolute value"
+msgstr ""
+
+#: data/plugins/base.json:81
+msgid "Convert angle from degrees to radians."
+msgstr ""
+
+#: data/plugins/base.json:82
+msgid "Convert angle from radians to degrees."
+msgstr ""
+
+#: data/plugins/base.json:83
+msgid "True"
+msgstr "Richtig"
+
+#: data/plugins/base.json:84
+msgid "False"
+msgstr "Falsch"
+
+#: data/plugins/base.json:85
+msgid "Round a number"
+msgstr ""
+
+#: data/plugins/base.json:86
+msgid "Floor"
+msgstr ""
+
+#: data/plugins/base.json:87
+msgid "Ceil"
+msgstr ""
+
+#: data/plugins/base.json:88
+msgid "Returns square root of n. Use ** for int powers."
+msgstr ""
+
+#: data/plugins/base.json:89
+msgid "Returns the lowest value"
+msgstr ""
+
+#: data/plugins/base.json:90
+msgid "Returns the highest value"
+msgstr ""
+
+#: data/plugins/base.json:91
+msgid "Color (property or editable)"
+msgstr ""
+
+#: data/plugins/base.json:92
+msgid "Font (property or editable)"
+msgstr ""
+
+#: data/plugins/base.json:93
+msgid "Number"
+msgstr "Nummer"
+
+#: data/plugins/base.json:94 data/ui/programview.ui:649
+msgid "String"
+msgstr "Text"
+
+#: data/plugins/base.json:95
+msgid "Object"
+msgstr ""
+
+#: data/plugins/base.json:96 data/ui/functions-dialog.ui:143
+msgid "None"
+msgstr ""
+
+#: data/plugins/base.json:97
+msgid "Key"
+msgstr "Taste"
+
+#: data/plugins/base.json:103
+msgid "Read all lines of a file"
+msgstr ""
+
+#: data/plugins/base.json:104
+msgid "Write lines to a file"
+msgstr ""
+
+#: data/plugins/base.json:105
+msgid "File dialog"
+msgstr ""
+
+#: data/plugins/base.json:106
+msgid "Check file exists"
+msgstr ""
+
+#: data/plugins/base.json:107
+msgid "Check directory exists"
+msgstr ""
+
+#: data/plugins/base.json:108
+msgid "Delete file or directory"
+msgstr ""
+
+#: data/plugins/base.json:109
+msgid "Get files in DIRECTORY"
+msgstr ""
+
+#: data/plugins/base.json:110
+msgid "Get subdirs in DIRECTORY"
+msgstr ""
+
+#: data/plugins/base.json:111
+msgid "Get parent directory / the directory the item is located in"
+msgstr ""
+
+#: data/plugins/base.json:112
+msgid "Get file name from path"
+msgstr ""
+
+#: data/plugins/base.json:113
+msgid "Run system command"
+msgstr ""
+
+#: data/plugins/base.json:114
+#, fuzzy
+msgid "Open file in default program"
+msgstr "Programm öffnen"
+
+#: data/plugins/base.json:115
+msgid "Get current timestamp"
+msgstr ""
+
+#: data/plugins/base.json:116
+msgid "Convert timestamp to string"
+msgstr ""
+
+#: data/plugins/base.json:117
+msgid "Convert string to timestamp"
+msgstr ""
+
+#: data/plugins/console.json:7
+msgid "Print to console"
+msgstr ""
+
+#: data/plugins/console.json:8
+msgid "Input from console"
+msgstr ""
+
+#: data/plugins/console.json:9
+msgid "Print to console without newline"
+msgstr ""
+
+#: data/plugins/console.json:10
+msgid "Print to stderr"
+msgstr ""
+
+#: data/plugins/mm.json:7
+msgid "Create sound player for a file"
+msgstr ""
+
+#: data/plugins/mm.json:8
+msgid "Play tone (frequency/C-B, duration, wait for end)"
+msgstr ""
+
+#: data/plugins/mm.json:9
+msgid "Play sound (file or sound player, volume - optional)"
+msgstr ""
+
+#: data/plugins/mm.json:10
+msgid "Pause sound player"
+msgstr ""
+
+#: data/plugins/mm.json:11
+msgid "is player playing"
+msgstr ""
+
+#: data/plugins/mm.json:12
+msgid "Seek to given position in seconds"
+msgstr ""
+
+#: data/plugins/mm.json:13
+msgid "Get current position"
+msgstr ""
+
+#: data/plugins/mm.json:14
+msgid ""
+"Get the duration of the media opened in player (returns zero if duration is "
+"unknown)"
+msgstr ""
+
+#: data/plugins/rpi.json:7
+msgid "Connect LED"
+msgstr ""
+
+#: data/plugins/rpi.json:8
+msgid "Connect RGB LED"
+msgstr ""
+
+#: data/plugins/rpi.json:9
+msgid "Connect Button"
+msgstr ""
+
+#: data/plugins/rpi.json:10
+msgid "Connect Input Device"
+msgstr ""
+
+#: data/plugins/rpi.json:11
+msgid "Connect PWM Output Device"
+msgstr ""
+
+#: data/plugins/rpi.json:12
+msgid "Connect Digital Output Device"
+msgstr ""
+
+#: data/plugins/rpi.json:13
+msgid "Turn on device"
+msgstr ""
+
+#: data/plugins/rpi.json:14
+msgid "Turn off device"
+msgstr ""
+
+#: data/plugins/rpi.json:15
+msgid "Value (input and output)"
+msgstr ""
+
+#: data/plugins/rpi.json:16
+msgid ""
+"Connect a function that is called when the device state changes to active"
+msgstr ""
+
+#: data/plugins/rpi.json:17
+msgid ""
+"Connect a function that is called when the device state changes to inactive"
+msgstr ""
+
+#: data/plugins/rpi.json:41
+msgid "RPi device activated"
+msgstr ""
+
+#: data/plugins/rpi.json:47
+msgid "RPi device deactivated"
+msgstr ""
+
+#: data/ui/app-settings.ui:9
+msgid "Settings"
+msgstr ""
+
+#: data/ui/app-settings.ui:31
+msgid ""
+"Write debug data to output files\n"
+"(this allows us to find on which line the error happened)"
+msgstr ""
+
+#: data/ui/app-settings.ui:73
+msgid "Dark mode"
+msgstr ""
+
+#: data/ui/app-settings.ui:100
+msgid "Dark icons"
+msgstr ""
+
+#: data/ui/functions-dialog.ui:9 data/ui/window.ui:451
+msgid "Functions"
+msgstr ""
+
+#: data/ui/functions-dialog.ui:108 data/ui/scene-editor-window.ui:269
+msgid "Name:"
+msgstr ""
+
+#: data/ui/functions-dialog.ui:133
+msgid "Connected event:"
+msgstr ""
+
+#: data/ui/program-settings.ui:7 data/ui/window.ui:487
+msgid "Project settings"
+msgstr ""
+
+#: data/ui/program-settings.ui:44
+msgid "Additional commands"
+msgstr ""
+
+#: data/ui/program-settings.ui:73
+msgid "Open plugins folder"
+msgstr ""
+
+#: data/ui/program-settings.ui:93
+msgid "Run the program in IDLE"
+msgstr "Starte das Programm in IDLE"
+
+#: data/ui/program-settings.ui:126
+msgid "Statistics"
+msgstr ""
+
+#: data/ui/program-settings.ui:178
+msgid "Cannot open plugins folder"
+msgstr ""
+
+#: data/ui/program-settings.ui:223
+msgid "Please open it manually at following address:"
+msgstr ""
+
+#: data/ui/programview.ui:44
+msgid "Enter a number"
+msgstr ""
+
+#: data/ui/programview.ui:64 data/ui/programview.ui:191
+#: data/ui/programview.ui:452 data/ui/programview.ui:518
+#: data/ui/programview.ui:585
+msgid "Done"
+msgstr ""
+
+#: data/ui/programview.ui:173
+msgid "Select key"
+msgstr ""
+
+#: data/ui/programview.ui:235
+msgid "Press any key to select value of the icon"
+msgstr ""
+
+#: data/ui/programview.ui:312
+msgid "Edit value"
+msgstr ""
+
+#: data/ui/programview.ui:322 data/ui/window.ui:173
+msgid "Help"
+msgstr "Hilfe"
+
+#: data/ui/programview.ui:332
+msgid "Autocomplete"
+msgstr ""
+
+#: data/ui/programview.ui:347
+msgid "Copy"
+msgstr ""
+
+#: data/ui/programview.ui:357
+msgid "Paste"
+msgstr ""
+
+#: data/ui/programview.ui:367
+msgid "Cut"
+msgstr ""
+
+#: data/ui/programview.ui:377
+msgid "Comment block"
+msgstr ""
+
+#: data/ui/programview.ui:386
+msgid "Uncomment block"
+msgstr ""
+
+#: data/ui/programview.ui:395
+msgid "Indent block"
+msgstr ""
+
+#: data/ui/programview.ui:404
+msgid "Unindent block"
+msgstr ""
+
+#: data/ui/programview.ui:419 data/ui/window.ui:298
+msgid "Undo"
+msgstr ""
+
+#: data/ui/programview.ui:428 data/ui/window.ui:315
+msgid "Redo"
+msgstr ""
+
+#: data/ui/programview.ui:436
+msgid "Edit Python code"
+msgstr ""
+
+#: data/ui/programview.ui:499
+msgid "Enter a string"
+msgstr ""
+
+#: data/ui/programview.ui:565
+msgid "Select data type"
+msgstr ""
+
+#: data/ui/programview.ui:618
+msgid "Integer"
+msgstr ""
+
+#: data/ui/programview.ui:633
+msgid "Float"
+msgstr ""
+
+#: data/ui/programview.ui:665
+msgid "Custom"
+msgstr ""
+
+#: data/ui/programview.ui:695
+msgid "Enter name of your custom data type"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:8 data/ui/scene-editor-window.ui:126
+msgid "Add scene"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:93
+msgid "Scenes"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:113
+msgid "New scene name"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:199
+msgid "Sprites"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:293 data/ui/window.ui:280
+#: src/windows/window.vala:349
+msgid "Save"
+msgstr "Speichern"
+
+#: data/ui/scene-editor-window.ui:311
+msgid "Delete"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:404
+msgid "Properties"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:448
+msgid "Width:"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:460
+msgid "Height:"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:501
+msgid "Remove"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:538
+msgid "Move the sprite to the lower layer"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:553
+msgid "Move the sprite to the upper layer"
+msgstr ""
+
+#: data/ui/scene-editor-window.ui:577
+msgid "Layer:"
+msgstr ""
+
+#: data/ui/search-widget.ui:26
+msgid "Find:"
+msgstr ""
+
+#: data/ui/search-widget.ui:54
+msgid "Replace:"
+msgstr ""
+
+#: data/ui/search-widget.ui:84
+msgid "Replace"
+msgstr ""
+
+#: data/ui/search-widget.ui:98
+msgid "Replace all"
+msgstr ""
+
+#: data/ui/window.ui:96
+msgid "New project"
+msgstr ""
+
+#: data/ui/window.ui:110
+msgid "Save as"
+msgstr ""
+
+#: data/ui/window.ui:135
+msgid "Show/hide search dialog"
+msgstr ""
+
+#: data/ui/window.ui:159
+msgid "Preferences"
+msgstr ""
+
+#: data/ui/window.ui:187
+msgid "About Turtlico"
+msgstr ""
+
+#: data/ui/window.ui:244
+msgid "Run program"
+msgstr "Starte das Programm"
+
+#: data/ui/window.ui:262
+msgid "Open program"
+msgstr "Programm öffnen"
+
+#: data/ui/window.ui:331
+msgid "Drop items here to delete them"
+msgstr ""
+
+#: data/ui/window.ui:469 src/windows/scene-editor-window.vala:153
+msgid "Scene editor"
 msgstr ""
 
 #: src/classes/debugger.vala:95
@@ -222,882 +1106,33 @@ msgstr ""
 msgid "Cannot insert the image: "
 msgstr ""
 
-#: src/main.vala:45
+#: src/libturtlico/command.vala:152
+msgid "Failed to load command def file: "
+msgstr ""
+
+#: src/libturtlico/compiler.vala:205
+msgid "Functions must start on a separate line!"
+msgstr ""
+
+#: src/libturtlico/compiler.vala:369
+msgid "Generated code:\n"
+msgstr ""
+
+#: src/main.vala:43
 msgid "Writes compiled program to FILE"
 msgstr ""
 
-#: src/main.vala:76
+#: src/main.vala:74
 #, c-format
 msgid "Cannot save the output file: %s\n"
-msgstr ""
-
-#: src/plugins/0turtle.json:7
-msgid "Go forward"
-msgstr "Geh geradeaus"
-
-#: src/plugins/0turtle.json:8
-msgid "Turn left"
-msgstr "Nach links"
-
-#: src/plugins/0turtle.json:9
-msgid "Turn right"
-msgstr "Nach rechts"
-
-#: src/plugins/0turtle.json:10
-msgid "Set heading angle"
-msgstr ""
-
-#: src/plugins/0turtle.json:11
-msgid "Speed"
-msgstr ""
-
-#: src/plugins/0turtle.json:12
-msgid "Set position"
-msgstr ""
-
-#: src/plugins/0turtle.json:13
-msgid "Set pen color"
-msgstr ""
-
-#: src/plugins/0turtle.json:14
-msgid "Lift the pen up – no drawing when moving."
-msgstr ""
-
-#: src/plugins/0turtle.json:15
-msgid "Put the pen down – drawing when moving."
-msgstr ""
-
-#: src/plugins/0turtle.json:16
-msgid "Pen properties"
-msgstr ""
-
-#: src/plugins/0turtle.json:17
-msgid "Hide turtle"
-msgstr "Verstecke die Turtle"
-
-#: src/plugins/0turtle.json:18
-msgid "Show turtle"
-msgstr "Zeige die Turtle"
-
-#: src/plugins/0turtle.json:19
-msgid "Write text on screen"
-msgstr ""
-
-#: src/plugins/0turtle.json:20
-msgid "Begin fill"
-msgstr ""
-
-#: src/plugins/0turtle.json:21
-msgid "End fill - fill the drawn shape"
-msgstr ""
-
-#: src/plugins/0turtle.json:22
-msgid "Last loaded scene"
-msgstr ""
-
-#: src/plugins/0turtle.json:23
-msgid "Clear turtle screen"
-msgstr "Lösche den Bildschrim"
-
-#: src/plugins/0turtle.json:24
-msgid "Get or set the color of the screen"
-msgstr ""
-
-#: src/plugins/0turtle.json:25
-msgid "Get or set the background picture of the screen"
-msgstr ""
-
-#: src/plugins/0turtle.json:26
-msgid "Load scene (file)"
-msgstr ""
-
-#: src/plugins/0turtle.json:27
-msgid "Image file"
-msgstr "Bild"
-
-#: src/plugins/0turtle.json:28
-msgid "Set turtle shape"
-msgstr ""
-
-#: src/plugins/0turtle.json:29
-msgid "Create new turtle"
-msgstr "Neue Turtle"
-
-#: src/plugins/0turtle.json:30
-msgid "Get the predefined turtle object"
-msgstr ""
-
-#: src/plugins/0turtle.json:31
-msgid "Place image at the position of the turtle"
-msgstr ""
-
-#: src/plugins/0turtle.json:32
-msgid "Sleep"
-msgstr "Schlaf"
-
-#: src/plugins/0turtle.json:33
-msgid ""
-"Connect a function to handle collision (in circle collider of specified "
-"radius) between two turtles"
-msgstr ""
-
-#: src/plugins/0turtle.json:34
-msgid ""
-"Connect a function to handle collision (in rectangle collider of specified "
-"size) between two turtles"
-msgstr ""
-
-#: src/plugins/0turtle.json:35
-msgid "Undo the last turtle action"
-msgstr ""
-
-#: src/plugins/0turtle.json:36
-msgid "Circle"
-msgstr ""
-
-#: src/plugins/0turtle.json:37
-msgid "Turbo mode"
-msgstr ""
-
-#: src/plugins/0turtle.json:38
-msgid "Camera properties"
-msgstr ""
-
-#: src/plugins/0turtle.json:39
-msgid "Connect a function to handle key presses"
-msgstr ""
-
-#: src/plugins/0turtle.json:40
-msgid "Call a function after n miliseconds"
-msgstr ""
-
-#: src/plugins/0turtle.json:41
-msgid "Number input"
-msgstr ""
-
-#: src/plugins/0turtle.json:42
-msgid "String input"
-msgstr ""
-
-#: src/plugins/0turtle.json:43
-msgid "Connect a function to handle mouse clicks"
-msgstr ""
-
-#: src/plugins/0turtle.json:248
-msgid "Key press"
-msgstr ""
-
-#: src/plugins/0turtle.json:254
-msgid "Specified key press"
-msgstr ""
-
-#: src/plugins/0turtle.json:260
-msgid "Mouse click"
-msgstr ""
-
-#: src/plugins/0turtle.json:266
-msgid "Mouse click on a turtle"
-msgstr ""
-
-#: src/plugins/0turtle.json:272
-msgid "Timer"
-msgstr ""
-
-#: src/plugins/0turtle.json:278
-msgid "Circular collision"
-msgstr ""
-
-#: src/plugins/0turtle.json:284
-msgid "Rectangle collision"
-msgstr ""
-
-#: src/plugins/base.json:6
-msgid "New line (Enter)"
-msgstr "Eingabetaste"
-
-#: src/plugins/base.json:7
-msgid "Tab"
-msgstr "Tab"
-
-#: src/plugins/base.json:8
-msgid "Comment"
-msgstr "Kommentar"
-
-#: src/plugins/base.json:9
-msgid "Argument separator (Comma)"
-msgstr ""
-
-#: src/plugins/base.json:10
-msgid "Left parenthesis"
-msgstr ""
-
-#: src/plugins/base.json:11
-msgid "Right parenthesis"
-msgstr ""
-
-#: src/plugins/base.json:12
-msgid "If statement"
-msgstr "Falls"
-
-#: src/plugins/base.json:13
-msgid "Else"
-msgstr ""
-
-#: src/plugins/base.json:14
-msgid "Begin block of commands"
-msgstr ""
-
-#: src/plugins/base.json:15
-msgid "and"
-msgstr "und"
-
-#: src/plugins/base.json:16
-msgid "or"
-msgstr "oder"
-
-#: src/plugins/base.json:17
-msgid "negation"
-msgstr ""
-
-#: src/plugins/base.json:18
-msgid "Equals"
-msgstr "ist"
-
-#: src/plugins/base.json:19
-msgid "Not equals"
-msgstr "ist nicht"
-
-#: src/plugins/base.json:20
-msgid "is less than"
-msgstr ""
-
-#: src/plugins/base.json:21
-msgid "is greater than"
-msgstr ""
-
-#: src/plugins/base.json:22
-msgid "Repeat block of commands"
-msgstr ""
-
-#: src/plugins/base.json:23
-msgid "For loop"
-msgstr ""
-
-#: src/plugins/base.json:24
-msgid "Is item in a list? / For all items in a collection."
-msgstr ""
-
-#: src/plugins/base.json:25
-msgid "Repeat while the condition is true"
-msgstr ""
-
-#: src/plugins/base.json:26
-msgid "Break out of a loop"
-msgstr ""
-
-#: src/plugins/base.json:27
-msgid "Continue with next iteration of a loop"
-msgstr ""
-
-#: src/plugins/base.json:28
-msgid "Define a method"
-msgstr ""
-
-#: src/plugins/base.json:29
-msgid "Return a value"
-msgstr ""
-
-#: src/plugins/base.json:30
-msgid "Left square bracket"
-msgstr ""
-
-#: src/plugins/base.json:31
-msgid "Right square bracket"
-msgstr ""
-
-#: src/plugins/base.json:32
-msgid "Length of (string, list etc)"
-msgstr ""
-
-#: src/plugins/base.json:33
-msgid "Delete an object"
-msgstr ""
-
-#: src/plugins/base.json:34
-msgid "Append an item to a list"
-msgstr ""
-
-#: src/plugins/base.json:35
-msgid "Insert an item to a list"
-msgstr ""
-
-#: src/plugins/base.json:36
-msgid "Clear list"
-msgstr ""
-
-#: src/plugins/base.json:37
-msgid "Finds index of the occurence of an item in a list or in a string"
-msgstr ""
-
-#: src/plugins/base.json:38
-msgid "Converts a string into lower case"
-msgstr ""
-
-#: src/plugins/base.json:39
-msgid "Converts a string into upper case"
-msgstr ""
-
-#: src/plugins/base.json:40
-msgid "Splits the string at the specified separator, and returns a list"
-msgstr ""
-
-#: src/plugins/base.json:41
-msgid "Replaces a specified phrase with another specified phrase"
-msgstr ""
-
-#: src/plugins/base.json:42
-msgid "Use variable as a global one"
-msgstr ""
-
-#: src/plugins/base.json:43
-msgid "Assign value to a variable"
-msgstr ""
-
-#: src/plugins/base.json:44
-msgid "Increase value by"
-msgstr ""
-
-#: src/plugins/base.json:45
-msgid "Decrease value by"
-msgstr ""
-
-#: src/plugins/base.json:46
-msgid "Dot (use to access properties of an object)"
-msgstr ""
-
-#: src/plugins/base.json:47
-msgid "Try"
-msgstr ""
-
-#: src/plugins/base.json:48
-msgid "Except"
-msgstr ""
-
-#: src/plugins/base.json:49
-msgid "Raise exception"
-msgstr ""
-
-#: src/plugins/base.json:50
-msgid "Plus"
-msgstr ""
-
-#: src/plugins/base.json:51
-msgid "Minus"
-msgstr ""
-
-#: src/plugins/base.json:52
-msgid "Multiply"
-msgstr ""
-
-#: src/plugins/base.json:53
-msgid "Divide"
-msgstr ""
-
-#: src/plugins/base.json:54
-msgid "Modulo"
-msgstr ""
-
-#: src/plugins/base.json:55
-msgid "Type conversion"
-msgstr ""
-
-#: src/plugins/base.json:56
-msgid "Direct Python code"
-msgstr ""
-
-#: src/plugins/base.json:57
-msgid "As type"
-msgstr ""
-
-#: src/plugins/base.json:58
-msgid "Random number"
-msgstr ""
-
-#: src/plugins/base.json:59
-msgid "Return list of numbers in specified range"
-msgstr ""
-
-#: src/plugins/base.json:60
-msgid "Converts a character to an int value"
-msgstr ""
-
-#: src/plugins/base.json:61
-msgid "Converts an int value to a character"
-msgstr ""
-
-#: src/plugins/base.json:62
-msgid "Create multidimensional list"
-msgstr ""
-
-#: src/plugins/base.json:63
-msgid "Exit the program"
-msgstr "Beenden das Programm"
-
-#: src/plugins/base.json:69
-msgid "East (0°)"
-msgstr ""
-
-#: src/plugins/base.json:70
-msgid "North (90°)"
-msgstr ""
-
-#: src/plugins/base.json:71
-msgid "West (180°)"
-msgstr ""
-
-#: src/plugins/base.json:72
-msgid "South (270°)"
-msgstr ""
-
-#: src/plugins/base.json:73
-msgid "Pi (3.14)"
-msgstr "Pi (3.14)"
-
-#: src/plugins/base.json:74
-msgid "Get x coordinate"
-msgstr ""
-
-#: src/plugins/base.json:75
-msgid "Get y coordinate"
-msgstr ""
-
-#: src/plugins/base.json:76
-msgid "Return True if turtle is shown."
-msgstr ""
-
-#: src/plugins/base.json:77
-msgid "Sine"
-msgstr ""
-
-#: src/plugins/base.json:78
-msgid "Cosine"
-msgstr ""
-
-#: src/plugins/base.json:79
-msgid "Tangent"
-msgstr ""
-
-#: src/plugins/base.json:80
-msgid "Absolute value"
-msgstr ""
-
-#: src/plugins/base.json:81
-msgid "Convert angle from degrees to radians."
-msgstr ""
-
-#: src/plugins/base.json:82
-msgid "Convert angle from radians to degrees."
-msgstr ""
-
-#: src/plugins/base.json:83
-msgid "True"
-msgstr "Richtig"
-
-#: src/plugins/base.json:84
-msgid "False"
-msgstr "Falsch"
-
-#: src/plugins/base.json:85
-msgid "Round a number"
-msgstr ""
-
-#: src/plugins/base.json:86
-msgid "Floor"
-msgstr ""
-
-#: src/plugins/base.json:87
-msgid "Ceil"
-msgstr ""
-
-#: src/plugins/base.json:88
-msgid "Returns square root of n. Use ** for int powers."
-msgstr ""
-
-#: src/plugins/base.json:89
-msgid "Returns the lowest value"
-msgstr ""
-
-#: src/plugins/base.json:90
-msgid "Returns the highest value"
-msgstr ""
-
-#: src/plugins/base.json:91
-msgid "Color (property or editable)"
-msgstr ""
-
-#: src/plugins/base.json:92
-msgid "Font (property or editable)"
-msgstr ""
-
-#: src/plugins/base.json:93
-msgid "Number"
-msgstr "Nummer"
-
-#: src/plugins/base.json:94 src/widgets/programview.ui:649
-msgid "String"
-msgstr "Text"
-
-#: src/plugins/base.json:95
-msgid "Object"
-msgstr ""
-
-#: src/plugins/base.json:96 src/windows/functions-dialog.ui:143
-msgid "None"
-msgstr ""
-
-#: src/plugins/base.json:97
-msgid "Key"
-msgstr "Taste"
-
-#: src/plugins/base.json:103
-msgid "Read all lines of a file"
-msgstr ""
-
-#: src/plugins/base.json:104
-msgid "Write lines to a file"
-msgstr ""
-
-#: src/plugins/base.json:105
-msgid "File dialog"
-msgstr ""
-
-#: src/plugins/base.json:106
-msgid "Check file exists"
-msgstr ""
-
-#: src/plugins/base.json:107
-msgid "Check directory exists"
-msgstr ""
-
-#: src/plugins/base.json:108
-msgid "Delete file or directory"
-msgstr ""
-
-#: src/plugins/base.json:109
-msgid "Get files in DIRECTORY"
-msgstr ""
-
-#: src/plugins/base.json:110
-msgid "Get subdirs in DIRECTORY"
-msgstr ""
-
-#: src/plugins/base.json:111
-msgid "Get parent directory / the directory the item is located in"
-msgstr ""
-
-#: src/plugins/base.json:112
-msgid "Get file name from path"
-msgstr ""
-
-#: src/plugins/base.json:113
-msgid "Run system command"
-msgstr ""
-
-#: src/plugins/base.json:114
-#, fuzzy
-msgid "Open file in default program"
-msgstr "Programm öffnen"
-
-#: src/plugins/base.json:115
-msgid "Get current timestamp"
-msgstr ""
-
-#: src/plugins/base.json:116
-msgid "Convert timestamp to string"
-msgstr ""
-
-#: src/plugins/base.json:117
-msgid "Convert string to timestamp"
-msgstr ""
-
-#: src/plugins/console.json:7
-msgid "Print to console"
-msgstr ""
-
-#: src/plugins/console.json:8
-msgid "Input from console"
-msgstr ""
-
-#: src/plugins/console.json:9
-msgid "Print to console without newline"
-msgstr ""
-
-#: src/plugins/console.json:10
-msgid "Print to stderr"
-msgstr ""
-
-#: src/plugins/mm.json:7
-msgid "Create sound player for a file"
-msgstr ""
-
-#: src/plugins/mm.json:8
-msgid "Play tone (frequency/C-B, duration, wait for end)"
-msgstr ""
-
-#: src/plugins/mm.json:9
-msgid "Play sound (file or sound player, volume - optional)"
-msgstr ""
-
-#: src/plugins/mm.json:10
-msgid "Pause sound player"
-msgstr ""
-
-#: src/plugins/mm.json:11
-msgid "is player playing"
-msgstr ""
-
-#: src/plugins/mm.json:12
-msgid "Seek to given position in seconds"
-msgstr ""
-
-#: src/plugins/mm.json:13
-msgid "Get current position"
-msgstr ""
-
-#: src/plugins/mm.json:14
-msgid ""
-"Get the duration of the media opened in player (returns zero if duration is "
-"unknown)"
-msgstr ""
-
-#: src/plugins/rpi.json:7
-msgid "Connect LED"
-msgstr ""
-
-#: src/plugins/rpi.json:8
-msgid "Connect RGB LED"
-msgstr ""
-
-#: src/plugins/rpi.json:9
-msgid "Connect Button"
-msgstr ""
-
-#: src/plugins/rpi.json:10
-msgid "Connect Input Device"
-msgstr ""
-
-#: src/plugins/rpi.json:11
-msgid "Connect PWM Output Device"
-msgstr ""
-
-#: src/plugins/rpi.json:12
-msgid "Connect Digital Output Device"
-msgstr ""
-
-#: src/plugins/rpi.json:13
-msgid "Turn on device"
-msgstr ""
-
-#: src/plugins/rpi.json:14
-msgid "Turn off device"
-msgstr ""
-
-#: src/plugins/rpi.json:15
-msgid "Value (input and output)"
-msgstr ""
-
-#: src/plugins/rpi.json:16
-msgid ""
-"Connect a function that is called when the device state changes to active"
-msgstr ""
-
-#: src/plugins/rpi.json:17
-msgid ""
-"Connect a function that is called when the device state changes to inactive"
-msgstr ""
-
-#: src/plugins/rpi.json:41
-msgid "RPi device activated"
-msgstr ""
-
-#: src/plugins/rpi.json:47
-msgid "RPi device deactivated"
-msgstr ""
-
-#: src/widgets/programview.ui:44
-msgid "Enter a number"
-msgstr ""
-
-#: src/widgets/programview.ui:64 src/widgets/programview.ui:191
-#: src/widgets/programview.ui:452 src/widgets/programview.ui:518
-#: src/widgets/programview.ui:585
-msgid "Done"
-msgstr ""
-
-#: src/widgets/programview.ui:173
-msgid "Select key"
-msgstr ""
-
-#: src/widgets/programview.ui:235
-msgid "Press any key to select value of the icon"
-msgstr ""
-
-#: src/widgets/programview.ui:312
-msgid "Edit value"
-msgstr ""
-
-#: src/widgets/programview.ui:322 src/windows/window.ui:173
-msgid "Help"
-msgstr "Hilfe"
-
-#: src/widgets/programview.ui:332
-msgid "Autocomplete"
-msgstr ""
-
-#: src/widgets/programview.ui:347
-msgid "Copy"
-msgstr ""
-
-#: src/widgets/programview.ui:357
-msgid "Paste"
-msgstr ""
-
-#: src/widgets/programview.ui:367
-msgid "Cut"
-msgstr ""
-
-#: src/widgets/programview.ui:377
-msgid "Comment block"
-msgstr ""
-
-#: src/widgets/programview.ui:386
-msgid "Uncomment block"
-msgstr ""
-
-#: src/widgets/programview.ui:395
-msgid "Indent block"
-msgstr ""
-
-#: src/widgets/programview.ui:404
-msgid "Unindent block"
-msgstr ""
-
-#: src/widgets/programview.ui:419 src/windows/window.ui:298
-msgid "Undo"
-msgstr ""
-
-#: src/widgets/programview.ui:428 src/windows/window.ui:315
-msgid "Redo"
-msgstr ""
-
-#: src/widgets/programview.ui:436
-msgid "Edit Python code"
-msgstr ""
-
-#: src/widgets/programview.ui:499
-msgid "Enter a string"
-msgstr ""
-
-#: src/widgets/programview.ui:565
-msgid "Select data type"
-msgstr ""
-
-#: src/widgets/programview.ui:618
-msgid "Integer"
-msgstr ""
-
-#: src/widgets/programview.ui:633
-msgid "Float"
-msgstr ""
-
-#: src/widgets/programview.ui:665
-msgid "Custom"
-msgstr ""
-
-#: src/widgets/programview.ui:695
-msgid "Enter name of your custom data type"
 msgstr ""
 
 #: src/widgets/scene-editor-view.vala:89
 msgid "No scene opened"
 msgstr ""
 
-#: src/widgets/search-widget.ui:26
-msgid "Find:"
-msgstr ""
-
-#: src/widgets/search-widget.ui:54
-msgid "Replace:"
-msgstr ""
-
-#: src/widgets/search-widget.ui:84
-msgid "Replace"
-msgstr ""
-
-#: src/widgets/search-widget.ui:98
-msgid "Replace all"
-msgstr ""
-
-#: src/windows/app-settings.ui:9
-msgid "Settings"
-msgstr ""
-
-#: src/windows/app-settings.ui:31
-msgid ""
-"Write debug data to output files\n"
-"(this allows us to find on which line the error happened)"
-msgstr ""
-
-#: src/windows/app-settings.ui:73
-msgid "Dark mode"
-msgstr ""
-
-#: src/windows/app-settings.ui:100
-msgid "Dark icons"
-msgstr ""
-
-#: src/windows/functions-dialog.ui:9 src/windows/window.ui:451
-msgid "Functions"
-msgstr ""
-
-#: src/windows/functions-dialog.ui:108 src/windows/scene-editor-window.ui:269
-msgid "Name:"
-msgstr ""
-
-#: src/windows/functions-dialog.ui:133
-msgid "Connected event:"
-msgstr ""
-
-#: src/windows/functions-dialog.vala:182
+#: src/windows/functions-dialog.vala:189
 msgid "Use this function"
-msgstr ""
-
-#: src/windows/program-settings.ui:7 src/windows/window.ui:487
-msgid "Project settings"
-msgstr ""
-
-#: src/windows/program-settings.ui:44
-msgid "Additional commands"
-msgstr ""
-
-#: src/windows/program-settings.ui:73
-msgid "Open plugins folder"
-msgstr ""
-
-#: src/windows/program-settings.ui:93
-msgid "Run the program in IDLE"
-msgstr "Starte das Programm in IDLE"
-
-#: src/windows/program-settings.ui:126
-msgid "Statistics"
-msgstr ""
-
-#: src/windows/program-settings.ui:178
-msgid "Cannot open plugins folder"
-msgstr ""
-
-#: src/windows/program-settings.ui:223
-msgid "Please open it manually at following address:"
 msgstr ""
 
 #: src/windows/program-settings.vala:84
@@ -1110,63 +1145,6 @@ msgstr ""
 
 #: src/windows/program-settings.vala:105
 msgid "Icon count without whitespace and comments: "
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:8 src/windows/scene-editor-window.ui:126
-msgid "Add scene"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:93
-msgid "Scenes"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:113
-msgid "New scene name"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:199
-msgid "Sprites"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:293 src/windows/window.ui:280
-#: src/windows/window.vala:349
-msgid "Save"
-msgstr "Speichern"
-
-#: src/windows/scene-editor-window.ui:311
-msgid "Delete"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:404
-msgid "Properties"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:448
-msgid "Width:"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:460
-msgid "Height:"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:501
-msgid "Remove"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:538
-msgid "Move the sprite to the lower layer"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:553
-msgid "Move the sprite to the upper layer"
-msgstr ""
-
-#: src/windows/scene-editor-window.ui:577
-msgid "Layer:"
-msgstr ""
-
-#: src/windows/scene-editor-window.vala:153 src/windows/window.ui:469
-msgid "Scene editor"
 msgstr ""
 
 #: src/windows/scene-editor-window.vala:194
@@ -1197,58 +1175,26 @@ msgstr ""
 msgid "Would you like to save your changes before closing the scene?"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:437 src/windows/window.vala:737
+#: src/windows/scene-editor-window.vala:437 src/windows/window.vala:748
 msgid "Otherwise the unsaved changes will be lost!"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:439 src/windows/window.vala:739
+#: src/windows/scene-editor-window.vala:439 src/windows/window.vala:750
 msgid "Yes"
 msgstr ""
 
-#: src/windows/scene-editor-window.vala:440 src/windows/window.vala:740
+#: src/windows/scene-editor-window.vala:440 src/windows/window.vala:751
 msgid "No"
 msgstr ""
 
 #: src/windows/scene-editor-window.vala:441 src/windows/window.vala:350
-#: src/windows/window.vala:384 src/windows/window.vala:741
+#: src/windows/window.vala:384 src/windows/window.vala:752
 msgid "Cancel"
 msgstr ""
 
 #: src/windows/scene-editor-window.vala:479
 #: src/windows/scene-editor-window.vala:523
 msgid "Error occurred while loading scenes and sprites"
-msgstr ""
-
-#: src/windows/window.ui:96
-msgid "New project"
-msgstr ""
-
-#: src/windows/window.ui:110
-msgid "Save as"
-msgstr ""
-
-#: src/windows/window.ui:135
-msgid "Show/hide search dialog"
-msgstr ""
-
-#: src/windows/window.ui:159
-msgid "Preferences"
-msgstr ""
-
-#: src/windows/window.ui:187
-msgid "About Turtlico"
-msgstr ""
-
-#: src/windows/window.ui:244
-msgid "Run program"
-msgstr "Starte das Programm"
-
-#: src/windows/window.ui:262
-msgid "Open program"
-msgstr "Programm öffnen"
-
-#: src/windows/window.ui:331
-msgid "Drop items here to delete them"
 msgstr ""
 
 #: src/windows/window.vala:337
@@ -1296,11 +1242,11 @@ msgstr ""
 msgid "Would you like to continue loading anyway and ignore further errors?"
 msgstr ""
 
-#: src/windows/window.vala:736
+#: src/windows/window.vala:747
 msgid "Would you like to save your changes before closing the program?"
 msgstr ""
 
-#: src/windows/window.vala:757
+#: src/windows/window.vala:768
 msgid "Unnamed"
 msgstr ""
 

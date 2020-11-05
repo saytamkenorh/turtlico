@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/io/gitlab/Turtlico/plugins">
+    <file>0turtle.json</file>
+    <file>base.json</file>
+    <file>console.json</file>
+    <file>mm.json</file>
+    <file>rpi.json</file>
+  </gresource>
+  <gresource prefix="/io/gitlab/Turtlico">
+    <file>icons/0turtle/bf.svg</file>
+    <file>icons/0turtle/collision.svg</file>
+    <file>icons/0turtle/collision_rect.svg</file>
+    <file>icons/0turtle/cs.svg</file>
+    <file>icons/0turtle/ds.svg</file>
+    <file>icons/0turtle/ef.svg</file>
+    <file>icons/0turtle/emc.svg</file>
+    <file>icons/0turtle/gett.svg</file>
+    <file>icons/0turtle/go.svg</file>
+    <file>icons/0turtle/ht.svg</file>
+    <file>icons/0turtle/img.svg</file>
+    <file>icons/0turtle/last_scene.svg</file>
+    <file>icons/0turtle/newt.svg</file>
+    <file>icons/0turtle/penc.svg</file>
+    <file>icons/0turtle/plcimg.svg</file>
+    <file>icons/0turtle/pos.svg</file>
+    <file>icons/0turtle/pp.svg</file>
+    <file>icons/0turtle/scene.svg</file>
+    <file>icons/0turtle/screen_c.svg</file>
+    <file>icons/0turtle/screen_i.svg</file>
+    <file>icons/0turtle/screenprop.svg</file>
+    <file>icons/0turtle/seth.svg</file>
+    <file>icons/0turtle/speed.svg</file>
+    <file>icons/0turtle/st.svg</file>
+    <file>icons/0turtle/tmr.svg</file>
+    <file>icons/0turtle/turbo.svg</file>
+    <file>icons/0turtle/wr.svg</file>
+
+    <file>icons/base/apnd.svg</file>
+    <file>icons/base/basename.svg</file>
+    <file>icons/base/clr.svg</file>
+    <file>icons/base/diris.svg</file>
+    <file>icons/base/dirname.svg</file>
+    <file>icons/base/exc.svg</file>
+    <file>icons/base/exit.svg</file>
+    <file>icons/base/false.svg</file>
+    <file>icons/base/fileis.svg</file>
+    <file>icons/base/index.svg</file>
+    <file>icons/base/ins.svg</file>
+    <file>icons/base/key.svg</file>
+    <file>icons/base/mdlist.svg</file>
+    <file>icons/base/none.svg</file>
+    <file>icons/base/open_file.svg</file>
+    <file>icons/base/python.svg</file>
+    <file>icons/base/r.svg</file>
+    <file>icons/base/range.svg</file>
+    <file>icons/base/rep.svg</file>
+    <file>icons/base/rs.svg</file>
+    <file>icons/base/runc.svg</file>
+    <file>icons/base/runf.svg</file>
+    <file>icons/base/srep.svg</file>
+    <file>icons/base/sspl.svg</file>
+    <file>icons/base/subdirs.svg</file>
+    <file>icons/base/subfiles.svg</file>
+    <file>icons/base/time.svg</file>
+    <file>icons/base/time_strf.svg</file>
+    <file>icons/base/time_strp.svg</file>
+    <file>icons/base/true.svg</file>
+    <file>icons/base/while.svg</file>
+
+    <file>icons/console/console.svg</file>
+    <file>icons/console/input.svg</file>
+    <file>icons/console/no_newline.svg</file>
+    <file>icons/console/stderr.svg</file>
+
+    <file>icons/mm/multimedia.svg</file>
+
+    <file>icons/rpi/raspberrypi.svg</file>
+    <file>icons/rpi/rpion.svg</file>
+    <file>icons/rpi/rpioff.svg</file>
+    <file>icons/rpi/rpievent.svg</file>
+    <file>icons/rpi/rpieventoff.svg</file>
+
+    <file>icons/turtle_sprite.png</file>
+  </gresource>
+</gresources>
