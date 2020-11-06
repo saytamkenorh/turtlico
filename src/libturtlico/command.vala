@@ -19,7 +19,7 @@
 namespace Turtlico {
     public const string TURTLICO_RESOURCES = "/io/gitlab/Turtlico/";
 
-    public class Command {
+    public class Command : Object {
         public const string PLUGIN_RESOURCES = TURTLICO_RESOURCES + "plugins/";
 
         public string id {get {return definition.id;}}
@@ -55,7 +55,7 @@ namespace Turtlico {
          * new_data: The new data to set.
          * resource_dir: Directory of the opened program (used for previews of 5_img).
         */
-        public Command set_data (string new_data, string resource_dir) {
+        public Command copy (string new_data, string resource_dir) {
             var c = new Command (this.definition, new_data);
             set_data_to (c, new_data, resource_dir);
             return c;
@@ -106,14 +106,10 @@ namespace Turtlico {
         }
     }
 
-    public class CommandCategory {
+    public class CommandCategory : Object {
         public string icon_path;
         public Gdk.Pixbuf icon;
-        public Gee.ArrayList<Command> commands;
-
-        public CommandCategory () {
-            commands = new Gee.ArrayList<Command> ();
-        }
+        public Command[] commands;
 
         public static string[] get_file_plugin_dirs () {
             var plugins_search_dirs = new Gee.ArrayList<string>.wrap (Environment.get_system_data_dirs ());
@@ -155,7 +151,7 @@ namespace Turtlico {
             return parsers.to_array ();
         }
 
-        public static Gee.ArrayList<CommandCategory> get_command_categories (
+        public static CommandCategory[] get_command_categories (
             string[] plugins,
             int icon_scale
         ) throws FileError {
@@ -182,7 +178,9 @@ namespace Turtlico {
                     output_category.icon = Command.get_pixbuf_from_icon_path (
                         output_category.icon_path,
                         0.5f, plugin_dir);
-                    // Add commands to prograview and liststore
+
+                    // Add commands to
+                    var output_category_commands = new Gee.ArrayList<Command> ();
                     var commands = category_node.get_object ().get_array_member ("commands");
                     commands.foreach_element ((array, index_, command_node) => {
                         // Parse one command
@@ -219,12 +217,13 @@ namespace Turtlico {
                             snippet,
                             icon_scale, plugin_dir);
                         Command c = new Command (command_definition, "");
-                        output_category.commands.add (c);
+                        output_category_commands.add (c);
                     });
+                    output_category.commands = output_category_commands.to_array ();
                     output_categories.add (output_category);
                 });
             }
-            return output_categories;
+            return output_categories.to_array ();
         }
     }
 

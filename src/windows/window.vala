@@ -558,7 +558,7 @@ namespace Turtlico {
             }
 
             // Load categories
-            Gee.ArrayList<CommandCategory> categories;
+            CommandCategory[] categories;
             try {
                 categories = CommandCategory.get_command_categories (
                     programview.buffer.enabled_plugins.to_array (), get_scale_factor ());

@@ -296,7 +296,7 @@ namespace Turtlico {
                 for (int command = 0; command < buffer.program[line].size; command++) {
                     if (buffer.program[line][command].id == "int" && buffer.program[line][command].data == "") {
                         buffer.program[line][command] =
-                            buffer.program[line][command].set_data ("0", buffer.resource_dir);
+                            buffer.program[line][command].copy ("0", buffer.resource_dir);
                     }
                     original_x = x;
                     if (line >= rect.y / CELL_HEIGHT && line <= (rect.y + rect.height) / CELL_HEIGHT) {
@@ -479,7 +479,7 @@ namespace Turtlico {
                     try {
                         Command c = buffer.find_command_by_id (data[i][0]);
                         if (data[i].size >= 2)
-                            c = c.set_data (data[i][1], buffer.resource_dir);
+                            c = c.copy (data[i][1], buffer.resource_dir);
                         x += draw_icon (ctx, x * CELL_WIDTH, (height - 1) * CELL_HEIGHT, c);
                         if (x > width)
                             width = x;
@@ -843,7 +843,7 @@ namespace Turtlico {
                     str = str.slice (0, end);
                 }
                 buffer.program[item.y][item.x] =
-                    buffer.program[item.y][item.x].set_data (str, buffer.resource_dir);
+                    buffer.program[item.y][item.x].copy (str, buffer.resource_dir);
                 queue_draw ();buffer.backup_program ();
                 break;
             case "str":
@@ -867,7 +867,7 @@ namespace Turtlico {
                 str_chooser_dialog.set_transient_for ((Gtk.Window)get_toplevel ());
                 str_chooser_dialog.run ();
                 str_chooser_dialog.hide ();
-                var c = buffer.program[item.y][item.x].set_data (str_chooser_dialog_entry.text, buffer.resource_dir);
+                var c = buffer.program[item.y][item.x].copy (str_chooser_dialog_entry.text, buffer.resource_dir);
                 if (buffer.program[item.y][item.x].id == "5_img" && c.data.strip () == "") {
                     try {
                         c = buffer.find_command_by_id ("5_img");
@@ -917,7 +917,7 @@ namespace Turtlico {
                     }
                 }
             }
-            buffer.program[y][x] = buffer.program[y][x].set_data (type, buffer.resource_dir);
+            buffer.program[y][x] = buffer.program[y][x].copy (type, buffer.resource_dir);
             queue_draw ();
         }
 
@@ -936,7 +936,7 @@ namespace Turtlico {
             python_view.buffer.text = buffer.program[y][x].data;
             python_code_dialog.run ();
             python_code_dialog.hide ();
-            buffer.program[y][x] = buffer.program[y][x].set_data (python_view.buffer.text, buffer.resource_dir);
+            buffer.program[y][x] = buffer.program[y][x].copy (python_view.buffer.text, buffer.resource_dir);
             queue_draw ();
         }
 
@@ -944,7 +944,7 @@ namespace Turtlico {
             color_dialog.set_transient_for ((Gtk.Window)get_toplevel ());
             color_dialog.run ();
             color_dialog.hide ();
-            buffer.program[y][x] = buffer.program[y][x].set_data (color_dialog.rgba.to_string (), buffer.resource_dir);
+            buffer.program[y][x] = buffer.program[y][x].copy (color_dialog.rgba.to_string (), buffer.resource_dir);
             queue_draw ();
         }
 
@@ -982,7 +982,7 @@ namespace Turtlico {
                 data += ";bold";
             else
                 data += ";normal";
-            buffer.program[y][x] = buffer.program[y][x].set_data (data, buffer.resource_dir);
+            buffer.program[y][x] = buffer.program[y][x].copy (data, buffer.resource_dir);
             queue_draw ();
         }
 
@@ -991,7 +991,7 @@ namespace Turtlico {
             key_dialog_label.label = buffer.program[y][x].data;
             key_dialog.run ();
             key_dialog.hide ();
-            buffer.program[y][x] = buffer.program[y][x].set_data (key_dialog_label.label, buffer.resource_dir);
+            buffer.program[y][x] = buffer.program[y][x].copy (key_dialog_label.label, buffer.resource_dir);
         }
 
         [GtkCallback]

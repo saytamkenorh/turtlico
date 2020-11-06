@@ -258,7 +258,7 @@ namespace Turtlico {
                             c = find_command_by_id ("5_" + props[0].substring (2));
                         }
                         // Set data only if necessary
-                        if (props[1] != "") c = c.set_data (props[1], resource_dir);
+                        if (props[1] != "") c = c.copy (props[1], resource_dir);
 
                         program[y].add (c);
                     }
@@ -653,12 +653,12 @@ namespace Turtlico {
                     }
                     else {
                         if (cmd.size >= 2)
-                            c = c.set_data (compress_unicode (cmd[1]), resource_dir);
+                            c = c.copy (compress_unicode (cmd[1]), resource_dir);
                         program[y].insert (x, c);
                     }
                     redraw_required ();
                     success = true;
-                    if (c.id == "int") { c = c.set_data ("0", resource_dir); }
+                    if (c.id == "int") { c = c.copy ("0", resource_dir); }
                     continue;
                 }
                 catch (FileError e) {}
