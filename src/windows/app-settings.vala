@@ -33,6 +33,8 @@ namespace Turtlico {
         Gtk.Switch debug_data_switch;
         [GtkChild]
         Gtk.Switch auto_indent_switch;
+        [GtkChild]
+        Gtk.Switch code_preview_switch;
         #if LINUX
         [GtkChild]
         Gtk.Switch csd_switch;
@@ -43,43 +45,16 @@ namespace Turtlico {
         Settings settings = new Settings ("io.gitlab.Turtlico");
 
         public AppSettings () {
-            dark_mode_switch.active = settings.get_boolean ("dark-mode");
-            dark_icons_switch.active = settings.get_boolean ("dark-icons");
-            debug_data_switch.active = settings.get_boolean ("debug-data");
-            auto_indent_switch.active = settings.get_boolean ("auto-indent");
+            settings.bind("dark-mode", dark_mode_switch, "state", SettingsBindFlags.DEFAULT);
+            settings.bind("dark-icons", dark_icons_switch, "state", SettingsBindFlags.DEFAULT);
+            settings.bind("debug-data", debug_data_switch, "state", SettingsBindFlags.DEFAULT);
+            settings.bind("auto-indent", auto_indent_switch, "state", SettingsBindFlags.DEFAULT);
+            settings.bind("code-preview", code_preview_switch, "state", SettingsBindFlags.DEFAULT);
             #if LINUX
-            csd_switch.active = settings.get_boolean ("csd");
+            settings.bind("csd", csd_switch, "state", SettingsBindFlags.DEFAULT);
             csd_switch.visible = true;
             csd_label.visible = true;
             #endif
-        }
-
-        [GtkCallback]
-        bool on_dark_mode_switch_state_set (Gtk.Switch sw, bool state) {
-            settings.set_boolean ("dark-mode", state);
-            return false;
-        }
-
-        [GtkCallback]
-        bool on_dark_icons_switch_state_set (Gtk.Switch sw, bool state) {
-            settings.set_boolean ("dark-icons", state);
-            return false;
-        }
-
-        [GtkCallback]
-        bool on_debug_data_switch_state_set (Gtk.Switch sw, bool state) {
-            settings.set_boolean ("debug-data", state);
-            return false;
-        }
-        [GtkCallback]
-        bool on_auto_indent_switch_state_set (Gtk.Switch sw, bool state) {
-            settings.set_boolean ("auto-indent", state);
-            return false;
-        }
-        [GtkCallback]
-        bool on_csd_switch_state_set (Gtk.Switch sw, bool state) {
-            settings.set_boolean ("csd", state);
-            return false;
         }
     }
 }

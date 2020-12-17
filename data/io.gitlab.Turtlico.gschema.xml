@@ -37,6 +37,10 @@
       <default>false</default>
       <summary>Use client side decoration</summary>
     </key>
+    <key name="code-preview" type="b">
+      <default>false</default>
+      <summary>Show Python code preview</summary>
+    </key>
   </schema>
 </schemalist>
 

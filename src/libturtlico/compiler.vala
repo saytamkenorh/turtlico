@@ -121,9 +121,7 @@ namespace Turtlico {
 
         public string compile (Gee.ArrayList<Gee.ArrayList<Command>> program, bool write_line_hints = true ) {
             output = new Gee.ArrayList<string> ();
-            output.add ("""#!/usr/bin/python3
-# Generated code
-""");
+            output.add ("""#!/usr/bin/python3""");
             modules_to_load = new Gee.LinkedList<string> ();
             // Plugins
             foreach (string plugin in enabled_plugins) {
@@ -355,6 +353,7 @@ namespace Turtlico {
                 else
                     warning (@"Module '$module' was not found in the module list!");
             }
+            output.insert (1, "# Generated code");
             // Modules should be inserted into the code in the same order as they are in the modules_to_load list
             // The main module (with imports) of a plugin must be placed before methods of the plugin
             for (int i = modules_to_load.size - 1; i >= 0; i--) {

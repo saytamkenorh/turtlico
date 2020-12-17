@@ -40,6 +40,7 @@ turtlico_sources = [
   'classes/program-buffer.vala',
   'classes/scene-editor.vala',
   'main.vala',
+  'widgets/code-preview.vala',
   'widgets/programview.vala',
   'widgets/scene-editor-view.vala',
   'widgets/search-widget.vala',

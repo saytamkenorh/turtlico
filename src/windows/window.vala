@@ -46,6 +46,9 @@ namespace Turtlico {
         [GtkChild]
         Gtk.ScrolledWindow icons_scrolled_window;
         public ProgramView programview;
+        public CodePreview code_preview;
+        [GtkChild]
+        Gtk.ScrolledWindow code_preview_scrolled_window;
 
         [GtkChild]
         Gtk.Button save_btn;
@@ -130,6 +133,11 @@ namespace Turtlico {
             // Functions Dialog
             functions_dialog = new FunctionsDialog (programview);
             setup_about_dialog ();
+            // Code preview
+            code_preview = new CodePreview (programview, compiler);
+            code_preview_scrolled_window.add (code_preview);
+            code_preview.show ();
+
             setup_accels (app);
 
             // Load commands database
@@ -556,6 +564,7 @@ namespace Turtlico {
                 debug (e.message);
                 return;
             }
+            code_preview.compiler = compiler;
 
             // Load categories
             CommandCategory[] categories;
@@ -634,19 +643,23 @@ namespace Turtlico {
         }
 
         void load_settings (string key) {
-            if (key == "dark-mode" || key == "") {
+            bool update_all = key == "";
+            if (key == "dark-mode" || update_all) {
                 var gtk_settings = Gtk.Settings.get_default ();
                 gtk_settings.gtk_application_prefer_dark_theme = settings.get_boolean ("dark-mode");
             }
-            if (key == "dark-icons" || key == "") {
+            if (key == "dark-icons" || update_all) {
                 programview.high_contrast = settings.get_boolean ("dark-icons");
                 load_commands ();
             }
-            if (key == "auto-indent" || key == "") {
+            if (key == "auto-indent" || update_all) {
                 programview.auto_indent = settings.get_boolean ("auto-indent");
             }
-            if (key == "csd" || key == "") {
+            if (key == "csd" || update_all) {
                 set_csd (settings.get_boolean ("csd"));
+            }
+            if (key == "code-preview" || update_all) {
+                code_preview_scrolled_window.visible = settings.get_boolean ("code-preview");
             }
         }
 
