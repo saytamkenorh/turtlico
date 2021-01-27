@@ -24,11 +24,13 @@ appstream_file = i18n.merge_file(
   install_dir: join_paths(get_option('datadir'), 'appdata')
 )
 
-appstream_util = find_program('appstream-util', required: false)
-if appstream_util.found()
-  test('Validate appstream file', appstream_util,
-    args: ['validate', appstream_file]
-  )
+if get_option('appstream')
+  appstream_util = find_program('appstream-util', required: false)
+  if appstream_util.found()
+    test('Validate appstream file', appstream_util,
+      args: ['validate', appstream_file]
+    )
+  endif
 endif
 
 install_data('io.gitlab.Turtlico.gschema.xml',
@@ -45,13 +47,12 @@ endif
 install_data('io.gitlab.Turtlico.xml',
 	     install_dir : join_paths(get_option('datadir'),'mime/packages'))
 
-
 gnome = import('gnome')
 
 resource_files = files('turtlico.gresource.xml')
-resources = gnome.compile_resources('io.gitlab.Turtlico', resource_files,
-  c_name: 'turtlico'
+gnome.compile_resources('io.gitlab.Turtlico',
+  resource_files,
+  gresource_bundle: true,
+  install: true,
+  install_dir: pkgdatadir,
 )
-
-subdir('plugins')
-

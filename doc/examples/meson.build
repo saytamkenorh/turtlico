@@ -1,7 +1,7 @@
 python = find_program('python3')
 test = find_program('test')
 
-test ('Compile examples', test, args:[turtlico_executable.full_path(), meson.current_source_dir(), python.path(), meson.current_build_dir()], timeout:480)
+test ('Compile examples', test, args:[join_paths(get_option('bindir'), 'turtlico'), meson.current_source_dir(), python.path(), meson.current_build_dir()], timeout:480)
 
 if get_option('help')
 pkgdocexamplesdir_abs = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'turtlico', 'en', 'examples')

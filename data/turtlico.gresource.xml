@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/io/gitlab/Turtlico">
-    <file>css/programview.css</file>
-    <file>ui/programview.ui</file>
-    <file>ui/scene-editor-view.ui</file>
-    <file>ui/search-widget.ui</file>
-    <file>ui/app-settings.ui</file>
-    <file>ui/functions-dialog.ui</file>
-    <file>ui/program-settings.ui</file>
-    <file>ui/scene-editor-window.ui</file>
-    <file>ui/window.ui</file>
+    <file>css/turtlico.css</file>
+    <file>ui/iconsview.ui</file>
+    <file>ui/mainwindow.ui</file>
   </gresource>
 </gresources>

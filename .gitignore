@@ -1,4 +1,4 @@
-build
+_build
 windows/output/
 windows/build/
 windows/pkg/
@@ -6,9 +6,8 @@ windows/src/
 doc/examples/*.py
 *.pkg.tar.xz
 *.pkg.tar.zst
-build-portable
 *.AppDir
 *.AppImage
 *~
-.flatpak-builder
-flatpak-build
+.flatpak
+**/__pycache__

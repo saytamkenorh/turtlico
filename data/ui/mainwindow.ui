@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="TurtlicoMainWindow" parent="GtkApplicationWindow">
+    <property name="can-focus">False</property>
+    <property name="title" translatable="yes">Turtlico</property>
+    <property name="default-width">1000</property>
+    <property name="default-height">500</property>
+    <child>
+      <object class="GtkBox" id="_root_box">
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+        <child>
+          <object class="GtkBox" id="_toolbar_box">
+            <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+            <property name="spacing">2</property>
+            <property name="margin-bottom">2</property>
+            <property name="margin-end">2</property>
+            <property name="margin-start">2</property>
+            <property name="margin-top">2</property>
+            <property name="vexpand">False</property>
+            <property name="valign">GTK_ALIGN_START</property>
+            <child>
+              <object class="GtkButton" id="_run_btn">
+                <style>
+                  <class name="flat"/>
+                </style>
+                <property name="tooltip-text" translatable="yes">Run</property>
+                <property name="action-name">project.run</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">media-playback-start-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_open_btn">
+                <style>
+                  <class name="flat"/>
+                </style>
+                <property name="tooltip-text" translatable="yes">Open project</property>
+                <property name="action-name">project.open</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">document-open-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_save_btn">
+                <style>
+                  <class name="flat"/>
+                </style>
+                <property name="tooltip-text" translatable="yes">Save project</property>
+                <property name="action-name">project.save</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">document-save-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"></object>
+        </child>
+        <child>
+          <object class="GtkBox" id="_content_box">
+            <child>
+              <object class="TurtlicoIconsView" id ="_icon_view">
+                 <property name="halign">GTK_ALIGN_START</property>
+                 <property name="vexpand">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="_program_view_scrolled_window">
+                <property name="halign">GTK_ALIGN_FILL</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <child>
+                  <object class="TurtlicoProgramView" id="_program_view">
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

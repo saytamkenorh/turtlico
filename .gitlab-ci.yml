@@ -1,3 +1,7 @@
+stages:
+    - check
+    - build
+
 variables:
     APP_ID: "io.gitlab.Turtlico"
     BUNDLE_FILENAME: "turtlico-master.flatpak"
@@ -5,24 +9,25 @@ variables:
 
 flatpak:
     stage: build
-    image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:3.38"
+    image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:nightly"
     cache:
         key: "$CI_JOB_NAME"
         paths:
-            - '.flatpak-builder/downloads'
-            - '.flatpak-builder/git'
+            - '.flatpak/.flatpak-builder/downloads'
+            - '.flatpak/.flatpak-builder/git'
     script:
-        - flatpak-builder --repo=repo --force-clean _build ${APP_ID}.json
-        - flatpak build-bundle ./repo ${BUNDLE_FILENAME} ${APP_ID}
+        - flatpak-builder --repo=./.flatpak/repo --force-clean _build ${APP_ID}.json
+        - flatpak build-bundle ./.flatpak/repo ${BUNDLE_FILENAME} ${APP_ID}
     artifacts:
         paths:
         - ${BUNDLE_FILENAME}
         expire_in: 1 month
 
-lint:
-    image: "valalang/lint:latest"
-    script:
-    - io.elementary.vala-lint src
+flake8:
+  stage: check
+  script:
+    - dnf install -y python3-flake8
+    - flake8 --ignore E402,W503 --show-source turtlico/
 
 .shared_windows_runners:
     tags:

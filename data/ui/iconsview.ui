@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="TurtlicoIconsView" parent="GtkBox">
+    <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+    <child>
+      <object class="GtkListBox" id="_categories_list_box">
+        <property name="halign">GTK_ALIGN_START</property>
+        <property name="selection-mode">GTK_SELECTION_BROWSE</property>
+        <style>
+          <class name="navigation-sidebar"/>
+        </style>
+        <signal name="row-selected" handler="on_categories_list_box_row_selected"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="_grid_view_scrolled_window">
+        <property name="hscrollbar-policy">GTK_POLICY_NEVER</property>
+        <child>
+          <object class="GtkGridView" id="_grid_view">
+            <property name="min-columns">4</property>
+            <property name="max-columns">4</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

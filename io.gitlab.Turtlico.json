@@ -1,7 +1,7 @@
 {
     "app-id": "io.gitlab.Turtlico",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "3.38",
+    "runtime-version": "master",
     "sdk": "org.gnome.Sdk",
     "command": "turtlico",
     "finish-args": [
@@ -148,7 +148,6 @@
             "builddir": true,
             "buildsystem": "meson",
             "config-opts" : [
-                "-Dflatpak=true"
             ],
             "sources": [
                 {

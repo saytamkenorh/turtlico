@@ -1,0 +1,15 @@
+{
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/.flatpak/**": true
+    },
+    "search.exclude": {
+        "**/.git": true,
+        "**/.flatpak/**": true
+    },
+    "python.envFile": "${workspaceFolder}/.env",
+    "licenser.author": "saytamkenorh",
+    "licenser.license": "GPLv3",
+    "licenser.projectName": "Turtlico",
+}

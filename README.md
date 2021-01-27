@@ -20,30 +20,32 @@ Turtlico supports Windows and Linux. <br>
 
 Development builds are available to download from [pipeline](https://gitlab.com/turtlico/turtlico/pipelines/latest).
 
-**Building**
+**Building on Linux**
 
-Please install following dependencies in order to compile Turtlico:
+The recommend way of building Turtlico is using Flatpak.
 
-- `gee-0.8`
-- `gtk+-3.0 >= 3.22`
-- `gtksourceview-4`
-- `json-glib-1.0`
-- `meson >= 0.47.0`
-- `vala`
+In order to create a bundle run in the directory of the repository following commands:
 
-To run programs created in Turtlico please install following:
-
-- `python3`
-- `python3-tk`
-- `python3-gpiozero` (Rapspberry Pi plugin)
-- `gir1.2-gstreamer-1.0` (Multimedia plugin)
-
-Then just clone this repository, build and install the program:
-	
 ```sh
-git clone https://gitlab.com/turtlico/turtlico.git
-cd turtlico
-meson ./ ./build --prefix /usr/local
-ninja -C build
-sudo ninja -C build install
+flatpak-builder --repo=./.flatpak/repo --force-clean _build io.gitlab.Turtlico.json
+flatpak build-bundle ./.flatpak/repo turtlico.flatpak io.gitlab.Turtlico.json
+```
+You can also use IDEs like VS Code or GNOME Builder with Flatpak integration.
+
+**Building on Windows**
+
+Turtlico Windows build dependencies can be obtained from [Chocolatey](https://chocolatey.org/install). Then you can run the build script:
+
+```powershell
+choco install msys2 -y
+cd .\windows
+filter replace-slash {$_ -replace "\\", "/"}
+C:\tools\msys64\usr\bin\bash.exe -lc "$(Get-Location | replace-slash)/build.sh"
+```
+
+You can also create an installer:
+
+```
+choco install innosetup -y
+iscc .\build\turtlico.iss /Q /O$(Get-Location) /Fturtlico-setup.exe
 ```
