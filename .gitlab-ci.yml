@@ -4,12 +4,29 @@ stages:
 
 variables:
     APP_ID: "io.gitlab.Turtlico"
-    BUNDLE_FILENAME: "turtlico-master.flatpak"
-    WINDOWS_INSTALLER_BASENAME: "turtlico-master-setup"
+    BUNDLE_FILENAME: "turtlico-${CI_COMMIT_REF_NAME}"
+
+.windows_runner:
+    tags:
+    - shared-windows
+    - windows
+    - windows-1809
+
+.linux_runner:
+    image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
+
+flake8:
+  extends:
+    - .linux_runner
+  stage: check
+  script:
+    - dnf install -y python3-flake8
+    - flake8 --ignore E402,W503 --show-source turtlico/
 
 flatpak:
     stage: build
-    image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:nightly"
+    extends:
+    - .linux_runner
     cache:
         key: "$CI_JOB_NAME"
         paths:
@@ -17,27 +34,17 @@ flatpak:
             - '.flatpak/.flatpak-builder/git'
     script:
         - flatpak-builder --repo=./.flatpak/repo --force-clean _build ${APP_ID}.json
-        - flatpak build-bundle ./.flatpak/repo ${BUNDLE_FILENAME} ${APP_ID}
+        - flatpak build-bundle ./.flatpak/repo "${BUNDLE_FILENAME}.flatpak" ${APP_ID}
     artifacts:
+        name: 'Flatpak artifacts'
+        expose_as: 'Get Flatpak bundle here'
         paths:
-        - ${BUNDLE_FILENAME}
-        expire_in: 1 month
-
-flake8:
-  stage: check
-  script:
-    - dnf install -y python3-flake8
-    - flake8 --ignore E402,W503 --show-source turtlico/
-
-.shared_windows_runners:
-    tags:
-    - shared-windows
-    - windows
-    - windows-1809
+        - "${BUNDLE_FILENAME}.flatpak"
+        expire_in: 14 days
 
 windows:
     extends:
-        - .shared_windows_runners
+        - .windows_runner
     stage: build
     script:
         - Set-Variable -Name "time" -Value (date -Format "%H:%m")
@@ -48,8 +55,10 @@ windows:
         - cd .\windows
         - filter replace-slash {$_ -replace "\\", "/"}
         - C:\tools\msys64\usr\bin\bash.exe -lc "$(Get-Location | replace-slash)/build.sh"
-        - iscc .\build\turtlico.iss /Q /O$(Get-Location) /F${WINDOWS_INSTALLER_BASENAME}
+        - iscc .\build\turtlico.iss /Q /O$(Get-Location) /F"${BUNDLE_FILENAME}-setup"
     artifacts:
+        name: 'Windows artifacts'
+        expose_as: 'Get Windows installer here'
         paths:
-        - windows/${WINDOWS_INSTALLER_BASENAME}.exe
-        expire_in: 1 month
+        - windows/${BUNDLE_FILENAME}-setup.exe
+        expire_in: 14 days

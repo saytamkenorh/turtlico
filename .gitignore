@@ -10,4 +10,5 @@ doc/examples/*.py
 *.AppImage
 *~
 .flatpak
+.vscode
 **/__pycache__

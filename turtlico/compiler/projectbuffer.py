@@ -178,8 +178,8 @@ class ProjectBuffer(GObject.Object):
         if command is None:
             return (None, False)
         if not data:
-            return command
-        return self.set_command_data(command, data)
+            return (command, True)
+        return (self.set_command_data(command, data), True)
 
     def set_command_data(self, command, data) -> Command:
         if not data:

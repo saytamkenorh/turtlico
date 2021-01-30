@@ -23,10 +23,11 @@ from gi.repository import Gtk
 import turtlico.compiler as compiler
 import turtlico.app.widgets as widgets
 
-buffer = compiler.ProjectBuffer()
-cmp = compiler.Compiler(buffer)
-res = cmp.compile(compiler.load_codepiece(compiler.parse_tcp('go;'), buffer))
-print(res)
+# buffer = compiler.ProjectBuffer()
+# cmp = compiler.Compiler(buffer)
+# p = compiler.load_codepiece(compiler.parse_tcp('go;'), buffer)
+# res = cmp.compile(p)
+# compiler.msg(res)
 
 
 @Gtk.Template(resource_path='/io/gitlab/Turtlico/ui/mainwindow.ui')
@@ -46,3 +47,4 @@ class MainWindow(Gtk.ApplicationWindow):
         self._icon_view.set_colors(self.icon_colors)
         self._icon_view.props.project_buffer = self.buffer
         self._program_view.set_colors(self.icon_colors)
+        self._program_view.set_codebuffer(self.buffer.code)

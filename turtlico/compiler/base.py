@@ -19,13 +19,9 @@
 
 from __future__ import annotations
 from typing import Union
-from collections import namedtuple
 
 import turtlico.compiler as compiler
 from .utils import error
-
-CompilerFunction = namedtuple(
-    'CompilerFunction', ['function', 'default_params'])
 
 
 class Compilation():
@@ -65,7 +61,11 @@ class Compilation():
             if mod:
                 self.modules_to_load.add(p.id)
 
-    def compile_line(self, line):
+    def compile_line(self, line, line_hint=None):
+        # Line hints are used in order to get position in icons program
+        # from a position in the Python code
+        if line_hint:
+            self.output.append(f'# Line: {line_hint}\n')
         self.line = line
         self.indentation = ''
         self.increase_indent = True
@@ -78,20 +78,21 @@ class Compilation():
 
         self.x = 0
         while self.x < len(self.line):
-            out_line = len(self.output)
+            out_line = len(self.output)  # noqa: F841
             cmd = self.line[self.x]
             self.cmd = cmd.definition
             self.cmd_data = cmd.data
 
             # Functions
-            if self.cmd.type == compiler.CommandType.METHOD:
+            if self.cmd.command_type == compiler.CommandType.METHOD:
                 self._parse_function()
                 continue
-            elif self.cmd.type == compiler.CommandType.KEYWORD:
+            elif self.cmd.command_type == compiler.CommandType.KEYWORD:
                 continue
-            elif self.cmd.type == compiler.CommandType.KEYWORD_WITH_ARGS:
+            elif (self.cmd.command_type
+                  == compiler.CommandType.KEYWORD_WITH_ARGS):
                 continue
-            elif self.cmd.type == compiler.CommandType.CODE_SNIPPET:
+            elif self.cmd.command_type == compiler.CommandType.CODE_SNIPPET:
                 continue
 
             # Comment (# icon) - ignores the rest of the line
@@ -105,7 +106,7 @@ class Compilation():
                     continue
                 else:
                     # Found first icon that is not a tab
-                    line_start_command = self.cmd.id
+                    line_start_command = self.cmd.id  # noqa: F841
                     self.increase_indent = False
                     continue
 
@@ -145,6 +146,7 @@ class Compiler():
 
     def __init__(self, project_buffer: compiler.ProjectBuffer):
         self.modules = {}
+        self.write_line_hints = True
 
         self.project_buffer = project_buffer
         self.reload_definitions()
@@ -156,11 +158,9 @@ class Compiler():
 
         # Actual commands
         for y in range(len(code)):
-            # Line hints are used in order to get position in icons program
-            # from a position in the Python code
-            if self.compiler.write_line_hints:
-                self.output.append(f'# Line: {y}\n')
-            ctx.compile_line(code.lines[y])
+            ctx.compile_line(
+                code[y],
+                y if self.write_line_hints else None)
 
         return ctx.finish()
 

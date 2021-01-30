@@ -20,7 +20,7 @@ from __future__ import annotations
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Graphene', '1.0')
-from gi.repository import GLib, GObject, Gtk, Gdk, Graphene, Pango
+from gi.repository import GObject, Gtk, Gdk, Graphene, Pango
 
 import turtlico.compiler as compiler
 
@@ -79,19 +79,7 @@ class SingleIconWidget(Gtk.Widget):
                          ) -> Gdk.ContentProvider:
         commands = [[self._command]]
 
-        data = compiler.save_tcp(compiler.save_codepice(commands))
-        data_bytes = GLib.Bytes.new(data.encode())
-        cp = Gdk.ContentProvider.new_for_bytes(
-            compiler.MIME_TURTLICO_CODEPIECE, data_bytes)
-
-        #snapshot = Gtk.Snapshot.new()
-        #append_block_to_snapshot(commands, snapshot, 0, 0, self, self._colors)
-        #size = Graphene.Size().init(ICON_WIDTH, ICON_HEIGHT)
-        #paintable = snapshot.to_paintable(size)
-        #source.set_icon(
-        #    paintable, ICON_WIDTH / 2, ICON_HEIGHT / 2)
-
-        return cp
+        return prepare_drag(source, commands, self, self._colors)
 
 
 def append_block_to_snapshot(commands: compiler.CodePiece,
@@ -101,12 +89,12 @@ def append_block_to_snapshot(commands: compiler.CodePiece,
                              code: compiler.CodeBuffer = None,
                              start_y=0, end_y=-1):
     for y, line in enumerate(commands, start=start_y):
-        if y >= end_y:
+        if end_y >= 0 and y >= end_y:
             return
         for x, command in enumerate(line):
-            x = x * ICON_WIDTH
-            y = y * ICON_HEIGHT
-            append_to_snapshot(command, snapshot, x, y, widget, colors, code)
+            xp = x * ICON_WIDTH
+            yp = y * ICON_HEIGHT
+            append_to_snapshot(command, snapshot, xp, yp, widget, colors, code)
 
 
 def append_to_snapshot(cmd: compiler.Command,
@@ -171,6 +159,26 @@ def get_default_colors() -> compiler.compilerCommandColorScheme:
         compiler.CommandColor.KEYWORD: (_default_bg, _white),
     }
     return colors
+
+
+def prepare_drag(source: Gtk.DragSource,
+                 commands: compiler.CodePiece,
+                 widget: Gtk.Widget,
+                 colors: compiler.CommandColorScheme) -> Gdk.ContentProvider:
+    val = GObject.Value()
+    val.init(compiler.CodePieceDrop)
+    drop = compiler.CodePieceDrop(compiler.save_codepice(commands))
+    val.set_value(drop)
+    cp = Gdk.ContentProvider.new_for_value(val)
+
+    snapshot = Gtk.Snapshot.new()
+    append_block_to_snapshot(commands, snapshot, 0, 0, widget, colors)
+    size = Graphene.Size().init(ICON_WIDTH, ICON_HEIGHT)
+    paintable = snapshot.to_paintable(size)
+    source.set_icon(
+        paintable, ICON_WIDTH / 2, ICON_HEIGHT / 2)
+
+    return cp
 
 
 GObject.type_register(SingleIconWidget)

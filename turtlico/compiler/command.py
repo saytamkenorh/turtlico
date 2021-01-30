@@ -96,6 +96,12 @@ class CommandDefinition(GObject.Object):
         self.color = color
         self.snippet = codepiece.parse_tcp(snippet) if snippet else None
 
+    def __str__(self):
+        return self.id
+
+    def __repr__(self):
+        return f'CommandDefinition(id="{self.id}")'
+
 
 class CommandCategory(GObject.Object):
     plugin: Plugin

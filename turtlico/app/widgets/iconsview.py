@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import gi
 gi.require_version('Gtk', '4.0')
-from gi.repository import GObject, GLib, Gio, Gtk, Gdk
+from gi.repository import GObject, Gio, Gtk, Gdk
 
 import turtlico.compiler as compiler
 from turtlico.compiler.projectbuffer import ProjectBuffer
@@ -69,6 +69,11 @@ class IconsView(Gtk.Box):
         self._categories = Gio.ListStore.new(compiler.CommandCategory)
         self._categories_list_box.bind_model(self._categories,
                                              self._create_category_widget)
+
+        # Icon trashing
+        self._drop_target = Gtk.DropTarget.new(
+            compiler.CodePieceDrop, Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
+        self.add_controller(self._drop_target)
 
     def set_colors(self, colors: compiler.CommandColorScheme):
         self._colors = colors
