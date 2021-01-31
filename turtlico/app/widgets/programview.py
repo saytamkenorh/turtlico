@@ -45,6 +45,7 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
     _colors: compiler.CommandColorScheme
 
     _drag_source: Gtk.DragSource
+    _drag_source_copy: Gtk.DragSource
     _drop_target: Gtk.DropTarget
     _hadjustment: Gtk.Adjustment
     _hscroll_policy: Gtk.ScrollablePolicy
@@ -69,9 +70,23 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
     def hadjustment(self):
         return self._hadjustment
 
+    @hadjustment.setter
+    def hadjustment(self, value):
+        self._hadjustment = value
+        self._hadjustment.step_increment = ICON_WIDTH
+        self._hadjustment.connect('value-changed', self._on_adjustment_value_changed)
+        self._update_hadjustment()
+
     @GObject.Property(type=Gtk.Adjustment)
     def vadjustment(self):
         return self._vadjustment
+
+    @vadjustment.setter
+    def vadjustment(self, value):
+        self._vadjustment = value
+        self._vadjustment.step_increment = ICON_HEIGHT
+        self._vadjustment.connect('value-changed', self._on_adjustment_value_changed)
+        self._update_vadjustment()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -81,13 +96,18 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         self._codebuffer = None
         self._colors = None
 
-        self._hadjustment = Gtk.Adjustment.new(0, 0, 0, 5, 0, 0)
-        self._vadjustment = Gtk.Adjustment.new(0, 0, 0, 5, 0, 0)
-
         self._drag_source = Gtk.DragSource.new()
+        self._drag_source.props.actions = Gdk.DragAction.MOVE
         self._drag_source.connect('prepare', self._on_drag_prepare)
         self._drag_source.connect('drag_end', self._on_drag_end)
         self.add_controller(self._drag_source)
+
+        self._drag_source_copy = Gtk.DragSource.new()
+        self._drag_source_copy.props.actions = Gdk.DragAction.COPY
+        self._drag_source_copy.props.button = Gdk.BUTTON_SECONDARY
+        self._drag_source_copy.connect('prepare', self._on_drag_prepare)
+        self._drag_source_copy.connect('drag_end', self._on_drag_end)
+        self.add_controller(self._drag_source_copy)
 
         self._drop_target = Gtk.DropTarget.new(
             compiler.CodePieceDrop, Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
@@ -98,28 +118,77 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         if not self._colors:
             return
         area = Graphene.Rect().init(0, 0, self.get_width(), self.get_height())
+
+        # Contenxt scroll
+        tx = -int(self.hadjustment.props.value)
+        ty = -int(self.vadjustment.props.value)
+
         snapshot.append_color(
             self._colors[compiler.CommandColor.INDENTATION][0], area)
         if not self._codebuffer:
             return
+
+        snapshot.push_clip(area)
+        start_x = int(self.hadjustment.props.value / ICON_WIDTH)
+        end_x = math.ceil(self.hadjustment.props.value + self.get_width() / ICON_WIDTH)
+        start_y = int(self.vadjustment.props.value / ICON_HEIGHT)
+        end_y = math.ceil(self.vadjustment.props.value + self.get_height() / ICON_HEIGHT)
         append_block_to_snapshot(self._codebuffer.lines,
-                                 snapshot, 0, 0,
-                                 self, self._colors)
+                                 snapshot, tx, ty,
+                                 self, self._colors, None,
+                                 start_x, end_x, start_y, end_y)
+        snapshot.pop()
+
+    def do_size_allocate(self, width: int, height: int, baseline: int):
+        self._update_adjustments()
 
     def do_measure(self, orientation, for_size):
-        if not self._codebuffer:
-            return (0, 0, -1, -1)
         if orientation == Gtk.Orientation.HORIZONTAL:
-            if len(self._codebuffer.lines) == 0:
-                width = 0
-            else:
-                width = (max(
-                    [len(line) for line in self._codebuffer.lines])
-                    * ICON_WIDTH)
+            width = self.hadjustment.props.upper
             return (width, width, -1, -1)
         else:
-            height = len(self._codebuffer.lines) * ICON_HEIGHT
+            height = self.vadjustment.props.upper
             return (height, height, -1, -1)
+
+    def _update_adjustments(self):
+        self._update_hadjustment()
+        self._update_vadjustment()
+
+    def _update_hadjustment(self):
+        if not self.props.hadjustment:
+            self.props.hadjustment = Gtk.Adjustment.new(0, 0, 0, 0, 0, 0)
+        width  = 3
+        if self._codebuffer and len(self._codebuffer.lines) > 0:
+            width += (max(
+                [len(line) for line in self._codebuffer.lines]))
+        width *= ICON_WIDTH
+
+        self.props.hadjustment.props.lower = 0
+        self.props.hadjustment.props.upper = width
+        self.props.hadjustment.props.page_size = min(width, self.get_width())
+        self.props.hadjustment.props.value = min(
+            self.props.hadjustment.props.value,
+            width - self.props.hadjustment.props.page_size
+        )
+
+    def _update_vadjustment(self):
+        if not self.props.vadjustment:
+            self.props.vadjustment = Gtk.Adjustment.new(0, 0, 0, 0, 0, 0)
+        height = 3
+        if self._codebuffer:
+            height += len(self._codebuffer.lines)
+        height *= ICON_HEIGHT
+
+        self.props.vadjustment.props.lower = 0
+        self.props.vadjustment.props.upper = height
+        self.props.vadjustment.props.page_size = min(height, self.get_height())
+        self.props.vadjustment.props.value = min(
+            self.props.vadjustment.props.value,
+            height - self.props.vadjustment.props.page_size
+        )
+
+    def _on_adjustment_value_changed(self, adjustment):
+        self.queue_draw()
 
     def do_get_request_mode(self):
         return Gtk.SizeRequestMode.CONSTANT_SIZE
@@ -166,6 +235,17 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         return (x, y)
 
     def _get_program_coords(self, x: float, y: float) -> (int, int):
+        """Converts mouse coordinates to icon column and line
+
+        Args:
+            x (float): X coordinate in pixels
+            y (float): Y coordinate in pixels
+
+        Returns:
+            (int, int): Icon column and line
+        """
+        x += self.props.hadjustment.props.value
+        y += self.props.vadjustment.props.value
         x = math.floor(x / ICON_WIDTH)
         y = math.floor(y / ICON_HEIGHT)
         return (x, y)
@@ -210,6 +290,7 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         return True
 
     def _codebuffer_code_changed(self, codebuffer):
+        self._update_adjustments()
         self.queue_draw()
 
     def _on_drag_prepare(self,
@@ -225,8 +306,6 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
             commands = [[command]]
             self.props.selection = compiler.CodePieceSelection(cx, cy, cx, cy)
 
-        source.props.actions = Gdk.DragAction.MOVE
-
         return prepare_drag(source, commands, self, self._colors)
 
     def _on_drag_end(self,
@@ -234,6 +313,7 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
                      drag: Gdk.Drag, delete_data: bool):
         if delete_data and self.props.selection:
             self.delete_selection()
+        self.props.selection = None
 
 
 GObject.type_register(ProgramView)

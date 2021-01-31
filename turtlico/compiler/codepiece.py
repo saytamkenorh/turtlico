@@ -156,12 +156,21 @@ class CodeBuffer(GObject.Object):
     def _pop(self, s: CodePieceSelection, ret: bool = False):
         if ret:
             output = []
+        update_previews = False
+
         for y in range(s.start_y, s.end_y + 1):
             start = 0 if y != s.start_y else s.start_x
             end = len(self.lines[y]) if y != s.end_y else s.end_x + 1
+            for c in self.lines[y][start:end]:
+                if (not update_previews
+                        and c.definition.id in COMMANDS_WITH_PREVIEW):
+                    update_previews = True
             if ret:
                 output.append(self.lines[y][start:end])
             del self.lines[y][start:end]
+
+        if update_previews:
+            self._clean_code_data_previews()
         self.emit('code-changed')
         if ret:
             return output

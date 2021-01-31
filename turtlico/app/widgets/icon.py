@@ -83,17 +83,23 @@ class SingleIconWidget(Gtk.Widget):
 
 
 def append_block_to_snapshot(commands: compiler.CodePiece,
-                             snapshot: Gtk.Snapshot, x: int, y: int,
+                             snapshot: Gtk.Snapshot, tx: int, ty: int,
                              widget: Gtk.Widget,
                              colors: compiler.CommandColorScheme,
                              code: compiler.CodeBuffer = None,
-                             start_y=0, end_y=-1):
-    for y, line in enumerate(commands, start=start_y):
-        if end_y >= 0 and y >= end_y:
-            return
+                             start_x=0, end_x=None, start_y=0, end_y=None):
+    for y, line in enumerate(commands):
+        if y < start_y:
+            continue
+        if end_y and y >= end_y:
+            break
         for x, command in enumerate(line):
-            xp = x * ICON_WIDTH
-            yp = y * ICON_HEIGHT
+            if x < start_x:
+                continue
+            if end_x and x >= end_x:
+                break
+            xp = tx + x * ICON_WIDTH
+            yp = ty + y * ICON_HEIGHT
             append_to_snapshot(command, snapshot, xp, yp, widget, colors, code)
 
 
@@ -111,7 +117,7 @@ def append_to_snapshot(cmd: compiler.Command,
         if isinstance(defin.icon, str):
             _append_text(snapshot, widget, defin.icon, _FONT_NORMAL, fg, area)
         else:
-            defin.icon.snapshot(snapshot, area, widget.get_scale_factor())
+            defin.icon.snapshot(snapshot, area)
     # Data
     if cmd.data:
         if defin.id == 'img' and code:

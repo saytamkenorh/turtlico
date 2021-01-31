@@ -27,13 +27,13 @@ from typing import Union, Dict, Tuple
 
 from gi.repository import GObject, Gio, Gdk, GLib
 
-from turtlico.compiler.utils import error, ScalableFileTexture
+from turtlico.compiler.utils import error, SVGFileTexture
 import turtlico.compiler.codepiece as codepiece
 
 PLUGIN_RESOURCES = '/io/gitlab/Turtlico/plugins'
 IMAGE_EXTENSIONS = ['.png', '.bmp', '.gif']
 
-CommandIcon = Union[ScalableFileTexture, str]
+CommandIcon = Union[SVGFileTexture, str]
 Command = namedtuple('Command', ['data', 'definition'])
 CommandModule = namedtuple('CommandModule', ['deps', 'code'])
 CommandEvent = namedtuple(
@@ -215,4 +215,4 @@ def icon(icon: str) -> CommandIcon:
     """
     plugin_dir = os.path.dirname(inspect.stack()[1].filename)
     path = os.path.join(plugin_dir, 'icons', icon)
-    return ScalableFileTexture(path)
+    return SVGFileTexture(path)

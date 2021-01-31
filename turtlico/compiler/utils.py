@@ -24,40 +24,30 @@ from datetime import datetime
 
 import gi
 gi.require_version('Gtk', '4.0')
-gi.require_version('GdkPixbuf', '2.0')
+gi.require_version('Rsvg', '2.0')
 gi.require_version('Graphene', '1.0')
-from gi.repository import Gio, Gdk, Gtk, GdkPixbuf, Graphene
+from gi.repository import Gio, Gdk, Gtk, Rsvg, Graphene
 
 
-class ScalableFileTexture():
+class SVGFileTexture():
     _path: str
-    _cached_texture: Gdk.Texture
-    _cached_texture_scale: float
+    _handle: Rsvg.Handle
 
     def __init__(self, path: str):
         self._path = path
-        self._cached_texture = None
-        self._cached_texture_scale = None
-
-    def _reload_texture(self, scale: float):
-        if scale != 1:
-            res = GdkPixbuf.Pixbuf.get_file_info(self._path)
-            w = res[1]
-            h = res[2]
-            pb: GdkPixbuf.Pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(
-                self._path, w * scale, h * scale, True)
-            self._cached_texture = Gdk.Texture.new_for_pixbuf(pb)
-        else:
-            file = Gio.File.new_for_path(self._path)
-            self._cached_texture = Gdk.Texture.new_from_file(file)
-        self._cached_texture_scale = scale
+        self._handle = Rsvg.Handle.new_from_file(path)
 
     def snapshot(self,
                  snapshot: Gtk.Snapshot,
-                 bounds: Graphene.Rect, scale: float):
-        if scale != self._cached_texture_scale or not self._cached_texture:
-            self._reload_texture(scale)
-        snapshot.append_texture(self._cached_texture, bounds)
+                 bounds: Graphene.Rect):
+
+        cr = snapshot.append_cairo(bounds)
+        rect = Rsvg.Rectangle()
+        rect.x = bounds.get_x()
+        rect.y = bounds.get_y()
+        rect.width = bounds.get_width()
+        rect.height = bounds.get_height()
+        self._handle.render_document(cr, rect)
 
 
 class bcolors:

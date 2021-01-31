@@ -20,7 +20,7 @@ flake8:
     - .linux_runner
   stage: check
   script:
-    - dnf install -y python3-flake8
+    - sudo dnf install -y python3-flake8
     - flake8 --ignore E402,W503 --show-source turtlico/
 
 flatpak:
