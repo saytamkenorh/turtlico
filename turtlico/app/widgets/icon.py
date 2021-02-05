@@ -63,9 +63,9 @@ class SingleIconWidget(Gtk.Widget):
 
     def do_measure(self, orientation, for_size):
         if orientation == Gtk.Orientation.HORIZONTAL:
-            return (ICON_WIDTH, ICON_WIDTH, 0, 0)
+            return (ICON_WIDTH, ICON_WIDTH, -1, -1)
         else:
-            return (ICON_HEIGHT, ICON_HEIGHT, 0, 0)
+            return (ICON_HEIGHT, ICON_HEIGHT, -1, -1)
 
     def do_get_request_mode(self):
         return Gtk.SizeRequestMode.CONSTANT_SIZE
@@ -87,20 +87,27 @@ def append_block_to_snapshot(commands: compiler.CodePiece,
                              widget: Gtk.Widget,
                              colors: compiler.CommandColorScheme,
                              code: compiler.CodeBuffer = None,
-                             start_x=0, end_x=None, start_y=0, end_y=None):
+                             start_x=0, end_x=None, start_y=0, end_y=None) -> (int, int):
+    width = 0
+    height = 0
     for y, line in enumerate(commands):
         if y < start_y:
             continue
         if end_y and y >= end_y:
             break
+        height+=1
         for x, command in enumerate(line):
             if x < start_x:
                 continue
             if end_x and x >= end_x:
                 break
+            if x > width:
+                width = x
             xp = tx + x * ICON_WIDTH
             yp = ty + y * ICON_HEIGHT
             append_to_snapshot(command, snapshot, xp, yp, widget, colors, code)
+    width+=1  # X is indexed from 0
+    return (width * ICON_WIDTH, height * ICON_HEIGHT)
 
 
 def append_to_snapshot(cmd: compiler.Command,
@@ -178,8 +185,8 @@ def prepare_drag(source: Gtk.DragSource,
     cp = Gdk.ContentProvider.new_for_value(val)
 
     snapshot = Gtk.Snapshot.new()
-    append_block_to_snapshot(commands, snapshot, 0, 0, widget, colors)
-    size = Graphene.Size().init(ICON_WIDTH, ICON_HEIGHT)
+    width, height = append_block_to_snapshot(commands, snapshot, 0, 0, widget, colors)
+    size = Graphene.Size().init(width, height)
     paintable = snapshot.to_paintable(size)
     source.set_icon(
         paintable, ICON_WIDTH / 2, ICON_HEIGHT / 2)

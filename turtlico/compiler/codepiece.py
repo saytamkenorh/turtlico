@@ -54,6 +54,11 @@ class CodePieceSelection(GObject.Object):
 
     def __init__(self, start_x, start_y, end_x, end_y):
         super().__init__()
+
+        if end_y < start_y or (start_y == end_y and start_x > end_x):
+            start_x, end_x = end_x, start_x
+            start_y, end_y = end_y, start_y
+
         self._start_x = int(start_x)
         self._start_y = int(start_y)
         self._end_x = int(end_x)
@@ -123,6 +128,7 @@ class CodeBuffer(GObject.Object):
         # Validates the coordinates
         lineslen = len(self.lines)
         if y == lineslen:
+            # Inserting a new line (directly under last line)
             if commands[-1][-1].definition.id != 'nl':
                 self.lines.append([self.project.get_command('nl', None)[0]])
             else:
@@ -130,12 +136,12 @@ class CodeBuffer(GObject.Object):
         elif y > lineslen or x > len(self.lines[y]):
             raise Exception('Invalid coordinates')
 
-        # Commands that are after the inserted code on the same line
+        # Tail = Commands that are after the inserted code on the same line
         tail = self.lines[y][x:]
         del self.lines[y][x:]
         # Inserts the code
         self.lines[y].extend(commands[0])
-        self.lines[y:y] = commands[1:]
+        self.lines[y+1:y+1] = commands[1:]
 
         # Adds the tail again
         if len(tail) > 0:
@@ -147,33 +153,50 @@ class CodeBuffer(GObject.Object):
 
         self.emit('code-changed')
 
-    def pop(self, s: CodePieceSelection) -> CodePiece:
-        return self._pop(s, True)
-
     def delete(self, s: CodePieceSelection):
-        self._pop(s, False)
-
-    def _pop(self, s: CodePieceSelection, ret: bool = False):
-        if ret:
-            output = []
         update_previews = False
 
-        for y in range(s.start_y, s.end_y + 1):
-            start = 0 if y != s.start_y else s.start_x
-            end = len(self.lines[y]) if y != s.end_y else s.end_x + 1
-            for c in self.lines[y][start:end]:
-                if (not update_previews
-                        and c.definition.id in COMMANDS_WITH_PREVIEW):
-                    update_previews = True
-            if ret:
-                output.append(self.lines[y][start:end])
+        start_y = s.props.start_y
+        y = start_y
+        end_y = s.props.end_y
+        for i in range(start_y, end_y + 1):
+            linelen = len(self.lines[y])
+            start = 0 if i > s.start_y else s.start_x
+            end = linelen if i < s.end_y else s.end_x + 1
+
+            if not update_previews:
+                for c in self.lines[y][start:end]:
+                    if c.definition.id in COMMANDS_WITH_PREVIEW:
+                        update_previews = True
+
+            if start == 0 and end == linelen:
+                del self.lines[y]
+                continue
             del self.lines[y][start:end]
+            if i < end_y:
+                y+=1
+
+        # If the inserted code does not end with newline
+        # joins the code from next line or adds newline
+        if (y < len(self.lines)
+                and self.lines[y][-1].definition.id != "nl"):
+            if y <= len(self.lines) - 2:
+                self.lines[y].extend(self.lines[y+1])
+                del self.lines[y+1]
+            else:
+                self.lines[y].append(self.project.get_command("nl", None)[0])
 
         if update_previews:
             self._clean_code_data_previews()
         self.emit('code-changed')
-        if ret:
-            return output
+
+    def get_range(self, s: CodePieceSelection) -> CodePiece:
+        output = []
+        for y in range(s.start_y, s.end_y + 1):
+            start_x = 0 if y > s.start_y else s.start_x
+            end_x = len(self.lines[y]) - 1 if y < s.end_y else s.end_x
+            output.append(self.lines[y][start_x:(end_x + 1)])
+        return output
 
     def get_command_data_preview(self,
                                  command: Command

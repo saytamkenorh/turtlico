@@ -12,21 +12,16 @@ variables:
     - windows
     - windows-1809
 
-.linux_runner:
-    image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
-
 flake8:
-  extends:
-    - .linux_runner
+  image: "registry.fedoraproject.org/fedora:latest"
   stage: check
   script:
-    - sudo dnf install -y python3-flake8
+    - dnf install -y python3-flake8
     - flake8 --ignore E402,W503 --show-source turtlico/
 
 flatpak:
     stage: build
-    extends:
-    - .linux_runner
+    image: "registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master"
     cache:
         key: "$CI_JOB_NAME"
         paths:

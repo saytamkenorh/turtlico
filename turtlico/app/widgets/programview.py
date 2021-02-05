@@ -17,6 +17,7 @@
 
 from __future__ import annotations
 import math
+from collections import namedtuple
 from typing import Union
 
 from gi.repository import GObject, Gtk, Gdk, Graphene
@@ -25,6 +26,7 @@ import turtlico.compiler as compiler
 from .icon import (append_block_to_snapshot, prepare_drag,
                    ICON_WIDTH, ICON_HEIGHT)
 
+SelectionStart = namedtuple('SelectionStart', ['mouse_x', 'mouse_y', 'x', 'y'])
 
 class ProgramView(Gtk.Widget, Gtk.Scrollable):
     __gtype_name__ = 'TurtlicoProgramView'
@@ -40,6 +42,8 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         self._selection = value
         self.queue_draw()
 
+    selection_color = GObject.Property(type=Gdk.RGBA)
+
     _codebuffer: compiler.CodeBuffer
     _codebuffer_code_changed_id: int
     _colors: compiler.CommandColorScheme
@@ -47,10 +51,13 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
     _drag_source: Gtk.DragSource
     _drag_source_copy: Gtk.DragSource
     _drop_target: Gtk.DropTarget
+    _drag_selection: Gtk.GestureDrag
     _hadjustment: Gtk.Adjustment
     _hscroll_policy: Gtk.ScrollablePolicy
     _vadjustment: Gtk.Adjustment
     _vscroll_policy: Gtk.ScrollablePolicy
+
+    _drag_selection_start: SelectionStart
 
     @GObject.Property(type=Gtk.ScrollablePolicy,
                       default=Gtk.ScrollablePolicy.NATURAL)
@@ -91,10 +98,13 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.props.selection = None
-
         self._codebuffer = None
         self._colors = None
+        self._drag_selection_start = None
+
+        self.props.selection = None
+        self.props.selection_color = compiler.rgba('rgba(0, 0, 0, 0.35)')
+        self.connect('notify::selection-color', self._on_selection_color_notify)
 
         self._drag_source = Gtk.DragSource.new()
         self._drag_source.props.actions = Gdk.DragAction.MOVE
@@ -114,29 +124,52 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         self._drop_target.connect('drop', self._on_drop_target_drop)
         self.add_controller(self._drop_target)
 
+        self._drag_selection = Gtk.GestureDrag.new()
+        self._drag_selection.connect('drag-begin', self._on_selection_begin)
+        self._drag_selection.connect('drag-update', self._on_selection_update)
+        self._drag_selection.connect('drag-end', self._on_selection_end)
+        self.add_controller(self._drag_selection)
+
     def do_snapshot(self, snapshot: Gtk.Snapshot):
         if not self._colors:
             return
         area = Graphene.Rect().init(0, 0, self.get_width(), self.get_height())
-
-        # Contenxt scroll
-        tx = -int(self.hadjustment.props.value)
-        ty = -int(self.vadjustment.props.value)
 
         snapshot.append_color(
             self._colors[compiler.CommandColor.INDENTATION][0], area)
         if not self._codebuffer:
             return
 
+        # Content
         snapshot.push_clip(area)
+        # Scroll
+        tx = -int(self.hadjustment.props.value)
+        ty = -int(self.vadjustment.props.value)
         start_x = int(self.hadjustment.props.value / ICON_WIDTH)
         end_x = math.ceil(self.hadjustment.props.value + self.get_width() / ICON_WIDTH)
         start_y = int(self.vadjustment.props.value / ICON_HEIGHT)
         end_y = math.ceil(self.vadjustment.props.value + self.get_height() / ICON_HEIGHT)
+
         append_block_to_snapshot(self._codebuffer.lines,
                                  snapshot, tx, ty,
                                  self, self._colors, None,
                                  start_x, end_x, start_y, end_y)
+        # Selection
+        if self.props.selection:
+            start_y = self.props.selection.start_y
+            end_y = self.props.selection.end_y
+            for y in range(start_y, end_y + 1):
+                start_x = 0 if y > start_y else self.props.selection.start_x
+                end_x = len(self._codebuffer.lines[y]) - 1 if y < end_y else self.props.selection.end_x
+                selection_rect = Graphene.Rect().init(
+                    tx + start_x * ICON_WIDTH, ty + y * ICON_HEIGHT,
+                    (end_x - start_x + 1) * ICON_WIDTH,
+                    ICON_HEIGHT
+                )
+                snapshot.append_color(
+                    self.props.selection_color,
+                    selection_rect)
+
         snapshot.pop()
 
     def do_size_allocate(self, width: int, height: int, baseline: int):
@@ -194,7 +227,7 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         return Gtk.SizeRequestMode.CONSTANT_SIZE
 
     def get_command_at(self, x: float, y: float
-                       ) -> Union[tuple[compiler.Command, int, int], None]:
+                       ) -> tuple[compiler.Command, int, int]:
         """Return Command at widget position x,y
 
         Args:
@@ -202,13 +235,13 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
             y (float): Y coordinate in pixels
 
         Returns:
-            Union[compiler.Command, None]: The Command or None
+            tuple[compiler.Command, int, int]: The Command (or None) and its coords
         """
         x, y = self._get_program_coords(x, y)
         if y >= len(self._codebuffer.lines):
-            return (None, None, None)
+            return (None, x, y)
         if x >= len(self._codebuffer.lines[y]):
-            return (None, None, None)
+            return (None, x, y)
         return (self._codebuffer.lines[y][x], x, y)
 
     def drop_coords_to_program(self, x: float, y: float) -> (int, int):
@@ -292,13 +325,17 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
     def _codebuffer_code_changed(self, codebuffer):
         self._update_adjustments()
         self.queue_draw()
+        self.props.selection = None
 
     def _on_drag_prepare(self,
                          source: Gtk.DragSource, x: float, y: float
                          ) -> Gdk.ContentProvider:
+        shift_mask = (source.get_current_event_state()
+            & Gdk.ModifierType.SHIFT_MASK)
+        if shift_mask != 0:
+            return None
         if self.props.selection:
-            # TODO: Implement selection
-            commands = []
+            commands = self._codebuffer.get_range(self.props.selection)
         else:
             command, cx, cy = self.get_command_at(x, y)
             if not command:
@@ -315,5 +352,51 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
             self.delete_selection()
         self.props.selection = None
 
+    def _on_selection_color_notify(self, obj, prop):
+        self.queue_draw()
+
+    def _on_selection_begin(self,
+                            source: Gtk.GestureDrag,
+                            start_x: float, start_y: float):
+        cmd, x, y = self.get_command_at(start_x, start_y)
+        shift_mask = (source.get_current_event_state()
+            & Gdk.ModifierType.SHIFT_MASK)
+        if cmd is None:
+            self.props.selection = None
+            return
+        if shift_mask == 0:
+            self._drag_selection_start = None
+            return
+        self.props.selection = compiler.CodePieceSelection(x, y, x, y)
+        self._drag_selection_start = SelectionStart(
+            start_x, start_y, x, y
+        )
+
+    def _on_selection_update(self,
+                             source: Gtk.GestureDrag,
+                             offset_x: float, offset_y: float):
+        if ((self.selection is None)
+                or (self._drag_selection_start is None)):
+            return
+        sx = self._drag_selection_start.x
+        sy = self._drag_selection_start.y
+        ex, ey = self._get_program_coords(
+            self._drag_selection_start.mouse_x + offset_x,
+            self._drag_selection_start.mouse_y + offset_y
+        )
+
+        ey = min(len(self._codebuffer.lines) - 1, ey)
+        if ey < 0:
+            return
+        ex = min(len(self._codebuffer.lines[ey]) - 1, ex)
+        if ex < 0:
+            return
+
+        self.props.selection = compiler.CodePieceSelection(sx, sy, ex, ey)
+
+    def _on_selection_end(self,
+                          source: Gtk.GestureDrag,
+                          offset_x: float, offset_y: float):
+        self._drag_selection_start = None
 
 GObject.type_register(ProgramView)
