@@ -74,12 +74,29 @@
               </object>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="_program_view_scrolled_window">
-                <property name="halign">GTK_ALIGN_FILL</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
+              <object class="GtkBox" id="_program_view_box">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
                 <child>
-                  <object class="TurtlicoProgramView" id="_program_view">
+                  <object class="GtkScrolledWindow" id="_program_view_scrolled_window">
+                    <property name="halign">GTK_ALIGN_FILL</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="TurtlicoProgramView" id="_program_view">
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="_status_bar">
+                    <style>
+                      <class name="caption"/>
+                    </style>
+                     <property name="halign">GTK_ALIGN_START</property>
+                    <property name="margin-bottom">2</property>
+                    <property name="margin-end">2</property>
+                    <property name="margin-start">2</property>
+                    <property name="margin-top">2</property>
                   </object>
                 </child>
               </object>

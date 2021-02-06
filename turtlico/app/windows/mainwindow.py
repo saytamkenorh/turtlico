@@ -18,7 +18,7 @@
 import gi
 
 gi.require_version('Gtk', '4.0')
-from gi.repository import Gtk
+from gi.repository import GLib, Gtk
 
 import turtlico.compiler as compiler
 import turtlico.app.widgets as widgets
@@ -36,6 +36,7 @@ class MainWindow(Gtk.ApplicationWindow):
 
     _icon_view: widgets.IconsView = Gtk.Template.Child()
     _program_view: widgets.programview = Gtk.Template.Child()
+    _status_bar: Gtk.Label = Gtk.Template.Child()
 
     buffer: compiler.ProjectBuffer
     icon_colors: compiler.CommandColorScheme
@@ -48,3 +49,6 @@ class MainWindow(Gtk.ApplicationWindow):
         self._icon_view.props.project_buffer = self.buffer
         self._program_view.set_colors(self.icon_colors)
         self._program_view.set_codebuffer(self.buffer.code)
+
+        self._program_view.bind_property(
+            'status-tooltip', self._status_bar, 'label')

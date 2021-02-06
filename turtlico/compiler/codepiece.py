@@ -141,7 +141,7 @@ class CodeBuffer(GObject.Object):
         del self.lines[y][x:]
         # Inserts the code
         self.lines[y].extend(commands[0])
-        self.lines[y+1:y+1] = commands[1:]
+        self.lines[y + 1:y + 1] = commands[1:]
 
         # Adds the tail again
         if len(tail) > 0:
@@ -174,15 +174,15 @@ class CodeBuffer(GObject.Object):
                 continue
             del self.lines[y][start:end]
             if i < end_y:
-                y+=1
+                y += 1
 
         # If the inserted code does not end with newline
         # joins the code from next line or adds newline
         if (y < len(self.lines)
                 and self.lines[y][-1].definition.id != "nl"):
             if y <= len(self.lines) - 2:
-                self.lines[y].extend(self.lines[y+1])
-                del self.lines[y+1]
+                self.lines[y].extend(self.lines[y + 1])
+                del self.lines[y + 1]
             else:
                 self.lines[y].append(self.project.get_command("nl", None)[0])
 

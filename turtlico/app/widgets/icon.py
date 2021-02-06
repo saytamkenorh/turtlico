@@ -87,7 +87,8 @@ def append_block_to_snapshot(commands: compiler.CodePiece,
                              widget: Gtk.Widget,
                              colors: compiler.CommandColorScheme,
                              code: compiler.CodeBuffer = None,
-                             start_x=0, end_x=None, start_y=0, end_y=None) -> (int, int):
+                             start_x=0, end_x=None,
+                             start_y=0, end_y=None) -> (int, int):
     width = 0
     height = 0
     for y, line in enumerate(commands):
@@ -95,7 +96,7 @@ def append_block_to_snapshot(commands: compiler.CodePiece,
             continue
         if end_y and y >= end_y:
             break
-        height+=1
+        height += 1
         for x, command in enumerate(line):
             if x < start_x:
                 continue
@@ -106,7 +107,7 @@ def append_block_to_snapshot(commands: compiler.CodePiece,
             xp = tx + x * ICON_WIDTH
             yp = ty + y * ICON_HEIGHT
             append_to_snapshot(command, snapshot, xp, yp, widget, colors, code)
-    width+=1  # X is indexed from 0
+    width += 1  # X is indexed from 0
     return (width * ICON_WIDTH, height * ICON_HEIGHT)
 
 
@@ -185,7 +186,8 @@ def prepare_drag(source: Gtk.DragSource,
     cp = Gdk.ContentProvider.new_for_value(val)
 
     snapshot = Gtk.Snapshot.new()
-    width, height = append_block_to_snapshot(commands, snapshot, 0, 0, widget, colors)
+    width, height = append_block_to_snapshot(
+        commands, snapshot, 0, 0, widget, colors)
     size = Graphene.Size().init(width, height)
     paintable = snapshot.to_paintable(size)
     source.set_icon(

@@ -21,12 +21,13 @@ import os
 import sys
 import inspect
 from datetime import datetime
+from typing import Callable
 
 import gi
 gi.require_version('Gtk', '4.0')
 gi.require_version('Rsvg', '2.0')
 gi.require_version('Graphene', '1.0')
-from gi.repository import Gio, Gdk, Gtk, Rsvg, Graphene
+from gi.repository import GLib, Gdk, Gtk, Rsvg, Graphene
 
 
 class SVGFileTexture():
@@ -86,3 +87,12 @@ def error(msg):
 
 def msg(msg):
     _debug_message('INFO', bcolors.OKBLUE, msg, sys.stdout)
+
+
+def new_shortcut(trigger: str,
+                 callback: Callable[[Gtk.Widget, GLib.Variant], bool]
+                 ) -> Gtk.Shortcut:
+    _trigger = Gtk.ShortcutTrigger.parse_string(trigger)
+    _action = Gtk.CallbackAction.new(callback)
+    shortcut = Gtk.Shortcut.new(_trigger, _action)
+    return shortcut
