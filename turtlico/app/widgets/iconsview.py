@@ -59,6 +59,8 @@ class IconsView(Gtk.Box):
         self._project_buffer = None
         self._colors = None
 
+        self._grid_view.props.has_tooltip = True
+
         self._grid_view_factory = Gtk.SignalListItemFactory.new()
         self._grid_view_factory.connect('bind', self._command_bind)
         self._grid_view_factory.connect('setup', self._command_setup)
@@ -79,7 +81,7 @@ class IconsView(Gtk.Box):
         self._colors = colors
 
     @Gtk.Template.Callback()
-    def on_categories_list_box_row_selected(self, box, row: Gtk.ListBoxRow):
+    def _on_categories_list_box_row_selected(self, box, row: Gtk.ListBoxRow):
         category = self._categories[row.get_index()]
         self._grid_view.set_model(
             Gtk.NoSelection.new(category.command_definitions))

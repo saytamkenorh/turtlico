@@ -58,6 +58,9 @@ class CommandColor(Enum):
     COMMENT = 2
     CYCLE = 3
     KEYWORD = 4
+    NUMBER = 5
+    STRING = 6
+    OBJECT = 7
 
 
 CommandColorScheme = Dict[CommandColor, Tuple[Gdk.RGBA, Gdk.RGBA]]

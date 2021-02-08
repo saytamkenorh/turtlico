@@ -122,7 +122,7 @@ class Compilation():
         return '\n'.join(self.output)
 
     def _parse_function(self):
-        if self.cmd.id.startswith('tcf_'):
+        if self.cmd.definition.function.startswith('tcf_'):
             self.modules_to_load.add(self.cmd.function)
 
     def _next_icon(self, offset=1) -> Union[compiler.Command, None]:

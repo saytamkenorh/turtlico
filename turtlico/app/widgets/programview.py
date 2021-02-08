@@ -25,6 +25,7 @@ from gi.repository import GObject, Gtk, Gdk, Graphene
 import turtlico.compiler as compiler
 
 from .icon import (append_block_to_snapshot, prepare_drag,
+                   validate_color_scheme,
                    ICON_WIDTH, ICON_HEIGHT)
 
 SelectionStart = namedtuple('SelectionStart', ['mouse_x', 'mouse_y', 'x', 'y'])
@@ -334,6 +335,10 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         self.queue_draw()
 
     def set_colors(self, colors: compiler.CommandColorScheme):
+        try:
+            validate_color_scheme(colors)
+        except Exception as e:
+            compiler.error(e)
         self._colors = colors
         self.queue_draw()
 

@@ -49,6 +49,8 @@ class SingleIconWidget(Gtk.Widget):
         self._colors = colors
         self._command = None
 
+        self.props.has_tooltip = True
+
         self._drag_source = Gtk.DragSource.new()
         self._drag_source.set_actions(Gdk.DragAction.COPY)
         self._drag_source.connect('prepare', self._on_drag_prepare)
@@ -69,6 +71,15 @@ class SingleIconWidget(Gtk.Widget):
 
     def do_get_request_mode(self):
         return Gtk.SizeRequestMode.CONSTANT_SIZE
+
+    def do_query_tooltip(self,
+                         x, y,
+                         keyboard_tooltip: bool,
+                         tooltip: Gtk.Tooltip) -> bool:
+        if self._command is None:
+            return False
+        tooltip.set_text(self._command.definition.help)
+        return True
 
     def set_command(self, command: compiler.Command):
         self._command = command
@@ -160,7 +171,7 @@ def _append_text(snapshot: Gtk.Snapshot, widget: Gtk.Widget,
         snapshot.restore()
 
 
-def get_default_colors() -> compiler.compilerCommandColorScheme:
+def get_default_colors() -> compiler.CommandColorScheme:
     _white = compiler.rgba('rgb(255, 255, 255)')
     _black = compiler.rgba('rgb(0, 0, 0)')
     _default_bg = compiler.rgba('rgb(255, 179, 0)')
@@ -171,8 +182,20 @@ def get_default_colors() -> compiler.compilerCommandColorScheme:
                                         _black),
         compiler.CommandColor.CYCLE: (compiler.rgba('rgb(200, 0, 0)'), _white),
         compiler.CommandColor.KEYWORD: (_default_bg, _white),
+        compiler.CommandColor.NUMBER: (compiler.rgba('rgb(0, 0, 128)'),
+                                       _white),
+        compiler.CommandColor.STRING: (compiler.rgba('rgb(255, 220, 0)'),
+                                       _white),
+        compiler.CommandColor.OBJECT: (compiler.rgba('rgb(100, 100, 100)'),
+                                       _white),
     }
     return colors
+
+
+def validate_color_scheme(scheme: compiler.CommandColorScheme):
+    for c in compiler.CommandColor:
+        if c not in scheme:
+            raise Exception(f'Color {c} is missing in the color scheme!')
 
 
 def prepare_drag(source: Gtk.DragSource,

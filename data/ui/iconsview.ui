@@ -9,7 +9,7 @@
         <style>
           <class name="navigation-sidebar"/>
         </style>
-        <signal name="row-selected" handler="on_categories_list_box_row_selected"/>
+        <signal name="row-selected" handler="_on_categories_list_box_row_selected"/>
       </object>
     </child>
     <child>

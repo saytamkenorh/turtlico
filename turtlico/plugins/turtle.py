@@ -45,6 +45,9 @@ def get_plugin():
             CommandDefinition('numi', '⌨#', _('Number input'), CommandType.METHOD, 'numinput', default_params="'{}','{}'".format(_('Number'), _('Enter a number:')), snippet='numi,;(,;str,{};sep,;str,{};sep,;int,50;sep,;int,100;),;'.format(_('Number'), _('Enter a number'))),
             CommandDefinition('stri', '⌨"', _('String input'), CommandType.METHOD, 'textinput', default_params="'{}','{}'".format(_('String'), _('Enter a string:')), snippet='stri,;(,;str,{};sep,;str,{};sep,;str,50;sep,;str,100;),;'.format(_('String'), _('Enter a string::'))),
             CommandDefinition('emc', icon('turtle/emc.svg'), _('Connect a function to handle mouse clicks'), CommandType.METHOD, 'tcf_mouseclick'),
+            CommandDefinition('xcor()', '❓X', _('Get x coordinate'), CommandType.CODE_SNIPPET, 'xcor()'),
+            CommandDefinition('ycor()', '❓Y', _('Get y coordinate'), CommandType.CODE_SNIPPET, 'ycor()'),
+            CommandDefinition('visible', '❓V', _('Is turtle visible?'), CommandType.CODE_SNIPPET, 'isvisible()'),
         ])
     ]
     p.modules = {
