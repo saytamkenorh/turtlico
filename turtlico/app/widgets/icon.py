@@ -16,6 +16,7 @@
 # along with Turtlico.  If not, see <http://www.gnu.org/licenses/>.
 
 from __future__ import annotations
+import math
 
 import gi
 gi.require_version('Gtk', '4.0')
@@ -109,16 +110,18 @@ def append_block_to_snapshot(commands: compiler.CodePiece,
         if end_y and y >= end_y:
             break
         height += 1
+        render_x = 0
         for x, command in enumerate(line):
             if x < start_x:
                 continue
             if end_x and x >= end_x:
                 break
-            if x > width:
-                width = x
-            xp = tx + x * ICON_WIDTH
+            if render_x > width:
+                width = render_x
+            xp = tx + render_x * ICON_WIDTH
             yp = ty + y * ICON_HEIGHT
-            append_to_snapshot(command, snapshot, xp, yp, widget, colors, code)
+            render_x += append_to_snapshot(
+                command, snapshot, xp, yp, widget, colors, code)
     width += 1  # X is indexed from 0
     return (width * ICON_WIDTH, height * ICON_HEIGHT)
 
@@ -126,16 +129,22 @@ def append_block_to_snapshot(commands: compiler.CodePiece,
 def append_to_snapshot(cmd: compiler.Command,
                        snapshot: Gtk.Snapshot, x, y,
                        widget: Gtk.Widget, colors: compiler.CommandColorScheme,
-                       code: compiler.CodeBuffer = None):
+                       code: compiler.CodeBuffer = None) -> int:
     defin: compiler.CommandDefinition = cmd.definition
     bg, fg = colors[defin.color]
-    area = Graphene.Rect.init(Graphene.Rect(), x, y, ICON_WIDTH, ICON_HEIGHT)
+    # Extend the width of the icon for icons with data
+    data_layout, icon_width = _create_data_layout(cmd, widget)
+
+    area = Graphene.Rect.init(
+        Graphene.Rect(), x, y, icon_width * ICON_WIDTH, ICON_HEIGHT)
+
     # Background
     snapshot.append_color(bg, area)
     # Foreground icon
     if not (defin.data_only and cmd.data):
         if isinstance(defin.icon, str):
-            _append_text(snapshot, widget, defin.icon, _FONT_NORMAL, fg, area)
+            layout = widget.create_pango_layout(defin.icon)
+            _append_layout(snapshot, layout, _FONT_NORMAL, fg, area)
         else:
             defin.icon.snapshot(snapshot, area)
     # Data
@@ -146,17 +155,36 @@ def append_to_snapshot(cmd: compiler.Command,
                 snapshot.append_texture(texture, area)
         if defin.id == 'color':
             data_color = utils.rgba(cmd.data)
-            _append_text(snapshot, widget, '⬤', _FONT_NORMAL, data_color, area)
-        else:
-            _append_text(
-                snapshot, widget, cmd.data, _FONT_SMALL, fg, area, 5)
+            layout = widget.create_pango_layout('⬤')
+            _append_layout(snapshot, layout, _FONT_NORMAL, data_color, area)
+        if data_layout:
+            _append_layout(
+                snapshot, data_layout, None, fg, area, 5)
+    return icon_width
 
 
-def _append_text(snapshot: Gtk.Snapshot, widget: Gtk.Widget,
-                 text: str, font, color: Gdk.RGBA,
-                 area: Graphene.Rect, y=0):
-    layout = widget.create_pango_layout(text)
-    layout.set_font_description(font)
+def calc_icon_width(cmd: compiler.Command,
+                    widget: Gtk.Widget) -> int:
+    return _create_data_layout(cmd, widget)[1]
+
+
+def _create_data_layout(cmd: compiler.Command,
+                        widget: Gtk.Widget) -> (Pango.Layout, int):
+    icon_width = 1
+    layout = None
+    if cmd.data:
+        layout = widget.create_pango_layout(cmd.data)
+        layout.set_font_description(_FONT_SMALL)
+        data_layout_width = layout.get_pixel_size()[0]
+        icon_width = max(icon_width, math.ceil(data_layout_width / ICON_WIDTH))
+    return (layout, icon_width)
+
+
+def _append_layout(snapshot: Gtk.Snapshot,
+                   layout: Pango.Layout, font, color: Gdk.RGBA,
+                   area: Graphene.Rect, y=0):
+    if font:
+        layout.set_font_description(font)
     layout.set_alignment(Pango.Alignment.CENTER)
     layout.set_width(area.size.width * Pango.SCALE)
     x = area.get_x()

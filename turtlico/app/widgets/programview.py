@@ -27,6 +27,7 @@ import turtlico.utils as utils
 
 from .icon import (append_block_to_snapshot, prepare_drag,
                    validate_color_scheme,
+                   calc_icon_width,
                    ICON_WIDTH, ICON_HEIGHT)
 from .programviewdataeditor import edit_icon
 
@@ -161,6 +162,9 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
     def do_snapshot(self, snapshot: Gtk.Snapshot):
         if not self._colors:
             return
+        # Scroll
+        tx = -int(self.hadjustment.props.value)
+        ty = -int(self.vadjustment.props.value)
         area = Graphene.Rect().init(0, 0, self.get_width(), self.get_height())
 
         snapshot.append_color(
@@ -170,9 +174,6 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
 
         # Content
         snapshot.push_clip(area)
-        # Scroll
-        tx = -int(self.hadjustment.props.value)
-        ty = -int(self.vadjustment.props.value)
         start_x = int(self.hadjustment.props.value / ICON_WIDTH)
         end_x = math.ceil(self.hadjustment.props.value
                           + self.get_width() / ICON_WIDTH)
@@ -189,9 +190,14 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
             start_y = self.props.selection.start_y
             end_y = self.props.selection.end_y
             for y in range(start_y, end_y + 1):
-                start_x = 0 if y > start_y else self.props.selection.start_x
-                end_x = (len(self._codebuffer.lines[y]) - 1 if y < end_y
-                         else self.props.selection.end_x)
+                start_x = (
+                    0 if y > start_y
+                    else self._line_x_to_render_x(
+                        self.props.selection.start_x, y)
+                )
+                end_x = self._line_x_to_render_x(
+                    len(self._codebuffer.lines[y]) - 1 if y < end_y
+                    else self.props.selection.end_x, y, True)
                 selection_rect = Graphene.Rect().init(
                     tx + start_x * ICON_WIDTH, ty + y * ICON_HEIGHT,
                     (end_x - start_x + 1) * ICON_WIDTH,
@@ -325,7 +331,37 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         y += self.props.vadjustment.props.value
         x = math.floor(x / ICON_WIDTH)
         y = math.floor(y / ICON_HEIGHT)
+
+        if y < len(self._codebuffer.lines):
+            linelen = len(self._codebuffer.lines[y]) - 1
+            program_x = 0
+            render_x = -1
+            while True:
+                if program_x < linelen:
+                    c = self._codebuffer.lines[y][program_x]
+                    w = calc_icon_width(c, self)
+                    render_x += w
+                else:
+                    render_x += 1
+                if render_x >= x:
+                    break
+                program_x += 1
+            x = program_x
         return (x, y)
+
+    def _line_x_to_render_x(self,
+                            x: float, y: float,
+                            fully_include_end: bool = False) -> int:
+        if y >= len(self._codebuffer.lines):
+            return x
+        end = min(x, len(self._codebuffer.lines[y]) - 1)
+        if fully_include_end:
+            end += 1
+        for cx in range(0, end):
+            c = self._codebuffer.lines[y][cx]
+            w = calc_icon_width(c, self)
+            x += w - 1
+        return x
 
     def set_codebuffer(self, codebuffer: compiler.CodeBuffer):
         assert isinstance(codebuffer, compiler.CodeBuffer)
