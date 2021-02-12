@@ -190,6 +190,10 @@ class CodeBuffer(GObject.Object):
             self._clean_code_data_previews()
         self.emit('code-changed')
 
+    def replace_command(self, cmd: Command, x: int, y: int):
+        self.lines[y][x] = cmd
+        self.emit('code-changed')
+
     def get_range(self, s: CodePieceSelection) -> CodePiece:
         output = []
         for y in range(s.start_y, s.end_y + 1):

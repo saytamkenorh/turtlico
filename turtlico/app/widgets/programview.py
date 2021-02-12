@@ -23,10 +23,12 @@ from typing import Union
 from gi.repository import GObject, Gtk, Gdk, Graphene
 
 import turtlico.compiler as compiler
+import turtlico.utils as utils
 
 from .icon import (append_block_to_snapshot, prepare_drag,
                    validate_color_scheme,
                    ICON_WIDTH, ICON_HEIGHT)
+from .programviewdataeditor import edit_icon
 
 SelectionStart = namedtuple('SelectionStart', ['mouse_x', 'mouse_y', 'x', 'y'])
 
@@ -115,7 +117,7 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         self.props.has_tooltip = True
 
         self.props.selection = None
-        self.props.selection_color = compiler.rgba('rgba(0, 0, 0, 0.35)')
+        self.props.selection_color = utils.rgba('rgba(0, 0, 0, 0.35)')
         self.connect('notify::selection-color',
                      self._on_selection_color_notify)
 
@@ -146,7 +148,9 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         self._shortcut_controller = Gtk.ShortcutController()
         self._shortcut_controller.props.scope = Gtk.ShortcutScope.GLOBAL
         self._shortcut_controller.add_shortcut(
-            compiler.new_shortcut('Delete', self._on_delete_shortcut))
+            utils.new_shortcut('Delete', self._on_delete_shortcut))
+        self._shortcut_controller.add_shortcut(
+            utils.new_shortcut('F2', self._on_edit_shortcut))
         self.add_controller(self._shortcut_controller)
 
         self._motion_controller = Gtk.EventControllerMotion()
@@ -278,9 +282,9 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
                 The Command (or None) and its coords
         """
         x, y = self._get_program_coords(x, y)
-        if y >= len(self._codebuffer.lines):
+        if y >= len(self._codebuffer.lines) or y < 0:
             return (None, x, y)
-        if x >= len(self._codebuffer.lines[y]):
+        if x >= len(self._codebuffer.lines[y]) or x < 0:
             return (None, x, y)
         return (self._codebuffer.lines[y][x], x, y)
 
@@ -345,6 +349,19 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
     def delete_selection(self):
         self._codebuffer.delete(self.props.selection)
         self.props.selection = None
+
+    def edit_command(self, x, y):
+        assert y < len(self._codebuffer.lines)
+        assert x < len(self._codebuffer.lines[y])
+
+        cmd = self._codebuffer.lines[y][x]
+        edit_icon(
+            cmd, self._codebuffer.project, self._get_parent_window(),
+            self._on_edit_command_response, x, y)
+
+    def _on_edit_command_response(self, cmd: compiler.Command, x, y):
+        self._codebuffer.replace_command(cmd, x, y)
+        self.queue_draw()
 
     def _on_drop_target_drop(self,
                              dt: Gtk.DropTarget,
@@ -468,6 +485,24 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
     def _on_ptr_leave(self, widget):
         self.props.status_tooltip = ''
         self._last_ptr_pos = None
+
+    def _on_edit_shortcut(self, widget, args):
+        if self._last_ptr_pos is None:
+            return
+        x, y = self._last_ptr_pos
+        cmd, cx, cy = self.get_command_at(x, y)
+        if cmd is None:
+            return
+        self.edit_command(cx, cy)
+
+    def _get_parent_window(self) -> Union[Gtk.Window, None]:
+        w = None
+        p = self
+        while p := p.get_parent():
+            w = p
+        if w == self or not isinstance(w, Gtk.Window):
+            return None
+        return w
 
 
 GObject.type_register(ProgramView)

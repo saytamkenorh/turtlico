@@ -4,4 +4,3 @@ from .codepiece import TcpPiece, CodePiece, CodePieceSelection, CodePieceDrop, C
 from .command import CommandIcon, Command, CommandModule, CommandEvent, CommandColor, CommandColorScheme
 from .command import CommandType, CommandDefinition, CommandCategory, Plugin, icon
 from .projectbuffer import ProjectBuffer
-from .utils import error, msg, rgba, new_shortcut

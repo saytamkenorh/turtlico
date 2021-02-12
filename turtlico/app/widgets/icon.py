@@ -23,6 +23,7 @@ gi.require_version('Graphene', '1.0')
 from gi.repository import GObject, Gtk, Gdk, Graphene, Pango
 
 import turtlico.compiler as compiler
+import turtlico.utils as utils
 
 ICON_WIDTH = 50
 ICON_HEIGHT = 35
@@ -144,11 +145,11 @@ def append_to_snapshot(cmd: compiler.Command,
             if texture:
                 snapshot.append_texture(texture, area)
         if defin.id == 'color':
-            data_color = compiler.utils.rgba(cmd.data)
+            data_color = utils.rgba(cmd.data)
             _append_text(snapshot, widget, '⬤', _FONT_NORMAL, data_color, area)
         else:
             _append_text(
-                snapshot, widget, defin.data, _FONT_SMALL, fg, area, 5)
+                snapshot, widget, cmd.data, _FONT_SMALL, fg, area, 5)
 
 
 def _append_text(snapshot: Gtk.Snapshot, widget: Gtk.Widget,
@@ -172,21 +173,21 @@ def _append_text(snapshot: Gtk.Snapshot, widget: Gtk.Widget,
 
 
 def get_default_colors() -> compiler.CommandColorScheme:
-    _white = compiler.rgba('rgb(255, 255, 255)')
-    _black = compiler.rgba('rgb(0, 0, 0)')
-    _default_bg = compiler.rgba('rgb(255, 179, 0)')
+    _white = utils.rgba('rgb(255, 255, 255)')
+    _black = utils.rgba('rgb(0, 0, 0)')
+    _default_bg = utils.rgba('rgb(255, 179, 0)')
     colors = {
         compiler.CommandColor.DEFAULT: (_default_bg, _white),
         compiler.CommandColor.INDENTATION: (_black, _white),
-        compiler.CommandColor.COMMENT: (compiler.rgba('rgb(255, 233, 140)'),
+        compiler.CommandColor.COMMENT: (utils.rgba('rgb(255, 233, 140)'),
                                         _black),
-        compiler.CommandColor.CYCLE: (compiler.rgba('rgb(200, 0, 0)'), _white),
+        compiler.CommandColor.CYCLE: (utils.rgba('rgb(200, 0, 0)'), _white),
         compiler.CommandColor.KEYWORD: (_default_bg, _white),
-        compiler.CommandColor.NUMBER: (compiler.rgba('rgb(0, 0, 128)'),
+        compiler.CommandColor.NUMBER: (utils.rgba('rgb(0, 0, 128)'),
                                        _white),
-        compiler.CommandColor.STRING: (compiler.rgba('rgb(255, 220, 0)'),
+        compiler.CommandColor.STRING: (utils.rgba('rgb(255, 220, 0)'),
                                        _white),
-        compiler.CommandColor.OBJECT: (compiler.rgba('rgb(100, 100, 100)'),
+        compiler.CommandColor.OBJECT: (utils.rgba('rgb(100, 100, 100)'),
                                        _white),
     }
     return colors
