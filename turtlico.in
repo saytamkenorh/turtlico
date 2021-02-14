@@ -23,7 +23,7 @@ import os
 import sys
 import signal
 
-turtlico_dir = os.path.dirname(os.path.dirname(__file__))
+turtlico_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 pkgdatadir = os.path.join(turtlico_dir, 'share', 'turtlico')
 
 sys.path.insert(1, pkgdatadir)

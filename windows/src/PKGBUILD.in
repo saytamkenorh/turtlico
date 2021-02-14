@@ -25,15 +25,17 @@ md5sums=()
 validpgpkeys=()
 
 build() {	
-	cd ../
-	 meson ../ ./build --prefix ${MINGW_PREFIX} --libdir lib -Dappstream=false
-	cd ./build
+	meson ${startdir}/../../ ${startdir}/_build --prefix ${MINGW_PREFIX} --libdir lib -Dappstream=false
+	cd ${startdir}/_build
 	ninja
-	ninja test
 }
 
+check() {
+	cd ${startdir}/_build
+	meson test
+}
 
 package() {
-	cd ../build
-	DESTDIR="${pkgdir}${MINGW_PREFIX}" ninja install
+	cd ${startdir}/_build
+	DESTDIR=${pkgdir} ninja install
 }

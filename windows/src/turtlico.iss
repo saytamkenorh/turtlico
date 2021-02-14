@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Turtlico"
-#define MyAppVersion "0.5"
+#define MyAppVersion "@PROJECT_VERSION@"
 #define MyAppPublisher "Matyas Hronek"
 #define MyAppURL "https://turtlico.gitlab.io"
 #define MyAppExeName "bin\turtlico.exe"
@@ -26,9 +26,9 @@ LicenseFile=@PROJECT_DIR@\COPYING
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-OutputDir=@PROJECT_DIR@\windows
+OutputDir=@PROJECT_DIR@\windows\build
 OutputBaseFilename=turtlico-setup
-SetupIconFile=@PROJECT_DIR@\src\turtlico.ico
+SetupIconFile=@PROJECT_DIR@\windows\src\turtlico.ico
 Compression=lzma
 SolidCompression=yes
 CloseApplications=force
@@ -46,7 +46,7 @@ Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "@PROJECT_DIR@\windows\output\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "@PROJECT_DIR@\windows\build\output\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

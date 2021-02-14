@@ -44,16 +44,15 @@ windows:
     script:
         - Set-Variable -Name "time" -Value (date -Format "%H:%m")
         - echo ${time}
-        - echo "started by ${GITLAB_USER_NAME}"
         - choco install msys2 -y
         - choco install innosetup -y
         - cd .\windows
         - filter replace-slash {$_ -replace "\\", "/"}
         - C:\tools\msys64\usr\bin\bash.exe -lc "$(Get-Location | replace-slash)/build.sh"
-        - iscc .\build\turtlico.iss /Q /O$(Get-Location) /F"${BUNDLE_FILENAME}-setup"
+        - iscc .\build\turtlico.iss /Q /O$(Get-Location)\build /F"${BUNDLE_FILENAME}-setup"
     artifacts:
         name: 'Windows artifacts'
         expose_as: 'Get Windows installer here'
         paths:
-        - windows/${BUNDLE_FILENAME}-setup.exe
+        - windows/build/${BUNDLE_FILENAME}-setup.exe
         expire_in: 14 days

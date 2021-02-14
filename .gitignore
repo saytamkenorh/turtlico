@@ -1,11 +1,6 @@
 _build
-windows/output/
 windows/build/
-windows/pkg/
-windows/src/
 doc/examples/*.py
-*.pkg.tar.xz
-*.pkg.tar.zst
 *.AppDir
 *.AppImage
 *~
