@@ -21,7 +21,6 @@ from __future__ import annotations
 from typing import Union
 
 import turtlico.compiler as compiler
-from .utils import error
 
 
 class Compilation():
@@ -169,8 +168,3 @@ class Compiler():
 
         for plugin in self.project_buffer.enabled_plugins.values():
             self.modules.update(plugin.modules)
-
-
-def _print_missing_property(id: str, props: list[str]):
-    error(
-        'Command "{}" is missing at least one of the following required properties: {}.'.format(id, ' '.join(props))) # NOQA

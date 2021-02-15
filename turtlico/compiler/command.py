@@ -27,7 +27,7 @@ from typing import Union, Dict, Tuple
 
 from gi.repository import GObject, Gio, Gdk, GLib
 
-from turtlico.compiler.utils import error, SVGFileTexture
+from turtlico.utils import error, SVGFileTexture
 import turtlico.compiler.codepiece as codepiece
 
 PLUGIN_RESOURCES = '/io/gitlab/Turtlico/plugins'
