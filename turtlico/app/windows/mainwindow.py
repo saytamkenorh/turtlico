@@ -18,16 +18,11 @@
 import gi
 
 gi.require_version('Gtk', '4.0')
-from gi.repository import Gtk
+from gi.repository import Gio, Gtk
 
 import turtlico.compiler as compiler
+import turtlico.utils as utils
 import turtlico.app.widgets as widgets
-
-# buffer = compiler.ProjectBuffer()
-# cmp = compiler.Compiler(buffer)
-# p = compiler.load_codepiece(compiler.parse_tcp('go;'), buffer)
-# res = cmp.compile(p)
-# compiler.msg(res)
 
 
 @Gtk.Template(resource_path='/io/gitlab/Turtlico/ui/mainwindow.ui')
@@ -38,17 +33,32 @@ class MainWindow(Gtk.ApplicationWindow):
     _program_view: widgets.programview = Gtk.Template.Child()
     _status_bar: Gtk.Label = Gtk.Template.Child()
 
+    _run_action: Gio.SimpleAction
+
     buffer: compiler.ProjectBuffer
+    compiler: compiler.Compiler
     icon_colors: compiler.CommandColorScheme
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.buffer = compiler.ProjectBuffer()
+        self.compiler = compiler.Compiler(self.buffer)
         self.icon_colors = widgets.get_default_colors()
+
         self._icon_view.set_colors(self.icon_colors)
         self._icon_view.props.project_buffer = self.buffer
+
         self._program_view.set_colors(self.icon_colors)
         self._program_view.set_codebuffer(self.buffer.code)
-
         self._program_view.bind_property(
             'status-tooltip', self._status_bar, 'label')
+
+        # Actions
+        self._run_action = Gio.SimpleAction.new("project.run", None)
+        self._run_action.connect('activate', self._on_run)
+        self.add_action(self._run_action)
+
+    def _on_run(self, action, params):
+        code, debug_map = self.compiler.compile(self.buffer.code.lines)
+        utils.debug('Generated code:')
+        utils.debug(code)

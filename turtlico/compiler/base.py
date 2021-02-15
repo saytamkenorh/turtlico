@@ -18,9 +18,13 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from __future__ import annotations
-from typing import Union
+from typing import Union, Dict, Tuple
 
 import turtlico.compiler as compiler
+
+
+# Python line: Program x, y
+DebugInfo = Dict[int, Tuple[int, int]]
 
 
 class Compilation():
@@ -44,15 +48,19 @@ class Compilation():
     param_level: int
     keyword_level: int
     line_start_command: compiler.Command  # First not tab command
+    out_line: int
 
     cmd: compiler.CommandDefinition  # Definition of current command
     cmd_data: str  # Data of current command
+
+    debug_info: DebugInfo
 
     def __init__(self, compiler: Compiler):
         self.output = ['#!/usr/bin/python3']
         self.modules_to_load = set()
         self.global_variables = set()
         self.compiler = compiler
+        self.debug_info = {}
 
         # Initializations of enabled plugins
         for p in self.compiler.project_buffer.enabled_plugins.values():
@@ -60,27 +68,26 @@ class Compilation():
             if mod:
                 self.modules_to_load.add(p.id)
 
-    def compile_line(self, line, line_hint=None):
-        # Line hints are used in order to get position in icons program
-        # from a position in the Python code
-        if line_hint:
-            self.output.append(f'# Line: {line_hint}\n')
+    def compile_line(self, line: compiler.CodePiece, line_y: int):
         self.line = line
         self.indentation = ''
         self.increase_indent = True
 
         self.x = -1
-        self.y = 0
         self.param_level = 0
         self.keyword_level = 0
         self.line_start_command = None
 
-        self.x = 0
-        while self.x < len(self.line):
-            out_line = len(self.output)  # noqa: F841
+        self.x = -1
+        while self.x < len(self.line) - 1:
+            self.x += 1
+            self.out_line = len(self.output)  # noqa: F841
             cmd = self.line[self.x]
             self.cmd = cmd.definition
             self.cmd_data = cmd.data
+
+            if self.out_line not in self.debug_info:
+                self.debug_info[self.out_line] = (self.x, line_y)
 
             # Functions
             if self.cmd.command_type == compiler.CommandType.METHOD:
@@ -109,19 +116,17 @@ class Compilation():
                     self.increase_indent = False
                     continue
 
-            self.x += 1
-
-    def finish(self) -> list[str]:
+    def finish(self) -> (str, DebugInfo):
         modules = set()
         for mod in self.modules_to_load:
             modules.add(mod)
             modules.update(self.compiler.modules[mod].deps)
         for mod in modules:
             self.output.append(self.compiler.modules[mod].code)
-        return '\n'.join(self.output)
+        return '\n'.join(self.output), self.debug_info
 
     def _parse_function(self):
-        if self.cmd.definition.function.startswith('tcf_'):
+        if self.cmd.function.startswith('tcf_'):
             self.modules_to_load.add(self.cmd.function)
 
     def _next_icon(self, offset=1) -> Union[compiler.Command, None]:
@@ -138,28 +143,24 @@ class Compilation():
 
 class Compiler():
     project_buffer: compiler.ProjectBuffer
-    write_line_hints: bool
 
     # Command definitions
     modules: dict[str, compiler.CommandModule]  # id - module info
 
     def __init__(self, project_buffer: compiler.ProjectBuffer):
         self.modules = {}
-        self.write_line_hints = True
 
         self.project_buffer = project_buffer
         self.reload_definitions()
         self.project_buffer.connect(
             'available-commands-changed', self.reload_definitions)
 
-    def compile(self, code: compiler.CodePiece) -> str:
+    def compile(self, code: compiler.CodePiece) -> (str, DebugInfo):
         ctx = Compilation(self)
 
         # Actual commands
         for y in range(len(code)):
-            ctx.compile_line(
-                code[y],
-                y if self.write_line_hints else None)
+            ctx.compile_line(code[y], y)
 
         return ctx.finish()
 

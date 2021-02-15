@@ -81,6 +81,10 @@ def _debug_message(mtype, color, msg, output):
         file=output)
 
 
+def debug(msg):
+    _debug_message('DEBUG', bcolors.OKGREEN, msg, sys.stdout)
+
+
 def error(msg):
     _debug_message('ERROR', bcolors.FAIL, msg, sys.stderr)
 

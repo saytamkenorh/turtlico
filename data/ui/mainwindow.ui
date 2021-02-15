@@ -24,7 +24,7 @@
                   <class name="flat"/>
                 </style>
                 <property name="tooltip-text" translatable="yes">Run</property>
-                <property name="action-name">project.run</property>
+                <property name="action-name">win.project.run</property>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">media-playback-start-symbolic</property>
@@ -38,7 +38,7 @@
                   <class name="flat"/>
                 </style>
                 <property name="tooltip-text" translatable="yes">Open project</property>
-                <property name="action-name">project.open</property>
+                <property name="action-name">win.project.open</property>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">document-open-symbolic</property>
@@ -52,7 +52,7 @@
                   <class name="flat"/>
                 </style>
                 <property name="tooltip-text" translatable="yes">Save project</property>
-                <property name="action-name">project.save</property>
+                <property name="action-name">win.project.save</property>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">document-save-symbolic</property>
