@@ -76,7 +76,7 @@ class NumberDialog(DataEditorDialog):
         self._shortcut_controller.props.propagation_phase = (
             Gtk.PropagationPhase.CAPTURE)
         self._shortcut_controller.add_shortcut(
-            utils.new_shortcut("Return", self._on_editing_done))
+            utils.new_shortcut("Return|KP_Enter", self._on_editing_done))
         self.add_controller(self._shortcut_controller)
 
         content.append(self._number_entry)

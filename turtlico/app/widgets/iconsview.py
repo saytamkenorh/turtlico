@@ -35,9 +35,11 @@ class IconsView(Gtk.Box):
 
     _categories: Gio.ListStore
     _colors: compiler.CommandColorScheme
+    _drop_target: Gtk.DropTarget
     _grid_view_factory: Gtk.SignalListItemFactory
     _project_buffer_available_commands_changed_id: int
     _project_buffer: ProjectBuffer
+    _scroll_ctl: Gtk.EventControllerScroll
 
     @GObject.Property(type=ProjectBuffer)
     def project_buffer(self):
@@ -76,6 +78,13 @@ class IconsView(Gtk.Box):
         self._drop_target = Gtk.DropTarget.new(
             compiler.CodePieceDrop, Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
         self.add_controller(self._drop_target)
+
+        self._scroll_ctl = Gtk.EventControllerScroll.new(
+            Gtk.EventControllerScrollFlags.DISCRETE
+            | Gtk.EventControllerScrollFlags.VERTICAL
+        )
+        self._scroll_ctl.connect('scroll', self._on_scroll)
+        self.add_controller(self._scroll_ctl)
 
     def set_colors(self, colors: compiler.CommandColorScheme):
         self._colors = colors
@@ -132,6 +141,24 @@ class IconsView(Gtk.Box):
 
     def _command_unbind(self, factory, item: Gtk.ListItem):
         item.props.child.set_command(None)
+
+    def _on_scroll(self, widget, dx: float, dy: float):
+        selected_row = self._categories_list_box.get_selected_row()
+        if not selected_row:
+            return False
+        selected_index = selected_row.get_index()
+        if dy < 0:
+            selected_index = selected_index - 1
+            if selected_index < 0:
+                selected_index = (
+                    self._categories.get_n_items() + selected_index)
+        elif dy > 0:
+            selected_index = (
+                (selected_index + 1) % self._categories.get_n_items())
+        row = self._categories_list_box.get_row_at_index(
+            selected_index)
+        self._categories_list_box.select_row(row)
+        return True
 
 
 GObject.type_register(IconsView)
