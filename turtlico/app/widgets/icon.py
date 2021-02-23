@@ -148,18 +148,19 @@ def append_to_snapshot(cmd: compiler.Command,
         else:
             defin.icon.snapshot(snapshot, area)
     # Data
-    if cmd.data:
+    if cmd.data and cmd.definition.show_data:
         if defin.id == 'img' and code:
             texture = code.get_command_data_preview(cmd)
             if texture:
                 snapshot.append_texture(texture, area)
         if defin.id == 'color':
-            data_color = utils.rgba(cmd.data)
+            data_color = utils.rgba(f'rgb({cmd.data})')
             layout = widget.create_pango_layout('⬤')
             _append_layout(snapshot, layout, _FONT_NORMAL, data_color, area)
         if data_layout:
             _append_layout(
-                snapshot, data_layout, None, fg, area, 5)
+                snapshot, data_layout, None, fg, area,
+                0 if defin.data_only else 5)
     return icon_width
 
 
@@ -172,7 +173,7 @@ def _create_data_layout(cmd: compiler.Command,
                         widget: Gtk.Widget) -> (Pango.Layout, int):
     icon_width = 1
     layout = None
-    if cmd.data:
+    if cmd.data and cmd.definition.show_data:
         layout = widget.create_pango_layout(cmd.data)
         layout.set_font_description(_FONT_SMALL)
         data_layout_width = layout.get_pixel_size()[0]
@@ -210,13 +211,16 @@ def get_default_colors() -> compiler.CommandColorScheme:
         compiler.CommandColor.COMMENT: (utils.rgba('rgb(255, 233, 140)'),
                                         _black),
         compiler.CommandColor.CYCLE: (utils.rgba('rgb(200, 0, 0)'), _white),
-        compiler.CommandColor.KEYWORD: (_default_bg, _white),
+        compiler.CommandColor.KEYWORD: (_default_bg,
+                                        utils.rgba('rgb(0, 0, 128)')),
         compiler.CommandColor.NUMBER: (utils.rgba('rgb(0, 0, 128)'),
                                        _white),
         compiler.CommandColor.STRING: (utils.rgba('rgb(255, 220, 0)'),
-                                       _white),
+                                       _black),
         compiler.CommandColor.OBJECT: (utils.rgba('rgb(100, 100, 100)'),
                                        _white),
+        compiler.CommandColor.TYPE_CONV: (_default_bg,
+                                          _black),
     }
     return colors
 

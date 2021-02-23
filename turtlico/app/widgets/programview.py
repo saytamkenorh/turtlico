@@ -332,7 +332,7 @@ class ProgramView(Gtk.Widget, Gtk.Scrollable):
         x = math.floor(x / ICON_WIDTH)
         y = math.floor(y / ICON_HEIGHT)
 
-        if y < len(self._codebuffer.lines):
+        if y < len(self._codebuffer.lines) and y >= 0:
             linelen = len(self._codebuffer.lines[y]) - 1
             program_x = 0
             render_x = -1

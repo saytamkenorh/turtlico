@@ -1,9 +1,47 @@
 # flake8: noqa
-from turtlico.compiler import Plugin, CommandCategory, CommandColor
+from turtlico.compiler import Plugin, CommandCategory, CommandColor, LiteralParserResult
 from turtlico.compiler import CommandDefinition, CommandType, CommandModule, CommandEvent, icon
 from turtlico.locale import _
 
 name='Base'
+
+def tc(data, toplevel) -> LiteralParserResult:
+    return LiteralParserResult(
+        f'({data})',
+        ()
+    )
+
+def raw_data(data, toplevel) -> LiteralParserResult:
+    return LiteralParserResult(
+        data,
+        ()
+    )
+
+def string(data, toplevel) -> LiteralParserResult:
+    return LiteralParserResult(
+        f"'{data}'",
+        ()
+    )
+
+def color(data, toplevel) -> LiteralParserResult:
+    if not data:
+        return LiteralParserResult('color', ())
+    if toplevel:
+        return LiteralParserResult(
+            f'color(({data}))', ()
+        )
+    else:
+        return LiteralParserResult(
+            f'({data})', ()
+        )
+
+def font(data, toplevel) -> LiteralParserResult:
+    if not data:
+        return LiteralParserResult('font', ())
+    family, size, fonttype, weight = data.split(';')
+    return LiteralParserResult(
+        f"font = ('{family}', '{size}', '{fonttype}', '{weight}')", ()
+    )
 
 def get_plugin():
     p = Plugin(name)
@@ -11,13 +49,13 @@ def get_plugin():
         CommandCategory(p, '⚙', [
             CommandDefinition('nl', '⏎', _('New line (enter)'), CommandType.INTERNAL, color=CommandColor.INDENTATION),
             CommandDefinition('tab', '·', _('Tab'), CommandType.INTERNAL, color=CommandColor.INDENTATION),
-            CommandDefinition('#', '#', _('Comment'), CommandType.INTERNAL, color=CommandColor.COMMENT, has_data=True, data_only=True),
+            CommandDefinition('#', '#', _('Comment'), CommandType.INTERNAL, color=CommandColor.COMMENT, data_only=True),
             CommandDefinition('sep', ',', _('Argument separator (Comma)'), CommandType.CODE_SNIPPET, ','),
-            CommandDefinition('(', ',', _('Left parenthesis'), CommandType.CODE_SNIPPET, '('),
-            CommandDefinition(')', ',', _('Right parenthesis'), CommandType.CODE_SNIPPET, ')'),
+            CommandDefinition('(', '(', _('Left parenthesis'), CommandType.CODE_SNIPPET, '('),
+            CommandDefinition(')', ')', _('Right parenthesis'), CommandType.CODE_SNIPPET, ')'),
             CommandDefinition('if', '❔if', _('If statement'), CommandType.KEYWORD_WITH_ARGS, 'if', snippet='if,;true,;:,;nl,;tab,;'),
             CommandDefinition('else', 'else', _('Else'), CommandType.KEYWORD_WITH_ARGS, 'else'),
-            CommandDefinition(':', ':', _('Begin block of commands'), CommandType.CODE_SNIPPET, ':'),
+            CommandDefinition(':', ':', _('Begin block of commands'), CommandType.INTERNAL),
             CommandDefinition('&', 'and', _('and'), CommandType.CODE_SNIPPET, ' and '),
             CommandDefinition('||', 'or', _('or'), CommandType.CODE_SNIPPET, ' or '),
             CommandDefinition('!', 'not', _('negation'), CommandType.CODE_SNIPPET, ' not '),
@@ -46,20 +84,21 @@ def get_plugin():
             CommandDefinition('sspl', icon('base/sspl.svg'), _('Split the string'), CommandType.METHOD, 'split', "'\\n'"),
             CommandDefinition('srep', icon('base/sspl.svg'), _('Replace a phrase with another phrase in the string'), CommandType.METHOD, 'replace'),
             CommandDefinition('global', 'Glob', _('Define global variable'), CommandType.INTERNAL, color=CommandColor.KEYWORD),
-            CommandDefinition('+=', '↖', _('increase value by'), CommandType.KEYWORD, '+=', color=CommandColor.KEYWORD),
-            CommandDefinition('-=', '↙', _('decrease value by'), CommandType.KEYWORD, '-=', color=CommandColor.KEYWORD),
-            CommandDefinition('.', '.', _('Dot (access properties of an object)'), CommandType.KEYWORD, '.', color=CommandColor.KEYWORD),
+            CommandDefinition('assign', '=', _('assign value'), CommandType.DIPERATOR, ' = ', color=CommandColor.KEYWORD),
+            CommandDefinition('+=', '↖', _('increase value by'), CommandType.DIPERATOR, ' += ', color=CommandColor.KEYWORD),
+            CommandDefinition('-=', '↙', _('decrease value by'), CommandType.DIPERATOR, ' -= ', color=CommandColor.KEYWORD),
+            CommandDefinition('.', '.', _('Dot (access properties of an object)'), CommandType.DIPERATOR, '.', color=CommandColor.KEYWORD),
             CommandDefinition('try', 'try:', _('Try'), CommandType.KEYWORD, 'try:', color=CommandColor.KEYWORD, snippet='try;nl;tab;nl;exc;obj,Exception;as;obj,e;:;nl;tab;'),
             CommandDefinition('exc', icon('base/exc.svg'), _('Except'), CommandType.KEYWORD_WITH_ARGS, 'except', color=CommandColor.KEYWORD),
             CommandDefinition('rs', icon('base/rs.svg'), _('Raise exception'), CommandType.KEYWORD_WITH_ARGS, 'raise', color=CommandColor.KEYWORD),
-            CommandDefinition('+', '+', _('plus'), CommandType.CODE_SNIPPET, '+'),
-            CommandDefinition('-', '-', _('minus'), CommandType.CODE_SNIPPET, '-'),
-            CommandDefinition('*', '*', _('multiply'), CommandType.CODE_SNIPPET, '*'),
-            CommandDefinition('/', '/', _('divide'), CommandType.CODE_SNIPPET, '/'),
-            CommandDefinition('%', '%', _('modulo'), CommandType.CODE_SNIPPET, '%'),
-            CommandDefinition('tc', '🔄', _('Type conversion'), CommandType.INTERNAL, has_data=True, data_only=False),
-            CommandDefinition('python', icon('base/python.svg'), _('Direct Python code'), CommandType.INTERNAL),
-            CommandDefinition('as', 'as', _('as type'), CommandType.CODE_SNIPPET, 'as', color=CommandColor.KEYWORD),
+            CommandDefinition('+', '+', _('plus'), CommandType.DIPERATOR, '+'),
+            CommandDefinition('-', '-', _('minus'), CommandType.DIPERATOR, '-'),
+            CommandDefinition('*', '*', _('multiply'), CommandType.DIPERATOR, '*'),
+            CommandDefinition('/', '/', _('divide'), CommandType.DIPERATOR, '/'),
+            CommandDefinition('%', '%', _('modulo'), CommandType.DIPERATOR, '%'),
+            CommandDefinition('tc', '🔄', _('Type conversion'), CommandType.LITERAL, tc, data_only=False, color=CommandColor.TYPE_CONV),
+            CommandDefinition('python', icon('base/python.svg'), _('Direct Python code'), CommandType.INTERNAL, data_only=False, show_data=False),
+            CommandDefinition('as', 'as', _('as type'), CommandType.DIPERATOR, ' as ', color=CommandColor.KEYWORD),
             CommandDefinition('rand', '🎲', _('Random number'), CommandType.METHOD, 'random.randint', '1,100'),
             CommandDefinition('range', icon('base/range.svg'), _('List of numbers in specified range'), CommandType.METHOD, 'range', '1,10'),
             CommandDefinition('ord', 'a→#', _('Converts a character to an int value'), CommandType.METHOD, 'ord', ''),
@@ -87,13 +126,13 @@ def get_plugin():
             CommandDefinition('sqrt', 'sqrt', _('Square root'), CommandType.METHOD, 'math.sqrt'),
             CommandDefinition('mmin', 'min', _('Lowest value'), CommandType.METHOD, 'min'),
             CommandDefinition('mmax', 'max', _('Highest value'), CommandType.METHOD, 'max'),
-            CommandDefinition('color', '🎨', _('Color (property or editable)'), CommandType.INTERNAL, has_data=True),
-            CommandDefinition('font', 'Aa', _('Font (property or editable)'), CommandType.INTERNAL, has_data=True),
-            CommandDefinition('int', '🔢', _('Number'), CommandType.INTERNAL, has_data=True, data_only=True, color=CommandColor.NUMBER),
-            CommandDefinition('str', '🔤', _('String'), CommandType.INTERNAL, has_data=True, data_only=True, color=CommandColor.STRING),
-            CommandDefinition('obj', '🆔', _('Object'), CommandType.INTERNAL, has_data=True, data_only=True, color=CommandColor.OBJECT),
+            CommandDefinition('color', '🎨', _('Color (property or editable)'), CommandType.LITERAL, color, data_only=True),
+            CommandDefinition('font', icon('base/font.svg'), _('Font (property or editable)'), CommandType.LITERAL, font),
+            CommandDefinition('int', '🔢', _('Number'), CommandType.LITERAL, raw_data, data_only=True, color=CommandColor.NUMBER),
+            CommandDefinition('str', '🔤', _('String'), CommandType.LITERAL, string, data_only=True, color=CommandColor.STRING),
+            CommandDefinition('obj', '🆔', _('Object'), CommandType.LITERAL, raw_data, data_only=True, color=CommandColor.OBJECT),
             CommandDefinition('none', icon('base/none.svg'), _('None'), CommandType.CODE_SNIPPET, 'None'),
-            CommandDefinition('key', icon('base/key.svg'), _('Key'), CommandType.INTERNAL, has_data=True, data_only=False),
+            CommandDefinition('key', icon('base/key.svg'), _('Key'), CommandType.LITERAL, string, data_only=False),
         ]),
         CommandCategory(p, '💾', [
             CommandDefinition('readlines', '📤', _('Read all lines from file'), CommandType.METHOD, 'tcf_readlines'),

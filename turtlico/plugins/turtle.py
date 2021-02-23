@@ -1,9 +1,15 @@
 # flake8: noqa
-from turtlico.compiler import Plugin, CommandCategory
+from turtlico.compiler import Plugin, CommandCategory, LiteralParserResult
 from turtlico.compiler import CommandDefinition, CommandType, CommandModule, CommandEvent, icon
 from turtlico.locale import _
 
 name='Turtle'
+
+def tcf_get_image(data, toplevel) -> LiteralParserResult:
+    return LiteralParserResult(
+        'tcf_get_image({})'.format(data),
+        ('tcf_get_image')
+    )
 
 def get_plugin():
     p = Plugin(name, list_priority=1)
@@ -29,7 +35,7 @@ def get_plugin():
             CommandDefinition('screen_c', icon('turtle/screen_c.svg'), _('Get or set the color of the screen'), CommandType.METHOD, 'bgcolor'),
             CommandDefinition('screen_i', icon('turtle/screen_i.svg'), _('Get or set the background picture of the screen'), CommandType.METHOD, 'bgpic'),
             CommandDefinition('scene', icon('turtle/scene.svg'), _('Load scene from file'), CommandType.METHOD, 'tcf_load_scene'),
-            CommandDefinition('img', icon('turtle/img.svg'), _('Image file'), CommandType.METHOD, 'tcf_get_image', has_data=True, data_only=True),
+            CommandDefinition('img', icon('turtle/img.svg'), _('Image file'), CommandType.LITERAL, tcf_get_image, data_only=True),
             CommandDefinition('newt', icon('turtle/newt.svg'), _('Create a new turtle'), CommandType.METHOD, 'tcf_newt'),
             CommandDefinition('gett', icon('turtle/gett.svg'), _('Get the predefined turtle object'), CommandType.METHOD, 'getturtle'),
             CommandDefinition('plcimg', icon('turtle/plcimg.svg'), _('Place image at the position of the turtle'), CommandType.METHOD, 'tcf_place_img'),
@@ -52,7 +58,7 @@ def get_plugin():
     ]
     p.modules = {
         'turtle': CommandModule(
-            deps=[],
+            deps=(),
             code="""from turtle import *
 from PIL import Image
 import os, time, sys
@@ -63,7 +69,7 @@ import tkinter; tkinter.Tk.report_callback_exception = tcf_tk_show_error
 tcf_last_scene = None"""
         ),
         'tcf_load_scene': CommandModule(
-            deps=['tcf_get_image'],
+            deps=('tcf_get_image'),
             code="""tcf_scene_turtles=[]
 def tcf_load_scene(path=None):
 	global tcf_last_scene; tcf_last_scene=path
@@ -95,7 +101,7 @@ def tcf_load_scene(path=None):
 	tracer(tracer_n, tracer_delay)"""
         ),
         'tcf_get_image': CommandModule(
-            deps=[],
+            deps=(),
             code="""def tcf_get_image(path):
 	if not path in getshapes():
 		if not path.endswith('.gif'):
@@ -109,14 +115,14 @@ def tcf_load_scene(path=None):
 	return path"""
         ),
         'tcf_newt': CommandModule(
-            deps=[],
+            deps=(),
             code="""def tcf_newt():
 	t = Turtle()
 	t.shape('turtle')
 	return t"""
         ),
         'tcf_place_img': CommandModule(
-            deps=[],
+            deps=(),
             code="""def tcf_place_img(image, t=None):
 	turt = Turtle()
 	turt.shape(image);turt.penup()
@@ -127,7 +133,7 @@ def tcf_load_scene(path=None):
 	return turt"""
         ),
         'tcf_sleep': CommandModule(
-            deps=[],
+            deps=(),
             code="""def tcf_sleep(seconds=None, block=True):
 	if seconds != None and seconds < 0:
 		seconds = abs(seconds); block=False
@@ -149,7 +155,7 @@ def tcf_load_scene(path=None):
 	listen()"""
         ),
         'tcf_collision': CommandModule(
-            deps=[],
+            deps=(),
             code="""tcf_collisions=[]
 def tcf_collision_check():
 	for c in tcf_collisions:
@@ -166,7 +172,7 @@ def tcf_collision(a, b, callback, collider_size_1=10, collider_size_2=10, user_d
 	tcf_collisions.append((a, b, callback, collider_size_1, collider_size_2, user_data))"""
         ),
         'tcf_collision_rect': CommandModule(
-            deps=[],
+            deps=(),
             code="""tcf_collisions_rect=[]
 def tcf_collision_check_rect():
 	for c in tcf_collisions_rect:
@@ -191,7 +197,7 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 	tcf_collisions_rect.append((a, b, callback, collider_size_1, collider_size_2, user_data))"""
         ),
         'tcf_turbo': CommandModule(
-            deps=[],
+            deps=(),
             code="""def tcf_turbo(turbo=False, do_not_render=False, t=None):
 	if turbo == 3: tracer(not do_not_render); return
 	if turbo == 2: trubo=True; do_not_render=True
@@ -201,7 +207,7 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 	tracer(not do_not_render)"""
         ),
         'tcf_screenprop': CommandModule(
-            deps=[],
+            deps=(),
             code="""def tcf_screenprop(cam_x = None, cam_y = None, width=None, height=None):
 	if width != None and height != None: setup(width, height, None, None)
 	if cam_x == None or cam_y == None:
@@ -222,7 +228,7 @@ def tcf_collision_rect(a, b, callback, collider_size_1=(15, 15), collider_size_2
 tcf_screenprop_first_run=True"""
         ),
         'tcf_keypress': CommandModule(
-            deps=[],
+            deps=(),
             code="""def tcf_keypress(function=None, key=None):
 	if key==None:
 	    if function == None:
@@ -239,7 +245,7 @@ tcf_screenprop_first_run=True"""
 	    onkeypress(function, key)"""
         ),
         'tcf_mouseclick': CommandModule(
-            deps=[],
+            deps=(),
             code="""def tcf_mouseclick(function=None, btn=1, turtle=None, add=None):
 	if isinstance(function, Turtle): function.onclick(None); return
 	if turtle==None:

@@ -20,10 +20,10 @@
 from __future__ import annotations
 import os
 import importlib.util
+import traceback
 import inspect
-from collections import namedtuple
 from enum import Enum
-from typing import Union, Dict, Tuple
+from typing import Union, Dict, Tuple, NamedTuple, Callable
 
 from gi.repository import GObject, Gio, Gdk, GLib
 
@@ -34,22 +34,46 @@ PLUGIN_RESOURCES = '/io/gitlab/Turtlico/plugins'
 IMAGE_EXTENSIONS = ['.png', '.bmp', '.gif']
 
 CommandIcon = Union[SVGFileTexture, str]
-Command = namedtuple('Command', ['data', 'definition'])
-CommandModule = namedtuple('CommandModule', ['deps', 'code'])
-CommandEvent = namedtuple(
-    'CommandEvent', ['name', 'handler', 'connector', 'params'])
+
+
+class Command(NamedTuple):
+    data: str
+    definition: CommandDefinition
+
+
+class CommandModule(NamedTuple):
+    deps: set[str]
+    code: str
+
+
+class CommandEvent(NamedTuple):
+    name: str
+    handler: str
+    connector: str
+    params: str
+
+
+class LiteralParserResult(NamedTuple):
+    code: str
+    required_modules: set
 
 
 class CommandType(Enum):
     INTERNAL = 0
     METHOD = 1
     OPERATOR = 2
-    # Keyword with one parameter
+    # Keyword with one parameter.
+    # If no paramters is specified then consumes the rest of the line.
     KEYWORD = 3
     # No additional logic
     CODE_SNIPPET = 4
+    # Dual Input oPERATOR
+    # Like KEYWORD but never starts a new line
+    DIPERATOR = 5
     # Keyword with multiple parameters (parameters ends with :)
-    KEYWORD_WITH_ARGS = 5
+    KEYWORD_WITH_ARGS = 6
+    # Command that represents its data
+    LITERAL = 7
 
 
 class CommandColor(Enum):
@@ -61,6 +85,7 @@ class CommandColor(Enum):
     NUMBER = 5
     STRING = 6
     OBJECT = 7
+    TYPE_CONV = 8
 
 
 CommandColorScheme = Dict[CommandColor, Tuple[Gdk.RGBA, Gdk.RGBA]]
@@ -71,10 +96,10 @@ class CommandDefinition(GObject.Object):
     icon: CommandIcon
     help: str
     color: CommandColor
-    has_data: bool
     data_only: bool
+    show_data: bool
     command_type: CommandType
-    function: str
+    function: Union[str, Callable[[str, bool], LiteralParserResult]]
     default_params: Union[str, None]
     snippet: Union[codepiece.TcpPiece, None]
 
@@ -82,10 +107,32 @@ class CommandDefinition(GObject.Object):
                  id: str, icon: CommandIcon, help: str,
                  command_type: CommandType, function: str = None,
                  default_params: str = None,
-                 has_data: bool = False, data_only: bool = False,
+                 data_only: bool = False,
+                 show_data: bool = True,
                  color: CommandColor = CommandColor.DEFAULT,
                  snippet: str = None):
         super().__init__()
+
+        assert isinstance(id, str)
+        assert isinstance(icon, SVGFileTexture) or isinstance(icon, str)
+        assert isinstance(help, str)
+        assert isinstance(command_type, CommandType)
+
+        if command_type == CommandType.LITERAL:
+            assert isinstance(function, Callable)
+        elif command_type == CommandType.INTERNAL:
+            assert function is None
+        else:
+            assert isinstance(function, str)
+
+        if default_params is not None:
+            assert isinstance(default_params, str)
+        assert isinstance(data_only, bool)
+        assert isinstance(show_data, bool)
+        assert isinstance(color, CommandColor)
+        if snippet is not None:
+            assert isinstance(snippet, str)
+
         self.id = id
         self.icon = icon
         self.help = help
@@ -94,8 +141,8 @@ class CommandDefinition(GObject.Object):
         self.function = function
         self.default_params = default_params
 
-        self.has_data = has_data
         self.data_only = data_only
+        self.show_data = show_data
         self.color = color
         self.snippet = codepiece.parse_tcp(snippet) if snippet else None
 
@@ -202,6 +249,7 @@ class Plugin():
                 plugins[id] = Plugin.new_from_path(path)
             except Exception as e:
                 error(f'Cannot load plugin "{id}": {e}')
+                print(traceback.format_exc())
         return plugins
 
     @staticmethod
