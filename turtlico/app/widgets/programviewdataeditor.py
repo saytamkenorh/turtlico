@@ -16,10 +16,11 @@
 # along with Turtlico.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-from typing import Callable
 from abc import abstractmethod
+from enum import Enum
+from typing import Callable
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk, Pango
 
 import turtlico.compiler as compiler
 import turtlico.utils as utils
@@ -81,6 +82,8 @@ class NumberDialog(DataEditorDialog):
 
         content.append(self._number_entry)
 
+        self.props.resizable = False
+
     def get_data(self) -> str:
         val = self._number_entry.props.value
         if val.is_integer():
@@ -96,6 +99,201 @@ class NumberDialog(DataEditorDialog):
     def _on_editing_done(self, widget, data):
         self._number_entry.update()
         self.emit('response', Gtk.ResponseType.OK)
+
+
+class StringType(Enum):
+    STRING = 0
+    VARIABLE_NAME = 1
+    PYTHON = 2
+    PATH = 3
+
+
+_STRING_TYPES = {
+    'str': StringType.STRING,
+    'obj': StringType.VARIABLE_NAME,
+    'tc': StringType.PYTHON,
+    'img': StringType.PATH
+}
+
+
+class StringDialog(DataEditorDialog):
+    _string_entry: Gtk.Entry
+
+    def __init__(self, str_type: StringType):
+        super().__init__()
+        content = self.get_content_area()
+
+        self._string_entry = Gtk.Entry.new()
+        self._string_entry.props.hexpand = True
+        if str_type == StringType.PATH:
+            self._string_entry.props.input_purpose = Gtk.InputPurpose.URL
+        self._string_entry.connect('activate', self._on_activate)
+
+        content.append(self._string_entry)
+
+    def get_data(self) -> str:
+        return self._string_entry.get_text()
+
+    def set_data(self, data: str):
+        if data:
+            self._string_entry.set_text(data)
+        else:
+            self._string_entry.set_text('')
+
+    def _on_activate(self, widget):
+        self.emit('response', Gtk.ResponseType.OK)
+
+
+class PythonDialog(DataEditorDialog):
+    _code_view: Gtk.TextView
+    _scrolled_window: Gtk.ScrolledWindow
+
+    def __init__(self):
+        super().__init__()
+        content = self.get_content_area()
+
+        self._code_view = Gtk.TextView.new()
+
+        self._scrolled_window = Gtk.ScrolledWindow.new()
+        self._scrolled_window.props.hexpand = True
+        self._scrolled_window.set_child(self._code_view)
+
+        content.append(self._scrolled_window)
+        content.props.vexpand = True
+        content.props.valign = Gtk.Align.FILL
+
+        self.set_default_size(300, 200)
+
+    def get_data(self) -> str:
+        return self._code_view.props.buffer.props.text
+
+    def set_data(self, data: str):
+        if data:
+            self._code_view.props.buffer.props.text = data
+        else:
+            self._code_view.props.buffer.props.text = ''
+
+
+class ColorDialog(DataEditorDialog):
+    _color_chooser: Gtk.ColorChooserWidget
+
+    def __init__(self):
+        super().__init__()
+        content = self.get_content_area()
+
+        self._color_chooser = Gtk.ColorChooserWidget.new()
+        self._color_chooser.props.use_alpha = False
+        content.append(self._color_chooser)
+
+    def get_data(self) -> str:
+        c = self._color_chooser.props.rgba
+        cstr = f'{int(c.red * 255)},{int(c.green * 255)},{int(c.blue * 255)}'
+        return cstr
+
+    def set_data(self, data: str):
+        if data:
+            rgba = utils.rgba(f'rgb({data})')
+        else:
+            rgba = utils.rgba('rgb(0,0,0)')
+        self._color_chooser.props.rgba = rgba
+
+
+_FONT_TYPES = {
+    'normal': Pango.Style.NORMAL,
+    'italic': Pango.Style.ITALIC
+}
+_FONT_TYPES_CODES = dict(map(reversed, _FONT_TYPES.items()))
+_FONT_WEIGHTS = {
+    'normal': Pango.Weight.NORMAL,
+    'bold': Pango.Weight.BOLD
+}
+_FONT_WEIGHTS_CODES = dict(map(reversed, _FONT_WEIGHTS.items()))
+
+
+class FontDialog(DataEditorDialog):
+    _font_chooser: Gtk.FontChooserWidget
+
+    def __init__(self):
+        super().__init__()
+        content = self.get_content_area()
+
+        self._font_chooser = Gtk.FontChooserWidget.new()
+        self._font_chooser.set_filter_func(self._font_filter)
+        content.append(self._font_chooser)
+
+    def get_data(self) -> str:
+        f = self._font_chooser.props.font_desc
+        family = f.get_family()
+        size = int(f.get_size() / Pango.SCALE)
+        fonttype = _FONT_TYPES_CODES.get(f.get_style(), 'normal')
+        weight = _FONT_WEIGHTS_CODES.get(f.get_weight(), 'normal')
+        fstr = f'{family};{size};{fonttype};{weight}'
+        return fstr
+
+    def set_data(self, data: str):
+        if data:
+            family, size, fonttype, weight = data.split(';')
+            font = Pango.FontDescription.new()
+            font.set_family(family)
+            font.set_size(int(size) * Pango.SCALE)
+            font.set_style(_FONT_TYPES.get(fonttype, Pango.Style.NORMAL))
+            font.set_weight(_FONT_WEIGHTS.get(weight, Pango.Weight.NORMAL))
+
+            self._font_chooser.props.font_desc = font
+
+    def _font_filter(self,
+                     family: Pango.FontFamily,
+                     face: Pango.FontFace) -> bool:
+        desc = face.describe()
+        if desc.get_style() not in _FONT_TYPES.values():
+            return False
+        if desc.get_weight() not in _FONT_WEIGHTS.values():
+            return False
+        return True
+
+
+class KeyDialog(DataEditorDialog):
+    _image: Gtk.Image
+    _label: Gtk.Label
+
+    _key_ctl: Gtk.EventControllerKey
+
+    def __init__(self):
+        super().__init__()
+        content = self.get_content_area()
+        content.props.orientation = Gtk.Orientation.VERTICAL
+
+        self._image = Gtk.Image.new_from_icon_name(
+            'preferences-desktop-keyboard-shortcuts-symbolic')
+        self._image.props.pixel_size = 64
+        content.append(self._image)
+
+        self._label = Gtk.Label.new('')
+        self._label.get_style_context().add_class('title-3')
+        content.append(self._label)
+
+        self._key_ctl = Gtk.EventControllerKey.new()
+        self._key_ctl.props.propagation_phase = Gtk.PropagationPhase.CAPTURE
+        self._key_ctl.connect('key_pressed', self._on_key_pressed)
+        self.add_controller(self._key_ctl)
+
+    def get_data(self) -> str:
+        return self._label.props.label
+
+    def set_data(self, data: str):
+        self._label.props.label = data
+
+    def _on_key_pressed(self, widget,
+                        keyval, keycode, state: Gdk.ModifierType):
+        # Allow close the dialog using only keyboard
+        ctrl = state & Gdk.ModifierType.CONTROL_MASK
+        if ctrl != 0 and keyval == Gdk.KEY_Escape:
+            self.emit('response', Gtk.ResponseType.CANCEL)
+            return True
+
+        key: str = Gdk.keyval_name(keyval)
+        self._label.props.label = key
+        return True
 
 
 def _edit_icon_finish(dialog: DataEditorDialog,
@@ -126,6 +324,17 @@ def edit_icon(cmd: compiler.Command,
 
     if cid == 'int':
         dialog = NumberDialog()
+    elif cid == 'color':
+        dialog = ColorDialog()
+    elif cid == 'font':
+        dialog = FontDialog()
+    elif cid == 'key':
+        dialog = KeyDialog()
+    elif cmd.definition.command_type == compiler.CommandType.LITERAL:
+        str_type = _STRING_TYPES.get(cmd.definition.id, StringType.STRING)
+        dialog = StringDialog(str_type)
+    elif cmd.definition.id == 'python':
+        dialog = PythonDialog()
     else:
         callback(cmd, *user_data)
         return
