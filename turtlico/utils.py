@@ -77,7 +77,7 @@ def _debug_message(mtype, color, msg, output):
     s = inspect.stack()[2]
     filename = os.path.basename(s.filename)
     print(
-        f'[Turtlico] {color}{bcolors.BOLD}{mtype}{bcolors.ENDC} {filename}:{s.function}:{s.lineno} ({_get_time()}): {msg}',  # NOQA
+        f'[Turtlico] {color}{bcolors.BOLD}{mtype}{bcolors.ENDC} {filename}:{s.lineno} ({_get_time()}): {msg}',  # NOQA
         file=output)
 
 

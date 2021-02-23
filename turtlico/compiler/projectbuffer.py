@@ -161,7 +161,7 @@ class ProjectBuffer(GObject.Object):
             for c in p.categories:
                 for cdefin in c.command_definitions:
                     self.available_commands[cdefin.id] = Command(
-                        '', cdefin)
+                        None, cdefin)
         self.emit('available_commands_changed')
 
     def _reload_plugins(self, enabled_plugins: list[str] = None):
@@ -183,5 +183,5 @@ class ProjectBuffer(GObject.Object):
 
     def set_command_data(self, command, data) -> Command:
         if not data:
-            return self.available_commands.get(id, None)
+            return self.available_commands.get(command.definition.id, None)
         return Command(data, command.definition)
