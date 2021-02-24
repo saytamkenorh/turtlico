@@ -15,6 +15,7 @@ flake8:
 include: 'https://gitlab.gnome.org/GNOME/citemplates/raw/master/flatpak/flatpak_ci_initiative.yml'
 
 flatpak:
+    stage: build
     image: 'registry.gitlab.gnome.org/gnome/gnome-runtime-images/gnome:master'
     variables:
         MANIFEST_PATH: "io.gitlab.Turtlico.json"
@@ -22,6 +23,7 @@ flatpak:
         RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
         APP_ID: "io.gitlab.Turtlico"
         BUNDLE: "${BUNDLE_FILENAME}.flatpak"
+    tags:
     extends: .flatpak
 
 .windows_runner:
