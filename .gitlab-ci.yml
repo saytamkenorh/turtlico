@@ -3,7 +3,7 @@ stages:
     - build
 
 variables:
-    BUNDLE_FILENAME: "turtlico-${CI_COMMIT_REF_NAME}"
+    BUNDLE_FILENAME: "turtlico-$CI_COMMIT_REF_NAME"
 
 flake8:
   image: "registry.fedoraproject.org/fedora:latest"
