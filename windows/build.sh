@@ -1,6 +1,6 @@
 MINGW_ARCH=64
 MINGW_PREFIX=mingw-w$MINGW_ARCH-x86_64
-BUILD_DEPS="desktop-file-utils meson pkgconf"
+BUILD_DEPS="desktop-file-utils meson pkgconf toolchain"
 RUNTIME_DEPS="gtk4 python python-gobject"
 BUNDLE_BLACKLIST="gst-plugins-bad sqlite3"
 
@@ -35,7 +35,7 @@ extract_packages () {
 	for pkg in $1
 	do
 		list_deps_for $pkg
-	done	
+	done
 
 	pkgs=$(echo $list_deps_pkgs | sort -u | xargs -n 1 pacman -Sp | awk -F// '{print $NF}')
 
@@ -60,7 +60,7 @@ extract_packages () {
 cleanup () {
 	# Binaries
 	find "$1/bin/" -type f -not -name "*.dll" -not -name "python*" -not -name "turtlico" -not -name "gspawn*" -delete
-	
+
 	rm -rf "$1/share/aclocal"
 	rm -rf "$1/share/applications"
 	rm -rf "$1/share/appdata"
@@ -97,7 +97,7 @@ cleanup () {
 	rm -rf "$1/share/icons/Adwaita/cursors"
 	# Unused translations
 	find "$1/share/locale/"* -maxdepth 0 -not -name "cs" -not -name "en*" -not -name "de" -exec rm -rf {} \;
-	
+
 	# Files
 	find "$1" -name "*.a" -exec rm -f {} \;
 	find "$1" -name "*.whl" -exec rm -f {} \;
@@ -112,7 +112,7 @@ cleanup () {
 	find "$1" -name "*.desktop" -exec rm -f {} \;
 	find "$1" -name "*.manifest" -exec rm -f {} \;
 	find "$1" -name "*.pyc" -exec rm -f {} \;
-	
+
 	"$1/bin/python3.exe" "$src_dir/depcheck.py" --delete
 
 	find "$1" -type d -empty -delete

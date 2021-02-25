@@ -22,7 +22,7 @@ flatpak:
         FLATPAK_MODULE: "turtlico"
         RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
         APP_ID: "io.gitlab.Turtlico"
-        BUNDLE: "${BUNDLE_FILENAME}.flatpak"
+        BUNDLE: "$BUNDLE_FILENAME.flatpak"
     tags:
     extends: .flatpak
 
