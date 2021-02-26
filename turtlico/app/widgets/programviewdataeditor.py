@@ -15,12 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with Turtlico.  If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
 import sys
 from abc import abstractmethod
 from enum import Enum
 from typing import Callable
 
-from gi.repository import Gtk, Gdk, Pango
+from gi.repository import GObject, GLib, Gio, Gtk, Gdk, Pango
 
 import turtlico.compiler as compiler
 import turtlico.utils as utils
@@ -104,14 +105,12 @@ class NumberDialog(DataEditorDialog):
 class StringType(Enum):
     STRING = 0
     VARIABLE_NAME = 1
-    PYTHON = 2
-    PATH = 3
+    PATH = 2
 
 
 _STRING_TYPES = {
     'str': StringType.STRING,
     'obj': StringType.VARIABLE_NAME,
-    'tc': StringType.PYTHON,
     'img': StringType.PATH
 }
 
@@ -296,6 +295,65 @@ class KeyDialog(DataEditorDialog):
         return True
 
 
+_TYPES = {
+    'int': _('Integer'),
+    'float': _('Float'),
+    'str': _('String'),
+    'other': _('Other'),
+}
+
+
+class TypeDialog(DataEditorDialog):
+    _action_group: Gio.ActionGroup
+    _type_select_action: Gio.PropertyAction
+    _other_type_entry: Gtk.Entry
+    _other_type_entry_rev: Gtk.Revealer
+
+    selected_type = GObject.Property(type=str)
+
+    def __init__(self):
+        super().__init__()
+        content = self.get_content_area()
+        content.props.orientation = Gtk.Orientation.VERTICAL
+
+        self._action_group = Gio.SimpleActionGroup.new()
+
+        self._type_select_action = Gio.PropertyAction.new(
+            'type-select', self, 'selected-type')
+        self._action_group.add_action(self._type_select_action)
+
+        self.insert_action_group('win', self._action_group)
+
+        for t, title in _TYPES.items():
+            btn = Gtk.CheckButton.new_with_label(title)
+            btn.props.action_name = 'win.type-select'
+            btn.props.action_target = GLib.Variant.new_string(t)
+            content.append(btn)
+
+        self._other_type_entry = Gtk.Entry.new()
+        self._other_type_entry_rev = Gtk.Revealer.new()
+        self._other_type_entry_rev.props.child = self._other_type_entry
+        content.append(self._other_type_entry_rev)
+
+        self.connect('notify::selected-type', self._on_selected_type_notify)
+
+    def get_data(self) -> str:
+        if self.props.selected_type == 'other':
+            return self._other_type_entry.props.text
+        return self.props.selected_type
+
+    def set_data(self, data: str):
+        if data and data not in _TYPES.keys():
+            self.props.selected_type = 'other'
+            self._other_type_entry.props.text = data
+            return
+        self.props.selected_type = data if data else 'int'
+
+    def _on_selected_type_notify(self, obj, pspec):
+        self._other_type_entry_rev.props.reveal_child = (
+            self.props.selected_type == 'other')
+
+
 def _edit_icon_finish(dialog: DataEditorDialog,
                       response: Gtk.ResponseType,
                       project: compiler.ProjectBuffer,
@@ -330,6 +388,8 @@ def edit_icon(cmd: compiler.Command,
         dialog = FontDialog()
     elif cid == 'key':
         dialog = KeyDialog()
+    elif cid == 'tc':
+        dialog = TypeDialog()
     elif cmd.definition.command_type == compiler.CommandType.LITERAL:
         str_type = _STRING_TYPES.get(cmd.definition.id, StringType.STRING)
         dialog = StringDialog(str_type)
