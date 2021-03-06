@@ -23,11 +23,9 @@
                 <style>
                   <class name="flat"/>
                 </style>
-                <property name="tooltip-text" translatable="yes">Run</property>
                 <property name="action-name">win.project.run</property>
                 <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">media-playback-start-symbolic</property>
+                  <object class="GtkImage" id="_run_btn_img">
                   </object>
                 </child>
               </object>
