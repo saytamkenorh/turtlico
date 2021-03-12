@@ -21,4 +21,4 @@ TCP_1_STR_MARK = str(chr(31))
 
 
 def tcp_1_to_2(source: str, enabled_plugins):
-    raise Exception('Support for Turtlico 0.x projects is not implemented yet')
+    raise NotImplementedError('Support for Turtlico 0.x projects is not implemented yet')
