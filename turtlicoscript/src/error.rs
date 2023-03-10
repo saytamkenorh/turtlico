@@ -49,8 +49,12 @@ impl Spanned<Error> {
         // https://chrisyeh96.github.io/2020/03/28/terminal-colors.html
         let mut bad_code = source[error_start..error_end].trim_matches('\n').to_owned();
         println!("{}:{} {}:{}", error_start, error_end, self.span.start, self.span.end);
-        bad_code.insert_str(self.span.end - error_start, "\x1b[0m");
-        bad_code.insert_str(self.span.start - error_start, "\x1b[41m");
+        
+        let line_error_start = usize::max(self.span.start - error_start - 1, 0);
+        let line_error_end = usize::min(self.span.end - error_start - 1, bad_code.len());
+
+        bad_code.insert_str(line_error_end, "\x1b[0m");
+        bad_code.insert_str(line_error_start, "\x1b[41m");
         format!("An \x1b[31merror\x1b[0m occurred on line {}:\n{}\n\x1b[33m{}\x1b[0m", error_line, bad_code, self.item)
     }
 }
