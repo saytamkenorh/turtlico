@@ -1,0 +1,6 @@
+println "Hello world!" println "What is your favourite number?"
+$number = int(readln)
+if $number == 42 {
+    println "That is the best number!"
+    println "And the ultimate answer."
+}

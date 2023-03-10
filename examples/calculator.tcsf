@@ -1,0 +1,7 @@
+println("Welcome to the calculator!")
+$numa = float(readln("Enter first number: "))
+$numb = float(readln("Enter second number: "))
+println("A+B =", $numa+$numb)
+println("A-B =", $numa-$numb)
+println("A*B =", $numa*$numb)
+println("A/B =", $numa/$numb)

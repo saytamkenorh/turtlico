@@ -1,0 +1,17 @@
+export MainWindow := Window {
+    title: "Turtlico program";
+    background: black;
+    min-width: 512px;
+    min-height: 512px;
+
+    property <int> turtle_x: 0;
+    property <int> turtle_y: 0;
+    property <int> turtle_rot: 0;
+    Image {
+        source: @image-url("../blocks/turtle.png");
+        x: turtle_x * 1px;
+        y: turtle_y * 1px;
+        rotation-angle: turtle_rot * 1deg;
+        image-rendering: pixelated;
+    }
+}

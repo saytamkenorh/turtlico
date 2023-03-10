@@ -1,0 +1,7 @@
+for $x 0 11 {
+    println $x 
+}
+
+for $x 0 11 2 {
+    println $x
+}

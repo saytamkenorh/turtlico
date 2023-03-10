@@ -1,0 +1,6 @@
+[workspace]
+members = [
+	"turtlicoscript",
+	"turtlicoscript_cli",
+	"turtlicoscript_gui"
+]

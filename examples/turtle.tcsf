@@ -1,0 +1,10 @@
+loop {
+    go
+    set_rot(-90)
+    go
+    set_rot(-180)
+    go
+    set_rot(-270)
+    go
+    set_rot 0
+}

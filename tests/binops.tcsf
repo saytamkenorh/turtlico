@@ -1,0 +1,11 @@
+$sum = 1.5+3.6
+$diff = 10-2
+$product = 3*4
+$quotient = 56/8
+$complicated = (10 + 3 * 2 - 2) / 2
+return (
+    string($sum) + "_" +
+    string($diff) + "_" +
+    string($product) + "_" +
+    string($quotient) + "_" +
+    string($complicated))

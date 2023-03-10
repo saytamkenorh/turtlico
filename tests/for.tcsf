@@ -1,0 +1,10 @@
+$out = ""
+for $x 0 11 {
+    $out = string $out + string $x + "_"
+}
+
+for $x 0 11 2 {
+    $out = string($out) + string($x) + "_"
+}
+
+return $out

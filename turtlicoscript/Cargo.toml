@@ -1,0 +1,11 @@
+[package]
+name = "turtlicoscript"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+logos = "0.12"
+chumsky = "0.8"
+checkargs = { version = "0.1.0", path = "./checkargs" }

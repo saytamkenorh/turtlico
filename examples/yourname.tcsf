@@ -1,0 +1,3 @@
+$name = readln("What is your name? ")
+print("Hello ") print($name) println("!")
+print("Press return to exit") readln()
