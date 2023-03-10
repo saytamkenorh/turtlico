@@ -62,6 +62,10 @@ pub enum Expression {
         step: Option<Box<Spanned<Expression>>>,
         body: Box<Spanned<Expression>>,
     },
+    While {
+        cond: Box<Spanned<Expression>>,
+        body: Box<Spanned<Expression>>,
+    },
 
     // Operators
     Negation(Box<Spanned<Expression>>),
@@ -69,7 +73,12 @@ pub enum Expression {
     Division(Box<Spanned<Expression>>, Box<Spanned<Expression>>),
     Addition(Box<Spanned<Expression>>, Box<Spanned<Expression>>),
     Subtraction(Box<Spanned<Expression>>, Box<Spanned<Expression>>),
-    Comparison(Box<Spanned<Expression>>, Box<Spanned<Expression>>),
+    Eq(Box<Spanned<Expression>>, Box<Spanned<Expression>>),
+    Neq(Box<Spanned<Expression>>, Box<Spanned<Expression>>),
+    Lt(Box<Spanned<Expression>>, Box<Spanned<Expression>>),
+    Gt(Box<Spanned<Expression>>, Box<Spanned<Expression>>),
+    Lte(Box<Spanned<Expression>>, Box<Spanned<Expression>>),
+    Gte(Box<Spanned<Expression>>, Box<Spanned<Expression>>),
 
     // Literals
     Int(i32),

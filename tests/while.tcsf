@@ -1,0 +1,8 @@
+$i = 0
+while $i < 5 $i = $i + 1
+$out = ""
+while $i >= 0 {
+    $out = $out + string($i) + "_"
+    $i = $i - 1
+}
+return $out

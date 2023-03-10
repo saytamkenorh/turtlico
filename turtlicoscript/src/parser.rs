@@ -131,6 +131,11 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
                 })
             )
             .map_with_span(Spanned::new);
+        let loop_while = just(Token::While)
+            .then(expr.clone())
+            .then(expr.clone())
+            .map(|((_token, cond), body)| Expression::While {cond: Box::new(cond), body: Box::new(body)})
+            .map_with_span(Spanned::new);
 
         // Atom
         let atom =
@@ -144,6 +149,7 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
             .or(loop_finite)
             .or(loop_infinite)
             .or(loop_for)
+            .or(loop_while)
             .or(shortcall)
             .or(var)
             .or(func);
@@ -195,12 +201,32 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
                 Spanned::new((op.item)(Box::new(lhs), Box::new(rhs)), Range {start: start, end: end})
             });
 
-        let comparison = sum
+        let eq = sum
             .clone()
             .then(
-                just(Token::Comparison)
-                    .to(Expression::Comparison as fn(_, _) -> _)
+                just(Token::Eq)
+                    .to(Expression::Eq as fn(_, _) -> _)
                     .map_with_span(Spanned::new)
+                .or(
+                    just(Token::Neq).to(Expression::Neq as fn(_, _) -> _)
+                    .map_with_span(Spanned::new)
+                )
+                .or(
+                    just(Token::Lt).to(Expression::Lt as fn(_, _) -> _)
+                    .map_with_span(Spanned::new)
+                )
+                .or(
+                    just(Token::Gt).to(Expression::Gt as fn(_, _) -> _)
+                    .map_with_span(Spanned::new)
+                )
+                .or(
+                    just(Token::Lte).to(Expression::Lte as fn(_, _) -> _)
+                    .map_with_span(Spanned::new)
+                )
+                .or(
+                    just(Token::Gte).to(Expression::Gte as fn(_, _) -> _)
+                    .map_with_span(Spanned::new)
+                )
                 .then(sum)
                 .repeated()
             )
@@ -210,7 +236,7 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
                 Spanned::new((op.item)(Box::new(lhs), Box::new(rhs)), Range {start: start, end: end})
             });
 
-        comparison
+        eq
         .or(
             block
         )

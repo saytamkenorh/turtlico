@@ -15,6 +15,11 @@ mod test_examples {
         test_example_file("for.tcsf", "0_1_2_3_4_5_6_7_8_9_10_0_2_4_6_8_10_");
     }
 
+    #[test]
+    fn loop_while() {
+        test_example_file("while.tcsf", "5_4_3_2_1_0_");
+    }
+
     fn test_example_file(name: &str, output: &str) {
         let root_dir = &env::var("CARGO_MANIFEST_DIR").expect("$CARGO_MANIFEST_DIR");
         let mut path_buf = path::PathBuf::new();

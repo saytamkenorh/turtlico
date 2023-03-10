@@ -9,7 +9,12 @@ enum MathOperator {
     Subtraction,
     Multiply,
     Division,
-    Comparison
+    Eq,
+    Neq,
+    Lt,
+    Gt,
+    Lte,
+    Gte
 }
 
 pub struct Context<'a> {
@@ -172,6 +177,21 @@ impl<'a> Context<'a> {
                     }
                 }
             },
+            Expression::While { cond, body } => {
+                loop {
+                    let cond = self.eval(&cond)?;
+                    if !matches!(cond, Value::Bool(true)) {
+                        break;
+                    }
+                    match self.eval(&body)? {
+                        Value::Break => {
+                            break;
+                        }
+                        _ => {}
+                    }
+                }
+                Ok(Value::None)
+            },
             // Keywords
             Expression::Assignment { expr, value } => {
                 match &expr.item {
@@ -212,8 +232,23 @@ impl<'a> Context<'a> {
             Expression::Division(a, b) => {
                 self.math_operator(a, b, MathOperator::Division)
             },
-            Expression::Comparison(a, b) => {
-                self.math_operator(a, b, MathOperator::Comparison)
+            Expression::Eq(a, b) => {
+                self.math_operator(a, b, MathOperator::Eq)
+            },
+            Expression::Neq(a, b) => {
+                self.math_operator(a, b, MathOperator::Neq)
+            },
+            Expression::Lt(a, b) => {
+                self.math_operator(a, b, MathOperator::Lt)
+            },
+            Expression::Gt(a, b) => {
+                self.math_operator(a, b, MathOperator::Gt)
+            },
+            Expression::Lte(a, b) => {
+                self.math_operator(a, b, MathOperator::Lte)
+            },
+            Expression::Gte(a, b) => {
+                self.math_operator(a, b, MathOperator::Gte)
             },
             // Literals
             Expression::Int(val) => Ok(Value::Int(*val)),
@@ -221,7 +256,10 @@ impl<'a> Context<'a> {
             Expression::String(val) => Ok(Value::String(val.to_owned())),
             Expression::Variable(name) => Ok(self.get_var(&name).map_err(|err| Spanned::new(err, expression.span.to_owned()))?.clone()),
             _ => {
-                Err(Spanned::new(Error::SyntaxError(Simple::custom(expression.span.clone(), "Interpreter error: unexpected expression")), expression.span.to_owned()))
+                Err(Spanned::new(Error::SyntaxError(
+                    Simple::custom(expression.span.clone(),
+                    format!("Interpreter error: unexpected expression {:?}", expression.item))
+                ), expression.span.to_owned()))
             }
         }
     }
@@ -260,7 +298,12 @@ impl<'a> Context<'a> {
                             MathOperator::Subtraction => Ok(Value::Int(val_a - val_b)),
                             MathOperator::Multiply => Ok(Value::Int(val_a * val_b)),
                             MathOperator::Division => Ok(Value::Int(val_a / val_b)),
-                            MathOperator::Comparison => Ok(Value::Bool(val_a == val_b)),
+                            MathOperator::Eq => Ok(Value::Bool(val_a == val_b)),
+                            MathOperator::Neq => Ok(Value::Bool(val_a != val_b)),
+                            MathOperator::Lt => Ok(Value::Bool(val_a < val_b)),
+                            MathOperator::Gt => Ok(Value::Bool(val_a > val_b)),
+                            MathOperator::Lte => Ok(Value::Bool(val_a <= val_b)),
+                            MathOperator::Gte => Ok(Value::Bool(val_a >= val_b)),
                         }
                     },
                     Value::Float(val_b) => {
@@ -269,7 +312,12 @@ impl<'a> Context<'a> {
                             MathOperator::Subtraction => Ok(Value::Float(f64::from(*val_a) - val_b)),
                             MathOperator::Multiply => Ok(Value::Float(f64::from(*val_a) * val_b)),
                             MathOperator::Division => Ok(Value::Float(f64::from(*val_a) / val_b)),
-                            MathOperator::Comparison => Ok(Value::Bool(f64::from(*val_a) == *val_b)),
+                            MathOperator::Eq => Ok(Value::Bool(f64::from(*val_a) == *val_b)),
+                            MathOperator::Neq => Ok(Value::Bool(f64::from(*val_a) != *val_b)),
+                            MathOperator::Lt => Ok(Value::Bool(f64::from(*val_a) < *val_b)),
+                            MathOperator::Gt => Ok(Value::Bool(f64::from(*val_a) > *val_b)),
+                            MathOperator::Lte => Ok(Value::Bool(f64::from(*val_a) <= *val_b)),
+                            MathOperator::Gte => Ok(Value::Bool(f64::from(*val_a) >= *val_b)),
                         }
                     },
                     _ => Err(Spanned::new(Error::TypeError(
@@ -285,7 +333,12 @@ impl<'a> Context<'a> {
                             MathOperator::Subtraction => Ok(Value::Float(val_a - val_b)),
                             MathOperator::Multiply => Ok(Value::Float(val_a * val_b)),
                             MathOperator::Division => Ok(Value::Float(val_a / val_b)),
-                            MathOperator::Comparison => Ok(Value::Bool(val_a == val_b)),
+                            MathOperator::Eq => Ok(Value::Bool(val_a == val_b)),
+                            MathOperator::Neq => Ok(Value::Bool(val_a != val_b)),
+                            MathOperator::Lt => Ok(Value::Bool(val_a < val_b)),
+                            MathOperator::Gt => Ok(Value::Bool(val_a > val_b)),
+                            MathOperator::Lte => Ok(Value::Bool(val_a <= val_b)),
+                            MathOperator::Gte => Ok(Value::Bool(val_a >= val_b)),
                         }
                     },
                     Value::Int(val_b) => {
@@ -294,7 +347,12 @@ impl<'a> Context<'a> {
                             MathOperator::Subtraction => Ok(Value::Float(val_a - f64::from(*val_b))),
                             MathOperator::Multiply => Ok(Value::Float(val_a * f64::from(*val_b))),
                             MathOperator::Division => Ok(Value::Float(val_a / f64::from(*val_b))),
-                            MathOperator::Comparison => Ok(Value::Bool(*val_a == f64::from(*val_b))),
+                            MathOperator::Eq => Ok(Value::Bool(*val_a == f64::from(*val_b))),
+                            MathOperator::Neq => Ok(Value::Bool(*val_a != f64::from(*val_b))),
+                            MathOperator::Lt => Ok(Value::Bool(*val_a < f64::from(*val_b))),
+                            MathOperator::Gt => Ok(Value::Bool(*val_a > f64::from(*val_b))),
+                            MathOperator::Lte => Ok(Value::Bool(*val_a <= f64::from(*val_b))),
+                            MathOperator::Gte => Ok(Value::Bool(*val_a >= f64::from(*val_b))),
                         }
                     },
                     _ => Err(Spanned::new(Error::TypeError(
@@ -307,7 +365,8 @@ impl<'a> Context<'a> {
                     Value::String(val_b) => {
                         match op {
                             MathOperator::Addition => Ok(Value::String(val_a.to_owned() + val_b)),
-                            MathOperator::Comparison => Ok(Value::Bool(val_a == val_b)),
+                            MathOperator::Eq => Ok(Value::Bool(val_a == val_b)),
+                            MathOperator::Neq => Ok(Value::Bool(val_a != val_b)),
                             _ => Err(Spanned::new(Error::TypeError(
                                 format!("Incompatible types ({} and {}) for this operator", a.type_to_string(), b.type_to_string()).to_owned()),
                                 span_b))

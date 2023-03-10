@@ -46,10 +46,6 @@ pub enum Token {
     RightCurly,
     #[token(",")]
     Comma,
-    #[token("==")]
-    Comparison,
-    #[token("=")]
-    Assignment,
 
     // Ops
     #[token("+")]
@@ -60,6 +56,20 @@ pub enum Token {
     Star,
     #[token("/")]
     Slash,
+    #[token("==")]
+    Eq,
+    #[token("!=")]
+    Neq,
+    #[token("<")]
+    Lt,
+    #[token(">")]
+    Gt,
+    #[token("<=")]
+    Lte,
+    #[token(">=")]
+    Gte,
+    #[token("=")]
+    Assignment,
 
     #[regex(r"[ \t\n\f]+", logos::skip)]
 
