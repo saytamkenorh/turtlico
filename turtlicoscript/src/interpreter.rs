@@ -192,6 +192,11 @@ impl<'a> Context<'a> {
                 }
                 Ok(Value::None)
             },
+            // Structure
+            Expression::FnDef { name, args, body } => {
+                self.vars.insert(name.to_owned(), Value::Callable(Callable::Function(Box::new(body))));
+                Ok(Value::None)
+            }
             // Keywords
             Expression::Assignment { expr, value } => {
                 match &expr.item {

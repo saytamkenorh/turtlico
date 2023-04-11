@@ -1,0 +1,6 @@
+fn sum($a, $b) {
+    return $a + $b
+}
+
+$out = ""
+$out = $out + string(sum(1, 2)) + "_"

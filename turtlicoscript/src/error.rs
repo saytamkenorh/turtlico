@@ -50,12 +50,12 @@ impl Spanned<Error> {
         let mut bad_code = source[error_start..error_end].trim_matches('\n').to_owned();
         println!("{}:{} {}:{}", error_start, error_end, self.span.start, self.span.end);
         
-        let line_error_start = usize::max(self.span.start - error_start - 1, 0);
+        let line_error_start = isize::max(self.span.start as isize - error_start as isize - 1, 0) as usize;
         let line_error_end = usize::min(self.span.end - error_start - 1, bad_code.len());
 
         bad_code.insert_str(line_error_end, "\x1b[0m");
         bad_code.insert_str(line_error_start, "\x1b[41m");
-        format!("An \x1b[31merror\x1b[0m occurred on line {}:\n{}\n\x1b[33m{}\x1b[0m", error_line, bad_code, self.item)
+        format!("An \x1b[31merror\x1b[0m occurred on line {}:\n{}\n\x1b[33m{}\x1b[0m", error_line + 1, bad_code, self.item)
     }
 }
 

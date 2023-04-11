@@ -2,7 +2,7 @@ extern crate proc_macro;
 
 use std::{collections::HashMap, fmt::Display, any::Any};
 
-use crate::error::RuntimeError;
+use crate::{error::RuntimeError, ast::Expression};
 
 pub type NativeFuncReturn = Result<Value, RuntimeError>;
 pub type NativeFuncArgs = Vec<Value>;
@@ -16,7 +16,7 @@ pub struct NativeFunc {
 
 #[derive(Clone)]
 pub enum Callable {
-    Function,
+    Function(Box<Expression>),
     NativeFunc(NativeFunc)
 }
 
@@ -88,7 +88,7 @@ impl From<f64> for Value {
 impl Display for Callable {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Callable::Function => write!(f, "<Function>"),
+            Callable::Function(_) => write!(f, "<Function>"),
             Callable::NativeFunc(_) => write!(f, "<Native function>")
         }
     }

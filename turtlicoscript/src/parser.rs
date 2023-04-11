@@ -137,6 +137,19 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
             .map(|((_token, cond), body)| Expression::While {cond: Box::new(cond), body: Box::new(body)})
             .map_with_span(Spanned::new);
 
+    
+        // Structure
+        let fndef = just(Token::FnDef)
+            .then(select! {Token::Function(x) => x})
+            .then(
+                (select! {Token::Variable(x) => x}).separated_by(just(Token::Comma))
+                .delimited_by(just(Token::LeftParent), just(Token::RightParent)))
+            .then(expr.clone())
+            .map(|(((_token, name), args), body)|{
+                Expression::FnDef { name: name, args: args, body: Box::new(body) }
+            })
+            .map_with_span(Spanned::new);
+
         // Atom
         let atom =
             literal
@@ -150,6 +163,7 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
             .or(loop_infinite)
             .or(loop_for)
             .or(loop_while)
+            .or(fndef)
             .or(shortcall)
             .or(var)
             .or(func);

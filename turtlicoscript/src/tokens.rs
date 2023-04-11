@@ -19,7 +19,7 @@ pub enum Token {
     #[token("while")]
     While,
     #[token("fn")]
-    Fn,
+    FnDef,
 
     #[regex(r"\$[\p{XID_Continue}]+", get_indentifier_var)]
     Variable(String),

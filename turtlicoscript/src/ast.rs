@@ -43,7 +43,7 @@ pub enum Expression {
     },
     Break,
 
-    // Control flow
+    // Loops
     If {
         cond: Box<Spanned<Expression>>,
         body: Box<Spanned<Expression>>,
@@ -64,6 +64,13 @@ pub enum Expression {
     },
     While {
         cond: Box<Spanned<Expression>>,
+        body: Box<Spanned<Expression>>,
+    },
+
+    // Structure
+    FnDef {
+        name: String,
+        args: Vec<String>,
         body: Box<Spanned<Expression>>,
     },
 
