@@ -8,8 +8,7 @@ edition = "2021"
 [dependencies]
 turtlicoscript = { version = "0.1.0", path = "../turtlicoscript" }
 turtlicoscript_gui = { version = "0.1.0", path = "../turtlicoscript_gui", optional = true }
-slint = { version = "0.3.3", optional = true}
 
 [features]
 default = ["gui"]
-gui = ["turtlicoscript_gui", "slint"]
+gui = ["turtlicoscript_gui"]

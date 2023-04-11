@@ -10,7 +10,6 @@ const NORMAL_SPEED_ROTATION: f32 = 90.0; // degrees per second
 const FRAME_INTERVAL: u64 = 33; // Milliseconds per frame update
 
 pub struct Context {
-    window: slint::Weak<MainWindow>,
     speed: f32, // 1.0 - normal, lower = faster, higher = slower
     rot: f32, // rotation, 0 - right
     x: f32,
@@ -48,12 +47,6 @@ impl Context {
     pub fn set_turtle_xy(&mut self, x: f32, y: f32) {
         self.x = x;
         self.y = y;
-        let win_copy = self.window.clone();
-        slint::invoke_from_event_loop(move || {
-            let win = win_copy.unwrap();
-            win.set_turtle_x(x as i32);
-            win.set_turtle_y(y as i32);
-        }).unwrap();
     }
 
     pub fn set_turtle_rot(&mut self, rot: f32) {
@@ -80,15 +73,10 @@ impl Context {
     fn _set_turtle_rot(&mut self, rot: f32) {
         self.rot = rot % 360.0;
         self.rot = if self.rot < 0.0 { 360.0 - self.rot } else { self.rot };
-        let win_copy = self.window.clone();
-        slint::invoke_from_event_loop(move || {
-            let win = win_copy.unwrap();
-            win.set_turtle_rot(360 - rot as i32);
-        }).unwrap();
     }
 }
 
-pub fn init_library(win: slint::Weak<MainWindow>) -> Library {
+pub fn init_library() -> Library {
     let vars = funcmap!{
         "gui",
         go,
@@ -98,15 +86,11 @@ pub fn init_library(win: slint::Weak<MainWindow>) -> Library {
 
 
     let ctx = Context {
-        window: win.clone(),
         speed: 1.0,
         rot: 0.0,
         x: 0.0,
         y: 0.0
     };
-    slint::invoke_from_event_loop(move || {
-        win.unwrap().show();
-    }).unwrap();
 
     Library {
         name: "gui".to_owned(),
@@ -114,8 +98,6 @@ pub fn init_library(win: slint::Weak<MainWindow>) -> Library {
         context: Box::new(ctx)
     }
 }
-
-slint::include_modules!();
 
 #[check_args(Int=32)]
 pub fn go(ctx: &mut NativeFuncCtxArg, mut args: NativeFuncArgs) -> NativeFuncReturn {

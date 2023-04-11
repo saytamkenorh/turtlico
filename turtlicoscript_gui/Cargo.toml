@@ -9,7 +9,3 @@ build = "build.rs"
 [dependencies]
 checkargs = { version = "0.1.0", path = "../turtlicoscript/checkargs" }
 turtlicoscript = { version = "0.1.0", path = "../turtlicoscript" }
-slint = "0.3.3"
-
-[build-dependencies]
-slint-build = "0.3.3"

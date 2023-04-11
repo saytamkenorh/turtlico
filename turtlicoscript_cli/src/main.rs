@@ -1,18 +1,9 @@
 use std::{env, fs};
-use slint::ComponentHandle;
 use turtlicoscript::{parser, interpreter::Context, value::Value};
 
 #[cfg(feature = "gui")]
 fn run(file: String) {
-    let window = turtlicoscript_gui::MainWindow::new();
-    let weak = window.as_weak();
-    std::thread::spawn(move || {
-        let weak = weak.clone();
-        run_file(file, |ctx|{
-            ctx.import_library(turtlicoscript_gui::init_library(weak), false);
-        }, true);
-    });
-    slint::run_event_loop();
+    run_file(file, |ctx|{}, false);
 }
 
 // And this function only gets compiled if the target OS is *not* linux
