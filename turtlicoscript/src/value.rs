@@ -2,7 +2,7 @@ extern crate proc_macro;
 
 use std::{collections::HashMap, fmt::Display, any::Any};
 
-use crate::{error::RuntimeError, ast::Expression};
+use crate::{error::RuntimeError, ast::{Expression, Spanned}};
 
 pub type NativeFuncReturn = Result<Value, RuntimeError>;
 pub type NativeFuncArgs = Vec<Value>;
@@ -15,8 +15,14 @@ pub struct NativeFunc {
 }
 
 #[derive(Clone)]
+pub struct TSFunc {
+    pub body: Spanned<Expression>,
+    pub args: Vec<String>
+}
+
+#[derive(Clone)]
 pub enum Callable {
-    Function(Box<Expression>),
+    Function(Box<TSFunc>),
     NativeFunc(NativeFunc)
 }
 

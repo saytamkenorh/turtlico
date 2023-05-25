@@ -4,3 +4,4 @@ fn sum($a, $b) {
 
 $out = ""
 $out = $out + string(sum(1, 2)) + "_"
+return $out

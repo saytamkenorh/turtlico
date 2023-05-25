@@ -16,6 +16,11 @@ mod test_examples {
     }
 
     #[test]
+    fn funcs() {
+        test_example_file("funcs.tcsf", "3_");
+    }
+
+    #[test]
     fn loop_while() {
         test_example_file("while.tcsf", "5_4_3_2_1_0_");
     }

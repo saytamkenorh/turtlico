@@ -2,7 +2,7 @@ use std::{collections::HashMap};
 
 use chumsky::{prelude::Simple};
 
-use crate::{ast::{Expression, Spanned}, error::{Error, RuntimeError}, value::{Value, Library, Callable, LibraryContext}, stdlib};
+use crate::{ast::{Expression, Spanned}, error::{Error, RuntimeError}, value::{Value, Library, Callable, LibraryContext, TSFunc}, stdlib};
 
 enum MathOperator {
     Addition,
@@ -89,8 +89,19 @@ impl<'a> Context<'a> {
                                     other_result => other_result
                                 }
                             },
-                            Callable::Function => {
-                                todo!()
+                            Callable::Function(func) => {
+                                let mut args_evaluated: Vec<(String, Value)> = vec![];
+                                for (argi, argname) in func.args.iter().enumerate() {
+                                    args_evaluated.push((argname.to_owned(), self.eval(&args[argi])?));
+                                }
+                                let mut subst = self.substitute();
+                                subst.vars.extend(args_evaluated);
+                                match subst.eval(&func.body)? {
+                                    Value::EvaluatedReturn(val) => {
+                                        Ok(*val)
+                                    },
+                                    other => Ok(other)
+                                }
                             }
                         }
                     }
@@ -194,7 +205,11 @@ impl<'a> Context<'a> {
             },
             // Structure
             Expression::FnDef { name, args, body } => {
-                self.vars.insert(name.to_owned(), Value::Callable(Callable::Function(Box::new(body))));
+                let func = TSFunc {
+                    body: (**body).clone(),
+                    args: args.to_owned()
+                };
+                self.vars.insert(name.to_owned(), Value::Callable(Callable::Function(Box::new(func))));
                 Ok(Value::None)
             }
             // Keywords
