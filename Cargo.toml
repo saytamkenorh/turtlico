@@ -2,5 +2,15 @@
 members = [
 	"turtlicoscript",
 	"turtlicoscript_cli",
-	"turtlicoscript_gui"
+	"turtlicoscript_gui",
+	"turtlico_editor",
 ]
+default-members = ["turtlico_editor"]
+resolver = "2"
+
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies, but not for our code:
+[profile.dev.package."*"]
+opt-level = 3

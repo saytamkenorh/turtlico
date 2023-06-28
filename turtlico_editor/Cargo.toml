@@ -1,26 +1,22 @@
 [package]
-name = "turtlicoscript_gui"
+name = "turtlico_editor"
 version = "0.1.0"
 edition = "2021"
-build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-checkargs = { version = "0.1.0", path = "../turtlicoscript/checkargs" }
 turtlicoscript = { version = "0.1.0", path = "../turtlicoscript" }
+turtlicoscript_gui = { version = "0.1.0", path = "../turtlicoscript_gui"}
+
 egui = "0.22.0"
 eframe = { version = "0.22.0", default-features = false, features = [
     "default_fonts", # Embed the default egui fonts.
     "glow",          # Use the glow rendering backend. Alternative: "wgpu".
 ] }
-egui_extras =  { version = "0.22.0", features = ["image"] }
+egui_extras =  { version = "0.22.0", features = ["image", "svg"] }
 emath = "0.22.0"
 image = { version = "0.24", features = ["jpeg", "png", "bmp", "gif"] }
-log = "0.4"
-web-sys =  { version = "0.3", features = ["DedicatedWorkerGlobalScope", "ErrorEvent", "Worker", "MessageEvent", "console"] }
-js-sys = "0.3.64"
-wasm-bindgen = "0.2"
 
 # native:
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]

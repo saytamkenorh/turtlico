@@ -3,22 +3,26 @@ use turtlicoscript::{parser, interpreter::Context, value::Value};
 
 #[cfg(feature = "gui")]
 fn run(file: String) {
-    run_file(file, |ctx|{}, false);
+    let subapp = turtlicoscript_gui::init_subapp(move |ctx, gui| {
+        run_file(file, ctx, gui);
+    }, false);
+    turtlicoscript_gui::app::RootApp::run(vec![
+        subapp
+    ]);
 }
 
-// And this function only gets compiled if the target OS is *not* linux
 #[cfg(not(feature = "gui"))]
 fn run(file: String) {
-    run_file(file, |ctx|{}, false);
+    let mut ctx = Context::new_parent();
+    run_file(file, ctx, false);
 }
-
 
 fn main() {
     let file = env::args().nth(1).expect("Expected file argument");
     run(file);
 }
 
-fn run_file<F>(file: String, ctx_initalizer: F, gui: bool) where F: FnOnce(&mut Context) {
+fn run_file(file: String, mut context: Context, gui: bool) {
     let src = fs::read_to_string(file)
         .expect("Failed to read file");
 
@@ -29,10 +33,6 @@ fn run_file<F>(file: String, ctx_initalizer: F, gui: bool) where F: FnOnce(&mut 
 
     match parser::parse(&src) {
         Ok(ast) => {
-            let mut context = Context::new_parent();
-
-            ctx_initalizer(&mut context);
-
             println!("AST:");
             println!("{:#?}", ast);
             println!("Default context:");

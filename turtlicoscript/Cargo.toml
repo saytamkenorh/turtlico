@@ -8,4 +8,6 @@ edition = "2021"
 [dependencies]
 logos = "0.12"
 chumsky = "0.8"
+async-recursion = "1"
+futures = "0.3"
 checkargs = { version = "0.1.0", path = "./checkargs" }

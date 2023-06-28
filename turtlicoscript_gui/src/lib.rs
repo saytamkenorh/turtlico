@@ -1,20 +1,29 @@
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+
 use std::any::Any;
+use std::collections::{HashMap, HashSet};
+use std::sync::mpsc::{Receiver, channel};
+use std::sync::{Arc, Mutex};
+use turtlicoscript::ast::{Spanned, Expression};
+use wasm_bindgen::prelude::wasm_bindgen;
 
 use checkargs::check_args;
 use turtlicoscript::value::{Value, NativeFuncArgs, NativeFuncReturn, Library, LibraryContext, NativeFuncCtxArg};
 use turtlicoscript::funcmap;
 use turtlicoscript::error::RuntimeError;
+use sprite::Sprite;
+use app::SubApp;
 
-const NORMAL_SPEED: f32 = 48.0; // pixels per second
-const NORMAL_SPEED_ROTATION: f32 = 90.0; // degrees per second
-const FRAME_INTERVAL: u64 = 33; // Milliseconds per frame update
+pub mod app;
+pub mod sprite;
+pub mod world;
+mod worker;
 
 pub struct Context {
-    speed: f32, // 1.0 - normal, lower = faster, higher = slower
-    rot: f32, // rotation, 0 - right
-    x: f32,
-    y: f32
+    world: Arc<Mutex<world::World>>,
+    sync_rx: Receiver<bool>,
 }
+
 impl LibraryContext for Context {
     fn as_any_mut(&mut self) -> &mut dyn Any {
         self
@@ -23,60 +32,19 @@ impl LibraryContext for Context {
 
 impl Context {
     pub fn go(&mut self, distance: f32) {
-        let rot = self.rot;
-
-        let mut d = 0.0;
-        let origx = self.x;
-        let orgiy = self.y;
-        if self.speed > 0.0 {
-            while d < distance {
-                d = f32::min(distance, d + (NORMAL_SPEED * (FRAME_INTERVAL as f32) / 1000.0));
-                std::thread::sleep(std::time::Duration::from_millis(FRAME_INTERVAL));
-                self.set_turtle_xy(
-                    f32::round(origx + f32::cos(f32::to_radians(rot)) * d),
-                    f32::round(orgiy + f32::sin(f32::to_radians(360.0 - rot)) * d)
-                );
-            }
-        }
-        self.set_turtle_xy(
-            f32::round(origx + f32::cos(f32::to_radians(rot)) * distance),
-            f32::round(orgiy + f32::sin(f32::to_radians(360.0 - rot)) * distance)
-        );
+        Sprite::go(&mut self.sync_rx, &self.world, &0, distance, false);
     }
 
-    pub fn set_turtle_xy(&mut self, x: f32, y: f32) {
-        self.x = x;
-        self.y = y;
+    pub fn set_sprite_xy(&mut self, x: f32, y: f32) {
+        Sprite::set_pos(&mut self.sync_rx, &self.world, &0, x, y, false);
     }
 
     pub fn set_turtle_rot(&mut self, rot: f32) {
-        let rot = rot % 360.0;
-        let rot = if rot < 0.0 { 360.0 + rot } else { rot };
-
-        if self.speed > 0.0 {
-            let speed = NORMAL_SPEED_ROTATION * (FRAME_INTERVAL as f32) / 1000.0;
-
-            let mut rot_anim = self.rot;
-            let rot_target =
-                if f32::abs((rot - 360.0) - self.rot) < f32::abs(rot - self.rot) {
-                    rot - 360.0
-                } else {rot};
-            while rot_anim != rot_target {
-                self._set_turtle_rot(rot_anim);
-                rot_anim = f32::clamp(rot_target, rot_anim - speed, rot_anim + speed);
-                std::thread::sleep(std::time::Duration::from_millis(FRAME_INTERVAL));
-            }
-        }
-        self._set_turtle_rot(rot);
-    }
-
-    fn _set_turtle_rot(&mut self, rot: f32) {
-        self.rot = rot % 360.0;
-        self.rot = if self.rot < 0.0 { 360.0 - self.rot } else { self.rot };
+        Sprite::set_rotation(&mut self.sync_rx, &self.world, &0, rot, false);
     }
 }
 
-pub fn init_library() -> Library {
+pub fn init_library(world: Arc<Mutex<world::World>>, sync_rx: Receiver<bool>) -> Library {
     let vars = funcmap!{
         "gui",
         go,
@@ -84,12 +52,9 @@ pub fn init_library() -> Library {
     };
     println!("Initializing GUI...");
 
-
     let ctx = Context {
-        speed: 1.0,
-        rot: 0.0,
-        x: 0.0,
-        y: 0.0
+        world: world,
+        sync_rx: sync_rx,
     };
 
     Library {
@@ -97,6 +62,61 @@ pub fn init_library() -> Library {
         vars: vars,
         context: Box::new(ctx)
     }
+}
+
+
+#[cfg(not(target_arch = "wasm32"))]
+pub fn spawn_subapp(ast: Spanned<Expression>, windowed: bool)
+    -> Box<dyn SubApp>
+{
+    let (tx, rx) = channel();
+    let world = world::World::new_arc_mutex(tx);
+    let world_clone = world.clone();
+    std::thread::spawn(move || {
+        let mut ctx = turtlicoscript::interpreter::Context::new_parent();
+        ctx.import_library(init_library(world_clone, rx), false);
+        match ctx.eval_root(&ast) {
+            Ok(_) => {
+
+            },
+            Err(_) => {
+
+            }
+        }
+    });
+
+    let app = app::ScriptApp::new(world, windowed);
+    Box::new(app)
+}
+#[cfg(target_arch = "wasm32")]
+pub fn spawn_subapp(ast: Spanned<Expression>, windowed: bool)
+    -> Box<dyn SubApp>
+{
+    let (tx, rx) = channel();
+    let world = world::World::new_arc_mutex(tx);
+    let world_clone = world.clone();
+
+
+    use web_sys::console;
+
+    console::log_1(&"[worker] Starting sub program".into());
+    let worker = worker::spawn(move || {
+        console::log_1(&"[worker] Hello from sub program".into());
+        let mut ctx = turtlicoscript::interpreter::Context::new_parent();
+        ctx.import_library(init_library(world_clone, rx), false);
+        match ctx.eval_root(&ast) {
+            Ok(_) => {
+
+            },
+            Err(_) => {
+
+            }
+        }
+    }).unwrap();
+
+    let mut app = app::ScriptApp::new(world, windowed);
+    app.pool = Some(worker);
+    Box::new(app)
 }
 
 #[check_args(Int=32)]
