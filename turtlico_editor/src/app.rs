@@ -24,7 +24,7 @@ impl EditorApp {
     }
 
     fn ui(&mut self, ui: &mut egui::Ui) {
-        let mut style = ui.style_mut();
+        let style = ui.style_mut();
         style.spacing.button_padding = Vec2::new(4.0, 4.0);
         style.spacing.item_spacing = Vec2::new(8.0, 8.0);
 
@@ -63,7 +63,7 @@ impl EditorApp {
         let src = self.codeview_text.to_owned();
         match parser::parse(&src) {
             Ok(ast) => {
-                let subapp = turtlicoscript_gui::spawn_subapp(ast, true);
+                let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, true);
                 self.code_subapp = Some(subapp);
             },
             Err(errors) => {

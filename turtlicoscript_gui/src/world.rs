@@ -1,9 +1,10 @@
-use std::sync::mpsc::{self, Receiver, SendError};
-use std::collections::{HashMap, HashSet};
+use std::sync::mpsc;
+use std::collections::{HashMap};
 use std::sync::{Arc, Mutex};
-use std::time::Instant;
 use egui_extras::RetainedImage;
+use turtlicoscript::interpreter::CancellationToken;
 
+use crate::WorldSyncState;
 use crate::sprite::Sprite;
 
 
@@ -21,12 +22,12 @@ pub struct World {
     pub sprites: HashMap<SpriteID, Sprite>,
     pub blocks: HashMap<String, egui_extras::RetainedImage>,
     last_anim_time: f64,
-    pub update_tx: mpsc::Sender<bool>,
-    pub update_tx_closed: bool,
+    pub update_tx: mpsc::Sender<WorldSyncState>,
+    pub update_tx_closed: bool, // Interpreter disconnected
 }
 
 impl World {
-    pub fn new(update_tx: mpsc::Sender<bool>) -> Self {
+    pub fn new(update_tx: mpsc::Sender<WorldSyncState>) -> Self {
         let map = HashMap::new();
         let mut s = Self {
             sprites: map,
@@ -38,7 +39,7 @@ impl World {
         s.add_sprite();
         s
     }
-    pub fn new_arc_mutex(update_tx: mpsc::Sender<bool>) -> Arc<Mutex<Self>> {
+    pub fn new_arc_mutex(update_tx: mpsc::Sender<WorldSyncState>) -> Arc<Mutex<Self>> {
         Arc::new(Mutex::new(Self::new(update_tx)))
     }
 
@@ -51,7 +52,7 @@ impl World {
         id
     }
 
-    pub fn ui(&mut self, ui: &mut egui::Ui) -> egui::Response {
+    pub fn ui(&mut self, ui: &mut egui::Ui, cancellable: &Option<CancellationToken>) -> egui::Response {
         let avail_size = ui.available_size();
         let cam_scale = f32::max(f32::min(
             avail_size.x / SCREEN_WIDTH_PX,
@@ -76,7 +77,13 @@ impl World {
         for sprite in self.sprites.values_mut() {
             sprite.animate(delta);
         }
-        if let Err(_) = self.update_tx.send(true) {
+        let mut state = WorldSyncState::Update;
+        if let Some(cancellable) = cancellable {
+            if cancellable.load(std::sync::atomic::Ordering::Relaxed) {
+                state = WorldSyncState::Cancelled;
+            }
+        }
+        if let Err(_) = self.update_tx.send(state) {
             self.update_tx_closed = true;
         }
         ui.ctx().request_repaint();

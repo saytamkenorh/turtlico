@@ -17,6 +17,7 @@ pub enum Error {
     InvalidForStep,
     RuntimeError(RuntimeError),
     TypeError(String),
+    Interrupted,
 }
 
 impl Display for Error {
@@ -49,7 +50,7 @@ impl Spanned<Error> {
         // https://chrisyeh96.github.io/2020/03/28/terminal-colors.html
         let mut bad_code = source[error_start..error_end].trim_matches('\n').to_owned();
         println!("{}:{} {}:{}", error_start, error_end, self.span.start, self.span.end);
-        
+
         let line_error_start = isize::max(self.span.start as isize - error_start as isize - 1, 0) as usize;
         let line_error_end = usize::min(self.span.end - error_start - 1, bad_code.len());
 

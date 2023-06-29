@@ -1,8 +1,10 @@
-use std::{collections::HashMap};
+use std::{collections::HashMap, sync::{Arc, atomic::AtomicBool}};
 
 use chumsky::{prelude::Simple};
 
 use crate::{ast::{Expression, Spanned}, error::{Error, RuntimeError}, value::{Value, Library, Callable, LibraryContext, TSFunc}, stdlib};
+
+pub type CancellationToken = Arc<AtomicBool>;
 
 enum MathOperator {
     Addition,
@@ -20,15 +22,17 @@ enum MathOperator {
 pub struct Context<'a> {
     parent: Option<&'a Context<'a>>,
     pub vars: HashMap<String, Value>,
-    libctx: HashMap<String, Box<dyn LibraryContext>>
+    libctx: HashMap<String, Box<dyn LibraryContext>>,
+    pub cancellable: Option<CancellationToken>,
 }
 
 impl<'a> Context<'a> {
-    pub fn new_parent() -> Self {
+    pub fn new_parent(cancellable: Option<CancellationToken>) -> Self {
         let mut this = Self {
             parent: None,
             vars: HashMap::new(),
-            libctx: HashMap::new()
+            libctx: HashMap::new(),
+            cancellable: cancellable,
         };
         this.import_library(stdlib::init_library(), false);
         this
@@ -38,7 +42,8 @@ impl<'a> Context<'a> {
         Self {
             parent: Some(self),
             vars: HashMap::new(),
-            libctx: HashMap::new()
+            libctx: HashMap::new(),
+            cancellable: self.cancellable.clone(),
         }
     }
 
@@ -50,6 +55,11 @@ impl<'a> Context<'a> {
     }
 
     fn eval(&mut self, expression: &Spanned<Expression>) -> Result<Value, Spanned<Error>> {
+        if let Some(cancellable) = &self.cancellable {
+            if cancellable.load(std::sync::atomic::Ordering::Relaxed) {
+                return Err(Spanned::new(Error::Interrupted, expression.span.to_owned()));
+            }
+        }
         match &expression.item {
             Expression::Block(block) => {
                 let mut last_result = Value::None;

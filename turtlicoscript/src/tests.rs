@@ -36,7 +36,7 @@ mod test_examples {
         let src = fs::read_to_string(path_buf).expect(&format!("Cannot read example file \"{}\"", name));
         let ast = parser::parse(&src).expect(&format!("Cannot parse example file \"{}\"", name));
 
-        let mut context = interpreter::Context::new_parent();
+        let mut context = interpreter::Context::new_parent(None);
         let _result = context.eval_root(&ast).expect(&format!("Evaluation of example file failed \"{}\"", name)).to_string();
         if output != _result {
             panic!("Invalid result. Expected: \"{}\". Got: \"{}\".", output, _result);

@@ -15,7 +15,7 @@ function loadWasm() {
         return
     }
 
-    wasm_bindgen()
+    wasm_bindgen('./turtlico_editor_bg.wasm')
         .catch(console.error);
 }
 

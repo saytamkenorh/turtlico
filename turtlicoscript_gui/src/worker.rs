@@ -1,5 +1,5 @@
+#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::{JsValue, prelude::wasm_bindgen};
-use web_sys::console;
 
 #[cfg(target_arch = "wasm32")]
 pub fn spawn(f: impl FnOnce() + Send + 'static) -> Result<web_sys::Worker, JsValue> {
@@ -26,9 +26,10 @@ pub fn spawn(f: impl FnOnce() + Send + 'static) -> Result<web_sys::Worker, JsVal
   }
 }
 
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(js_name = "child_entry_point")]
 pub fn child_entry_point(ptr: u32) {
-  console::log_1(&"[worker] Hello from WASM child entry point".into());
+  web_sys::console::log_1(&"[worker] Hello from WASM child entry point".into());
   let work = unsafe { Box::from_raw(ptr as *mut Box<dyn FnOnce()>) };
   (*work)();
 }

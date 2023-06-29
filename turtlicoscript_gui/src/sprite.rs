@@ -1,6 +1,6 @@
 use std::{sync::{Mutex, Arc, mpsc::Receiver}};
 
-use crate::world::{*};
+use crate::{world::{*}, WorldSyncState};
 
 pub struct Sprite {
     pub block: String,
@@ -55,7 +55,7 @@ impl Sprite {
         self.rendered_y = new_y;
     }
 
-    pub fn go(sync_rx: &Receiver<bool>, world: &Arc<Mutex<World>>, id: &SpriteID, distance: f32, instant: bool) {
+    pub fn go(sync_rx: &Receiver<WorldSyncState>, world: &Arc<Mutex<World>>, id: &SpriteID, distance: f32, instant: bool) {
         let target_x;
         let target_y;
         {
@@ -67,7 +67,7 @@ impl Sprite {
         Sprite::set_pos(sync_rx, world, id, target_x, target_y, instant);
     }
 
-    pub fn set_pos(sync_rx: &Receiver<bool>, world: &Arc<Mutex<World>>, id: &SpriteID, x: f32, y: f32, instant: bool) {
+    pub fn set_pos(sync_rx: &Receiver<WorldSyncState>, world: &Arc<Mutex<World>>, id: &SpriteID, x: f32, y: f32, instant: bool) {
         let speed;
         {
             let _world = world.lock().unwrap();
@@ -76,23 +76,23 @@ impl Sprite {
         if speed > 0.0 || instant {
             {
                 let mut _world = world.lock().unwrap();
-                let mut sprite = _world.sprites.get_mut(id).unwrap();
+                let sprite = _world.sprites.get_mut(id).unwrap();
                 sprite.x = x;
                 sprite.y = y;
             }
             loop {
+                let state = sync_rx.recv().unwrap(); // Wait for next frame
                 {
                     let _world = world.lock().unwrap();
                     let sprite = _world.sprites.get(id).unwrap();
-                    if sprite.rendered_x == sprite.x && sprite.rendered_y == sprite.y {
+                    if sprite.rendered_x == sprite.x && sprite.rendered_y == sprite.y || matches!(state, WorldSyncState::Cancelled) {
                         break;
                     }
                 }
-                sync_rx.recv().unwrap(); // Wait for next frame
             }
         } else {
             let mut _world = world.lock().unwrap();
-            let mut sprite = _world.sprites.get_mut(id).unwrap();
+            let sprite = _world.sprites.get_mut(id).unwrap();
             sprite.x = x;
             sprite.y = y;
             sprite.rendered_x = sprite.x;
@@ -100,7 +100,7 @@ impl Sprite {
         }
     }
 
-    pub fn set_rotation(sync_rx: &Receiver<bool>, world: &Arc<Mutex<World>>, id: &SpriteID, rot: f32, instant: bool) {
+    pub fn set_rotation(sync_rx: &Receiver<WorldSyncState>, world: &Arc<Mutex<World>>, id: &SpriteID, rot: f32, instant: bool) {
         let speed;
         {
             let _world = world.lock().unwrap();
@@ -114,18 +114,18 @@ impl Sprite {
                 _world.sprites.get_mut(id).unwrap().rot = rot;
             }
             loop {
+                let state = sync_rx.recv().unwrap(); // Wait for next frame
                 {
                     let _world = world.lock().unwrap();
                     let sprite = _world.sprites.get(id).unwrap();
-                    if sprite.rendered_rot == sprite.rot {
+                    if sprite.rendered_rot == sprite.rot || matches!(state, WorldSyncState::Cancelled) {
                         break;
                     }
                 }
-                sync_rx.recv().unwrap(); // Wait for next frame
             }
         } else {
             let mut _world = world.lock().unwrap();
-            let mut sprite = _world.sprites.get_mut(id).unwrap();
+            let sprite = _world.sprites.get_mut(id).unwrap();
             sprite.rot = rot;
             sprite.rendered_rot = sprite.rot;
         }

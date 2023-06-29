@@ -1,5 +1,9 @@
 use std::{sync::{Arc, Mutex}, thread::JoinHandle};
 
+use turtlicoscript::interpreter::CancellationToken;
+use turtlicoscript::ast::{Spanned, Expression};
+use std::sync::{atomic::AtomicBool, mpsc::channel};
+
 use crate::world::World;
 
 pub trait SubApp {
@@ -68,6 +72,8 @@ pub struct ScriptApp {
     world: Arc<Mutex<World>>,
     windowed: bool,
     pub pool: Option<web_sys::Worker>,
+    pub thread: Option<JoinHandle<()>>,
+    pub cancellable: Option<CancellationToken>,
 }
 
 impl ScriptApp{
@@ -75,13 +81,75 @@ impl ScriptApp{
         Self {
             world: world,
             windowed,
-            pool: None
+            pool: None,
+            thread: None,
+            cancellable: None
         }
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    pub fn spawn(ast: Spanned<Expression>, windowed: bool)
+        -> Box<dyn SubApp>
+    {
+        let (tx, rx) = channel();
+        let world = crate::world::World::new_arc_mutex(tx);
+        let world_clone = world.clone();
+        let cancellable = Arc::new(AtomicBool::new(false));
+
+        let mut app = ScriptApp::new(world, windowed);
+        app.cancellable = Some(cancellable.clone());
+
+        let handle = std::thread::spawn(move || {
+            let mut ctx = turtlicoscript::interpreter::Context::new_parent(Some(cancellable));
+            ctx.import_library(crate::init_library(world_clone, rx), false);
+            match ctx.eval_root(&ast) {
+                Ok(_) => {
+
+                },
+                Err(_) => {
+
+                }
+            }
+        });
+
+        app.thread = Some(handle);
+        Box::new(app)
+    }
+    #[cfg(target_arch = "wasm32")]
+    pub fn spawn(ast: Spanned<Expression>, windowed: bool)
+        -> Box<dyn SubApp>
+    {
+        use web_sys::console;
+        let (tx, rx) = channel();
+        let world = crate::world::World::new_arc_mutex(tx);
+        let world_clone = world.clone();
+        let cancellable = Arc::new(AtomicBool::new(false));
+
+        let mut app = crate::app::ScriptApp::new(world, windowed);
+        app.cancellable = Some(cancellable.clone());
+
+        console::log_1(&"[worker] Starting sub program".into());
+        let worker = crate::worker::spawn(move || {
+            console::log_1(&"[worker] Hello from sub program".into());
+            let mut ctx = turtlicoscript::interpreter::Context::new_parent(Some(cancellable));
+            ctx.import_library(crate::init_library(world_clone, rx), false);
+            match ctx.eval_root(&ast) {
+                Ok(_) => {
+
+                },
+                Err(_) => {
+
+                }
+            }
+        }).unwrap();
+
+        app.pool = Some(worker);
+        Box::new(app)
     }
 
     fn ui(&mut self, ui: &mut egui::Ui) {
         let mut world = self.world.lock().unwrap();
-        world.ui(ui);
+        world.ui(ui, &self.cancellable);
     }
 }
 
@@ -102,12 +170,20 @@ impl SubApp for ScriptApp {
                     self.ui(ui);
                 });
         }
+        if !win_open {
+            if let Some(cancellable) = &self.cancellable {
+                cancellable.store(true, std::sync::atomic::Ordering::Relaxed);
+            }
+        }
+        let cancelled = if let Some(cancellable) = &self.cancellable {
+            cancellable.load(std::sync::atomic::Ordering::Relaxed)
+        } else {false};
         let program_stopped;
         {
             let world = self.world.lock().unwrap();
             program_stopped = world.update_tx_closed;
         }
 
-        return !(program_stopped && !win_open);
+        return !(program_stopped && (!win_open || cancelled));
     }
 }
