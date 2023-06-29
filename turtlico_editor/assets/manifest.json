@@ -1,6 +1,6 @@
 {
-  "name": "egui Template PWA",
-  "short_name": "egui-template-pwa",
+  "name": "Turtlico PWA",
+  "short_name": "turtlico-pwa",
   "icons": [
     {
       "src": "./icon-256.png",
