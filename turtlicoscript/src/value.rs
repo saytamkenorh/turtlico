@@ -73,6 +73,10 @@ macro_rules! check_argc {
     };
 }
 
+pub fn unwrap_context<T: 'static>(ctx: &mut NativeFuncCtxArg) -> &mut T {
+    (&mut *ctx).as_any_mut().downcast_mut::<T>().expect("Invalid context type")
+}
+
 impl From<i32> for Value {
     fn from(val: i32) -> Self {
         Value::Int(val)

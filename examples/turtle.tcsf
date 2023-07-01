@@ -7,4 +7,14 @@ loop {
     set_rot(-270)
     go
     set_rot 0
+    loop 4 {
+        go 2
+        left
+    }
+    left
+    loop 4 {
+        go 3
+        right
+    }
+    set_rot 0
 }

@@ -59,6 +59,17 @@ impl RootApp {
                 .expect("failed to start eframe");
         });
     }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    fn close(&mut self, frame: &mut eframe::Frame) {
+        self.subapps.clear();
+        frame.close();
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    fn close(&mut self, _frame: &mut eframe::Frame) {
+        self.subapps.clear();
+    }
 }
 
 impl eframe::App for RootApp {
@@ -74,7 +85,7 @@ impl eframe::App for RootApp {
             self.subapps.remove(i);
         }
         if self.subapps.len() == 0 {
-            frame.close();
+            self.close(frame);
         }
     }
 }

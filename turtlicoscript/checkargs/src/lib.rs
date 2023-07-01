@@ -1,11 +1,11 @@
-use proc_macro2::{TokenTree};
-use syn::{ItemFn, parse_macro_input};
-use quote::{quote, format_ident};
+use proc_macro2::TokenTree;
+use quote::{format_ident, quote};
+use syn::{parse_macro_input, ItemFn};
 
 #[derive(Debug)]
 struct ArgTypeSpec {
     pub arg_type: String,
-    pub default_value: Option<proc_macro2::Literal>
+    pub default_value: Option<proc_macro2::Literal>,
 }
 
 #[derive(PartialEq, Eq)]
@@ -22,7 +22,10 @@ enum ParseState {
 ///     do_something_other(arg1);
 /// }
 #[proc_macro_attribute]
-pub fn check_args(attr: proc_macro::TokenStream, input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+pub fn check_args(
+    attr: proc_macro::TokenStream,
+    input: proc_macro::TokenStream,
+) -> proc_macro::TokenStream {
     //println!("{:?}", attr);
 
     let mut specs = vec![];
@@ -36,9 +39,12 @@ pub fn check_args(attr: proc_macro::TokenStream, input: proc_macro::TokenStream)
                 if let Some(spec) = last_spec {
                     specs.push(spec);
                 }
-                last_spec = Some(ArgTypeSpec{arg_type: i.to_string(), default_value: None});
+                last_spec = Some(ArgTypeSpec {
+                    arg_type: i.to_string(),
+                    default_value: None,
+                });
                 state = ParseState::Identifier;
-            },
+            }
             TokenTree::Punct(p) => {
                 assert!(p.as_char() == '=' || p.as_char() == ',');
                 if p.as_char() == '=' {
@@ -48,7 +54,7 @@ pub fn check_args(attr: proc_macro::TokenStream, input: proc_macro::TokenStream)
                 if p.as_char() == ',' {
                     state = ParseState::Start;
                 }
-            },
+            }
             TokenTree::Literal(lit) => {
                 assert!(state == ParseState::Assignment);
                 assert!(last_spec.is_some());
@@ -71,7 +77,7 @@ pub fn check_args(attr: proc_macro::TokenStream, input: proc_macro::TokenStream)
     for (pos, arg) in specs.iter().enumerate() {
         if let Some(default_value) = &arg.default_value {
             let req_argc = pos + 1;
-            arg_checker.extend(quote!{
+            arg_checker.extend(quote! {
                 if args.len() < #req_argc {
                     args.push(Value::from(#default_value));
                 }
@@ -79,7 +85,7 @@ pub fn check_args(attr: proc_macro::TokenStream, input: proc_macro::TokenStream)
         }
     }
     // Check argument count
-    arg_checker.extend(quote!{
+    arg_checker.extend(quote! {
         if args.len() != #argc {
             return Err(RuntimeError::InvalidArgCount(args.len(), #argc));
         }
@@ -89,7 +95,7 @@ pub fn check_args(attr: proc_macro::TokenStream, input: proc_macro::TokenStream)
         let arg_type = &arg.arg_type;
         let varname = format_ident!("arg{}", pos);
         if arg_type == "String" {
-            arg_checker.extend(quote!{
+            arg_checker.extend(quote! {
                 let mut #varname = None;
                 match &args[#pos] {
                     Value::String(val) => {
@@ -102,10 +108,26 @@ pub fn check_args(attr: proc_macro::TokenStream, input: proc_macro::TokenStream)
                 let #varname = #varname.unwrap();
             });
         } else if arg_type == "Int" {
-            arg_checker.extend(quote!{
+            arg_checker.extend(quote! {
                 let mut #varname = None;
                 match args[#pos] {
                     Value::Int(val) => {
+                        #varname = Some(val);
+                    },
+                    _ => {
+                        return Err(RuntimeError::InvalidArgType(#pos));
+                    }
+                }
+                let #varname = #varname.unwrap();
+            });
+        } else if arg_type == "Float" {
+            arg_checker.extend(quote! {
+                let mut #varname = None;
+                match args[#pos] {
+                    Value::Int(val) => {
+                        #varname = Some(val as f64);
+                    },
+                    Value::Float(val) => {
                         #varname = Some(val);
                     },
                     _ => {
@@ -121,7 +143,12 @@ pub fn check_args(attr: proc_macro::TokenStream, input: proc_macro::TokenStream)
     }
     //println!("{}", arg_checker.to_string());
 
-    let ItemFn { attrs, vis, sig, block } = parse_macro_input!(input as ItemFn);
+    let ItemFn {
+        attrs,
+        vis,
+        sig,
+        block,
+    } = parse_macro_input!(input as ItemFn);
     let stmts = &block.stmts;
     let output = quote! {
         #(#attrs)* #vis #sig {

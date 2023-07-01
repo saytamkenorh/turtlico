@@ -6,7 +6,7 @@ pub struct Sprite {
     pub block: String,
     pub speed: f32, // 1.0 - normal, lower = faster, higher = slower
     pub rendered_rot: f32, // rendered rotation
-    pub rot: f32, // rotation, 0 - right
+    pub rot: f32, // clockwise rotation, 0 - right
     pub x: f32,
     pub y: f32,
     pub rendered_x: f32,
@@ -35,8 +35,9 @@ impl Sprite {
         let dist_ccw = if self.rendered_rot > self.rot { self.rendered_rot - self.rot } else { self.rendered_rot + 360.0 - self.rot };
         let step_rot = self.speed * NORMAL_SPEED_ROTATION * delta;
         let new_rot =
-            if dist_cw < dist_ccw {f32::min(self.rot, normalize_angle(self.rendered_rot + step_rot))}
-            else {f32::max(self.rot, normalize_angle(self.rendered_rot - step_rot))};
+            if f32::abs(self.rot - self.rendered_rot) <= step_rot {self.rot}
+            else if dist_cw < dist_ccw {normalize_angle(self.rendered_rot + step_rot)}
+            else {normalize_angle(self.rendered_rot - step_rot)};
 
         self.rendered_rot = new_rot;
 
@@ -61,8 +62,8 @@ impl Sprite {
         {
             let _world = world.lock().unwrap();
             let sprite = _world.sprites.get(id).unwrap();
-            target_x = sprite.x + f32::cos(sprite.rot.to_radians()) * distance;
-            target_y = sprite.y + f32::sin(sprite.rot.to_radians()) * distance;
+            target_x = f32::round(sprite.x + f32::cos(sprite.rot.to_radians()) * distance * BLOCK_SIZE_PX);
+            target_y = f32::round(sprite.y + f32::sin(sprite.rot.to_radians()) * distance * BLOCK_SIZE_PX);
         }
         Sprite::set_pos(sync_rx, world, id, target_x, target_y, instant);
     }
@@ -73,7 +74,7 @@ impl Sprite {
             let _world = world.lock().unwrap();
             speed = _world.sprites.get(id).unwrap().speed;
         }
-        if speed > 0.0 || instant {
+        if speed > 0.0 && !instant {
             {
                 let mut _world = world.lock().unwrap();
                 let sprite = _world.sprites.get_mut(id).unwrap();
@@ -100,6 +101,13 @@ impl Sprite {
         }
     }
 
+    pub fn set_pos_target(world: &Arc<Mutex<World>>, id: &SpriteID, x: f32, y: f32) {
+        let mut _world = world.lock().unwrap();
+        let sprite = _world.sprites.get_mut(id).unwrap();
+        sprite.x = x;
+        sprite.y = y;
+    }
+
     pub fn set_rotation(sync_rx: &Receiver<WorldSyncState>, world: &Arc<Mutex<World>>, id: &SpriteID, rot: f32, instant: bool) {
         let speed;
         {
@@ -108,7 +116,7 @@ impl Sprite {
         }
         let rot = normalize_angle(rot);
 
-        if speed > 0.0 || instant {
+        if speed > 0.0 && !instant {
             {
                 let mut _world = world.lock().unwrap();
                 _world.sprites.get_mut(id).unwrap().rot = rot;
@@ -129,5 +137,15 @@ impl Sprite {
             sprite.rot = rot;
             sprite.rendered_rot = sprite.rot;
         }
+    }
+
+    pub fn get_rotation(world: &Arc<Mutex<World>>, id: &SpriteID) -> f32 {
+        let mut _world = world.lock().unwrap();
+        _world.sprites.get_mut(id).unwrap().rot
+    }
+
+    pub fn set_speed(world: &Arc<Mutex<World>>, id: &SpriteID, speed: f32) {
+        let mut _world = world.lock().unwrap();
+        _world.sprites.get_mut(id).unwrap().speed = speed;
     }
 }
