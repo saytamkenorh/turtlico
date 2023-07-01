@@ -4,7 +4,7 @@ use turtlicoscript::ast::{Spanned, Expression};
 
 #[cfg(feature = "gui")]
 fn run(ast: Spanned<Expression>, src: &String) {
-    use turtlicoscript_gui::app::ProgramState;
+    use turtlicoscript_gui::app::ScriptState;
 
     let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, false);
     let state = subapp.program_state.clone();
@@ -13,7 +13,7 @@ fn run(ast: Spanned<Expression>, src: &String) {
     ]);
     let _state = state.lock().unwrap();
     match &*_state {
-        ProgramState::Error(err) => {
+        ScriptState::Error(err) => {
             eprintln!("{}", err.build_message(&src));
         }
         _ => {}

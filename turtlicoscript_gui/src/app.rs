@@ -80,7 +80,7 @@ impl eframe::App for RootApp {
 }
 
 #[derive(Debug)]
-pub enum ProgramState {
+pub enum ScriptState {
     Running,
     Finished(Value),
     Error(Spanned<turtlicoscript::error::Error>)
@@ -92,7 +92,7 @@ pub struct ScriptApp {
     pub pool: Option<web_sys::Worker>,
     pub thread: Option<JoinHandle<()>>,
     pub cancellable: Option<CancellationToken>,
-    pub program_state: Arc<Mutex<ProgramState>>,
+    pub program_state: Arc<Mutex<ScriptState>>,
 }
 
 impl ScriptApp{
@@ -103,7 +103,7 @@ impl ScriptApp{
             pool: None,
             thread: None,
             cancellable: None,
-            program_state: Arc::new(Mutex::new(ProgramState::Running)),
+            program_state: Arc::new(Mutex::new(ScriptState::Running)),
         }
     }
 
@@ -126,11 +126,11 @@ impl ScriptApp{
             match ctx.eval_root(&ast) {
                 Ok(result) => {
                     let mut _state = state.lock().unwrap();
-                    *_state = ProgramState::Finished(result);
+                    *_state = ScriptState::Finished(result);
                 },
                 Err(err) => {
                     let mut _state = state.lock().unwrap();
-                    *_state = ProgramState::Error(err);
+                    *_state = ScriptState::Error(err);
                 }
             }
         });
@@ -160,11 +160,11 @@ impl ScriptApp{
             match ctx.eval_root(&ast) {
                 Ok(result) => {
                     let mut _state = state.lock().unwrap();
-                    *_state = ProgramState::Finished(result);
+                    *_state = ScriptState::Finished(result);
                 },
                 Err(err) => {
                     let mut _state = state.lock().unwrap();
-                    *_state = ProgramState::Error(err);
+                    *_state = ScriptState::Error(err);
                 }
             }
         }).unwrap();
@@ -201,17 +201,10 @@ impl SubApp for ScriptApp {
                 cancellable.store(true, std::sync::atomic::Ordering::Relaxed);
             }
         }
-        let cancelled = if let Some(cancellable) = &self.cancellable {
-            cancellable.load(std::sync::atomic::Ordering::Relaxed)
-        } else {false};
-        let mut error = false;
 
         let _state = self.program_state.lock().unwrap();
-        let program_stopped = !matches!(&*_state, ProgramState::Running);
-        if program_stopped {
-            error = matches!(&*_state, ProgramState::Error(_));
-        }
+        let script_stopped = !matches!(&*_state, ScriptState::Running);
 
-        return !(program_stopped && (!win_open || cancelled || error));
+        return !(script_stopped);
     }
 }

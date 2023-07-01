@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use egui_extras::{RetainedImage, image::FitTo};
 use emath::Vec2;
 use turtlicoscript::{parser, ast::Spanned};
-use turtlicoscript_gui::app::{SubApp, ScriptApp, ProgramState};
+use turtlicoscript_gui::app::{SubApp, ScriptApp, ScriptState};
 
 const BTN_ICON_SIZE: u32 = 22;
 const MARGIN_SMALL: f32 = 4.0;
@@ -109,7 +109,7 @@ impl SubApp for EditorApp {
                 let app_continues = code_subapp.update(ctx, frame);
                 if !app_continues {
                     match &*code_subapp.program_state.lock().unwrap() {
-                        ProgramState::Error(err) => {
+                        ScriptState::Error(err) => {
                             match err.item {
                                 turtlicoscript::error::Error::Interrupted => {},
                                 _ => {
