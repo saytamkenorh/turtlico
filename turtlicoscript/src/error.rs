@@ -4,7 +4,7 @@ use chumsky::prelude::Simple;
 
 use crate::{tokens::Token, ast::Spanned};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Error {
     InvalidToken,
     UnexpectedToken(Token),
@@ -60,7 +60,7 @@ impl Spanned<Error> {
     }
 }
 
-#[derive(Debug, Hash)]
+#[derive(Debug, Hash, Clone)]
 pub enum RuntimeError {
     /// Invalid argument count (found, expected)
     InvalidArgCount(usize, usize),

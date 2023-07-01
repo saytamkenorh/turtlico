@@ -1,12 +1,13 @@
 use std::{sync::{Arc, Mutex}, thread::JoinHandle};
 
-use turtlicoscript::interpreter::CancellationToken;
+use turtlicoscript::{interpreter::CancellationToken, value::Value};
 use turtlicoscript::ast::{Spanned, Expression};
 use std::sync::{atomic::AtomicBool, mpsc::channel};
 
 use crate::world::World;
 
 pub trait SubApp {
+    // Return true to continue
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) -> bool;
 }
 
@@ -62,10 +63,27 @@ impl RootApp {
 
 impl eframe::App for RootApp {
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
-        for subapp in self.subapps.iter_mut() {
-            subapp.update(ctx, frame);
+        let mut stopped_apps = vec![];
+        for (i, subapp) in self.subapps.iter_mut().enumerate() {
+            if !subapp.update(ctx, frame) {
+                stopped_apps.push(i);
+            }
+        }
+        stopped_apps.reverse();
+        for i in stopped_apps {
+            self.subapps.remove(i);
+        }
+        if self.subapps.len() == 0 {
+            frame.close();
         }
     }
+}
+
+#[derive(Debug)]
+pub enum ProgramState {
+    Running,
+    Finished(Value),
+    Error(Spanned<turtlicoscript::error::Error>)
 }
 
 pub struct ScriptApp {
@@ -74,6 +92,7 @@ pub struct ScriptApp {
     pub pool: Option<web_sys::Worker>,
     pub thread: Option<JoinHandle<()>>,
     pub cancellable: Option<CancellationToken>,
+    pub program_state: Arc<Mutex<ProgramState>>,
 }
 
 impl ScriptApp{
@@ -83,13 +102,14 @@ impl ScriptApp{
             windowed,
             pool: None,
             thread: None,
-            cancellable: None
+            cancellable: None,
+            program_state: Arc::new(Mutex::new(ProgramState::Running)),
         }
     }
 
     #[cfg(not(target_arch = "wasm32"))]
     pub fn spawn(ast: Spanned<Expression>, windowed: bool)
-        -> Box<dyn SubApp>
+        -> ScriptApp
     {
         let (tx, rx) = channel();
         let world = crate::world::World::new_arc_mutex(tx);
@@ -97,27 +117,30 @@ impl ScriptApp{
         let cancellable = Arc::new(AtomicBool::new(false));
 
         let mut app = ScriptApp::new(world, windowed);
+        let state = app.program_state.clone();
         app.cancellable = Some(cancellable.clone());
 
         let handle = std::thread::spawn(move || {
             let mut ctx = turtlicoscript::interpreter::Context::new_parent(Some(cancellable));
             ctx.import_library(crate::init_library(world_clone, rx), false);
             match ctx.eval_root(&ast) {
-                Ok(_) => {
-
+                Ok(result) => {
+                    let mut _state = state.lock().unwrap();
+                    *_state = ProgramState::Finished(result);
                 },
-                Err(_) => {
-
+                Err(err) => {
+                    let mut _state = state.lock().unwrap();
+                    *_state = ProgramState::Error(err);
                 }
             }
         });
 
         app.thread = Some(handle);
-        Box::new(app)
+        app
     }
     #[cfg(target_arch = "wasm32")]
     pub fn spawn(ast: Spanned<Expression>, windowed: bool)
-        -> Box<dyn SubApp>
+        -> ScriptApp
     {
         use web_sys::console;
         let (tx, rx) = channel();
@@ -126,6 +149,7 @@ impl ScriptApp{
         let cancellable = Arc::new(AtomicBool::new(false));
 
         let mut app = crate::app::ScriptApp::new(world, windowed);
+        let state = app.program_state.clone();
         app.cancellable = Some(cancellable.clone());
 
         console::log_1(&"[worker] Starting sub program".into());
@@ -134,17 +158,19 @@ impl ScriptApp{
             let mut ctx = turtlicoscript::interpreter::Context::new_parent(Some(cancellable));
             ctx.import_library(crate::init_library(world_clone, rx), false);
             match ctx.eval_root(&ast) {
-                Ok(_) => {
-
+                Ok(result) => {
+                    let mut _state = state.lock().unwrap();
+                    *_state = ProgramState::Finished(result);
                 },
-                Err(_) => {
-
+                Err(err) => {
+                    let mut _state = state.lock().unwrap();
+                    *_state = ProgramState::Error(err);
                 }
             }
         }).unwrap();
 
         app.pool = Some(worker);
-        Box::new(app)
+        app
     }
 
     fn ui(&mut self, ui: &mut egui::Ui) {
@@ -178,12 +204,14 @@ impl SubApp for ScriptApp {
         let cancelled = if let Some(cancellable) = &self.cancellable {
             cancellable.load(std::sync::atomic::Ordering::Relaxed)
         } else {false};
-        let program_stopped;
-        {
-            let world = self.world.lock().unwrap();
-            program_stopped = world.update_tx_closed;
+        let mut error = false;
+
+        let _state = self.program_state.lock().unwrap();
+        let program_stopped = !matches!(&*_state, ProgramState::Running);
+        if program_stopped {
+            error = matches!(&*_state, ProgramState::Error(_));
         }
 
-        return !(program_stopped && (!win_open || cancelled));
+        return !(program_stopped && (!win_open || cancelled || error));
     }
 }

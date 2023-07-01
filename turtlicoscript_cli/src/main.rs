@@ -3,15 +3,25 @@ use turtlicoscript::{parser};
 use turtlicoscript::ast::{Spanned, Expression};
 
 #[cfg(feature = "gui")]
-fn run(ast: Spanned<Expression>) {
+fn run(ast: Spanned<Expression>, src: &String) {
+    use turtlicoscript_gui::app::ProgramState;
+
     let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, false);
+    let state = subapp.program_state.clone();
     turtlicoscript_gui::app::RootApp::run(vec![
-        subapp
+        Box::new(subapp)
     ]);
+    let _state = state.lock().unwrap();
+    match &*_state {
+        ProgramState::Error(err) => {
+            eprintln!("{}", err.build_message(&src));
+        }
+        _ => {}
+    }
 }
 
 #[cfg(not(feature = "gui"))]
-fn run(ast: Spanned<Expression>) {
+fn run(ast: Spanned<Expression>, src: &String) {
     use {interpreter::Context, value::Value};
     let mut ctx = Context::new_parent();
     match context.eval_root(&ast) {
@@ -45,7 +55,7 @@ fn run_file(file: String) {
 
     match parser::parse(&src) {
         Ok(ast) => {
-            run(ast);
+            run(ast, &src);
         },
         Err(errors) => {
             eprintln!("File parse error (s):\n{}", errors.into_iter().map(|err| err.build_message(&src)).collect::<Vec<String>>().join("\n"));
