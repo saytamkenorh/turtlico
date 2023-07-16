@@ -2,7 +2,10 @@ var cacheName = 'turtlico-pwa';
 var filesToCache = [
   './',
   './index.html',
+  './index.js',
+  './worker.js',
   './turtlico_editor.js',
+  './favicon.ico',
   './turtlico_editor_bg.wasm',
 ];
 

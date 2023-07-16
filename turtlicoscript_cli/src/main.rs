@@ -55,6 +55,8 @@ fn run_file(file: String) {
 
     match parser::parse(&src) {
         Ok(ast) => {
+            println!("AST:");
+            println!("{:#?}", ast);
             run(ast, &src);
         },
         Err(errors) => {

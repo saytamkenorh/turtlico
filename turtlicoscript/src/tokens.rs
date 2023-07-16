@@ -1,6 +1,7 @@
 use logos::{Lexer, Logos, Source};
 
 #[derive(Logos, Debug, PartialEq, Clone, Hash, Eq)]
+#[logos(skip r"[ \t\n\f]+")]
 pub enum Token {
     #[regex(r"#.*")]
     Comment,
@@ -44,8 +45,16 @@ pub enum Token {
     LeftCurly,
     #[token("}")]
     RightCurly,
+    #[token("[")]
+    LeftSquare,
+    #[token("]")]
+    RightSquare,
     #[token(",")]
     Comma,
+    #[token(":")]
+    Colon,
+    #[token(".")]
+    Dot,
 
     // Ops
     #[token("+")]
@@ -70,11 +79,6 @@ pub enum Token {
     Gte,
     #[token("=")]
     Assignment,
-
-    #[regex(r"[ \t\n\f]+", logos::skip)]
-
-    #[error]
-    Error,
 }
 
 fn get_indentifier(lexer: &mut Lexer<Token>) -> String {

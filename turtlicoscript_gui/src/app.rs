@@ -93,7 +93,7 @@ impl eframe::App for RootApp {
 #[derive(Debug)]
 pub enum ScriptState {
     Running,
-    Finished(Value),
+    Finished,
     Error(Spanned<turtlicoscript::error::Error>)
 }
 
@@ -135,9 +135,9 @@ impl ScriptApp{
             let mut ctx = turtlicoscript::interpreter::Context::new_parent(Some(cancellable));
             ctx.import_library(crate::init_library(world_clone, rx), false);
             match ctx.eval_root(&ast) {
-                Ok(result) => {
+                Ok(_) => {
                     let mut _state = state.lock().unwrap();
-                    *_state = ScriptState::Finished(result);
+                    *_state = ScriptState::Finished;
                 },
                 Err(err) => {
                     let mut _state = state.lock().unwrap();
@@ -171,7 +171,7 @@ impl ScriptApp{
             match ctx.eval_root(&ast) {
                 Ok(result) => {
                     let mut _state = state.lock().unwrap();
-                    *_state = ScriptState::Finished(result);
+                    *_state = ScriptState::Finished;
                 },
                 Err(err) => {
                     let mut _state = state.lock().unwrap();
