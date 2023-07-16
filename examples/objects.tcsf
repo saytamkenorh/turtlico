@@ -1,0 +1,8 @@
+$dict = { "hello": 1, "go": "went" }
+
+println $dict
+
+$dict.$good_bye = "Bye!"
+
+println $dict
+println ("good_bye" + "->" + $dict.$good_bye)

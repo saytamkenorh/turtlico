@@ -71,6 +71,7 @@ pub enum RuntimeError {
     TypeParseError(String),
     /// Value cannot be parsed to target type (value type, target)
     TypeParseUnsupported(String, String),
+    TypeHashUnsupported,
     NativeLibraryError(String),
 }
 

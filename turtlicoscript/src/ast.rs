@@ -38,6 +38,9 @@ pub enum Expression {
         expr: Box<Spanned<Expression>>,
         value: Box<Spanned<Expression>>,
     },
+    ObjDef {
+        object: Vec<(Spanned<Expression>, Spanned<Expression>)>
+    },
     Return {
         value: Box<Spanned<Expression>>,
     },
@@ -91,7 +94,10 @@ pub enum Expression {
     Int(i32),
     Float(f64),
     String(String),
-    Variable(String),
+    Variable {
+        parent: Option<Box<Spanned<Expression>>>,
+        name: String
+    },
     None,
 
     Block(Vec<Spanned<Expression>>),

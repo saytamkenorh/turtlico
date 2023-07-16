@@ -222,13 +222,31 @@ impl<'a> Context<'a> {
                 self.vars.insert(name.to_owned(), Value::Callable(Callable::Function(Box::new(func))));
                 Ok(Value::None)
             }
+           
             // Keywords
             Expression::Assignment { expr, value } => {
                 match &expr.item {
-                    Expression::Variable(variable) => {
+                    Expression::Variable{parent, name} => {
                         let value = self.eval(&value)?;
-                        let oldval = self.vars.insert(variable.to_owned(), value);
-                        Ok(oldval.unwrap_or(Value::None))
+                        match parent {
+                            Some(parent) => {
+                                let parent = self.eval(parent)?;
+                                match parent {
+                                    Value::Object(object) => {
+                                        let oldval = object.borrow_mut().insert(
+                                            crate::value::HashableValue::String(name.to_owned()), value);
+                                        Ok(oldval.unwrap_or(Value::None))
+                                    },
+                                    _ => {
+                                        Err(Spanned::new(Error::TypeError("This is not an object".to_owned()), expr.span.to_owned()))
+                                    }
+                                }
+                            },
+                            None => {
+                                let oldval = self.vars.insert(name.to_owned(), value);
+                                Ok(oldval.unwrap_or(Value::None))
+                            }
+                        }
                     },
                     _ => {
                         Err(Spanned::new(Error::ThisIsNotAssignable, expr.span.to_owned()))
@@ -284,7 +302,29 @@ impl<'a> Context<'a> {
             Expression::Int(val) => Ok(Value::Int(*val)),
             Expression::Float(val) => Ok(Value::Float(*val)),
             Expression::String(val) => Ok(Value::String(val.to_owned())),
-            Expression::Variable(name) => Ok(self.get_var(&name).map_err(|err| Spanned::new(err, expression.span.to_owned()))?.clone()),
+            Expression::Variable {parent, name} => {
+                match parent {
+                    Some(parent) => {
+                        let object = self.eval(parent)?;
+                        Ok(self.get_var(&name, Some(object)).map_err(|err: Error| Spanned::new(err, expression.span.to_owned()))?)
+
+                    },
+                    None => {
+                        Ok(self.get_var(&name, None).map_err(|err: Error| Spanned::new(err, expression.span.to_owned()))?)
+                    }
+                }
+            },
+            Expression::ObjDef {object} => {
+                let mut map = HashMap::new();
+                for item in object {
+                    map.insert(self.eval(&item.0)?.try_into().map_err(|err: RuntimeError| {
+                        Spanned { item: Error::RuntimeError(err), span: item.0.span.clone() }
+                    })?, self.eval(&item.1)?);
+                }
+                Ok(Value::Object(std::rc::Rc::new(
+                    std::cell::RefCell::new(map)
+                )))
+            },
             _ => {
                 Err(Spanned::new(Error::SyntaxError(
                     Simple::custom(expression.span.clone(),
@@ -294,13 +334,30 @@ impl<'a> Context<'a> {
         }
     }
 
-    fn get_var(&self, name: &str) -> Result<&Value, Error> {
-        match self.vars.get(name) {
-            Some(value) => Ok(value),
+    fn get_var(&self, name: &str, parent_obj: Option<Value>) -> Result<Value, Error> {
+        match parent_obj {
+            Some (parent_obj) => {
+                match parent_obj {
+                    Value::Object(object) => {
+                        match object.borrow().get(&crate::value::HashableValue::String(name.to_owned())) {
+                            Some (value) => Ok(value.clone()),
+                            None => Err(Error::RuntimeError(RuntimeError::InvalidIdentifier(name.to_owned())))
+                        }
+                    },
+                    _ => {
+                        Err(Error::TypeError("This is not an object".to_owned()))
+                    }
+                }
+            },
             None => {
-                match self.parent {
-                    Some(parent) => parent.get_var(name),
-                    None => Err(Error::RuntimeError(RuntimeError::InvalidIdentifier(name.to_owned()))),
+                match self.vars.get(name) {
+                    Some(value) => Ok(value.clone()),
+                    None => {
+                        match self.parent {
+                            Some(parent) => parent.get_var(name, None),
+                            None => Err(Error::RuntimeError(RuntimeError::InvalidIdentifier(name.to_owned()))),
+                        }
+                    }
                 }
             }
         }

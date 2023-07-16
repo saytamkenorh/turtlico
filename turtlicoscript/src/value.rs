@@ -1,6 +1,6 @@
 extern crate proc_macro;
 
-use std::{collections::HashMap, fmt::Display, any::Any};
+use std::{collections::HashMap, fmt::Display, any::Any, sync::Arc};
 
 use crate::{error::RuntimeError, ast::{Expression, Spanned}};
 
@@ -26,6 +26,12 @@ pub enum Callable {
     NativeFunc(NativeFunc)
 }
 
+#[derive(Hash, Eq, PartialEq, Debug, Clone)]
+pub enum HashableValue {
+    String(String),
+    Int(i32),
+}
+
 #[derive(Debug, Clone)]
 pub enum Value {
     Int(i32),
@@ -33,6 +39,7 @@ pub enum Value {
     String(String),
     Bool(bool),
     Callable(Callable),
+    Object(std::rc::Rc<std::cell::RefCell<HashMap<HashableValue, Value>>>),
     EvaluatedReturn(Box<Value>),
     Break,
     None,
@@ -77,6 +84,23 @@ pub fn unwrap_context<T: 'static>(ctx: &mut NativeFuncCtxArg) -> &mut T {
     (&mut *ctx).as_any_mut().downcast_mut::<T>().expect("Invalid context type")
 }
 
+impl TryFrom<Value> for HashableValue {
+    type Error = crate::error::RuntimeError;
+    fn try_from(val: Value) -> Result<Self, Self::Error> {
+        match val {
+            Value::String(str) => {
+                Ok(Self::String(str))
+            },
+            Value::Int(int) => {
+                Ok(Self::Int(int))
+            },
+            _ => {
+                Err(RuntimeError::TypeHashUnsupported)
+            }
+        }
+    }
+}
+
 impl From<i32> for Value {
     fn from(val: i32) -> Self {
         Value::Int(val)
@@ -118,6 +142,7 @@ impl Display for Value {
             Value::String(val) => write!(f, "{}", val),
             Value::Bool(val) => write!(f, "{}", val),
             Value::Callable(val) => write!(f, "{}", val),
+            Value::Object(val) => write!(f, "{:?}", val),
             Value::EvaluatedReturn(val) => write!(f, "<Return value: {}>", *val),
             Value::Break => write!(f, "<Break>"),
             Value::None => write!(f, "None")
@@ -133,6 +158,7 @@ impl Value {
             Value::String(_) => "string",
             Value::Bool(_) => "bool",
             Value::Callable(_) => "callable",
+            Value::Object(_) => "object",
             Value::EvaluatedReturn(_) => "return",
             Value::Break => "break",
             Value::None => "none"
