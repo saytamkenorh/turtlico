@@ -1,6 +1,6 @@
 extern crate proc_macro;
 
-use std::{collections::HashMap, fmt::Display, any::Any, sync::Arc};
+use std::{collections::HashMap, fmt::Display, any::Any};
 
 use crate::{error::RuntimeError, ast::{Expression, Spanned}};
 

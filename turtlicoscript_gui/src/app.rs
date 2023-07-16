@@ -1,6 +1,6 @@
 use std::{sync::{Arc, Mutex}, thread::JoinHandle};
 
-use turtlicoscript::{interpreter::CancellationToken, value::Value};
+use turtlicoscript::{interpreter::CancellationToken};
 use turtlicoscript::ast::{Spanned, Expression};
 use std::sync::{atomic::AtomicBool, mpsc::channel};
 
