@@ -1,10 +1,16 @@
 use logos::{Lexer, Logos, Source};
 
 #[derive(Logos, Debug, PartialEq, Clone, Hash, Eq)]
-#[logos(skip r"[ \t\n\f]+")]
+#[logos(skip r"[ \t\f]+")]
 pub enum Token {
     #[regex(r"#.*")]
     Comment,
+
+    // Command Ends
+    #[regex(r"[\n]+")]
+    Newline,
+    #[regex(";")]
+    Space,
 
     // Keywords
     #[token("if")]

@@ -1,4 +1,8 @@
+$turtle2 = new_turtle; $turtle2.speed 1
+
 loop {
+    $turtle2.speed 2
+    $turtle2.set_target_xy(15, 5)
     go
     set_rot(-90)
     go
@@ -7,11 +11,15 @@ loop {
     set_rot(-270)
     go
     set_rot 0
+    $turtle2.speed 1.5
+    $turtle2.set_target_xy(0, 0)
     loop 4 {
         go 2
         left
     }
-    left
+    left()
+    $turtle2.speed 0.6
+    $turtle2.set_target_xy(0, 9)
     loop 4 {
         go 3
         right

@@ -2,9 +2,10 @@ use std::any::Any;
 use std::io::Write;
 
 use crate::error::RuntimeError;
-use crate::value::{Value, NativeFuncArgs, NativeFuncReturn, Library, LibraryContext, NativeFuncCtxArg};
+use crate::value::{Value, NativeFuncArgs, NativeFuncReturn, Library, LibraryContext, NativeFuncCtxArg, FuncThisObject};
 use crate::{funcmap, check_argc};
-use checkargs::{check_args};
+use checkargs::check_args;
+use rand::Rng;
 
 pub mod io;
 
@@ -24,7 +25,8 @@ pub fn init_library() -> Library {
         readln,
         int,
         float,
-        string
+        string,
+        random
     };
     let ctx = Context {};
     Library {
@@ -34,19 +36,19 @@ pub fn init_library() -> Library {
     }
 }
 
-pub fn println(_ctx: &mut NativeFuncCtxArg, args: NativeFuncArgs) -> NativeFuncReturn{
+pub fn println(_ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn{
     println!("{}", args.into_iter().map(|val| val.to_string()).collect::<Vec<String>>().join(" "));
     Ok(Value::None)
 }
 
-pub fn print(_ctx: &mut NativeFuncCtxArg, args: NativeFuncArgs) -> NativeFuncReturn{
+pub fn print(_ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn{
     print!("{}", args.into_iter().map(|val| val.to_string()).collect::<Vec<String>>().join(" "));
     Ok(Value::None)
 }
 
 ///Reads line from input
 #[check_args(String="")]
-pub fn readln(_ctx: &mut NativeFuncCtxArg, mut args: NativeFuncArgs) -> NativeFuncReturn {
+pub fn readln(_ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, mut args: NativeFuncArgs) -> NativeFuncReturn {
     if !arg0.is_empty() {
         print!("{}", arg0);
     }
@@ -60,7 +62,7 @@ pub fn readln(_ctx: &mut NativeFuncCtxArg, mut args: NativeFuncArgs) -> NativeFu
     Ok(Value::String(buffer))
 }
 
-pub fn int(_ctx: &mut NativeFuncCtxArg, mut args: NativeFuncArgs) -> NativeFuncReturn {
+pub fn int(_ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, mut args: NativeFuncArgs) -> NativeFuncReturn {
     check_argc!(args, 1);
     let value = args.remove(0);
     match value {
@@ -74,7 +76,7 @@ pub fn int(_ctx: &mut NativeFuncCtxArg, mut args: NativeFuncArgs) -> NativeFuncR
     }
 }
 
-pub fn float(_ctx: &mut NativeFuncCtxArg, mut args: NativeFuncArgs) -> NativeFuncReturn {
+pub fn float(_ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, mut args: NativeFuncArgs) -> NativeFuncReturn {
     check_argc!(args, 1);
     let value = args.remove(0);
     match value {
@@ -88,8 +90,24 @@ pub fn float(_ctx: &mut NativeFuncCtxArg, mut args: NativeFuncArgs) -> NativeFun
     }
 }
 
-pub fn string(_ctx: &mut NativeFuncCtxArg, mut args: NativeFuncArgs) -> NativeFuncReturn {
+pub fn string(_ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, mut args: NativeFuncArgs) -> NativeFuncReturn {
     check_argc!(args, 1);
     let value = args.remove(0);
     Ok(Value::String(value.to_string()))
+}
+
+pub fn random(_ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, mut args: NativeFuncArgs) -> NativeFuncReturn {
+    match args.len() {
+        0 => {
+            Ok(Value::Float(rand::random::<f64>()))
+        },
+        2 => {
+            let min = args.remove(0).try_into()?;
+            let max = args.remove(0).try_into()?;
+            Ok(Value::Int(rand::thread_rng().gen_range(min..=max)))
+        },
+        _ => {
+            Err(crate::error::RuntimeError::InvalidArgCount(args.len(), 2))
+        }
+    }
 }

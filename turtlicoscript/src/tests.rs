@@ -21,6 +21,17 @@ mod test_examples {
     }
 
     #[test]
+    fn objects() {
+        test_example_file("objects.tcsf", "1_text_value_text_inserted");
+    }
+
+    #[test]
+    fn padding() {
+        test_example_file("padding.tcsf", "1_text_value_text_inserted");
+    }
+
+
+    #[test]
     fn loop_while() {
         test_example_file("while.tcsf", "5_4_3_2_1_0_");
     }

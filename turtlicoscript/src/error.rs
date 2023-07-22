@@ -72,7 +72,9 @@ pub enum RuntimeError {
     /// Value cannot be parsed to target type (value type, target)
     TypeParseUnsupported(String, String),
     TypeHashUnsupported,
+    TypeError,
     NativeLibraryError(String),
+    MethodCalledAsFunction,
 }
 
 impl Display for RuntimeError {

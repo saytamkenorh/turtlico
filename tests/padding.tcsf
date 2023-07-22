@@ -1,0 +1,18 @@
+$a = random
+$b = 5; $c = 3
+$tests = 0
+
+if $b + $c == 8 {
+    $tests = $tests + 1
+}
+if $b + $c == 8
+{
+    $tests = $tests + 10
+}
+$tests = (
+    $tests
+    +
+    100
+)
+
+return string $tests

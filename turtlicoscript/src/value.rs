@@ -1,17 +1,20 @@
 extern crate proc_macro;
 
-use std::{collections::HashMap, fmt::Display, any::Any};
+use std::{collections::HashMap, fmt::Display, any::Any, rc::Weak};
 
 use crate::{error::RuntimeError, ast::{Expression, Spanned}};
 
 pub type NativeFuncReturn = Result<Value, RuntimeError>;
+pub type FuncThisObject = Option<Weak<std::cell::RefCell<ValueObject>>>;
 pub type NativeFuncArgs = Vec<Value>;
 pub type NativeFuncCtxArg = Box<dyn LibraryContext>;
+pub type ValueObject = HashMap<HashableValue, Value>;
 
 #[derive(Clone)]
 pub struct NativeFunc {
+    pub this: FuncThisObject,
     pub library: String,
-    pub func: fn(&mut NativeFuncCtxArg, NativeFuncArgs) -> NativeFuncReturn
+    pub func: fn(&mut NativeFuncCtxArg, FuncThisObject, NativeFuncArgs) -> NativeFuncReturn
 }
 
 #[derive(Clone)]
@@ -39,7 +42,7 @@ pub enum Value {
     String(String),
     Bool(bool),
     Callable(Callable),
-    Object(std::rc::Rc<std::cell::RefCell<HashMap<HashableValue, Value>>>),
+    Object(std::rc::Rc<std::cell::RefCell<ValueObject>>),
     EvaluatedReturn(Box<Value>),
     Break,
     None,
@@ -62,7 +65,25 @@ macro_rules! funcmap {
             let mut map = std::collections::HashMap::new();
             $(
                 map.insert(stringify!($x).replace("::", ".").to_owned(), $crate::value::Value::Callable($crate::value::Callable::NativeFunc(
-                    $crate::value::NativeFunc{func: $x, library: $name.to_owned()})));
+                    $crate::value::NativeFunc{this: None, func: $x, library: $name.to_owned()})));
+            )*
+            map
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! funcmap_obj {
+    ( $name:expr, $obj:expr, $( $x:expr ),* ) => {
+        {
+            let mut map = std::collections::HashMap::new();
+            $(
+                map.insert(
+                    $crate::value::HashableValue::String(stringify!($x).replace("::", ".").to_owned()),
+                    $crate::value::Value::Callable($crate::value::Callable::NativeFunc(
+                        $crate::value::NativeFunc{this: $obj, func: $x, library: $name.to_owned()})
+                    )
+                );
             )*
             map
         }
@@ -84,6 +105,21 @@ pub fn unwrap_context<T: 'static>(ctx: &mut NativeFuncCtxArg) -> &mut T {
     (&mut *ctx).as_any_mut().downcast_mut::<T>().expect("Invalid context type")
 }
 
+impl Display for Callable {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Callable::Function(_) => write!(f, "<Function>"),
+            Callable::NativeFunc(_) => write!(f, "<Native function>")
+        }
+    }
+}
+
+impl std::fmt::Debug for Callable {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Display::fmt(&self, f)
+    }
+}
+
 impl TryFrom<Value> for HashableValue {
     type Error = crate::error::RuntimeError;
     fn try_from(val: Value) -> Result<Self, Self::Error> {
@@ -98,6 +134,11 @@ impl TryFrom<Value> for HashableValue {
                 Err(RuntimeError::TypeHashUnsupported)
             }
         }
+    }
+}
+impl From<&str> for HashableValue {
+    fn from(value: &str) -> Self {
+        Self::String(value.to_owned())
     }
 }
 
@@ -119,19 +160,40 @@ impl From<f64> for Value {
     }
 }
 
-impl Display for Callable {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Callable::Function(_) => write!(f, "<Function>"),
-            Callable::NativeFunc(_) => write!(f, "<Native function>")
-        }
+impl From<HashMap<HashableValue, Value>> for Value {
+    fn from(value: HashMap<HashableValue, Value>) -> Self {
+        Value::Object(std::rc::Rc::new(std::cell::RefCell::new(value)))
     }
 }
 
-impl std::fmt::Debug for Callable {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        Display::fmt(&self, f)
+impl TryInto<f64> for Value {
+    fn try_into(self) -> Result<f64, crate::error::RuntimeError> {
+        match self {
+            Value::Float(val) => {
+                Ok(val)
+            },
+            _ => {
+                Err(RuntimeError::TypeError)
+            }
+        }
     }
+
+    type Error = crate::error::RuntimeError;
+}
+
+impl TryInto<i32> for Value {
+    fn try_into(self) -> Result<i32, crate::error::RuntimeError> {
+        match self {
+            Value::Int(val) => {
+                Ok(val)
+            },
+            _ => {
+                Err(RuntimeError::TypeError)
+            }
+        }
+    }
+
+    type Error = crate::error::RuntimeError;
 }
 
 impl Display for Value {

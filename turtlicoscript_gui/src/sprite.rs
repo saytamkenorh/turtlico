@@ -1,4 +1,4 @@
-use std::{sync::{Mutex, Arc, mpsc::Receiver}};
+use std::sync::{Mutex, Arc, mpsc::Receiver};
 
 use crate::{world::{*}, WorldSyncState};
 
@@ -47,10 +47,12 @@ impl Sprite {
         let step_move = self.speed * NORMAL_SPEED * delta;
 
         let step_x = step_move * f32::cos(angle);
-        let new_x = if step_x < 0.0 { f32::max(self.rendered_x + step_x, self.x) } else {f32::min(self.rendered_x + step_x, self.x)};
+        let new_x = if (self.x - self.rendered_x) < 0.0 { f32::max(self.rendered_x + step_x, self.x) } else {f32::min(self.rendered_x + step_x, self.x)};
 
         let step_y = step_move * f32::sin(angle);
-        let new_y = if step_y < 0.0 { f32::max(self.rendered_y + step_y, self.y) } else {f32::min(self.rendered_y + step_y, self.y)};
+        let new_y = if (self.y - self.rendered_y) < 0.0 { f32::max(self.rendered_y + step_y, self.y) } else {f32::min(self.rendered_y + step_y, self.y)};
+
+        // println!("{} {} -> {} {}, angle {} step {} new {}", self.rendered_x, self.rendered_y, self.x, self.y, angle, step_y, new_y);
 
         self.rendered_x = new_x;
         self.rendered_y = new_y;

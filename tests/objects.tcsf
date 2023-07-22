@@ -1,0 +1,5 @@
+$obj = { "number": 1, "text": "text_value" }
+
+$obj.$inserted = "text_inserted"
+
+return string $obj.$number + "_" + $obj.$text + "_" + $obj.$inserted

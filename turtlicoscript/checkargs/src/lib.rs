@@ -136,6 +136,19 @@ pub fn check_args(
                 }
                 let #varname = #varname.unwrap();
             });
+        } else if arg_type == "Object" {
+            arg_checker.extend(quote! {
+                let mut #varname = None;
+                match args[#pos].clone() {
+                    Value::Object(val) => {
+                        #varname = Some(val);
+                    },
+                    _ => {
+                        return Err(RuntimeError::InvalidArgType(#pos));
+                    }
+                }
+                let #varname = #varname.unwrap();
+            });
         } else if arg_type == "Other" {
         } else {
             panic!("Checking for type {} is not suppored!", arg_type)

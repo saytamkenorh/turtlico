@@ -36,7 +36,7 @@ pub struct World {
 impl World {
     pub fn new(update_tx: mpsc::Sender<WorldSyncState>) -> Self {
         let map = HashMap::new();
-        let mut s = Self {
+        let s = Self {
             sprites: map,
             blocks: default_blocks(),
             last_anim_time: 0.0,
@@ -46,7 +46,6 @@ impl World {
             primary_ptr_down: false,
             secondary_ptr_down: false,
         };
-        s.add_sprite();
         s
     }
     pub fn new_arc_mutex(update_tx: mpsc::Sender<WorldSyncState>) -> Arc<Mutex<Self>> {

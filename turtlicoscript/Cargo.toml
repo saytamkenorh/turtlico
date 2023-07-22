@@ -10,4 +10,5 @@ logos = "0.13"
 chumsky = "0.9"
 async-recursion = "1"
 futures = "0.3"
+rand = "0.8"
 checkargs = { version = "0.1.0", path = "./checkargs" }

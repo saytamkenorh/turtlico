@@ -53,9 +53,12 @@ pub fn get_tokens(source: &str) -> Vec<Result<Token, ()>> {
 
 fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Token>> {
     let expression = recursive(|expr| {
+        let padding = just(Token::Newline).or(just(Token::Space)).repeated();
         let block = expr.clone()
                 .repeated()
-                .delimited_by(just(Token::LeftCurly), just(Token::RightCurly))
+                .delimited_by(
+                    padding.clone().ignore_then(just(Token::LeftCurly)).then_ignore(padding.clone()),
+                    just(Token::RightCurly))
                 .map(Expression::Block)
                 .map_with_span(Spanned::new);
         let literal = filter_map(
@@ -118,7 +121,7 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
             .then(
                 expr.clone()
                     .separated_by(just(Token::Comma))
-                    .allow_leading()
+                    .allow_leading() //TODO: Remove
                     .delimited_by(just(Token::LeftParent), just(Token::RightParent))
             )
             .map(|(ident, args)| Expression::Call { expr: Box::new(ident), args: args })
@@ -160,11 +163,11 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
         // Loops
         let loop_finite = just(Token::Loop)
             .then(expr.clone())
-            .then(expr.clone())
+            .then(block.clone())
             .map(|((_token, iters), body)| Expression::LoopFinite {iters: Box::new(iters), body: Box::new(body)})
             .map_with_span(Spanned::new);
         let loop_infinite = just(Token::Loop)
-            .then(expr.clone())
+            .then(block.clone())
             .map(|(_token, body)| Expression::LoopInfinite {body: Box::new(body)})
             .map_with_span(Spanned::new);
         let loop_for =
@@ -217,6 +220,10 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
             .or(var)
             .or(func)
             .or(objdef);
+        let atom =
+            padding.clone()
+            .ignore_then(atom)
+            .then_ignore(padding.clone());
 
         // Operators
         let unary = just(Token::Minus)
@@ -299,6 +306,7 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
                 let end = rhs.span.end;
                 Spanned::new((op.item)(Box::new(lhs), Box::new(rhs)), Range {start: start, end: end})
             });
+
 
         eq
         .or(

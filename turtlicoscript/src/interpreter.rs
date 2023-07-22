@@ -90,7 +90,7 @@ impl<'a> Context<'a> {
                                     func_args.push(self.eval(&arg)?);
                                 }
                                 let ctx = self.libctx.get_mut(&func.library).unwrap();
-                                let result = (func.func)(ctx, func_args).map_err(
+                                let result = (func.func)(ctx, func.this, func_args).map_err(
                                     |err| Spanned::new(Error::RuntimeError(err), expression.span.to_owned()));
                                 match result {
                                     Ok(Value::EvaluatedReturn(value)) => {
@@ -222,7 +222,7 @@ impl<'a> Context<'a> {
                 self.vars.insert(name.to_owned(), Value::Callable(Callable::Function(Box::new(func))));
                 Ok(Value::None)
             }
-           
+
             // Keywords
             Expression::Assignment { expr, value } => {
                 match &expr.item {
@@ -233,7 +233,8 @@ impl<'a> Context<'a> {
                                 let parent = self.eval(parent)?;
                                 match parent {
                                     Value::Object(object) => {
-                                        let oldval = object.borrow_mut().insert(
+                                        let mut hashmap = (*object).borrow_mut();
+                                        let oldval = hashmap.insert(
                                             crate::value::HashableValue::String(name.to_owned()), value);
                                         Ok(oldval.unwrap_or(Value::None))
                                     },
