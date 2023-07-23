@@ -104,10 +104,10 @@ impl World {
             //let world_rect = world_rect.expand(visuals.expansion);
             let wpainter = ui.painter().with_clip_rect(world_rect);
             wpainter
-                .rect(world_rect, 0.0, egui::Color32::from_rgb(0, 0, 0), visuals.bg_stroke);
+                .rect(world_rect, 0.0, egui::Color32::from_rgb(255, 255, 255), visuals.bg_stroke);
 
             for sprite in self.sprites.values() {
-                let block = self.blocks.get(&sprite.block).unwrap_or(default_block);
+                let block = self.blocks.get(&sprite.skin).unwrap_or(default_block);
                 let sprite_rect = egui::Rect::from_min_size(
                     egui::Pos2 { x: sprite.rendered_x * cam_scale, y: sprite.rendered_y * cam_scale },
                     block.size_vec2() * cam_scale).translate(egui::vec2(world_rect.left(), world_rect.top()));
@@ -160,6 +160,12 @@ fn default_blocks() -> HashMap<String, RetainedImage> {
     let mut map = HashMap::new();
     map.insert("turtle".to_owned(),
         RetainedImage::from_image_bytes("turtle", include_bytes!("../blocks/turtle.png")).unwrap()
+        .with_options(egui::TextureOptions::NEAREST));
+    map.insert("bricks".to_owned(),
+        RetainedImage::from_image_bytes("bricks", include_bytes!("../blocks/bricks.png")).unwrap()
+        .with_options(egui::TextureOptions::NEAREST));
+    map.insert("wood".to_owned(),
+        RetainedImage::from_image_bytes("wood", include_bytes!("../blocks/wood.png")).unwrap()
         .with_options(egui::TextureOptions::NEAREST));
     map
 }

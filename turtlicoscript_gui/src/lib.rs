@@ -6,7 +6,7 @@ use std::sync::mpsc::Receiver;
 use std::sync::{Arc, Mutex};
 
 use checkargs::check_args;
-use turtlicoscript::value::{Value, NativeFuncArgs, NativeFuncReturn, Library, LibraryContext, NativeFuncCtxArg, unwrap_context, HashableValue, ValueObject, FuncThisObject};
+use turtlicoscript::value::{Value, NativeFuncArgs, NativeFuncReturn, Library, LibraryContext, NativeFuncCtxArg, unwrap_context, HashableValue, FuncThisObject};
 use turtlicoscript::{funcmap, funcmap_obj};
 use turtlicoscript::error::RuntimeError;
 use sprite::Sprite;
@@ -63,6 +63,10 @@ impl Context {
 
     pub fn sprite_speed(&mut self, id: SpriteID, speed: f32) {
         Sprite::set_speed(&self.world, &id, speed);
+    }
+
+    pub fn sprite_skin(&mut self, id: SpriteID, skin: &String) {
+        Sprite::set_skin(&self.world, &id, skin);
     }
 
     pub fn wait(&mut self, time: f64) {
@@ -136,7 +140,8 @@ pub fn new_turtle(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, _args: Nati
             set_rot,
             left,
             right,
-            speed
+            speed,
+            skin
         });
     }
 
@@ -243,6 +248,13 @@ pub fn speed(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, mut args: NativeF
     Ok(Value::None)
 }
 
+#[check_args(String)]
+pub fn skin(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
+    let sprite_id = get_sprite_id(this)?;
+    let skin = arg0 as &String;
+    unwrap_context::<Context>(ctx).sprite_skin(sprite_id, skin);
+    Ok(Value::None)
+}
 
 #[check_args(Float=0)]
 pub fn wait(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, mut args: NativeFuncArgs) -> NativeFuncReturn {

@@ -3,7 +3,7 @@ use std::sync::{Mutex, Arc, mpsc::Receiver};
 use crate::{world::{*}, WorldSyncState};
 
 pub struct Sprite {
-    pub block: String,
+    pub skin: String,
     pub speed: f32, // 1.0 - normal, lower = faster, higher = slower
     pub rendered_rot: f32, // rendered rotation
     pub rot: f32, // clockwise rotation, 0 - right
@@ -19,7 +19,7 @@ impl Sprite {
         let y = BLOCK_SIZE_PX * (SCREEN_HEIGHT as f32 - 1.0);
         let rot = 0.0;
         Self {
-            block: "turtle".to_owned(),
+            skin: "turtle".to_owned(),
             speed: 1.0,
             rendered_rot: rot,
             rot: rot,
@@ -149,5 +149,10 @@ impl Sprite {
     pub fn set_speed(world: &Arc<Mutex<World>>, id: &SpriteID, speed: f32) {
         let mut _world = world.lock().unwrap();
         _world.sprites.get_mut(id).unwrap().speed = speed;
+    }
+
+    pub fn set_skin(world: &Arc<Mutex<World>>, id: &SpriteID, skin: &String) {
+        let mut _world = world.lock().unwrap();
+        _world.sprites.get_mut(id).unwrap().skin = skin.to_owned();
     }
 }
