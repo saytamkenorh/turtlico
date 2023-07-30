@@ -3,10 +3,10 @@ use turtlicoscript::{parser};
 use turtlicoscript::ast::{Spanned, Expression};
 
 #[cfg(feature = "gui")]
-fn run(ast: Spanned<Expression>, src: &String) {
+fn run(ast: Spanned<Expression>, src: &String, script_dir: Option<String>) {
     use turtlicoscript_gui::app::ScriptState;
 
-    let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, false);
+    let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, script_dir, false);
     let state = subapp.program_state.clone();
     turtlicoscript_gui::app::RootApp::run(vec![
         Box::new(subapp)
@@ -45,8 +45,9 @@ fn main() {
 }
 
 fn run_file(file: String) {
-    let src = fs::read_to_string(file)
+    let src = fs::read_to_string(file.to_owned())
         .expect("Failed to read file");
+    let script_dir = std::path::Path::new(&file.to_owned()).parent().map(|p| p.to_str().unwrap().to_owned());
 
     println!("Tokens:");
     for token in parser::get_tokens(&src) {
@@ -57,7 +58,7 @@ fn run_file(file: String) {
         Ok(ast) => {
             println!("AST:");
             println!("{:#?}", ast);
-            run(ast, &src);
+            run(ast, &src, script_dir);
         },
         Err(errors) => {
             eprintln!("File parse error (s):\n{}", errors.into_iter().map(|err| err.build_message(&src)).collect::<Vec<String>>().join("\n"));

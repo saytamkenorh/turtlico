@@ -1,5 +1,8 @@
 $turtle2 = new_turtle; $turtle2.speed 1
-$turtle2.skin "bricks"
+$turtle2.skin @"bricks"
+
+$turtle3 = new_turtle
+$turtle3.skin @"./customskin.png"
 
 loop {
     $turtle2.speed 2

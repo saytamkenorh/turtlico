@@ -119,11 +119,11 @@ impl ScriptApp{
     }
 
     #[cfg(not(target_arch = "wasm32"))]
-    pub fn spawn(ast: Spanned<Expression>, windowed: bool)
+    pub fn spawn(ast: Spanned<Expression>, script_dir: Option<String>, windowed: bool)
         -> ScriptApp
     {
         let (tx, rx) = channel();
-        let world = crate::world::World::new_arc_mutex(tx);
+        let world = crate::world::World::new_arc_mutex(tx, script_dir);
         let world_clone = world.clone();
         let cancellable = Arc::new(AtomicBool::new(false));
 
@@ -150,12 +150,12 @@ impl ScriptApp{
         app
     }
     #[cfg(target_arch = "wasm32")]
-    pub fn spawn(ast: Spanned<Expression>, windowed: bool)
+    pub fn spawn(ast: Spanned<Expression>, script_dir: Option<String>, windowed: bool)
         -> ScriptApp
     {
         use web_sys::console;
         let (tx, rx) = channel();
-        let world = crate::world::World::new_arc_mutex(tx);
+        let world = crate::world::World::new_arc_mutex(tx, script_dir);
         let world_clone = world.clone();
         let cancellable = Arc::new(AtomicBool::new(false));
 

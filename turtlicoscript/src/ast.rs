@@ -94,6 +94,7 @@ pub enum Expression {
     Int(i32),
     Float(f64),
     String(String),
+    Image(String),
     Variable {
         parent: Option<Box<Spanned<Expression>>>,
         name: String

@@ -4,6 +4,7 @@ use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, Mutex};
 use egui::Key;
 use egui_extras::RetainedImage;
+use ndarray::prelude::*;
 use turtlicoscript::interpreter::CancellationToken;
 
 use crate::WorldSyncState;
@@ -24,9 +25,12 @@ pub type SpriteID = u32;
 pub struct World {
     pub sprites: HashMap<SpriteID, Sprite>,
     pub blocks: HashMap<String, egui_extras::RetainedImage>,
+    pub block_map: Array3<Option<String>>,
+    
     last_anim_time: f64,
     pub update_tx: mpsc::Sender<WorldSyncState>,
     pub update_tx_closed: bool, // Interpreter disconnected
+    pub script_dir: Option<String>,
 
     pub keys_down: HashSet<Key, RandomState>,
     pub primary_ptr_down: bool,
@@ -36,20 +40,27 @@ pub struct World {
 impl World {
     pub fn new(update_tx: mpsc::Sender<WorldSyncState>) -> Self {
         let map = HashMap::new();
+        let block_map_depth = 3;
         let s = Self {
             sprites: map,
             blocks: default_blocks(),
+            block_map: Array::from_elem((SCREEN_WIDTH, SCREEN_HEIGHT, block_map_depth), None),
+
             last_anim_time: 0.0,
             update_tx,
             update_tx_closed: false,
+            script_dir: None,
+            
             keys_down: HashSet::new(),
             primary_ptr_down: false,
             secondary_ptr_down: false,
         };
         s
     }
-    pub fn new_arc_mutex(update_tx: mpsc::Sender<WorldSyncState>) -> Arc<Mutex<Self>> {
-        Arc::new(Mutex::new(Self::new(update_tx)))
+    pub fn new_arc_mutex(update_tx: mpsc::Sender<WorldSyncState>, script_dir: Option<String>) -> Arc<Mutex<Self>> {
+        let mut world = Self::new(update_tx);
+        world.script_dir = script_dir;
+        Arc::new(Mutex::new(world))
     }
 
     pub fn add_sprite(&mut self) -> SpriteID {
@@ -59,6 +70,27 @@ impl World {
         }
         self.sprites.insert(id, Sprite::new());
         id
+    }
+
+    pub fn get_block(&mut self, name: &String) -> Result<String, turtlicoscript::error::RuntimeError> {
+        if name.starts_with("./") && !self.blocks.contains_key(name) {
+            if let Some(project_dir) = &self.script_dir {
+                let path = std::path::Path::new(&project_dir).join(&name[2..]);
+                if path.exists() {
+                    match load_block_file(&mut self.blocks, name, &path) {
+                        Ok(_) => {},
+                        Err(_err) => {
+                            return Err(turtlicoscript::error::RuntimeError::InvalidBlock(name.to_owned()));
+                        }
+                    }
+                }
+            }
+        }
+        if self.blocks.contains_key(name) {
+            Ok(name.to_owned())
+        } else {
+            Err(turtlicoscript::error::RuntimeError::InvalidBlock(name.to_owned()))
+        }
     }
 
     pub fn ui(&mut self, ui: &mut egui::Ui, cancellable: &Option<CancellationToken>) -> egui::Response {
@@ -106,20 +138,25 @@ impl World {
             wpainter
                 .rect(world_rect, 0.0, egui::Color32::from_rgb(255, 255, 255), visuals.bg_stroke);
 
+            // Blocks
+            for z in (0..self.block_map.len_of(Axis(2))).rev() {
+                for x in 0..self.block_map.len_of(Axis(0)) {
+                    for y in 0..self.block_map.len_of(Axis(1)) {
+                        let block_name = self.block_map.get((x, y, z)).unwrap();
+                        if let Some(block_name) = block_name {
+                            let block = self.blocks.get(block_name).unwrap_or(default_block);
+                            let x = x as f32 * BLOCK_SIZE_PX;
+                            let y = y as f32 * BLOCK_SIZE_PX;
+                            self.render_block(&wpainter, block, x, y, 0.0, cam_scale);
+                        }
+                    }
+                }
+            }
+            // Graphics
+            // Sprites
             for sprite in self.sprites.values() {
                 let block = self.blocks.get(&sprite.skin).unwrap_or(default_block);
-                let sprite_rect = egui::Rect::from_min_size(
-                    egui::Pos2 { x: sprite.rendered_x * cam_scale, y: sprite.rendered_y * cam_scale },
-                    block.size_vec2() * cam_scale).translate(egui::vec2(world_rect.left(), world_rect.top()));
-                let mut mesh = egui::Mesh::with_texture(block.texture_id(ui.ctx()));
-                mesh.add_rect_with_uv(
-                    sprite_rect,
-                    egui::Rect::from_min_max(egui::pos2(0.0, 0.0), egui::pos2(1.0, 1.0)),
-                    egui::Color32::WHITE);
-                mesh.rotate(
-                    emath::Rot2::from_angle(sprite.rendered_rot.to_radians()),
-                    sprite_rect.min + egui::vec2(0.5, 0.5) * sprite_rect.size());
-                    wpainter.add(egui::Shape::mesh(mesh));
+                self.render_block(&wpainter, block, sprite.rendered_x, sprite.rendered_y, sprite.rendered_rot, cam_scale);
             }
         }
 
@@ -141,6 +178,21 @@ impl World {
        response
     }
 
+    pub fn render_block(&self, painter: &egui::Painter, block: &RetainedImage, x: f32, y: f32, rot: f32, cam_scale: f32) {
+        let rect = egui::Rect::from_min_size(
+            egui::Pos2 { x: x * cam_scale, y: y * cam_scale },
+            block.size_vec2() * cam_scale).translate(egui::vec2(painter.clip_rect().left(), painter.clip_rect().top()));
+        let mut mesh = egui::Mesh::with_texture(block.texture_id(painter.ctx()));
+        mesh.add_rect_with_uv(
+            rect,
+            egui::Rect::from_min_max(egui::pos2(0.0, 0.0), egui::pos2(1.0, 1.0)),
+            egui::Color32::WHITE);
+        mesh.rotate(
+            emath::Rot2::from_angle(rot.to_radians()),
+            rect.min + egui::vec2(0.5, 0.5) * rect.size());
+            painter.add(egui::Shape::mesh(mesh));
+    }
+
     /// Wait for a key press or a touch/click
     pub fn wait_for_input(sync_rx: &Receiver<WorldSyncState>, world: &Arc<Mutex<World>>) {
         loop {
@@ -155,18 +207,25 @@ impl World {
     }
 }
 
+macro_rules! insert_block_embedded {
+    ( $map:expr, $name:expr, $file:expr ) => {
+        $map.insert($name.to_owned(),
+            RetainedImage::from_image_bytes($name, include_bytes!($file)).unwrap()
+            .with_options(egui::TextureOptions::NEAREST));
+    };
+}
+
+fn load_block_file(map: &mut HashMap<String, RetainedImage>, name: &String, path: &std::path::Path) -> Result<(), std::io::Error> {
+    map.insert(name.to_owned(), RetainedImage::from_image_bytes(name, &std::fs::read(path)?).unwrap()
+        .with_options(egui::TextureOptions::NEAREST));
+    Ok(())
+}
 
 fn default_blocks() -> HashMap<String, RetainedImage> {
     let mut map = HashMap::new();
-    map.insert("turtle".to_owned(),
-        RetainedImage::from_image_bytes("turtle", include_bytes!("../blocks/turtle.png")).unwrap()
-        .with_options(egui::TextureOptions::NEAREST));
-    map.insert("bricks".to_owned(),
-        RetainedImage::from_image_bytes("bricks", include_bytes!("../blocks/bricks.png")).unwrap()
-        .with_options(egui::TextureOptions::NEAREST));
-    map.insert("wood".to_owned(),
-        RetainedImage::from_image_bytes("wood", include_bytes!("../blocks/wood.png")).unwrap()
-        .with_options(egui::TextureOptions::NEAREST));
+    insert_block_embedded!(map, "turtle", "../blocks/turtle.png");
+    insert_block_embedded!(map, "bricks", "../blocks/bricks.png");
+    insert_block_embedded!(map, "wood", "../blocks/wood.png");
     map
 }
 

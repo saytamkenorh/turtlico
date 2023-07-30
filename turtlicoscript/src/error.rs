@@ -73,6 +73,7 @@ pub enum RuntimeError {
     TypeParseUnsupported(String, String),
     TypeHashUnsupported,
     TypeError,
+    InvalidBlock(String),
     NativeLibraryError(String),
     MethodCalledAsFunction,
 }

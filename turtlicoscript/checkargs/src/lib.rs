@@ -107,6 +107,19 @@ pub fn check_args(
                 }
                 let #varname = #varname.unwrap();
             });
+        } else if arg_type == "Image" {
+            arg_checker.extend(quote! {
+                let mut #varname = None;
+                match &args[#pos] {
+                    Value::Image(val) => {
+                        #varname = Some(val);
+                    },
+                    _ => {
+                        return Err(RuntimeError::InvalidArgType(#pos));
+                    }
+                }
+                let #varname = #varname.unwrap();
+            });
         } else if arg_type == "Int" {
             arg_checker.extend(quote! {
                 let mut #varname = None;

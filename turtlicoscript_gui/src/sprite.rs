@@ -1,5 +1,7 @@
 use std::sync::{Mutex, Arc, mpsc::Receiver};
 
+use turtlicoscript::error::RuntimeError;
+
 use crate::{world::{*}, WorldSyncState};
 
 pub struct Sprite {
@@ -151,8 +153,9 @@ impl Sprite {
         _world.sprites.get_mut(id).unwrap().speed = speed;
     }
 
-    pub fn set_skin(world: &Arc<Mutex<World>>, id: &SpriteID, skin: &String) {
+    pub fn set_skin(world: &Arc<Mutex<World>>, id: &SpriteID, skin: &String) -> Result<(), RuntimeError>{
         let mut _world = world.lock().unwrap();
-        _world.sprites.get_mut(id).unwrap().skin = skin.to_owned();
+        _world.sprites.get_mut(id).unwrap().skin = _world.get_block(skin)?;
+        Ok(())
     }
 }

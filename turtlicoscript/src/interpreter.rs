@@ -303,6 +303,7 @@ impl<'a> Context<'a> {
             Expression::Int(val) => Ok(Value::Int(*val)),
             Expression::Float(val) => Ok(Value::Float(*val)),
             Expression::String(val) => Ok(Value::String(val.to_owned())),
+            Expression::Image(val) => Ok(Value::Image(val.to_owned())),
             Expression::Variable {parent, name} => {
                 match parent {
                     Some(parent) => {

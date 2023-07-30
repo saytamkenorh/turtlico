@@ -65,8 +65,11 @@ impl Context {
         Sprite::set_speed(&self.world, &id, speed);
     }
 
-    pub fn sprite_skin(&mut self, id: SpriteID, skin: &String) {
-        Sprite::set_skin(&self.world, &id, skin);
+    pub fn sprite_skin(&mut self, id: SpriteID, skin: &String) -> Result<(), RuntimeError> {
+        Sprite::set_skin(&self.world, &id, skin)
+    }
+
+    pub fn sprite_place_block(&mut self, id: SpriteID, skin: &String) {
     }
 
     pub fn wait(&mut self, time: f64) {
@@ -248,11 +251,19 @@ pub fn speed(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, mut args: NativeF
     Ok(Value::None)
 }
 
-#[check_args(String)]
+#[check_args(Image)]
 pub fn skin(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
     let sprite_id = get_sprite_id(this)?;
     let skin = arg0 as &String;
     unwrap_context::<Context>(ctx).sprite_skin(sprite_id, skin);
+    Ok(Value::None)
+}
+
+#[check_args(Image)]
+pub fn place_block(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
+    let sprite_id = get_sprite_id(this)?;
+    let skin = arg0 as &String;
+    unwrap_context::<Context>(ctx).sprite_place_block(sprite_id, skin);
     Ok(Value::None)
 }
 

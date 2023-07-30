@@ -65,6 +65,7 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
             |span, token: Token| match token {
                 Token::Integer(x) => Ok(Expression::Int(x)),
                 Token::String(x) => Ok(Expression::String(x)),
+                Token::Image(x) => Ok(Expression::Image(x)),
                 Token::Float(x) => x.parse().map_err(
                     |err: ParseFloatError| Simple::custom(span, err.to_string()))
                         .map(|value| Expression::Float(value)),
