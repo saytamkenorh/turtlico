@@ -1,14 +1,13 @@
 extern crate proc_macro;
 
-use std::{collections::HashMap, fmt::Display, any::Any, rc::Weak};
+use std::{collections::{HashMap, HashSet}, fmt::Display, any::Any, rc::Weak};
 
 use crate::{error::RuntimeError, ast::{Expression, Spanned}};
 
 pub type NativeFuncReturn = Result<Value, RuntimeError>;
-pub type FuncThisObject = Option<Weak<std::cell::RefCell<ValueObject>>>;
+pub type FuncThisObject = Option<Weak<std::cell::RefCell<TSObject>>>;
 pub type NativeFuncArgs = Vec<Value>;
 pub type NativeFuncCtxArg = Box<dyn LibraryContext>;
-pub type ValueObject = HashMap<HashableValue, Value>;
 
 #[derive(Clone)]
 pub struct NativeFunc {
@@ -29,6 +28,12 @@ pub enum Callable {
     NativeFunc(NativeFunc)
 }
 
+#[derive(Debug, Clone)]
+pub struct TSObject {
+    pub fields: HashMap<HashableValue, Value>,
+    pub fields_props: HashSet<HashableValue>,
+}
+
 #[derive(Hash, Eq, PartialEq, Debug, Clone)]
 pub enum HashableValue {
     String(String),
@@ -43,7 +48,7 @@ pub enum Value {
     Image(String),
     Bool(bool),
     Callable(Callable),
-    Object(std::rc::Rc<std::cell::RefCell<ValueObject>>),
+    Object(std::rc::Rc<std::cell::RefCell<TSObject>>),
     EvaluatedReturn(Box<Value>),
     Break,
     None,
@@ -51,7 +56,7 @@ pub enum Value {
 
 pub struct Library {
     pub name: String,
-    pub vars: HashMap<String, Value>,
+    pub scope: crate::interpreter::Scope,
     pub context: Box<dyn LibraryContext>
 }
 
@@ -161,17 +166,26 @@ impl From<f64> for Value {
     }
 }
 
-impl From<HashMap<HashableValue, Value>> for Value {
-    fn from(value: HashMap<HashableValue, Value>) -> Self {
-        Value::Object(std::rc::Rc::new(std::cell::RefCell::new(value)))
+impl From<usize> for Value {
+    fn from(val: usize) -> Self {
+        Value::Int(val as i32)
     }
 }
 
-impl TryInto<f64> for Value {
+impl From<HashMap<HashableValue, Value>> for Value {
+    fn from(value: HashMap<HashableValue, Value>) -> Self {
+        Value::Object(std::rc::Rc::new(std::cell::RefCell::new(TSObject { fields: value, fields_props: HashSet::new() })))
+    }
+}
+
+impl TryInto<f64> for &Value {
     fn try_into(self) -> Result<f64, crate::error::RuntimeError> {
         match self {
             Value::Float(val) => {
-                Ok(val)
+                Ok(val.to_owned())
+            },
+            Value::Int(val) => {
+                Ok(val.to_owned().into())
             },
             _ => {
                 Err(RuntimeError::TypeError)
@@ -228,5 +242,11 @@ impl Value {
             Value::Break => "break",
             Value::None => "none"
         }
+    }
+}
+
+impl TSObject {
+    pub fn new() -> Self {
+        Self { fields: HashMap::new(), fields_props: HashSet::new() }
     }
 }

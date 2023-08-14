@@ -1,8 +1,8 @@
-use std::{collections::HashMap, sync::{Arc, atomic::AtomicBool}};
+use std::{collections::{HashMap, HashSet}, sync::{Arc, atomic::AtomicBool}, ops::Range};
 
-use chumsky::{prelude::Simple};
+use chumsky::prelude::Simple;
 
-use crate::{ast::{Expression, Spanned}, error::{Error, RuntimeError}, value::{Value, Library, Callable, LibraryContext, TSFunc}, stdlib};
+use crate::{ast::{Expression, Spanned}, error::{Error, RuntimeError}, value::{Value, Library, Callable, LibraryContext, TSFunc, TSObject}, stdlib};
 
 pub type CancellationToken = Arc<AtomicBool>;
 
@@ -19,18 +19,27 @@ enum MathOperator {
     Gte
 }
 
-pub struct Context<'a> {
-    parent: Option<&'a Context<'a>>,
-    pub vars: HashMap<String, Value>,
+pub struct Context {
+    pub stack: Vec<Scope>,
     libctx: HashMap<String, Box<dyn LibraryContext>>,
     pub cancellable: Option<CancellationToken>,
 }
 
-impl<'a> Context<'a> {
+pub struct Scope {
+    pub vars: HashMap<String, Value>,
+    pub vars_props: HashSet<String>
+}
+
+impl Scope {
+    pub fn new() -> Self {
+        Self { vars: HashMap::new(), vars_props: HashSet::new() }
+    }
+}
+
+impl Context {
     pub fn new_parent(cancellable: Option<CancellationToken>) -> Self {
         let mut this = Self {
-            parent: None,
-            vars: HashMap::new(),
+            stack: vec![Scope::new()],
             libctx: HashMap::new(),
             cancellable: cancellable,
         };
@@ -38,17 +47,13 @@ impl<'a> Context<'a> {
         this
     }
 
-    pub fn substitute(&'a self) -> Self {
-        Self {
-            parent: Some(self),
-            vars: HashMap::new(),
-            libctx: HashMap::new(),
-            cancellable: self.cancellable.clone(),
-        }
+    #[inline(always)]
+    fn get_scope(&mut self) -> &mut Scope {
+        return self.stack.last_mut().unwrap();
     }
 
     pub fn eval_root(&mut self, expression: &Spanned<Expression>) -> Result<Value, Spanned<Error>> {
-        match self.eval(expression) {
+        match self.eval(expression)  {
             Ok(Value::EvaluatedReturn(value)) => Ok(*value),
             other => other
         }
@@ -82,38 +87,7 @@ impl<'a> Context<'a> {
             Expression::Call { expr, args } => {
                 match self.eval(&expr)? {
                     Value::Callable(callable) => {
-                        match callable {
-                            Callable::NativeFunc(func) => {
-                                //let func = self.get_var(&name)?;
-                                let mut func_args = vec![];
-                                for arg in args {
-                                    func_args.push(self.eval(&arg)?);
-                                }
-                                let ctx = self.libctx.get_mut(&func.library).unwrap();
-                                let result = (func.func)(ctx, func.this, func_args).map_err(
-                                    |err| Spanned::new(Error::RuntimeError(err), expression.span.to_owned()));
-                                match result {
-                                    Ok(Value::EvaluatedReturn(value)) => {
-                                        return Ok(*value);
-                                    },
-                                    other_result => other_result
-                                }
-                            },
-                            Callable::Function(func) => {
-                                let mut args_evaluated: Vec<(String, Value)> = vec![];
-                                for (argi, argname) in func.args.iter().enumerate() {
-                                    args_evaluated.push((argname.to_owned(), self.eval(&args[argi])?));
-                                }
-                                let mut subst = self.substitute();
-                                subst.vars.extend(args_evaluated);
-                                match subst.eval(&func.body)? {
-                                    Value::EvaluatedReturn(val) => {
-                                        Ok(*val)
-                                    },
-                                    other => Ok(other)
-                                }
-                            }
-                        }
+                        self.call_callable(&callable, expression.span.to_owned(), args)
                     }
                     value => {
                         Err(Spanned::new(Error::ThisCannotBeCalled(value.to_string()), expression.span.to_owned()))
@@ -171,7 +145,7 @@ impl<'a> Context<'a> {
                                     Value::Int(step) => {
                                         let mut i = start;
                                         while i < end {
-                                            self.vars.insert(var.to_owned(), Value::Int(i));
+                                            self.get_scope().vars.insert(var.to_owned(), Value::Int(i));
                                             match self.eval(&body)? {
                                                 Value::Break => {
                                                     break;
@@ -219,7 +193,7 @@ impl<'a> Context<'a> {
                     body: (**body).clone(),
                     args: args.to_owned()
                 };
-                self.vars.insert(name.to_owned(), Value::Callable(Callable::Function(Box::new(func))));
+                self.get_scope().vars.insert(name.to_owned(), Value::Callable(Callable::Function(Box::new(func))));
                 Ok(Value::None)
             }
 
@@ -234,7 +208,7 @@ impl<'a> Context<'a> {
                                 match parent {
                                     Value::Object(object) => {
                                         let mut hashmap = (*object).borrow_mut();
-                                        let oldval = hashmap.insert(
+                                        let oldval = hashmap.fields.insert(
                                             crate::value::HashableValue::String(name.to_owned()), value);
                                         Ok(oldval.unwrap_or(Value::None))
                                     },
@@ -244,7 +218,7 @@ impl<'a> Context<'a> {
                                 }
                             },
                             None => {
-                                let oldval = self.vars.insert(name.to_owned(), value);
+                                let oldval = self.get_scope().vars.insert(name.to_owned(), value);
                                 Ok(oldval.unwrap_or(Value::None))
                             }
                         }
@@ -317,14 +291,14 @@ impl<'a> Context<'a> {
                 }
             },
             Expression::ObjDef {object} => {
-                let mut map = HashMap::new();
+                let mut fields = HashMap::new();
                 for item in object {
-                    map.insert(self.eval(&item.0)?.try_into().map_err(|err: RuntimeError| {
+                    fields.insert(self.eval(&item.0)?.try_into().map_err(|err: RuntimeError| {
                         Spanned { item: Error::RuntimeError(err), span: item.0.span.clone() }
                     })?, self.eval(&item.1)?);
                 }
                 Ok(Value::Object(std::rc::Rc::new(
-                    std::cell::RefCell::new(map)
+                    std::cell::RefCell::new(TSObject { fields: fields, fields_props: HashSet::new() })
                 )))
             },
             _ => {
@@ -336,13 +310,28 @@ impl<'a> Context<'a> {
         }
     }
 
-    fn get_var(&self, name: &str, parent_obj: Option<Value>) -> Result<Value, Error> {
+    fn get_var(&mut self, name: &str, parent_obj: Option<Value>) -> Result<Value, Error> {
         match parent_obj {
             Some (parent_obj) => {
                 match parent_obj {
                     Value::Object(object) => {
-                        match object.borrow().get(&crate::value::HashableValue::String(name.to_owned())) {
-                            Some (value) => Ok(value.clone()),
+                        let object = object.borrow();
+                        let field_name = &crate::value::HashableValue::String(name.to_owned());
+                        match object.fields.get(field_name) {
+                            Some (value) => {
+                                if object.fields_props.contains(field_name) {
+                                    match value {
+                                        Value::Callable(callable) => {
+                                            self.call_callable(callable, Range { start: 0, end: 0 }, &vec![]).map_err(|err| err.item)
+                                        },
+                                        _ => {
+                                            Err(Error::TypeError("Property field is not a callable".to_owned()))
+                                        }
+                                    }
+                                } else {
+                                    Ok(value.clone())
+                                }
+                            },
                             None => Err(Error::RuntimeError(RuntimeError::InvalidIdentifier(name.to_owned())))
                         }
                     },
@@ -352,23 +341,78 @@ impl<'a> Context<'a> {
                 }
             },
             None => {
-                match self.vars.get(name) {
-                    Some(value) => Ok(value.clone()),
-                    None => {
-                        match self.parent {
-                            Some(parent) => parent.get_var(name, None),
-                            None => Err(Error::RuntimeError(RuntimeError::InvalidIdentifier(name.to_owned()))),
-                        }
+                for scope in self.stack.iter_mut().rev() {
+                    if let Some(value) = scope.vars.get(name) {
+                        return if scope.vars_props.contains(name) {
+                            match value.clone() {
+                                Value::Callable(callable) => {
+                                    self.call_callable(&callable, Range { start: 0, end: 0 }, &vec![]).map_err(|err| err.item)
+                                },
+                                _ => {
+                                    Err(Error::TypeError("Property field is not a callable".to_owned()))
+                                }
+                            }
+                        } else {
+                            Ok(value.clone())
+                        };
                     }
                 }
+                return Err(Error::RuntimeError(RuntimeError::InvalidIdentifier(name.to_owned())));
+            }
+        }
+    }
+
+    fn call_callable(&mut self, callable: &Callable, span: Range<usize>, args: &Vec<Spanned<Expression>>) -> Result<Value, Spanned<Error>> {
+        match callable {
+            Callable::NativeFunc(func) => {
+                //let func = self.get_var(&name)?;
+                let mut func_args = vec![];
+                for arg in args {
+                    func_args.push(self.eval(&arg)?);
+                }
+                let ctx = self.libctx.get_mut(&func.library).unwrap();
+                let result = (func.func)(ctx, func.this.clone(), func_args).map_err(
+                    |err| Spanned::new(Error::RuntimeError(err), span));
+                match result {
+                    Ok(Value::EvaluatedReturn(value)) => {
+                        return Ok(*value);
+                    },
+                    other_result => other_result
+                }
+            },
+            Callable::Function(func) => {
+                let mut args_evaluated: Vec<(String, Value)> = vec![];
+                if func.args.len() != args.len() {
+                    return Err(
+                            Spanned::new(
+                                Error::RuntimeError(RuntimeError::InvalidArgCount(args.len(), func.args.len())), span)
+                        );
+                }
+                for (argi, argname) in func.args.iter().enumerate() {
+                    args_evaluated.push((argname.to_owned(), self.eval(&args[argi])?));
+                }
+                let mut subst = Scope::new();
+                subst.vars.extend(args_evaluated);
+                self.stack.push(subst);
+                let result = match self.eval(&func.body)? {
+                    Value::EvaluatedReturn(val) => {
+                        Ok(*val)
+                    },
+                    other => Ok(other)
+                };
+                self.stack.pop();
+                result
             }
         }
     }
 
     pub fn import_library(&mut self, lib: Library, prefix_name: bool) {
         let libname = lib.name;
-        self.vars.extend(lib.vars.into_iter().map(|(key, value)| {
+        self.stack[0].vars.extend(lib.scope.vars.into_iter().map(|(key, value)| {
             (if prefix_name {libname.to_owned() + "." + &key} else {key}, value)
+        }));
+        self.stack[0].vars_props.extend(lib.scope.vars_props.into_iter().map(|prop| {
+            if prefix_name {libname.to_owned() + "." + &prop} else {prop}
         }));
         self.libctx.insert(libname, lib.context);
     }

@@ -17,7 +17,7 @@ mod test_examples {
 
     #[test]
     fn funcs() {
-        test_example_file("funcs.tcsf", "3_");
+        test_example_file("funcs.tcsf", "7_5_3_");
     }
 
     #[test]
@@ -27,7 +27,7 @@ mod test_examples {
 
     #[test]
     fn padding() {
-        test_example_file("padding.tcsf", "1_text_value_text_inserted");
+        test_example_file("padding.tcsf", "111");
     }
 
 

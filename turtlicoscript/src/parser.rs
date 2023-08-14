@@ -128,12 +128,10 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
             .map(|(ident, args)| Expression::Call { expr: Box::new(ident), args: args })
             .map_with_span(Spanned::new);
 
+        let shortcall_param = literal.clone().or(var.clone());
         let shortcall = func.clone()
-            .then(literal.clone())
-            .map(|(ident, arg)| Expression::Call { expr: Box::new(ident), args: vec![arg] })
-            .or(
-                func.clone().then(var.clone())
-                .map(|(ident, arg)| Expression::Call { expr: Box::new(ident), args: vec![arg] }))
+            .then(shortcall_param.clone().repeated()/*.separated_by(just(Token::Comma))*/)
+            .map(|(ident, args)| Expression::Call { expr: Box::new(ident), args: args })
             .or(func.clone().map(|ident| Expression::Call { expr: Box::new(ident), args: vec![] }))
             .map_with_span(Spanned::new);
 

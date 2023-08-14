@@ -1,0 +1,29 @@
+loop 3 {
+    place_block @"wood"
+    go
+}
+go
+left
+go
+left
+loop 3 {
+    place_block @"bricks"
+    go
+}
+set_rot 0
+set_xy(3, 9)
+place_block @"flower"
+place_block @"fence"
+go
+place_block @"flower"
+wait 1
+destroy_block $block_xy
+place_block @"fence" $block_xy
+
+for $x 0 16 {
+    for $y 0 3 {
+        place_block @"grass" $x $y
+        wait 0.25
+    }
+}
+wait

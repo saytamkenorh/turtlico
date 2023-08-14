@@ -87,7 +87,7 @@ impl EditorApp {
         let src = self.codeview_text.to_owned();
         match parser::parse(&src) {
             Ok(ast) => {
-                let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, true);
+                let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, None, true);
                 self.script_subapp = Some(subapp);
             },
             Err(errors) => {

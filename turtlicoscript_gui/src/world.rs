@@ -205,6 +205,32 @@ impl World {
             }
         }
     }
+
+    pub fn place_block(world: &Arc<Mutex<World>>, sprite: SpriteID, block: Option<&String>, on_sprite: bool, x: Option<f64>, y: Option<f64>) {
+        let mut world = world.lock().unwrap();
+        let sprite = world.sprites.get(&sprite).unwrap();
+
+        if (x.is_some() && x.unwrap().fract() != 0.0) || (y.is_some() && y.unwrap().fract() != 0.0) {
+            todo!("Placing blocks as graphics is not supported yet")
+        }
+
+        let bx = if let Some(x) = x { x as usize } else if on_sprite || y.is_some() { sprite.get_block_x() } else { sprite.get_forward_block_x() };
+        let by = if let Some(y) = y { y as usize } else if on_sprite || x.is_some() { sprite.get_block_y() } else { sprite.get_forward_block_y() };
+        match block {
+            Some(block) => {
+                for bz in 0..world.block_map.len_of(Axis(2)) - 1 {
+                    let new_val = world.block_map[(bx, by, bz)].clone();
+                    world.block_map[(bx, by, bz + 1)] = new_val;
+                }
+                world.block_map[(bx, by, 0)] = Some(block.to_owned());
+            },
+            None => {
+                for bz in 0..world.block_map.len_of(Axis(2)) {
+                    world.block_map[(bx, by, bz)] = None;
+                }
+            }
+        }
+    }
 }
 
 macro_rules! insert_block_embedded {
@@ -223,8 +249,11 @@ fn load_block_file(map: &mut HashMap<String, RetainedImage>, name: &String, path
 
 fn default_blocks() -> HashMap<String, RetainedImage> {
     let mut map = HashMap::new();
-    insert_block_embedded!(map, "turtle", "../blocks/turtle.png");
     insert_block_embedded!(map, "bricks", "../blocks/bricks.png");
+    insert_block_embedded!(map, "fence", "../blocks/fence.png");
+    insert_block_embedded!(map, "flower", "../blocks/flower.png");
+    insert_block_embedded!(map, "grass", "../blocks/grass.png");
+    insert_block_embedded!(map, "turtle", "../blocks/turtle.png");
     insert_block_embedded!(map, "wood", "../blocks/wood.png");
     map
 }

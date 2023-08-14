@@ -2,6 +2,7 @@ use std::any::Any;
 use std::io::Write;
 
 use crate::error::RuntimeError;
+use crate::interpreter::Scope;
 use crate::value::{Value, NativeFuncArgs, NativeFuncReturn, Library, LibraryContext, NativeFuncCtxArg, FuncThisObject};
 use crate::{funcmap, check_argc};
 use checkargs::check_args;
@@ -19,7 +20,8 @@ impl LibraryContext for Context {
 }
 
 pub fn init_library() -> Library {
-    let vars = funcmap!{"std",
+    let mut scope = Scope::new();
+    scope.vars.extend(funcmap!{"std",
         println,
         print,
         readln,
@@ -27,11 +29,11 @@ pub fn init_library() -> Library {
         float,
         string,
         random
-    };
+    });
     let ctx = Context {};
     Library {
         name: "std".to_owned(),
-        vars: vars,
+        scope: scope,
         context: Box::new(ctx)
     }
 }

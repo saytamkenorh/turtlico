@@ -1,6 +1,7 @@
 use std::{sync::{Arc, Mutex}, thread::JoinHandle};
 
-use turtlicoscript::{interpreter::CancellationToken};
+use egui::Color32;
+use turtlicoscript::interpreter::CancellationToken;
 use turtlicoscript::ast::{Spanned, Expression};
 use std::sync::{atomic::AtomicBool, mpsc::channel};
 
@@ -33,6 +34,7 @@ impl RootApp {
         let mut native_options = eframe::NativeOptions::default();
         native_options.decorated = true;
         native_options.app_id = Some("io.gitlab.Turtlico".to_owned());
+        native_options.maximized = true;
         eframe::run_native(
             "Turtlico",
             native_options,
@@ -195,7 +197,7 @@ impl SubApp for ScriptApp {
         let mut win_open = true;
         if !self.windowed {
             egui::CentralPanel::default()
-                .frame(egui::Frame { inner_margin: 0.0.into(), fill: ctx.style().visuals.panel_fill, ..Default::default()})
+                .frame(egui::Frame { inner_margin: 0.0.into(), fill: Color32::BLACK, ..Default::default()})
                 .show(ctx, |ui| {
                     self.ui(ui);
                 });

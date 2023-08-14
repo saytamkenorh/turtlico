@@ -1,7 +1,12 @@
+$const = 1
 fn sum($a, $b) {
-    return $a + $b
+    return ($a + $b) * $const
 }
 
 $out = ""
+$ab = sum 0 5
+$ab = sum $ab 2
+$out = $out + string $ab + "_"
+$out = $out + string(sum 3 2) + "_"
 $out = $out + string(sum(1, 2)) + "_"
 return $out

@@ -6,7 +6,8 @@ use std::sync::mpsc::Receiver;
 use std::sync::{Arc, Mutex};
 
 use checkargs::check_args;
-use turtlicoscript::value::{Value, NativeFuncArgs, NativeFuncReturn, Library, LibraryContext, NativeFuncCtxArg, unwrap_context, HashableValue, FuncThisObject};
+use turtlicoscript::interpreter::Scope;
+use turtlicoscript::value::{Value, NativeFuncArgs, NativeFuncReturn, Library, LibraryContext, NativeFuncCtxArg, unwrap_context, HashableValue, FuncThisObject, TSObject};
 use turtlicoscript::{funcmap, funcmap_obj};
 use turtlicoscript::error::RuntimeError;
 use sprite::Sprite;
@@ -52,6 +53,15 @@ impl Context {
         Sprite::set_pos_target(&self.world, &id, x, y);
     }
 
+    pub fn sprite_get_block_xy(&mut self, id: SpriteID) -> HashMap<HashableValue, Value> {
+        let mut res = HashMap::new();
+        let mut _world = self.world.lock().unwrap();
+        let sprite = _world.sprites.get_mut(&id).unwrap();
+        res.insert("x".into(), sprite.get_block_x().into());
+        res.insert("y".into(), sprite.get_block_y().into());
+        res
+    }
+
     pub fn sprite_set_rot(&mut self, id: SpriteID, rot: f32) {
         Sprite::set_rotation(&mut self.sync_rx, &self.world, &id, rot, false);
     }
@@ -69,7 +79,8 @@ impl Context {
         Sprite::set_skin(&self.world, &id, skin)
     }
 
-    pub fn sprite_place_block(&mut self, id: SpriteID, skin: &String) {
+    pub fn sprite_place_block(&mut self, id: SpriteID, block: Option<&String>, on_sprite: bool, x: Option<f64>, y: Option<f64>) {
+        World::place_block(&self.world, id, block,  on_sprite, x, y);
     }
 
     pub fn wait(&mut self, time: f64) {
@@ -92,11 +103,15 @@ impl Context {
 }
 
 pub fn init_library(world: Arc<Mutex<world::World>>, sync_rx: Receiver<WorldSyncState>) -> Library {
-    let vars = funcmap!{
+    let mut scope = Scope::new();
+    scope.vars.extend(funcmap!{
         "gui",
         new_turtle,
         wait
-    };
+    });
+    // Consts
+    // scope.vars.insert("EXAMPLE".to_owned(), "value".into());
+
     println!("Initializing GUI...");
 
     let ctx = Box::new(Context {
@@ -106,18 +121,23 @@ pub fn init_library(world: Arc<Mutex<world::World>>, sync_rx: Receiver<WorldSync
 
     let mut lib = Library {
         name: "gui".to_owned(),
-        vars: vars,
+        scope: scope,
         context: ctx
     };
 
     let default_turtle = new_turtle(&mut lib.context, None, vec![]).unwrap();
     if let Value::Object(obj) = default_turtle {
-        for (key, value) in obj.borrow().iter() {
+        for (key, value) in obj.borrow().fields.iter() {
             if let HashableValue::String(name) = key {
-                lib.vars.insert(name.to_owned(), value.to_owned());
+                lib.scope.vars.insert(name.to_owned(), value.to_owned());
             }
         }
-        lib.vars.insert("turtle".to_owned(), Value::Object(obj));
+        for prop in obj.borrow().fields_props.iter() {
+            if let HashableValue::String(name) = prop {
+                lib.scope.vars_props.insert(name.to_owned());
+            }
+        }
+        lib.scope.vars.insert("turtle".to_owned(), Value::Object(obj));
     }
 
     lib
@@ -126,26 +146,32 @@ pub fn init_library(world: Arc<Mutex<world::World>>, sync_rx: Receiver<WorldSync
 pub fn new_turtle(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, _args: NativeFuncArgs) -> NativeFuncReturn {
     let ctx = unwrap_context::<Context>(ctx);
     let id = ctx.sprite_new();
-    let turtle_obj = std::rc::Rc::new(std::cell::RefCell::new(HashMap::new()));
+    let turtle_obj = std::rc::Rc::new(std::cell::RefCell::new(TSObject::new()));
 
     {
         let mut turtle = turtle_obj.borrow_mut();
-        turtle.insert(HashableValue::String("sprite_id".to_owned()), Value::Int(id.try_into().unwrap()));
+        turtle.fields.insert("sprite_id".into(), Value::Int(id.try_into().unwrap()));
 
-        turtle.extend(funcmap_obj!{
+        turtle.fields.extend(funcmap_obj!{
             "gui",
-            Some(std::rc::Rc::<std::cell::RefCell<HashMap<HashableValue, Value>>>::downgrade(&turtle_obj)),
+            Some(std::rc::Rc::<std::cell::RefCell<TSObject>>::downgrade(&turtle_obj)),
             go,
             set_xy,
             set_xy_px,
             set_target_xy,
             set_target_xy_px,
+            block_xy,
             set_rot,
             left,
             right,
             speed,
-            skin
+            skin,
+            place_block,
+            destroy_block
         });
+        turtle.fields_props.extend(vec![
+            "block_xy".into()
+        ]);
     }
 
     Ok(Value::Object(turtle_obj))
@@ -154,7 +180,7 @@ pub fn new_turtle(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, _args: Nati
 fn get_sprite_id(this: FuncThisObject) -> Result<SpriteID, RuntimeError> {
     match this {
         Some(this) => {
-            match this.upgrade().unwrap().borrow().get(&"sprite_id".into()) {
+            match this.upgrade().unwrap().borrow().fields.get(&"sprite_id".into()) {
                 Some(id) => {
                     match id {
                         Value::Int(id) => Ok(SpriteID::try_from(*id).map_err(|_| RuntimeError::TypeError)?),
@@ -219,6 +245,13 @@ pub fn set_target_xy_px(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, args: 
     Ok(Value::None)
 }
 
+#[check_args()]
+pub fn block_xy(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
+    let sprite_id = get_sprite_id(this)?;
+    let res = unwrap_context::<Context>(ctx).sprite_get_block_xy(sprite_id);
+    Ok(res.into())
+}
+
 #[check_args(Int=0)]
 pub fn set_rot(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, mut args: NativeFuncArgs) -> NativeFuncReturn {
     let sprite_id = get_sprite_id(this)?;
@@ -255,16 +288,70 @@ pub fn speed(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, mut args: NativeF
 pub fn skin(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
     let sprite_id = get_sprite_id(this)?;
     let skin = arg0 as &String;
-    unwrap_context::<Context>(ctx).sprite_skin(sprite_id, skin);
+    unwrap_context::<Context>(ctx).sprite_skin(sprite_id, skin)?;
     Ok(Value::None)
 }
 
-#[check_args(Image)]
-pub fn place_block(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
+fn place_destroy_block(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, args: NativeFuncArgs, force_destroy: bool, force_place: bool) -> NativeFuncReturn {
     let sprite_id = get_sprite_id(this)?;
-    let skin = arg0 as &String;
-    unwrap_context::<Context>(ctx).sprite_place_block(sprite_id, skin);
+    let mut block: Option<&String> = None;
+    let mut x: Option<f64> = None;
+    let mut y: Option<f64> = None;
+    let mut on_sprite = false;
+    for (i, arg) in args.iter().enumerate() {
+        match arg {
+            Value::Image(value) => {
+                if force_destroy {
+                    return Err(RuntimeError::InvalidArgType(i));
+                }
+                block = Some(value);
+            },
+            Value::Int(value) => {
+                if x.is_none() {
+                    x = Some(*value as f64)
+                } else if y.is_none() {
+                    y = Some(*value as f64)
+                } else {
+                    return Err(RuntimeError::InvalidArgType(i));
+                }
+            },
+            Value::Object(value) => {
+                let value = value.borrow_mut();
+                match value.fields.get(&("x".into())) {
+                    Some(val_x) => {
+                        x = Some(val_x.try_into()?)
+                    },
+                    None => return Err(RuntimeError::InvalidIdentifier("x".to_owned()))
+                }
+                match value.fields.get(&("y".into())) {
+                    Some(val_y) => {
+                        y = Some(val_y.try_into()?)
+                    },
+                    None => return Err(RuntimeError::InvalidIdentifier("y".to_owned()))
+                }
+            },
+            Value::String(value) => {
+                if value == "on_sprite" {
+                    on_sprite = true;
+                }
+            },
+            _ => {
+                return Err(RuntimeError::InvalidArgType(i))
+            }
+        }
+    }
+    if force_place && matches!(block, None) {
+        return  Err(RuntimeError::MissingParam("block".to_owned()));
+    }
+    unwrap_context::<Context>(ctx).sprite_place_block(sprite_id, block, on_sprite, x, y);
     Ok(Value::None)
+} 
+pub fn place_block(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
+    place_destroy_block(ctx, this, args, false, true)
+}
+
+pub fn destroy_block(ctx: &mut NativeFuncCtxArg, this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
+    place_destroy_block(ctx, this, args, true, false)
 }
 
 #[check_args(Float=0)]

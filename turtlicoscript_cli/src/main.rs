@@ -1,5 +1,5 @@
 use std::{env, fs};
-use turtlicoscript::{parser};
+use turtlicoscript::parser;
 use turtlicoscript::ast::{Spanned, Expression};
 
 #[cfg(feature = "gui")]
@@ -22,6 +22,7 @@ fn run(ast: Spanned<Expression>, src: &String, script_dir: Option<String>) {
 
 #[cfg(not(feature = "gui"))]
 fn run(ast: Spanned<Expression>, src: &String) {
+    todo!();
     use {interpreter::Context, value::Value};
     let mut ctx = Context::new_parent();
     match context.eval_root(&ast) {

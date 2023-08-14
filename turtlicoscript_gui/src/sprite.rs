@@ -60,6 +60,22 @@ impl Sprite {
         self.rendered_y = new_y;
     }
 
+    pub fn get_block_x(&self) -> usize {
+        f32::floor(self.rendered_x / BLOCK_SIZE_PX) as usize
+    }
+
+    pub fn get_block_y(&self) -> usize {
+        f32::floor(self.rendered_y / BLOCK_SIZE_PX) as usize
+    }
+
+    pub fn get_forward_block_x(&self) -> usize {
+        f32::floor((self.rendered_x + f32::cos(self.rot.to_radians()) * BLOCK_SIZE_PX) / BLOCK_SIZE_PX) as usize
+    }
+
+    pub fn get_forward_block_y(&self) -> usize {
+        f32::floor((self.rendered_y + f32::sin(self.rot.to_radians()) * BLOCK_SIZE_PX) / BLOCK_SIZE_PX) as usize
+    }
+
     pub fn go(sync_rx: &Receiver<WorldSyncState>, world: &Arc<Mutex<World>>, id: &SpriteID, distance: f32, instant: bool) {
         let target_x;
         let target_y;

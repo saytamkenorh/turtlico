@@ -66,6 +66,10 @@ pub enum RuntimeError {
     InvalidArgCount(usize, usize),
     /// Invalid argument type (position)
     InvalidArgType(usize),
+    /// Missing parameter (name)
+    MissingParam(String),
+    /// Extra parameter (name)
+    ExtraParam(String),
     InvalidIdentifier(String),
     /// Value cannot be parsed to target type due to an error (invalid format etc)
     TypeParseError(String),
