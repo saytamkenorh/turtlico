@@ -26,4 +26,9 @@ for $x 0 16 {
         wait 0.25
     }
 }
+
+$t2 = new_turtle
+$t2.set_xy 5 5
+$t2.place_block @"flower" $t2.$block_xy
+
 wait
