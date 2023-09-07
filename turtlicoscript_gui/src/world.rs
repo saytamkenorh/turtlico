@@ -190,7 +190,7 @@ impl World {
         mesh.rotate(
             emath::Rot2::from_angle(rot.to_radians()),
             rect.min + egui::vec2(0.5, 0.5) * rect.size());
-            painter.add(egui::Shape::mesh(mesh));
+        painter.add(egui::Shape::mesh(mesh));
     }
 
     /// Wait for a key press or a touch/click

@@ -11,4 +11,6 @@ chumsky = "0.9"
 async-recursion = "1"
 futures = "0.3"
 rand = "0.8"
+serde = { version = "1.0", features = ["derive"] }
+serde_derive = "1.0.170"
 checkargs = { version = "0.1.0", path = "./checkargs" }

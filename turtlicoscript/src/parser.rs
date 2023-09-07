@@ -42,6 +42,20 @@ pub fn parse(source: &str) -> Result<Spanned<Expression>, Vec<Spanned<Error>>> {
     })
 }
 
+pub fn parse_tokens(tokens: Vec<Token>) -> Result<Spanned<Expression>, Vec<Spanned<Error>>> {
+    let srclen = tokens.len();
+    create_parser().parse(Stream::from_iter(srclen..srclen+1, tokens.into_iter().enumerate().map(
+        |(i, val)| {
+            (val, i..i+1)
+        }
+    ))).map_err(|errors| {
+        errors.into_iter().map(|err| {
+            let span = err.span();
+            Spanned::new(Error::SyntaxError(err), span)
+        }).collect()
+    })
+}
+
 pub fn get_tokens(source: &str) -> Vec<Result<Token, ()>> {
     let mut lexer = Token::lexer(source);
     let mut tokens = vec![];

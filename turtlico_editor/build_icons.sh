@@ -3,6 +3,26 @@ INKSCAPE="flatpak run org.inkscape.Inkscape"
 SCOUR="flatpak run --command=scour org.inkscape.Inkscape"
 CONVERT="flatpak run --command=convert org.inkscape.Inkscape"
 
+POSITIONAL_ARGS=()
+PWA_ICONS="NO"
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --pwa-icons)
+      PWA_ICONS="YES"
+      shift
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1")
+      shift
+      ;;
+  esac
+done
+
 if [ -f "$(which distrobox-host-exec 2> /dev/null)" ]; then
     HOST_EXEC="distrobox-host-exec"
     INKSCAPE="$HOST_EXEC $INKSCAPE"
@@ -21,14 +41,16 @@ for file in "$SCRIPT_DIR/icons_raw/"*; do
     fi
 done
 
-echo "Exporting favicon and PWA icons..."
+if [ $PWA_ICONS == "YES" ]; then
+    echo "Exporting favicon and PWA icons..."
 
-# Favicon
-$INKSCAPE --export-type=png --export-filename="$SCRIPT_DIR/assets/favicon.png" -w 48 -h 48 "$SCRIPT_DIR/icons_raw/turtlico.svg"
-$CONVERT "$SCRIPT_DIR/assets/favicon.png" "$SCRIPT_DIR/assets/favicon.ico"
-rm "$SCRIPT_DIR/assets/favicon.png"
+    # Favicon
+    $INKSCAPE --export-type=png --export-filename="$SCRIPT_DIR/assets/favicon.png" -w 48 -h 48 "$SCRIPT_DIR/icons_raw/turtlico.svg"
+    $CONVERT "$SCRIPT_DIR/assets/favicon.png" "$SCRIPT_DIR/assets/favicon.ico"
+    rm "$SCRIPT_DIR/assets/favicon.png"
 
-# PWA icons
-$INKSCAPE --export-type=png --export-filename="$SCRIPT_DIR/assets/icon-256.png" -w 256 -h 256 "$SCRIPT_DIR/icons_raw/turtlico.svg"
-$INKSCAPE --export-type=png --export-filename="$SCRIPT_DIR/assets/icon-1024.png" -w 1024 -h 1024 "$SCRIPT_DIR/icons_raw/turtlico.svg"
-$INKSCAPE --export-type=png --export-filename="$SCRIPT_DIR/assets/icon_ios_touch_192" -w 192 -h 192 "$SCRIPT_DIR/icons_raw/turtlico.svg"
+    # PWA icons
+    $INKSCAPE --export-type=png --export-filename="$SCRIPT_DIR/assets/icon-256.png" -w 256 -h 256 "$SCRIPT_DIR/icons_raw/turtlico.svg"
+    $INKSCAPE --export-type=png --export-filename="$SCRIPT_DIR/assets/icon-1024.png" -w 1024 -h 1024 "$SCRIPT_DIR/icons_raw/turtlico.svg"
+    $INKSCAPE --export-type=png --export-filename="$SCRIPT_DIR/assets/icon_ios_touch_192" -w 192 -h 192 "$SCRIPT_DIR/icons_raw/turtlico.svg"
+fi

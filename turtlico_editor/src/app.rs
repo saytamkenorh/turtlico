@@ -1,27 +1,67 @@
 use std::collections::HashMap;
 
 use egui_extras::{RetainedImage, image::FitTo};
-use emath::Vec2;
-use turtlicoscript::{parser, ast::Spanned};
+use emath::{Vec2, Pos2};
+use turtlicoscript::{parser, ast::Spanned, tokens::Token};
 use turtlicoscript_gui::app::{SubApp, ScriptApp, ScriptState};
 
-const BTN_ICON_SIZE: u32 = 22;
-const MARGIN_SMALL: f32 = 4.0;
-const MARGIN_MEDIUM: f32 = 8.0;
-const COLOR_ERROR: egui::Color32 = egui::Color32::from_rgb(255, 200, 200);
+use crate::{programview, cmdpalette, dndctl::{DnDCtl, DragData, DragAction}, project::{Command, Project, CommandRange}, cmdrenderer::{CommandRenderer, CMD_ICON_SIZE_VEC, CMD_SIZE_VEC}};
+
+pub const BTN_ICON_SIZE: u32 = 22;
+pub const BTN_ICON_SIZE_VEC: Vec2 = Vec2::new(BTN_ICON_SIZE as f32, BTN_ICON_SIZE as f32);
+pub const MARGIN_SMALL: f32 = 4.0;
+pub const MARGIN_MEDIUM: f32 = 8.0;
+pub const COLOR_ERROR: egui::Color32 = egui::Color32::from_rgb(255, 200, 200);
 
 pub struct EditorApp {
     icons: HashMap<String, RetainedImage>,
-    codeview_text: String,
+    dndctl:  DnDCtl<EditorDragData>,
+
+    programview_state: programview::ProgramViewState,
+    cmdpalette_state: cmdpalette::CmdPaletteState,
+
     script_subapp: Option<ScriptApp>,
     script_errors: Option<Vec<Spanned<turtlicoscript::error::Error>>>,
 }
 
+pub struct EditorDragData {
+    pub commands: Vec<Vec<Command>>,
+    pub commands_range: Option<CommandRange>,
+    pub project: std::rc::Rc<std::cell::RefCell<Project>>,
+    pub action: DragAction
+
+}
+impl DragData for EditorDragData {
+    fn get_size(&mut self, painter: &egui::Painter) -> (Vec2, Vec2) {
+        (
+            self.project.borrow_mut().renderer.layout_block(&self.commands, painter, Pos2::new(0.0, 0.0)).0.size(),
+            CMD_SIZE_VEC * -0.5
+        )
+    }
+    fn render(&mut self, painter: &egui::Painter, pos: Pos2) {
+        self.project.borrow_mut().renderer.render_block(&self.commands, painter, pos, None);
+    }
+    fn drag_finish(&mut self) {
+        if self.action == DragAction::MOVE {
+            if let Some(range) = self.commands_range {
+                self.project.borrow_mut().delete(range);
+            }
+        }
+    }
+    fn get_action(&mut self) -> DragAction {
+        self.action
+    }
+}
+
 impl EditorApp {
     pub fn new() -> Self {
+        let programview_state = programview::ProgramViewState::new();
+        let cmdpalette_state = cmdpalette::CmdPaletteState::new(&programview_state.project.borrow());
         Self {
             icons: load_icons(),
-            codeview_text: String::new(),
+            dndctl: DnDCtl::new(),
+            programview_state: programview_state,
+            cmdpalette_state: cmdpalette_state,
             script_subapp: None,
             script_errors: None,
         }
@@ -38,13 +78,16 @@ impl EditorApp {
                 ui.add_space(MARGIN_SMALL);
                 let run_img = self.icons.get("run").unwrap();
                 let run_btn = ui.add(
-                    egui::ImageButton::new(run_img.texture_id(ui.ctx()), Vec2::new(BTN_ICON_SIZE as f32, BTN_ICON_SIZE as f32)));
+                    egui::ImageButton::new(run_img.texture_id(ui.ctx()), BTN_ICON_SIZE_VEC));
                 if run_btn.clicked() {
                     self.run();
                 }
             });
             ui.with_layout(egui::Layout::left_to_right(egui::Align::TOP), |ui| {
-                ui.add_space(MARGIN_MEDIUM);
+                ui.add_space(MARGIN_SMALL);
+                ui.add(
+                    cmdpalette::cmdpalette(&mut self.cmdpalette_state, self.programview_state.project.clone(), &mut self.dndctl)
+                );
                 ui.vertical(|ui| {
                     if let Some(erros) = self.script_errors.clone() {
                         egui::Frame::group(ui.style())
@@ -64,19 +107,14 @@ impl EditorApp {
                                 });
                         });
                     }
-                    egui::ScrollArea::both().show(ui, |ui| {
-                        ui.add(
-                            egui::TextEdit::multiline(&mut self.codeview_text)
-                                .font(egui::TextStyle::Monospace) // for cursor height
-                                .code_editor()
-                                .desired_rows(10)
-                                .lock_focus(true)
-                                .desired_width(f32::INFINITY)
-                        );
-                    })
+                    ui.add(
+                        programview::programview(&mut self.programview_state, &mut self.dndctl)
+                    );
                 });
             });
         });
+
+        self.dndctl.ui(ui);
     }
 
 
@@ -84,8 +122,13 @@ impl EditorApp {
         if self.script_subapp.is_some() {
             return;
         }
-        let src = self.codeview_text.to_owned();
-        match parser::parse(&src) {
+        let tokens = self.programview_state.project.borrow().program.clone().into_iter().flatten().filter_map(|item| {
+            match item {
+                Command::Token(token) => Some(token),
+                _ => None
+            }
+        }).collect::<Vec<Token>>();
+        match parser::parse_tokens(tokens) {
             Ok(ast) => {
                 let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, None, true);
                 self.script_subapp = Some(subapp);

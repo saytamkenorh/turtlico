@@ -1,6 +1,8 @@
 use logos::{Lexer, Logos, Source};
+use serde::{Serialize, Deserialize};
 
 #[derive(Logos, Debug, PartialEq, Clone, Hash, Eq)]
+#[derive(Serialize, Deserialize)]
 #[logos(skip r"[ \t\f]+")]
 pub enum Token {
     #[regex(r"#.*")]
