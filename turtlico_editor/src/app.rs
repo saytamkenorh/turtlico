@@ -5,7 +5,7 @@ use emath::{Vec2, Pos2};
 use turtlicoscript::{parser, ast::Spanned, tokens::Token};
 use turtlicoscript_gui::app::{SubApp, ScriptApp, ScriptState};
 
-use crate::{programview, cmdpalette, dndctl::{DnDCtl, DragData, DragAction}, project::{Command, Project, CommandRange}, cmdrenderer::{CommandRenderer, CMD_ICON_SIZE_VEC, CMD_SIZE_VEC}};
+use crate::{programview, cmdpalette, dndctl::{DnDCtl, DragData, DragAction}, project::{Command, Project, CommandRange}, cmdrenderer::{CMD_SIZE_VEC}};
 
 pub const BTN_ICON_SIZE: u32 = 22;
 pub const BTN_ICON_SIZE_VEC: Vec2 = Vec2::new(BTN_ICON_SIZE as f32, BTN_ICON_SIZE as f32);

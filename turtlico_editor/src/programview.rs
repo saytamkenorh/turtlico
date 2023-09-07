@@ -1,8 +1,8 @@
-use std::collections::hash_map::DefaultHasher;
+
 
 use emath::{Vec2, Pos2, Rect};
 
-use crate::{project::{Project, CommandRange}, dndctl::{DnDCtl, DragAction}, app::EditorDragData, cmdrenderer::{CMD_SIZE, CMD_SIZE_VEC, CMD_ICON_SIZE, CMD_ICON_SIZE_VEC}};
+use crate::{project::{Project, CommandRange}, dndctl::{DnDCtl, DragAction}, app::EditorDragData, cmdrenderer::{CMD_SIZE_VEC, CMD_ICON_SIZE_VEC}};
 
 pub struct ProgramViewState {
     pub project: std::rc::Rc<std::cell::RefCell<Project>>,
@@ -89,7 +89,7 @@ fn programview_ui(ui: &mut egui::Ui, state: &mut ProgramViewState, dndctl: &mut 
         egui::Frame::group(ui.style()).fill(bg_color).show(ui, |ui: &mut egui::Ui| {
             ui.set_min_size(ui.available_size());
             egui::ScrollArea::both().show(ui, |ui| {
-                let (rect, mut response) = ui.allocate_at_least(
+                let (rect, response) = ui.allocate_at_least(
                     Vec2::new(f32::max(ui.available_width(), state.size.width() + CMD_ICON_SIZE_VEC.x * 3.0), f32::max(ui.available_height(), state.size.height() + CMD_ICON_SIZE_VEC.y * 3.0)),
                     egui::Sense::click_and_drag());
                 //let rect = response.rect;

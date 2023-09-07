@@ -64,7 +64,7 @@ impl CommandRenderer {
                             }
                         }
                     },
-                    token => {
+                    _token => {
                     }
                 }
             }
