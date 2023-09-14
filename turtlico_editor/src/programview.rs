@@ -36,8 +36,9 @@ impl ProgramViewState {
         {
             let (col, row) = self.xy_to_col_row(relpos);
             let mut project = self.project.borrow_mut();
-            let col_max = if row < project.program.len() { project.program[row].len() -1 } else { usize::MAX };
-            project.insert(data.commands, usize::min(col, col_max), row);
+            let col_max = if row < project.program.len() { project.program[row].len() - 1 } else { 0 };
+            let row_max = project.program.len();
+            project.insert(data.commands, usize::min(col, col_max), usize::min(row, row_max));
         }
     }
 
