@@ -23,7 +23,8 @@ impl ProgramViewState {
     }
 
     fn recalc_layout(&mut self, ui: &mut egui::Ui) {
-        (self.size, self.layout) = self.project.borrow().renderer.layout_block(&self.project.borrow().program, ui.painter(), Pos2::new(0.0, 0.0));
+        (self.size, self.layout) = self.project.borrow().renderer.layout_block(
+            &self.project.borrow().program, &self.project.borrow(), ui.painter(), Pos2::new(0.0, 0.0));
     }
 
     pub fn load_project(&mut self, ui: &mut egui::Ui, project: std::rc::Rc<std::cell::RefCell<Project>>) {
@@ -35,7 +36,8 @@ impl ProgramViewState {
         {
             let (col, row) = self.xy_to_col_row(relpos);
             let mut project = self.project.borrow_mut();
-            project.insert(data.commands, col, row);
+            let col_max = if row < project.program.len() { project.program[row].len() -1 } else { usize::MAX };
+            project.insert(data.commands, usize::min(col, col_max), row);
         }
     }
 
@@ -114,11 +116,13 @@ fn programview_ui(ui: &mut egui::Ui, state: &mut ProgramViewState, dndctl: &mut 
                     let rect = rect.expand(visuals.expansion);
                     let painter = ui.painter().with_clip_rect(rect);
             
-                    let mut project = state.project.borrow_mut();
-                    project.renderer.color_program_bg = bg_color;
-                    project.renderer.color_program_fg = fg_color;
-            
-                    project.renderer.render_block(&project.program, &painter, rect.min, None);
+                    {
+                        let mut project = state.project.borrow_mut();
+                        project.renderer.color_program_bg = bg_color;
+                        project.renderer.color_program_fg = fg_color;
+                    }
+                    let project = state.project.borrow();
+                    project.renderer.render_block(&project.program, &project, &painter, rect.min, None);
                 }
             });
         }).response

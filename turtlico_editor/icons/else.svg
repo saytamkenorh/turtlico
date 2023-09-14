@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+<g fill="#2ec27e" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+<rect x="23.5" y="7.5" width="5" height="5" rx=".72426" ry=".88155"/>
+<rect x="23.5" y="19.5" width="5" height="5" rx=".72426" ry=".88155" stroke-width=".99999"/>
+<rect transform="rotate(-45)" x="-9.7027" y="12.925" width="14.809" height="14.809" rx="2.1451" ry="2.611"/>
+</g>
+</svg>

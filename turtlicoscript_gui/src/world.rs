@@ -1,6 +1,6 @@
 use std::collections::hash_map::RandomState;
 use std::sync::mpsc::{self, Receiver};
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap, HashSet, BTreeMap};
 use std::sync::{Arc, Mutex};
 use egui::Key;
 use egui_extras::RetainedImage;
@@ -43,7 +43,7 @@ impl World {
         let block_map_depth = 3;
         let s = Self {
             sprites: map,
-            blocks: default_blocks(),
+            blocks: HashMap::from_iter(default_blocks().into_iter()),
             block_map: Array::from_elem((SCREEN_WIDTH, SCREEN_HEIGHT, block_map_depth), None),
 
             last_anim_time: 0.0,
@@ -247,8 +247,8 @@ fn load_block_file(map: &mut HashMap<String, RetainedImage>, name: &String, path
     Ok(())
 }
 
-fn default_blocks() -> HashMap<String, RetainedImage> {
-    let mut map = HashMap::new();
+pub fn default_blocks() -> BTreeMap<String, RetainedImage> {
+    let mut map = BTreeMap::new();
     insert_block_embedded!(map, "bricks", "../blocks/bricks.png");
     insert_block_embedded!(map, "fence", "../blocks/fence.png");
     insert_block_embedded!(map, "flower", "../blocks/flower.png");

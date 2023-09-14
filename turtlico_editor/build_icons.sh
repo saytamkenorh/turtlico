@@ -34,9 +34,12 @@ for file in "$SCRIPT_DIR/icons_raw/"*; do
     if [ -f "$file" ]; then
         filename=$(basename -- "$file")
         src="$file"
-        dist="$SCRIPT_DIR/icons/$filename"
-        echo "$src -> $dist"
-        $SCOUR -i "$src" -o "$dist" --enable-viewboxing --enable-id-stripping \
+        dest="$SCRIPT_DIR/icons/$filename"
+        if [ -f "$dest" ] && [ "$src" -ot "$dest" ]; then
+            continue
+        fi
+        echo "$src -> $dest"
+        $SCOUR -i "$src" -o "$dest" --enable-viewboxing --enable-id-stripping \
             --enable-comment-stripping --shorten-ids --indent=none
     fi
 done

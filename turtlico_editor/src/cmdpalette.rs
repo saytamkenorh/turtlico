@@ -1,14 +1,17 @@
+use turtlicoscript::tokens::Token;
+
 use crate::{project::{Project, Command}, cmdrenderer::{CMD_SIZE, CMD_SIZE_VEC}, dndctl::{DnDCtl, DragAction}, app::EditorDragData};
 
-
 pub struct CmdPaletteState {
-    pub active_plugin: Option<&'static str>
+    pub active_plugin: Option<&'static str>,
+    icon_default_blocks: egui_extras::RetainedImage,
 }
 
 impl CmdPaletteState {
     pub fn new(project: &Project) -> Self {
         Self {
-            active_plugin: project.plugins.first().map(|p| p.name)
+            active_plugin: project.plugins.first().map(|p| p.name),
+            icon_default_blocks: crate::project::plugin_icon!("../icons/default_blocks.svg"),
         }
     }
 }
@@ -17,7 +20,15 @@ fn cmdpalette_ui(ui: &mut egui::Ui, state: &mut CmdPaletteState, project: std::r
     ui.with_layout(egui::Layout::left_to_right(egui::Align::Min), |ui| {
         ui.vertical(|ui| {
             for plugin in project.borrow().plugins.iter() {
-                ui.add(egui::ImageButton::new(plugin.icon.texture_id(ui.ctx()), crate::app::BTN_ICON_SIZE_VEC));
+                let btn = ui.add(egui::ImageButton::new(plugin.icon.texture_id(ui.ctx()), crate::app::BTN_ICON_SIZE_VEC));
+                if btn.clicked() {
+                    state.active_plugin = Some(plugin.name);
+                }
+            }
+            // Default blocks
+            let btn = ui.add(egui::ImageButton::new(state.icon_default_blocks.texture_id(ui.ctx()), crate::app::BTN_ICON_SIZE_VEC));
+            if btn.clicked() {
+                state.active_plugin = Some("default_blocks");
             }
         });
         let available_space = ui.available_size();
@@ -31,7 +42,14 @@ fn cmdpalette_ui(ui: &mut egui::Ui, state: &mut CmdPaletteState, project: std::r
                                 if let Some(active_plugin) = state.active_plugin {
                                     if let Some(active_plugin) = project.borrow().get_plugin(active_plugin) {
                                         for cmd in active_plugin.commands.iter() {
-                                            ui.add(cmdiconsource(cmd, project.clone(), dndctl));
+                                            ui.add(cmdiconsource(vec![cmd], 0, project.clone(), dndctl));
+                                        }
+                                    } else if active_plugin == "default_blocks" {
+                                        for (name, _) in project.borrow().default_blocks.iter() {
+                                            ui.add(cmdiconsource(vec![
+                                                &Command::Token(Token::Function("place_block".to_owned())),
+                                                &Command::Token(Token::Image(name.to_owned()))
+                                            ], 1, project.clone(), dndctl));
                                         }
                                     } else {
                                         state.active_plugin = None;
@@ -52,13 +70,13 @@ pub fn cmdpalette<'a>(state: &'a mut CmdPaletteState, project: std::rc::Rc<std::
     move |ui: &mut egui::Ui| cmdpalette_ui(ui, state, project, dndctl)
 }
 
-fn cmdiconsource_ui(ui: &mut egui::Ui, cmd: &Command, project: std::rc::Rc<std::cell::RefCell<Project>>, dndctl: &mut DnDCtl<EditorDragData>) -> egui::Response {
+fn cmdiconsource_ui(ui: &mut egui::Ui, cmd: Vec<&Command>, preview_index: usize, project: std::rc::Rc<std::cell::RefCell<Project>>, dndctl: &mut DnDCtl<EditorDragData>) -> egui::Response {
     let (rect, response) = ui.allocate_exact_size(CMD_SIZE_VEC, egui::Sense::drag());
 
-    project.borrow().renderer.render_icon(cmd, &ui.painter().with_clip_rect(rect), rect.min, true);
+    project.borrow().renderer.render_icon(&cmd[preview_index], &project.borrow(), &ui.painter().with_clip_rect(rect), rect.min, true);
     if response.drag_started() {
         dndctl.drag_start(ui, EditorDragData {
-            commands: vec![vec![cmd.clone()]],
+            commands: vec![cmd.into_iter().map(|cmd| cmd.clone()).collect::<Vec<Command>>()],
             commands_range: None,
             project: project.clone(),
             action: DragAction::COPY
@@ -68,6 +86,6 @@ fn cmdiconsource_ui(ui: &mut egui::Ui, cmd: &Command, project: std::rc::Rc<std::
     response
 }
 
-pub fn cmdiconsource<'a>(cmd: &'a Command, project: std::rc::Rc<std::cell::RefCell<Project>>, dndctl: &'a mut DnDCtl<EditorDragData>) -> impl egui::Widget + 'a {
-    move |ui: &mut egui::Ui| cmdiconsource_ui(ui, cmd, project, dndctl)
+pub fn cmdiconsource<'a>(cmd: Vec<&'a Command>, preview_index: usize, project: std::rc::Rc<std::cell::RefCell<Project>>, dndctl: &'a mut DnDCtl<EditorDragData>) -> impl egui::Widget + 'a {
+    move |ui: &mut egui::Ui| cmdiconsource_ui(ui, cmd, preview_index, project, dndctl)
 }

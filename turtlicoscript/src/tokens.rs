@@ -17,6 +17,8 @@ pub enum Token {
     // Keywords
     #[token("if")]
     If,
+    #[token("else")]
+    Else,
     #[token("return")]
     Return,
     #[token("break")]

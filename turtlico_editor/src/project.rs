@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, BTreeMap};
 use serde::{Serialize, Deserialize, Serializer};
 use serde::ser::SerializeStruct;
 
@@ -31,6 +31,8 @@ macro_rules! plugin_icon {
     };
 }
 
+pub(crate) use plugin_icon;
+
 pub struct Project {
     pub modify_timestamp: std::time::Instant,
     pub program: Vec<Vec<Command>>,
@@ -39,7 +41,8 @@ pub struct Project {
     pub path: Option<String>,
     /// Project emmbeded files (blocks etc.)
     pub files: HashMap<String, Vec<u8>>,
-    blocks: HashMap<String, egui_extras::RetainedImage>,
+    pub blocks: HashMap<String, egui_extras::RetainedImage>,
+    pub default_blocks: BTreeMap<String, egui_extras::RetainedImage>,
     
     pub renderer: CommandRenderer,
     pub plugins: Vec<Plugin>,
@@ -71,6 +74,7 @@ impl Project {
             path: None,
             files: HashMap::new(),
             blocks: HashMap::new(),
+            default_blocks: turtlicoscript_gui::world::default_blocks(),
             renderer: CommandRenderer::new(),
             plugins: get_cmd_plugins(),
         }
@@ -195,10 +199,71 @@ fn get_cmd_plugins() -> Vec<Plugin> {
                 Command::Token(Token::Function("left".to_owned())),
                 Command::Token(Token::Function("right".to_owned())),
                 Command::Token(Token::Function("wait".to_owned())),
+
+                Command::Token(Token::Function("set_xy".to_owned())),
+                Command::Token(Token::Function("set_xy_px".to_owned())),
+                Command::Token(Token::Function("set_target_xy".to_owned())),
+                Command::Token(Token::Function("set_target_xy_px".to_owned())),
+
+                Command::Token(Token::Variable("block_xy".to_owned())),
+                Command::Token(Token::Function("set_rot".to_owned())),
+                Command::Token(Token::Function("speed".to_owned())),
+                Command::Token(Token::Function("skin".to_owned())),
+
+                Command::Token(Token::Function("new_turtle".to_owned())),
             ]
         }
     );
     // Control commands
+    pv.push(
+        Plugin {
+            name: "control",
+            icon: plugin_icon!("../icons/plugin_control.svg"),
+            commands: vec![
+                Command::Token(Token::Loop),
+                Command::Token(Token::For),
+                Command::Token(Token::While),
+                Command::Token(Token::Break),
+                
+                Command::Token(Token::If),
+                Command::Token(Token::Else),
+                Command::Token(Token::FnDef),
+                Command::Token(Token::Return),
+
+                Command::Token(Token::Variable("x".to_owned())),
+                Command::Token(Token::Function("".to_owned())),
+                Command::Token(Token::Assignment),
+                Command::Token(Token::Dot),
+
+                Command::Token(Token::String("str".to_owned())),
+                Command::Token(Token::Integer(0)),
+                Command::Token(Token::Float("0.0".to_owned())),
+                Command::Token(Token::Colon),
+               
+                Command::Token(Token::LeftCurly),
+                Command::Token(Token::RightCurly),
+                Command::Token(Token::LeftSquare),
+                Command::Token(Token::RightSquare),
+
+                Command::Token(Token::Plus),
+                Command::Token(Token::Minus),
+                Command::Token(Token::Star),
+                Command::Token(Token::Slash),
+
+                Command::Token(Token::Lt),
+                Command::Token(Token::Gt),
+                Command::Token(Token::Lte),
+                Command::Token(Token::Gte),
+
+                Command::Token(Token::LeftParent),
+                Command::Token(Token::RightParent),
+                Command::Token(Token::Eq),
+                Command::Token(Token::Neq),
+                
+                Command::Token(Token::Comma),
+            ]
+        }
+    );
 
     pv
 }

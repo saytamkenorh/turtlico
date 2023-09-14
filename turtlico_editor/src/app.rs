@@ -5,7 +5,7 @@ use emath::{Vec2, Pos2};
 use turtlicoscript::{parser, ast::Spanned, tokens::Token};
 use turtlicoscript_gui::app::{SubApp, ScriptApp, ScriptState};
 
-use crate::{programview, cmdpalette, dndctl::{DnDCtl, DragData, DragAction}, project::{Command, Project, CommandRange}, cmdrenderer::{CMD_SIZE_VEC}};
+use crate::{programview, cmdpalette, dndctl::{DnDCtl, DragData, DragAction}, project::{Command, Project, CommandRange}, cmdrenderer::CMD_SIZE_VEC};
 
 pub const BTN_ICON_SIZE: u32 = 22;
 pub const BTN_ICON_SIZE_VEC: Vec2 = Vec2::new(BTN_ICON_SIZE as f32, BTN_ICON_SIZE as f32);
@@ -34,12 +34,12 @@ pub struct EditorDragData {
 impl DragData for EditorDragData {
     fn get_size(&mut self, painter: &egui::Painter) -> (Vec2, Vec2) {
         (
-            self.project.borrow_mut().renderer.layout_block(&self.commands, painter, Pos2::new(0.0, 0.0)).0.size(),
+            self.project.borrow().renderer.layout_block(&self.commands, &self.project.borrow(), painter, Pos2::new(0.0, 0.0)).0.size(),
             CMD_SIZE_VEC * -0.5
         )
     }
     fn render(&mut self, painter: &egui::Painter, pos: Pos2) {
-        self.project.borrow_mut().renderer.render_block(&self.commands, painter, pos, None);
+        self.project.borrow().renderer.render_block(&self.commands, &self.project.borrow(), painter, pos, None);
     }
     fn drag_finish(&mut self) {
         if self.action == DragAction::MOVE {
@@ -58,7 +58,7 @@ impl EditorApp {
         let programview_state = programview::ProgramViewState::new();
         let cmdpalette_state = cmdpalette::CmdPaletteState::new(&programview_state.project.borrow());
         Self {
-            icons: load_icons(),
+            icons: HashMap::new(),
             dndctl: DnDCtl::new(),
             programview_state: programview_state,
             cmdpalette_state: cmdpalette_state,
@@ -68,6 +68,9 @@ impl EditorApp {
     }
 
     fn ui(&mut self, ui: &mut egui::Ui) {
+        if self.icons.len() == 0 {
+            self.icons = load_icons(ui.ctx());
+        }
         let style = ui.style_mut();
         style.spacing.button_padding = Vec2::new(MARGIN_SMALL, MARGIN_SMALL);
         style.spacing.item_spacing = Vec2::new(MARGIN_MEDIUM, MARGIN_MEDIUM);
@@ -122,6 +125,7 @@ impl EditorApp {
         if self.script_subapp.is_some() {
             return;
         }
+        self.script_errors = None;
         let tokens = self.programview_state.project.borrow().program.clone().into_iter().flatten().filter_map(|item| {
             match item {
                 Command::Token(token) => Some(token),
@@ -171,11 +175,18 @@ impl SubApp for EditorApp {
     }
 }
 
-fn load_icons() -> HashMap<String, RetainedImage> {
+fn get_btn_icon_size(ctx: &egui::Context) -> FitTo {
+    FitTo::Size(
+        (BTN_ICON_SIZE as f32 * ctx.pixels_per_point()) as u32,
+        (BTN_ICON_SIZE as f32 * ctx.pixels_per_point()) as u32
+    )
+}
+
+fn load_icons(ctx: &egui::Context) -> HashMap<String, RetainedImage> {
     let mut map = HashMap::new();
     map.insert("run".to_owned(),
-        RetainedImage::from_svg_bytes_with_size("run", include_bytes!("../icons/run.svg"), FitTo::Size(BTN_ICON_SIZE, BTN_ICON_SIZE)).unwrap());
+        RetainedImage::from_svg_bytes_with_size("run", include_bytes!("../icons/run.svg"), get_btn_icon_size(ctx)).unwrap());
     map.insert("close".to_owned(),
-        RetainedImage::from_svg_bytes_with_size("close", include_bytes!("../icons/close.svg"), FitTo::Size(BTN_ICON_SIZE, BTN_ICON_SIZE)).unwrap());
+        RetainedImage::from_svg_bytes_with_size("close", include_bytes!("../icons/close.svg"), get_btn_icon_size(ctx)).unwrap());
     map
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 32 32"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="fndef.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     inkscape:zoom="17.546875"
+     inkscape:cx="36.986643"
+     inkscape:cy="22.254675"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:#9141ac;stroke:#ffffff;stroke-width:1;stroke-linecap:round;stroke-linejoin:round"
+       id="path1"
+       cx="16"
+       cy="16"
+       r="12.5" />
+    <path
+       d="m 14.20038,15.192086 h -2.021701 v 6.807925 H 9.8430014 V 15.192086 H 8.5564642 v -1.12572 L 9.8430014,13.438413 V 12.81046 q 0,-1.46267 0.7198486,-2.13657 0.719848,-0.6739005 2.305045,-0.6739005 1.209958,0 2.151887,0.3599245 l -0.597321,1.715382 q -0.704532,-0.22208 -1.301853,-0.22208 -0.497767,0 -0.719848,0.29866 -0.222081,0.291002 -0.222081,0.75048 v 0.536057 h 2.021701 z m 9.243157,6.807925 h -2.335678 v -5.000647 q 0,-0.926613 -0.329292,-1.38609 -0.329292,-0.467136 -1.04914,-0.467136 -0.980219,0 -1.416723,0.658585 -0.436504,0.650926 -0.436504,2.167202 v 4.028086 h -2.335677 v -8.561598 h 1.784304 l 0.313977,1.095088 h 0.130185 q 0.390556,-0.620294 1.072114,-0.934271 0.689217,-0.321634 1.562224,-0.321634 1.493302,0 2.266756,0.811744 0.773454,0.804085 0.773454,2.328019 z"
+       id="text1"
+       style="font-weight:bold;font-size:15.6835px;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Bold';fill:#ffffff;stroke-linecap:round;stroke-linejoin:round"
+       aria-label="fn" />
+  </g>
+</svg>
