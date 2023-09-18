@@ -63,7 +63,12 @@ impl CommandRenderer {
 
         match cmd {
             Command::Comment(value) => {
-                text = Some(value);
+                if value.is_empty() {
+                    text = Some("#");
+                    text_size = 18.0;
+                } else {
+                    text = Some(value);
+                }
                 background = egui::Color32::from_rgb(100, 100, 100);
             },
             Command::Token(token) => {

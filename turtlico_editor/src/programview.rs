@@ -1,14 +1,17 @@
 
 
 use emath::{Vec2, Pos2, Rect};
+use turtlicoscript::tokens::Token;
 
-use crate::{project::{Project, CommandRange}, dndctl::{DnDCtl, DragAction}, app::EditorDragData, cmdrenderer::{CMD_SIZE_VEC, CMD_ICON_SIZE_VEC}};
+use crate::{project::{Project, CommandRange, Command}, dndctl::{DnDCtl, DragAction}, app::EditorDragData, cmdrenderer::{CMD_SIZE_VEC, CMD_ICON_SIZE_VEC}, programviewdialogs};
 
 pub struct ProgramViewState {
     pub project: std::rc::Rc<std::cell::RefCell<Project>>,
     size: Rect,
-    project_modify_timestamp: std::time::Instant,
+    drag_started: Option<DragAction>,
+    project_modify_timestamp: chrono::DateTime<chrono::Local>,
     layout: Vec<Vec<f32>>,
+    pub(crate) edited_cmd: Option<(usize, usize, Command)>,
 }
 
 impl ProgramViewState {
@@ -16,8 +19,10 @@ impl ProgramViewState {
         let this = Self {
             project: std::rc::Rc::new(Project::empty().into()),
             size: Rect::from_min_size(Pos2::new(0.0, 0.0), Vec2::new(0.0, 0.0)),
-            project_modify_timestamp: std::time::Instant::now(),
+            drag_started: None,
+            project_modify_timestamp: chrono::Local::now(),
             layout: vec![],
+            edited_cmd: None,
         };
         this
     }
@@ -95,22 +100,42 @@ fn programview_ui(ui: &mut egui::Ui, state: &mut ProgramViewState, dndctl: &mut 
                 let (rect, response) = ui.allocate_at_least(
                     Vec2::new(f32::max(ui.available_width(), state.size.width() + CMD_ICON_SIZE_VEC.x * 3.0), f32::max(ui.available_height(), state.size.height() + CMD_ICON_SIZE_VEC.y * 3.0)),
                     egui::Sense::click_and_drag());
-                //let rect = response.rect;
+                
+                // User input
+                ui.set_enabled(state.edited_cmd.is_none());
+                if ui.is_enabled() {
+                    if let Some((droppos, data)) = dndctl.drag_receive(rect) {
+                        state.insert((droppos - rect.min).to_pos2(), data);
+                    }
 
-                if let Some((droppos, data)) = dndctl.drag_receive(rect) {
-                    state.insert((droppos - rect.min).to_pos2(), data);
-                }
+                    if response.drag_started() {
+                        state.drag_started = Some(if response.drag_started_by(egui::PointerButton::Secondary) { DragAction::COPY } else { DragAction::MOVE });
+                    }
+                    if let Some(start_button) = state.drag_started {
+                        if response.drag_delta().length_sq() > 3.0 {
+                            if let Some((cmd, range)) = state.get_cmd_at_pointer(ui, rect) {
+                                dndctl.drag_start(ui, EditorDragData {
+                                    action: start_button,
+                                    commands: vec![vec![cmd]],
+                                    commands_range: Some(range),
+                                    project: state.project.clone(),
+                                });
+                            }
+                            state.drag_started = None;
+                        }
+                    }
+                    if !response.dragged() {
+                        state.drag_started = None;
+                    }
 
-                if response.drag_started() {
-                    if let Some((cmd, range)) = state.get_cmd_at_pointer(ui, rect) {
-                        dndctl.drag_start(ui, EditorDragData {
-                            action: if response.drag_started_by(egui::PointerButton::Secondary) { DragAction::COPY } else { DragAction::MOVE },
-                            commands: vec![vec![cmd]],
-                            commands_range: Some(range),
-                            project: state.project.clone(),
-                        });
+                    if response.secondary_clicked() {
+                        if let Some((cmd, range)) = state.get_cmd_at_pointer(ui, rect) {
+                            state.edited_cmd = Some((range.start.0, range.start.1, cmd.clone()));
+                        }
                     }
                 }
+
+                programviewdialogs::dialog(ui, state);
 
                 if ui.is_rect_visible(rect) {
                     let visuals = ui.style().noninteractive();

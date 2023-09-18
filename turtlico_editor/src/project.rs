@@ -34,7 +34,7 @@ macro_rules! plugin_icon {
 pub(crate) use plugin_icon;
 
 pub struct Project {
-    pub modify_timestamp: std::time::Instant,
+    pub modify_timestamp: chrono::DateTime<chrono::Local>,
     pub program: Vec<Vec<Command>>,
     
     /// File system path of the project (if applicable)
@@ -69,7 +69,7 @@ pub struct CommandRange {
 impl Project {
     pub fn empty() -> Self {
         Self {
-            modify_timestamp: std::time::Instant::now(),
+            modify_timestamp: chrono::Local::now(),
             program: Vec::new(),
             path: None,
             files: HashMap::new(),
@@ -127,7 +127,7 @@ impl Project {
                 self.insert_single(cmd.clone(), col, row);
             }
         }
-        self.modify_timestamp = std::time::Instant::now();
+        self.modify_timestamp = chrono::Local::now();
     }
 
     fn delete_single(&mut self, col: usize, row: usize) {
@@ -157,7 +157,7 @@ impl Project {
                 self.delete_single(x, y);
             }
         }
-        self.modify_timestamp = std::time::Instant::now();
+        self.modify_timestamp = chrono::Local::now();
     }
 }
 
@@ -261,6 +261,7 @@ fn get_cmd_plugins() -> Vec<Plugin> {
                 Command::Token(Token::Neq),
                 
                 Command::Token(Token::Comma),
+                Command::Comment("".to_owned()),
             ]
         }
     );

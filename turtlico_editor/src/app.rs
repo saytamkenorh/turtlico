@@ -57,14 +57,16 @@ impl EditorApp {
     pub fn new() -> Self {
         let programview_state = programview::ProgramViewState::new();
         let cmdpalette_state = cmdpalette::CmdPaletteState::new(&programview_state.project.borrow());
-        Self {
+        let app = Self {
             icons: HashMap::new(),
             dndctl: DnDCtl::new(),
             programview_state: programview_state,
             cmdpalette_state: cmdpalette_state,
             script_subapp: None,
             script_errors: None,
-        }
+        };
+        crate::t_log("EditorApp initialized");
+        app
     }
 
     fn ui(&mut self, ui: &mut egui::Ui) {
