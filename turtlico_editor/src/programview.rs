@@ -1,7 +1,6 @@
 
 
 use emath::{Vec2, Pos2, Rect};
-use turtlicoscript::tokens::Token;
 
 use crate::{project::{Project, CommandRange, Command}, dndctl::{DnDCtl, DragAction}, app::EditorDragData, cmdrenderer::{CMD_SIZE_VEC, CMD_ICON_SIZE_VEC}, programviewdialogs};
 

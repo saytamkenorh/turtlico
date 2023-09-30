@@ -89,7 +89,7 @@ impl Project {
         None
     }
 
-    fn insert_single(&mut self, cmd: Command, mut col: usize, mut row: usize) {
+    fn insert_single(&mut self, cmd: Command, mut col: usize, mut row: usize, extra_insert: bool) {
         if row >= self.program.len() {
             self.program.push(vec![Command::Token(Token::Newline)]);
             if get_is_token!(cmd, Newline) {
@@ -105,7 +105,18 @@ impl Project {
                     if col >= row_len {
                         self.program.insert(row + 1, vec![Command::Token(Token::Newline)]);
                     } else {
-                        let following_newline: Vec<_> = self.program[row].drain(col..row_len).collect();
+                        let mut following_newline: Vec<_> = self.program[row].drain(col..row_len).collect();
+                        if let Some(cmd) = self.program[row].last() {
+                            if get_is_token!(cmd, LeftCurly) && !matches!(following_newline.first(), Some(Command::Token(Token::RightCurly))) {
+                                following_newline.insert(0, Command::Token(Token::Space));   
+                            }
+                        }
+                        for cmd in self.program[row].iter() {
+                            if !get_is_token!(cmd, Space) {
+                                break;   
+                            }
+                            following_newline.insert(0, Command::Token(Token::Space));
+                        };
                         self.program[row].push(Command::Token(Token::Newline));
                         self.program.insert(row + 1, following_newline);
                     }
@@ -118,13 +129,25 @@ impl Project {
         if col >= row_len && row_len > 0 && get_is_token!(self.program[row].last().unwrap(), Newline) {
             col = row_len - 1;
         }
+        if extra_insert {
+            if get_is_token!(cmd, LeftCurly) {
+                self.program[row].insert(usize::min(row_len, col), Command::Token(Token::RightCurly));
+            }
+            if get_is_token!(cmd, LeftParent) {
+                self.program[row].insert(usize::min(row_len, col), Command::Token(Token::RightParent));
+            }
+            if get_is_token!(cmd, LeftSquare) {
+                self.program[row].insert(usize::min(row_len, col), Command::Token(Token::RightSquare));
+            }
+        }
         self.program[row].insert(usize::min(row_len, col), cmd);
     }
 
     pub fn insert(&mut self, block: Vec<Vec<Command>>, col: usize, row: usize) {
+        let extra_insert = block.len() == 1 && block[0].len() == 1;
         for line in block.iter().rev() {
             for cmd in line.iter().rev() {
-                self.insert_single(cmd.clone(), col, row);
+                self.insert_single(cmd.clone(), col, row, extra_insert);
             }
         }
         self.modify_timestamp = chrono::Local::now();
