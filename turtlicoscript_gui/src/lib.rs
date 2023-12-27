@@ -16,7 +16,7 @@ use world::{SpriteID, BLOCK_SIZE_PX, World};
 pub mod app;
 pub mod sprite;
 pub mod world;
-mod worker;
+pub mod worker;
 
 pub enum WorldSyncState {
     Update,

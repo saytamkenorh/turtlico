@@ -4,9 +4,11 @@ pub mod app;
 pub mod cmdrenderer;
 pub mod cmdpalette;
 pub mod dndctl;
+pub mod nativedialogs;
 pub mod programview;
 pub mod programviewdialogs;
 pub mod project;
+pub mod widgets;
 
 fn main() {
     env_init();

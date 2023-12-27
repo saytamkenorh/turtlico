@@ -20,13 +20,13 @@ fn cmdpalette_ui(ui: &mut egui::Ui, state: &mut CmdPaletteState, project: std::r
     ui.with_layout(egui::Layout::left_to_right(egui::Align::Min), |ui| {
         ui.vertical(|ui| {
             for plugin in project.borrow().plugins.iter() {
-                let btn = ui.add(egui::ImageButton::new(plugin.icon.texture_id(ui.ctx()), crate::app::BTN_ICON_SIZE_VEC));
+                let btn = ui.add(egui::ImageButton::new(plugin.icon.texture_id(ui.ctx()), crate::widgets::BTN_ICON_SIZE_VEC));
                 if btn.clicked() {
                     state.active_plugin = Some(plugin.name);
                 }
             }
             // Default blocks
-            let btn = ui.add(egui::ImageButton::new(state.icon_default_blocks.texture_id(ui.ctx()), crate::app::BTN_ICON_SIZE_VEC));
+            let btn = ui.add(egui::ImageButton::new(state.icon_default_blocks.texture_id(ui.ctx()), crate::widgets::BTN_ICON_SIZE_VEC));
             if btn.clicked() {
                 state.active_plugin = Some("default_blocks");
             }

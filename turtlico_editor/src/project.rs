@@ -1,6 +1,5 @@
 use std::collections::{HashMap, BTreeMap};
-use serde::{Serialize, Deserialize, Serializer};
-use serde::ser::SerializeStruct;
+use serde::{Serialize, Deserialize};
 
 use turtlicoscript::tokens::Token;
 
@@ -24,7 +23,7 @@ macro_rules! plugin_icon {
     ( $file:expr ) => {
         egui_extras::RetainedImage::from_svg_bytes_with_size(
                 $file, include_bytes!($file),
-                egui_extras::image::FitTo::Size(crate::app::BTN_ICON_SIZE, crate::app::BTN_ICON_SIZE)
+                egui_extras::image::FitTo::Size(crate::widgets::BTN_ICON_SIZE, crate::widgets::BTN_ICON_SIZE)
             )
             .unwrap()
             .with_options(egui::TextureOptions::NEAREST)
@@ -33,7 +32,9 @@ macro_rules! plugin_icon {
 
 pub(crate) use plugin_icon;
 
+#[derive(Serialize, Deserialize)]
 pub struct Project {
+    #[serde(skip, default = "chrono::Local::now")]
     pub modify_timestamp: chrono::DateTime<chrono::Local>,
     pub program: Vec<Vec<Command>>,
     
@@ -41,10 +42,14 @@ pub struct Project {
     pub path: Option<String>,
     /// Project emmbeded files (blocks etc.)
     pub files: HashMap<String, Vec<u8>>,
+    #[serde(skip)]
     pub blocks: HashMap<String, egui_extras::RetainedImage>,
+    #[serde(skip, default = "turtlicoscript_gui::world::default_blocks")]
     pub default_blocks: BTreeMap<String, egui_extras::RetainedImage>,
     
+    #[serde(skip, default = "CommandRenderer::new")]
     pub renderer: CommandRenderer,
+    #[serde(skip, default = "get_cmd_plugins")]
     pub plugins: Vec<Plugin>,
 }
 
@@ -87,6 +92,10 @@ impl Project {
             }
         }
         None
+    }
+
+    pub fn save(&self) -> Result<String, serde_json::Error> {
+        serde_json::to_string(self)
     }
 
     fn insert_single(&mut self, cmd: Command, mut col: usize, mut row: usize, extra_insert: bool) {
@@ -181,20 +190,6 @@ impl Project {
             }
         }
         self.modify_timestamp = chrono::Local::now();
-    }
-}
-
-impl Serialize for Project {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        // 3 is the number of fields in the struct.
-        let mut state = serializer.serialize_struct("Project", 3)?;
-        state.serialize_field("program", &self.program)?;
-        state.serialize_field("files", &self.files)?;
-        state.serialize_field("plugins", &self.plugins.iter().map(|p| p.name).collect::<Vec<&str>>())?;
-        state.end()
     }
 }
 

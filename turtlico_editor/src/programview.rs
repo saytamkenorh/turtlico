@@ -31,9 +31,16 @@ impl ProgramViewState {
             &self.project.borrow().program, &self.project.borrow(), ui.painter(), Pos2::new(0.0, 0.0));
     }
 
-    pub fn load_project(&mut self, ui: &mut egui::Ui, project: std::rc::Rc<std::cell::RefCell<Project>>) {
+    pub fn load_project(&mut self, data: &str) -> Result<(), serde_json::Error> {
+        let proj: Project = serde_json::from_str(data)?;
+        self.set_project(std::rc::Rc::new(proj.into()));
+        Ok(())
+    }
+
+    pub fn set_project(&mut self, project: std::rc::Rc<std::cell::RefCell<Project>>) {
         self.project = project;
-        self.recalc_layout(ui);
+        self.project_modify_timestamp = chrono::DateTime::<chrono::Local>::MIN_UTC.into();
+        self.project.borrow_mut().modify_timestamp = chrono::Local::now();
     }
 
     pub fn insert(&mut self, relpos: Pos2, data: EditorDragData) {

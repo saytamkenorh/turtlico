@@ -10,6 +10,9 @@ use crate::world::World;
 pub trait SubApp {
     // Return true to continue
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) -> bool;
+
+    fn save(&mut self, _storage: &mut dyn eframe::Storage) {}
+    fn load(&mut self, _storage: &dyn eframe::Storage) {}
 }
 
 pub struct RootApp {
@@ -17,8 +20,13 @@ pub struct RootApp {
 }
 
 impl RootApp {
-    pub fn new(cc: &eframe::CreationContext<'_>, subapps: Vec<Box<dyn SubApp>>) -> Self {
+    pub fn new(cc: &eframe::CreationContext<'_>, mut subapps: Vec<Box<dyn SubApp>>) -> Self {
         cc.egui_ctx.set_visuals(egui::Visuals::light());
+        if let Some(storage) = cc.storage {
+            for app in subapps.iter_mut() {
+                app.load(storage);
+            }
+        }
 
         Self {
             subapps: subapps
@@ -89,6 +97,17 @@ impl eframe::App for RootApp {
         if self.subapps.len() == 0 {
             self.close(frame);
         }
+    }
+
+    fn save(&mut self, storage: &mut dyn eframe::Storage) {
+        for app in self.subapps.iter_mut() {
+            app.save(storage);
+        }
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    fn auto_save_interval(&self) -> std::time::Duration {
+        std::time::Duration::from_secs(60 * 10)
     }
 }
 
@@ -171,7 +190,7 @@ impl ScriptApp{
             let mut ctx = turtlicoscript::interpreter::Context::new_parent(Some(cancellable));
             ctx.import_library(crate::init_library(world_clone, rx), false);
             match ctx.eval_root(&ast) {
-                Ok(result) => {
+                Ok(_result) => {
                     let mut _state = state.lock().unwrap();
                     *_state = ScriptState::Finished;
                 },
