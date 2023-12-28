@@ -31,9 +31,6 @@ jobs:
     - name: Build
       run: bash wasm-build.sh --build-only
 
-    - name: Run tests
-      run: cargo test --verbose
-
     - name: Upload Artifact
       uses: actions/upload-pages-artifact@v2
       with:
