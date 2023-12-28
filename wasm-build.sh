@@ -3,6 +3,7 @@ set -e
 
 PROFILE="dev"
 SERVE=1
+HTTPS=0
 
 for i in "$@"; do
   case $i in
@@ -12,6 +13,10 @@ for i in "$@"; do
       ;;
     -s|--serve)
       SERVE=1
+      shift
+      ;;
+    -s|--https)
+      HTTPS=1
       shift
       ;;
     -b|--build-only)
@@ -46,5 +51,9 @@ cp "$SCRIPT_DIR/turtlico_editor/index.html" "$DEST_DIRT/index.html"
 cp -r "$SCRIPT_DIR/turtlico_editor/assets/"* "$DEST_DIRT"
 
 if [[ $SERVE -eq 1 ]]; then
-  cd "$DEST_DIRT" && python3 "$SCRIPT_DIR/wasm-server.py"
+  if [[ $HTTPS -eq 1 ]]; then
+    cd "$DEST_DIRT" && python3 "$SCRIPT_DIR/wasm-server.py" --https
+  else
+    cd "$DEST_DIRT" && python3 "$SCRIPT_DIR/wasm-server.py"
+  fi
 fi
