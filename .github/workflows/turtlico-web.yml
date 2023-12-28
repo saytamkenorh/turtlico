@@ -1,0 +1,58 @@
+name: Turtlico Web
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly
+        profile: minimal
+        target: wasm32-unknown-unknown
+        override: true
+    - uses: Swatinem/rust-cache@v2
+      with:
+        prefix-key: "turtlico-web-"
+
+    - name: Build
+      run: bash wasm-build.sh --build-only
+
+    - name: Run tests
+      run: cargo test --verbose
+
+    - name: Upload Artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        path: './dist/dev'
+
+  deploy:
+    needs: build
+    
+    permissions:
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          folder: './dist/dev'
+          single-commit: true
