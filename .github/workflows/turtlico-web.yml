@@ -22,6 +22,7 @@ jobs:
         profile: minimal
         target: wasm32-unknown-unknown
         override: true
+        components: rust-src
     - uses: Swatinem/rust-cache@v2
       with:
         prefix-key: "turtlico-web-"
