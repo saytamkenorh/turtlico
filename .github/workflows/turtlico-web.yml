@@ -23,6 +23,7 @@ jobs:
         target: wasm32-unknown-unknown
         override: true
         components: rust-src
+    - run: cargo +nightly install wasm-bindgen-cli
     - uses: Swatinem/rust-cache@v2
       with:
         prefix-key: "turtlico-web-"
