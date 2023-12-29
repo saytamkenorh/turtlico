@@ -37,7 +37,8 @@ RUSTFLAGS='-C target-feature=+atomics,+bulk-memory,+mutable-globals --cfg=web_sy
 RUSTFLAGS=$RUSTFLAGS cargo +nightly build --profile "$PROFILE" --target wasm32-unknown-unknown -Z build-std=std,panic_abort
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-DEST_DIRT="./dist/$PROFILE"
+DIST_DIR="./dist"
+DEST_DIRT="$DIST_DIR/$PROFILE"
 
 rm -rf "$DEST_DIRT"
 
@@ -52,8 +53,8 @@ cp -r "$SCRIPT_DIR/turtlico_editor/assets/"* "$DEST_DIRT"
 
 if [[ $SERVE -eq 1 ]]; then
   if [[ $HTTPS -eq 1 ]]; then
-    cd "$DEST_DIRT" && python3 "$SCRIPT_DIR/wasm-server.py" --https
+    cd "$DIST_DIR" && python3 "$SCRIPT_DIR/wasm-server.py" --https
   else
-    cd "$DEST_DIRT" && python3 "$SCRIPT_DIR/wasm-server.py"
+    cd "$DIST_DIR" && python3 "$SCRIPT_DIR/wasm-server.py"
   fi
 fi

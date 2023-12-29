@@ -3,16 +3,7 @@ use wasm_bindgen::{JsValue, prelude::wasm_bindgen};
 
 #[cfg(target_arch = "wasm32")]
 pub fn spawn(f: impl FnOnce() + Send + 'static) -> Result<web_sys::Worker, JsValue> {
-  // Relative path for web_sys::Worker::new does not work properly in a subfolder
-  // so a domain relative path is built manually
-  let mut path_workerjs = std::path::PathBuf::new();
-  path_workerjs.push(web_sys::window().unwrap().location().pathname()?);
-  if path_workerjs.file_name().unwrap_or(std::ffi::OsStr::new("")).to_str().unwrap().ends_with(".html") {
-    path_workerjs.pop();
-  }
-  path_workerjs.push("worker.js");
-
-  let w = web_sys::Worker::new(path_workerjs.to_str().unwrap())?;
+  let w = web_sys::Worker::new("worker.js")?;
   // Double-boxing because `dyn FnOnce` is unsized and so `Box<dyn FnOnce()>` has
   // an undefined layout (although I think in practice its a pointer and a length?).
   let ptr = Box::into_raw(Box::new(Box::new(f) as Box<dyn FnOnce()>));
