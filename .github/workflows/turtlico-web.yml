@@ -50,10 +50,10 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-pages-artifact@v2
       with:
-        path: './dist/dev'
+        path: './dist/release'
 
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@v4
       with:
-        folder: './dist/dev'
+        folder: './dist/release'
         single-commit: true
