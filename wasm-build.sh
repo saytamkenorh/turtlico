@@ -45,12 +45,18 @@ rm -rf "$DEST_DIR"
 mkdir -p "$DEST_DIR"
 
 echo "Running wasm-bindgen..."
+if [[ $PROFILE -eq "release" ]]; then
+  WASM_FILE="$SCRIPT_DIR/target/wasm32-unknown-unknown/release/turtlico_editor.wasm"
+else
+  WASM_FILE="$SCRIPT_DIR/target/wasm32-unknown-unknown/debug/turtlico_editor.wasm"
+fi
+
 wasm-bindgen \
   --out-dir "$DEST_DIR" \
   --target no-modules \
-  "$SCRIPT_DIR/target/wasm32-unknown-unknown/debug/turtlico_editor.wasm"
+  "$WASM_FILE"
 
-if [[ $PROFILE -eq "release" ]]; then
+if [ "$PROFILE" == "release" ]; then
   echo "Optimizing WASM..."
   wasm-opt -O3 --fast-math -o "$DEST_DIR/turtlico_editor_bg.wasm" "$DEST_DIR/turtlico_editor_bg.wasm"
 fi
