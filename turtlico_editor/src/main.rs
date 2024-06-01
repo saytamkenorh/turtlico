@@ -12,10 +12,11 @@ pub mod widgets;
 
 fn main() {
     env_init();
-    let editor_app = Box::new(EditorApp::new());
-    turtlicoscript_gui::app::RootApp::run(vec![
-        editor_app
-    ]);
+    turtlicoscript_gui::app::RootApp::run(
+        |ctx|{ vec![
+            Box::new(EditorApp::new(ctx))
+        ]}
+    );
 }
 
 #[cfg(not(target_arch = "wasm32"))]

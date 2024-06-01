@@ -1,14 +1,18 @@
 use std::collections::HashMap;
 
-use egui_extras::{RetainedImage, image::FitTo};
+use egui::ImageSource;
 use emath::{Vec2, Pos2};
 use turtlicoscript::{parser, ast::Spanned, tokens::Token};
 use turtlicoscript_gui::app::{SubApp, ScriptApp, ScriptState};
 
 use crate::{programview, cmdpalette, dndctl::{DnDCtl, DragData, DragAction}, project::{Command, Project, CommandRange}, cmdrenderer::CMD_SIZE_VEC, nativedialogs, widgets::{self, MARGIN_SMALL, MARGIN_MEDIUM, BTN_ICON_SIZE_VEC, BTN_ICON_SIZE}};
 
+const MODIFIERS_CTRL: egui::Modifiers = egui::Modifiers { alt: false, ctrl: true, shift: false, mac_cmd: false, command: false };
+
 pub struct EditorApp {
-    icons: HashMap<String, RetainedImage>,
+    ctx: egui::Context,
+
+    icons: HashMap<String, egui::ImageSource<'static>>,
     dndctl:  DnDCtl<EditorDragData>,
 
     programview_state: programview::ProgramViewState,
@@ -19,6 +23,7 @@ pub struct EditorApp {
 
     project_autosave_time: chrono::DateTime<chrono::Local>,
     project_path: Option<std::path::PathBuf>,
+    project_save_time: chrono::DateTime<chrono::Local>,
     app_errors: Vec<String>,
 
     save_file_receiver: Option<std::sync::mpsc::Receiver<nativedialogs::SaveFileMsg>>,
@@ -35,12 +40,12 @@ pub struct EditorDragData {
 impl DragData for EditorDragData {
     fn get_size(&mut self, painter: &egui::Painter) -> (Vec2, Vec2) {
         (
-            self.project.borrow().renderer.layout_block(&self.commands, &self.project.borrow(), painter, Pos2::new(0.0, 0.0)).0.size(),
+            self.project.borrow().renderer.as_ref().unwrap().layout_block(&self.commands, &self.project.borrow(), painter, Pos2::new(0.0, 0.0)).0.size(),
             CMD_SIZE_VEC * -0.5
         )
     }
     fn render(&mut self, painter: &egui::Painter, pos: Pos2) {
-        self.project.borrow().renderer.render_block(&self.commands, &self.project.borrow(), painter, pos, None);
+        self.project.borrow().renderer.as_ref().unwrap().render_block(&self.commands, &self.project.borrow(), painter, pos, None);
     }
     fn drag_finish(&mut self) {
         if self.action == DragAction::MOVE {
@@ -55,10 +60,11 @@ impl DragData for EditorDragData {
 }
 
 impl EditorApp {
-    pub fn new() -> Self {
-        let programview_state = programview::ProgramViewState::new();
-        let cmdpalette_state = cmdpalette::CmdPaletteState::new(&programview_state.project.borrow());
+    pub fn new(ctx: &egui::Context) -> Self {
+        let programview_state = programview::ProgramViewState::new(ctx);
+        let cmdpalette_state = cmdpalette::CmdPaletteState::new(&programview_state.project.borrow(), ctx);
         let app = Self {
+            ctx: ctx.clone(),
             icons: HashMap::new(),
             dndctl: DnDCtl::new(),
             programview_state: programview_state,
@@ -67,6 +73,7 @@ impl EditorApp {
             script_errors: None,
             project_autosave_time: chrono::DateTime::<chrono::Local>::MIN_UTC.into(),
             project_path: None,
+            project_save_time: chrono::DateTime::<chrono::Local>::MIN_UTC.into(),
             app_errors: vec![],
             save_file_receiver: None,
             open_file_dialog: None,
@@ -77,7 +84,7 @@ impl EditorApp {
 
     fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
         if self.icons.len() == 0 {
-            self.icons = load_icons(ui.ctx());
+            self.icons = load_icons();
         }
         let style = ui.style_mut();
         style.spacing.button_padding = Vec2::new(MARGIN_SMALL, MARGIN_SMALL);
@@ -87,19 +94,23 @@ impl EditorApp {
             ui.add_space(MARGIN_SMALL);
             ui.horizontal(|ui| {
                 ui.add_space(MARGIN_SMALL);
+                ui.set_height(BTN_ICON_SIZE as f32 + MARGIN_SMALL * 2.0);
                 // Run
                 let run_img = self.icons.get("run").unwrap();
                 let run_btn = ui.add(
-                    egui::ImageButton::new(run_img.texture_id(ui.ctx()), BTN_ICON_SIZE_VEC));
+                    egui::ImageButton::new(run_img.clone()));
                 if run_btn.clicked() {
                     self.run();
                 }
                 // Save
                 let save_img = self.icons.get("save").unwrap();
-                let save_btn = ui.add(
-                    egui::ImageButton::new(save_img.texture_id(ui.ctx()), BTN_ICON_SIZE_VEC));
-                if save_btn.clicked() {
-                    self.local_save();
+                let save_btn = ui.add_enabled(
+                    self.get_project_modified(),
+                    egui::ImageButton::new(save_img.clone()));
+                if save_btn.clicked() || ui.ctx().input_mut(
+                    |i| i.consume_shortcut(&egui::KeyboardShortcut::new(MODIFIERS_CTRL, egui::Key::S)))
+                {
+                    self.local_save(false);
                 }
                 if let Some(receiver) = &self.save_file_receiver {
                     if let Ok(result) = receiver.try_recv() {
@@ -118,19 +129,24 @@ impl EditorApp {
                 // Load
                 let load_img = self.icons.get("load").unwrap();
                 let load_btn = ui.add(
-                    egui::ImageButton::new(load_img.texture_id(ui.ctx()), BTN_ICON_SIZE_VEC));
-                if load_btn.clicked() {
+                    egui::ImageButton::new(load_img.clone()));
+                if load_btn.clicked() || ui.ctx().input_mut(
+                    |i| i.consume_shortcut(&egui::KeyboardShortcut::new(MODIFIERS_CTRL, egui::Key::O)))
+                {
                     self.local_open();
                 }
                 if let Some(dialog) = &self.open_file_dialog {
                     if let Ok(result) = dialog.get_receiver().try_recv() {
                         self.app_errors.clear();
                         match result {
-                            nativedialogs::OpenFileMsg::Openend(data) => {
+                            nativedialogs::OpenFileMsg::Openend(data, path) => {
                                 match String::from_utf8(data) {
                                     Ok(data) => {
                                         match self.load_project_string(&data) {
-                                            Ok(_) => {},
+                                            Ok(_) => {
+                                                self.project_path = path;
+                                                self.set_project_unmodified();
+                                            },
                                             Err(err) => {
                                                 self.app_errors.push(format!("Failed to load the file: {}", err));
                                             }
@@ -149,6 +165,16 @@ impl EditorApp {
                         self.open_file_dialog = None;
                     }
                 }
+
+                ui.with_layout(egui::Layout::centered_and_justified(egui::Direction::RightToLeft), |ui| {
+                    ui.add(egui::Label::new(
+                        self.project_path.as_ref().map_or("".to_owned(), |path| {
+                            path.file_name().map_or("<invalid filename>".to_owned(), |filename| {
+                                (if self.get_project_modified() { "*" } else { "" }).to_owned() + 
+                                filename.to_str().unwrap_or("<invalid filename>")
+                            })
+                        })));
+                });
             });
             ui.with_layout(egui::Layout::left_to_right(egui::Align::TOP), |ui| {
                 ui.add_space(MARGIN_SMALL);
@@ -206,7 +232,7 @@ impl EditorApp {
     }
 
     fn load_project_string(&mut self, input: &str) -> Result<(), serde_json::Error> {
-        match self.programview_state.load_project(input) {
+        match self.programview_state.load_project(input, &self.ctx) {
             Ok(_) => {
                 crate::t_log("Program loaded");
                 Ok(())
@@ -239,17 +265,23 @@ impl EditorApp {
         }
     }
 
-    fn local_save(&mut self) {
+    fn local_save(&mut self, save_as: bool) {
         if self.save_file_receiver.is_some() {
             return;
         }
-        match self.programview_state.project.borrow().save() {
+        let save_ok = match self.programview_state.project.borrow().save() {
             Ok(str) => {
-                self.save_file_receiver = Some(crate::nativedialogs::save_file(str.into_bytes(), self.project_path.to_owned()));
+                let path = if save_as { None } else { self.project_path.to_owned() };
+                self.save_file_receiver = Some(crate::nativedialogs::save_file(str.into_bytes(), path));
+                true
             },
             Err(err) => {
                 self.app_errors.push(format!("File serialization failed: {}", err.to_string()));
+                false
             }
+        };
+        if save_ok {
+            self.set_project_unmodified();
         }
     }
 
@@ -263,6 +295,18 @@ impl EditorApp {
     #[cfg(target_arch = "wasm32")]
     fn local_open(&mut self) {
         self.open_file_dialog = Some(crate::nativedialogs::open_file());
+    }
+
+    fn get_project_modified(&self) -> bool {
+        if self.project_path.is_none() {
+            true
+        } else {
+            self.programview_state.project.borrow().modify_timestamp != self.project_save_time
+        }
+    }
+
+    fn set_project_unmodified(&mut self) {
+        self.project_save_time = self.programview_state.project.borrow().modify_timestamp;
     }
 }
 
@@ -305,22 +349,19 @@ impl SubApp for EditorApp {
     }
 }
 
-fn get_btn_icon_size(ctx: &egui::Context) -> FitTo {
+/*fn get_btn_icon_size(ctx: &egui::Context) -> FitTo {
     FitTo::Size(
         (BTN_ICON_SIZE as f32 * ctx.pixels_per_point()) as u32,
         (BTN_ICON_SIZE as f32 * ctx.pixels_per_point()) as u32
     )
-}
+}*/
 
-fn load_icons(ctx: &egui::Context) -> HashMap<String, RetainedImage> {
+fn load_icons() -> HashMap<String, ImageSource<'static>> {
     let mut map = HashMap::new();
-    map.insert("close".to_owned(),
-        RetainedImage::from_svg_bytes_with_size("close", include_bytes!("../icons/close.svg"), get_btn_icon_size(ctx)).unwrap());
-    map.insert("run".to_owned(),
-        RetainedImage::from_svg_bytes_with_size("run", include_bytes!("../icons/run.svg"), get_btn_icon_size(ctx)).unwrap());
-    map.insert("save".to_owned(),
-        RetainedImage::from_svg_bytes_with_size("run", include_bytes!("../icons/save.svg"), get_btn_icon_size(ctx)).unwrap());
-    map.insert("load".to_owned(),
-        RetainedImage::from_svg_bytes_with_size("run", include_bytes!("../icons/load.svg"), get_btn_icon_size(ctx)).unwrap());
+    map.insert("close".to_owned(), egui::include_image!("../icons/close.svg"));
+    map.insert("run".to_owned(), egui::include_image!("../icons/run.svg"));
+    map.insert("save".to_owned(), egui::include_image!("../icons/save.svg"));
+    map.insert("save_as".to_owned(), egui::include_image!("../icons/save_as.svg"));
+    map.insert("load".to_owned(), egui::include_image!("../icons/load.svg"));
     map
 }

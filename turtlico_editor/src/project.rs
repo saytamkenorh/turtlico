@@ -1,4 +1,5 @@
 use std::collections::{HashMap, BTreeMap};
+use egui::load::SizedTexture;
 use serde::{Serialize, Deserialize};
 
 use turtlicoscript::tokens::Token;
@@ -20,13 +21,11 @@ macro_rules! get_is_token {
 }
 
 macro_rules! plugin_icon {
-    ( $file:expr ) => {
-        egui_extras::RetainedImage::from_svg_bytes_with_size(
-                $file, include_bytes!($file),
-                egui_extras::image::FitTo::Size(crate::widgets::BTN_ICON_SIZE, crate::widgets::BTN_ICON_SIZE)
-            )
-            .unwrap()
-            .with_options(egui::TextureOptions::NEAREST)
+    ( $file:expr, $ctx:expr ) => {
+        turtlicoscript_gui::world::load_texture_from_bytes(
+            $ctx, include_bytes!($file),
+            std::path::Path::new($file).extension().unwrap().to_str().unwrap(),
+            egui::load::SizeHint::Size(crate::widgets::BTN_ICON_SIZE, crate::widgets::BTN_ICON_SIZE)).unwrap()
     };
 }
 
@@ -38,24 +37,22 @@ pub struct Project {
     pub modify_timestamp: chrono::DateTime<chrono::Local>,
     pub program: Vec<Vec<Command>>,
     
-    /// File system path of the project (if applicable)
-    pub path: Option<String>,
     /// Project emmbeded files (blocks etc.)
     pub files: HashMap<String, Vec<u8>>,
     #[serde(skip)]
-    pub blocks: HashMap<String, egui_extras::RetainedImage>,
-    #[serde(skip, default = "turtlicoscript_gui::world::default_blocks")]
-    pub default_blocks: BTreeMap<String, egui_extras::RetainedImage>,
+    pub blocks: HashMap<String, SizedTexture>,
+    #[serde(skip)]
+    pub default_blocks: BTreeMap<String, SizedTexture>,
     
-    #[serde(skip, default = "CommandRenderer::new")]
-    pub renderer: CommandRenderer,
-    #[serde(skip, default = "get_cmd_plugins")]
+    #[serde(skip)]
+    pub renderer: Option<CommandRenderer>,
+    #[serde(skip)]
     pub plugins: Vec<Plugin>,
 }
 
 pub struct Plugin {
     pub name: &'static str,
-    pub icon: egui_extras::RetainedImage,
+    pub icon: egui::load::SizedTexture,
     pub commands: Vec<Command>,
 }
 
@@ -72,17 +69,25 @@ pub struct CommandRange {
 }
 
 impl Project {
-    pub fn empty() -> Self {
+    pub fn empty(ctx: &egui::Context) -> Self {
         Self {
             modify_timestamp: chrono::Local::now(),
             program: Vec::new(),
-            path: None,
             files: HashMap::new(),
             blocks: HashMap::new(),
-            default_blocks: turtlicoscript_gui::world::default_blocks(),
-            renderer: CommandRenderer::new(),
-            plugins: get_cmd_plugins(),
+            default_blocks: BTreeMap::from_iter(turtlicoscript_gui::world::World::default_blocks(ctx).into_iter()),
+            renderer: Some(CommandRenderer::new(ctx)),
+            plugins: get_cmd_plugins(ctx),
         }
+    }
+
+    pub fn from_str(data: &str, ctx: &egui::Context) -> Result<Self, serde_json::Error> {
+        let mut proj: Project = serde_json::from_str(data)?;
+
+        proj.plugins = get_cmd_plugins(ctx);
+        proj.renderer = Some(CommandRenderer::new(ctx));
+
+        Ok(proj)
     }
 
     pub fn get_plugin(&self, name: &str) -> Option<&Plugin> {
@@ -199,14 +204,14 @@ impl CommandRange {
     }
 }
 
-fn get_cmd_plugins() -> Vec<Plugin> {
+fn get_cmd_plugins(ctx: &egui::Context) -> Vec<Plugin> {
     let mut pv = Vec::new();
 
     // Turtle
     pv.push(
         Plugin {
             name: "turtle",
-            icon: plugin_icon!("../icons/turtlico.svg"),
+            icon: plugin_icon!("../icons/turtlico.svg", ctx),
             commands: vec![
                 Command::Token(Token::Newline),
                 Command::Token(Token::Space),
@@ -236,7 +241,7 @@ fn get_cmd_plugins() -> Vec<Plugin> {
     pv.push(
         Plugin {
             name: "control",
-            icon: plugin_icon!("../icons/plugin_control.svg"),
+            icon: plugin_icon!("../icons/plugin_control.svg", ctx),
             commands: vec![
                 Command::Token(Token::Loop),
                 Command::Token(Token::For),

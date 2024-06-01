@@ -14,9 +14,9 @@ pub struct ProgramViewState {
 }
 
 impl ProgramViewState {
-    pub fn new() -> Self {
+    pub fn new(ctx: &egui::Context) -> Self {
         let this = Self {
-            project: std::rc::Rc::new(Project::empty().into()),
+            project: std::rc::Rc::new(Project::empty(ctx).into()),
             size: Rect::from_min_size(Pos2::new(0.0, 0.0), Vec2::new(0.0, 0.0)),
             drag_started: None,
             project_modify_timestamp: chrono::Local::now(),
@@ -27,13 +27,12 @@ impl ProgramViewState {
     }
 
     fn recalc_layout(&mut self, ui: &mut egui::Ui) {
-        (self.size, self.layout) = self.project.borrow().renderer.layout_block(
+        (self.size, self.layout) = self.project.borrow().renderer.as_ref().unwrap().layout_block(
             &self.project.borrow().program, &self.project.borrow(), ui.painter(), Pos2::new(0.0, 0.0));
     }
 
-    pub fn load_project(&mut self, data: &str) -> Result<(), serde_json::Error> {
-        let proj: Project = serde_json::from_str(data)?;
-        self.set_project(std::rc::Rc::new(proj.into()));
+    pub fn load_project(&mut self, data: &str, ctx: &egui::Context) -> Result<(), serde_json::Error> {
+        self.set_project(std::rc::Rc::new(Project::from_str(data, ctx)?.into()));
         Ok(())
     }
 
@@ -150,11 +149,11 @@ fn programview_ui(ui: &mut egui::Ui, state: &mut ProgramViewState, dndctl: &mut 
             
                     {
                         let mut project = state.project.borrow_mut();
-                        project.renderer.color_program_bg = bg_color;
-                        project.renderer.color_program_fg = fg_color;
+                        project.renderer.as_mut().unwrap().color_program_bg = bg_color;
+                        project.renderer.as_mut().unwrap().color_program_fg = fg_color;
                     }
                     let project = state.project.borrow();
-                    project.renderer.render_block(&project.program, &project, &painter, rect.min, None);
+                    project.renderer.as_ref().unwrap().render_block(&project.program, &project, &painter, rect.min, None);
                 }
             });
         }).response

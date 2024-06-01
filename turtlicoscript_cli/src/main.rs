@@ -8,9 +8,12 @@ fn run(ast: Spanned<Expression>, src: &String, script_dir: Option<String>) {
 
     let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, script_dir, false);
     let state = subapp.program_state.clone();
-    turtlicoscript_gui::app::RootApp::run(vec![
-        Box::new(subapp)
-    ]);
+
+    turtlicoscript_gui::app::RootApp::run(
+        |_ctx|{ vec![
+            Box::new(subapp)
+        ]}
+    );
     let _state = state.lock().unwrap();
     match &*_state {
         ScriptState::Error(err) => {

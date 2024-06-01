@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 pub enum SaveFileMsg {
     Saved(Option<std::path::PathBuf>),
     Canceled,
@@ -5,7 +7,7 @@ pub enum SaveFileMsg {
 }
 
 pub enum OpenFileMsg {
-    Openend(Vec<u8>),
+    Openend(Vec<u8>, Option<PathBuf>),
     Canceled,
     Err(String)
 }
@@ -99,7 +101,7 @@ pub fn save_file(data: Vec<u8>, path: Option<std::path::PathBuf>) -> std::sync::
         let file = task.await;
         if let Some(file) = file {
             let mut new_path = std::path::PathBuf::from(file.path());
-            new_path.set_extension(".tcpf");
+            new_path.set_extension("tcpf");
             match save_to_path(&new_path, data) {
                 Ok(_) => {
                     sender.send(SaveFileMsg::Saved(Some(new_path))).ok();
@@ -127,7 +129,7 @@ pub fn open_file() -> Box<impl OpenFileDialog> {
         let file = task.await;
         if let Some(file) = file {
             let data = file.read().await;
-            sender.send(OpenFileMsg::Openend(data)).ok();
+            sender.send(OpenFileMsg::Openend(data, Some(file.path().to_path_buf()))).ok();
         } else {
             sender.send(OpenFileMsg::Canceled).ok();
         }
@@ -159,7 +161,7 @@ pub fn open_file() -> Box<impl OpenFileDialog> {
             Ok(result) => {
                 crate::t_log("File loaded successfully");
                 let data = js_sys::Uint8Array::new(&result);
-                sender2.send(OpenFileMsg::Openend(data.to_vec())).ok();
+                sender2.send(OpenFileMsg::Openend(data.to_vec(), None)).ok();
             },
             Err(err) => {
                 crate::t_log("File loading failed");

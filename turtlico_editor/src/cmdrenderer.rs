@@ -1,4 +1,5 @@
 use std::{collections::HashMap, sync::Arc};
+use egui::load::SizedTexture;
 use emath::{Rect, Vec2, Pos2};
 use turtlicoscript::tokens::Token;
 
@@ -10,9 +11,9 @@ pub const CMD_ICON_SIZE: u32 = 32;
 pub const CMD_ICON_SIZE_VEC: Vec2 = Vec2::new(CMD_ICON_SIZE as f32, CMD_ICON_SIZE as f32);
 
 pub struct CommandRenderer {
-    funcs_icons: HashMap<String, egui_extras::RetainedImage>,
-    var_icons: HashMap<String, egui_extras::RetainedImage>,
-    token_icons: HashMap<Token, egui_extras::RetainedImage>,
+    funcs_icons: HashMap<String, egui::load::SizedTexture>,
+    var_icons: HashMap<String, egui::load::SizedTexture>,
+    token_icons: HashMap<Token, egui::load::SizedTexture>,
     token_text_icons: HashMap<Token, &'static str>,
     color_bg: egui::Color32,
     color_border: egui::Color32,
@@ -30,11 +31,11 @@ pub struct CommandRenderer {
 }
 
 impl CommandRenderer {
-    pub fn new() -> Self {
+    pub fn new(ctx: &egui::Context) -> Self {
         Self {
-            funcs_icons: load_funcs_icons(),
-            var_icons: load_vars_icons(),
-            token_icons: load_token_icons(),
+            funcs_icons: load_funcs_icons(ctx),
+            var_icons: load_vars_icons(ctx),
+            token_icons: load_token_icons(ctx),
             token_text_icons: token_text_icons(),
             color_bg: egui::Color32::from_rgb(255, 179, 0),
             color_border: egui::Color32::from_rgb(20, 20, 0),
@@ -53,7 +54,7 @@ impl CommandRenderer {
     }
     pub fn render_icon(&self, cmd: &Command, project: &Project, painter: &egui::Painter, pos: Pos2, do_paint: bool) -> Rect {
         let mut background = self.color_bg;
-        let mut icon: Option<&egui_extras::RetainedImage> = None;
+        let mut icon: Option<&egui::load::SizedTexture> = None;
 
         let mut text: Option<&str> = None;
         let mut text_owned: String = String::new();
@@ -171,7 +172,7 @@ impl CommandRenderer {
             }
             // Icon
             if let Some(icon) = icon {
-                let mut mesh = egui::Mesh::with_texture(icon.texture_id(painter.ctx()));
+                let mut mesh = egui::Mesh::with_texture(icon.id);
                 mesh.add_rect_with_uv(
                     icon_rect,
                     Rect::from_min_max(egui::pos2(0.0, 0.0), egui::pos2(1.0, 1.0)),
@@ -182,7 +183,8 @@ impl CommandRenderer {
             if let Some(text_layout) = text_layout {
                 painter.galley(Pos2 {
                     x: pos.x + rect.width() / 2.0 - text_layout.size().x / 2.0,
-                    y: pos.y + rect.height() / 2.0 - text_layout.size().y / 2.0 }, text_layout);
+                    y: pos.y + rect.height() / 2.0 - text_layout.size().y / 2.0 }, text_layout,
+                self.color_bg);
             }
         }
 
@@ -224,60 +226,63 @@ impl CommandRenderer {
 }
 
 macro_rules! insert_func_icon_emmbeded {
-    ( $map:expr, $name:expr, $file:expr ) => {
-        $map.insert($name.to_owned(),
-        egui_extras::RetainedImage::from_svg_bytes_with_size(
-                $name, include_bytes!($file),
-                egui_extras::image::FitTo::Size(CMD_ICON_SIZE, CMD_ICON_SIZE)).unwrap()
-            .with_options(egui::TextureOptions::NEAREST));
+    ( $map:expr, $name:expr, $file:expr, $ctx:expr ) => {
+        $map.insert(
+            $name.to_owned(),
+            turtlicoscript_gui::world::load_texture_from_bytes(
+                $ctx, include_bytes!($file),
+                std::path::Path::new($file).extension().unwrap().to_str().unwrap(),
+                egui::load::SizeHint::Size(CMD_ICON_SIZE, CMD_ICON_SIZE)).unwrap()
+        )
     };
 }
 
 macro_rules! insert_token_icon_emmbeded {
-    ( $map:expr, $token:expr, $file:expr ) => {
-        $map.insert($token,
-        egui_extras::RetainedImage::from_svg_bytes_with_size(
-                format!("{:?}", $token), include_bytes!($file),
-                egui_extras::image::FitTo::Size(CMD_ICON_SIZE, CMD_ICON_SIZE)).unwrap()
-            .with_options(egui::TextureOptions::NEAREST));
+    ( $map:expr, $token:expr, $file:expr, $ctx:expr ) => {
+        $map.insert(
+            $token.to_owned(),
+            turtlicoscript_gui::world::load_texture_from_bytes($ctx, include_bytes!($file),
+            std::path::Path::new($file).extension().unwrap().to_str().unwrap(),
+            egui::load::SizeHint::Size(CMD_ICON_SIZE, CMD_ICON_SIZE)).unwrap()
+        )
     };
 }
 
-fn load_funcs_icons() -> HashMap<String, egui_extras::RetainedImage> {
+fn load_funcs_icons(ctx: &egui::Context) -> HashMap<String, SizedTexture> {
     let mut map = HashMap::new();
-    insert_func_icon_emmbeded!(map, "destroy_block", "../icons/destroy_block.svg");
-    insert_func_icon_emmbeded!(map, "go", "../icons/go.svg");
-    insert_func_icon_emmbeded!(map, "left", "../icons/left.svg");
-    insert_func_icon_emmbeded!(map, "new_turtle", "../icons/new_turtle.svg");
-    insert_func_icon_emmbeded!(map, "place_block", "../icons/place_block.svg");
-    insert_func_icon_emmbeded!(map, "right", "../icons/right.svg");
-    insert_func_icon_emmbeded!(map, "set_rot", "../icons/set_rot.svg");
-    insert_func_icon_emmbeded!(map, "set_target_xy_px", "../icons/set_target_xy_px.svg");
-    insert_func_icon_emmbeded!(map, "set_target_xy", "../icons/set_target_xy.svg");
-    insert_func_icon_emmbeded!(map, "set_xy_px", "../icons/set_xy_px.svg");
-    insert_func_icon_emmbeded!(map, "set_xy", "../icons/set_xy.svg");
-    insert_func_icon_emmbeded!(map, "skin", "../icons/skin.svg");
-    insert_func_icon_emmbeded!(map, "speed", "../icons/speed.svg");
-    insert_func_icon_emmbeded!(map, "wait", "../icons/wait.svg");
+    insert_func_icon_emmbeded!(map, "destroy_block", "../icons/destroy_block.svg", ctx);
+    insert_func_icon_emmbeded!(map, "go", "../icons/go.svg", ctx);
+    insert_func_icon_emmbeded!(map, "left", "../icons/left.svg", ctx);
+    insert_func_icon_emmbeded!(map, "new_turtle", "../icons/new_turtle.svg", ctx);
+    insert_func_icon_emmbeded!(map, "place_block", "../icons/place_block.svg", ctx);
+    insert_func_icon_emmbeded!(map, "right", "../icons/right.svg", ctx);
+    insert_func_icon_emmbeded!(map, "set_rot", "../icons/set_rot.svg", ctx);
+    insert_func_icon_emmbeded!(map, "set_target_xy_px", "../icons/set_target_xy_px.svg", ctx);
+    insert_func_icon_emmbeded!(map, "set_target_xy", "../icons/set_target_xy.svg", ctx);
+    insert_func_icon_emmbeded!(map, "set_xy_px", "../icons/set_xy_px.svg", ctx);
+    insert_func_icon_emmbeded!(map, "set_xy", "../icons/set_xy.svg", ctx);
+    insert_func_icon_emmbeded!(map, "skin", "../icons/skin.svg", ctx);
+    insert_func_icon_emmbeded!(map, "speed", "../icons/speed.svg", ctx);
+    insert_func_icon_emmbeded!(map, "wait", "../icons/wait.svg", ctx);
     map
 }
 
-fn load_vars_icons() -> HashMap<String, egui_extras::RetainedImage> {
+fn load_vars_icons(ctx: &egui::Context) -> HashMap<String, SizedTexture> {
     let mut map = HashMap::new();
-    insert_func_icon_emmbeded!(map, "block_xy", "../icons/block_xy.svg");
+    insert_func_icon_emmbeded!(map, "block_xy", "../icons/block_xy.svg", ctx);
     map
 }
 
-fn load_token_icons() -> HashMap<Token, egui_extras::RetainedImage> {
+fn load_token_icons(ctx: &egui::Context) -> HashMap<Token, SizedTexture> {
     let mut map = HashMap::new();
-    insert_token_icon_emmbeded!(map, Token::Break, "../icons/break.svg");
-    insert_token_icon_emmbeded!(map, Token::FnDef, "../icons/fndef.svg");
-    insert_token_icon_emmbeded!(map, Token::For, "../icons/for.svg");
-    insert_token_icon_emmbeded!(map, Token::If, "../icons/if.svg");
-    insert_token_icon_emmbeded!(map, Token::Else, "../icons/else.svg");
-    insert_token_icon_emmbeded!(map, Token::Loop, "../icons/loop.svg");
-    insert_token_icon_emmbeded!(map, Token::Return, "../icons/return.svg");
-    insert_token_icon_emmbeded!(map, Token::While, "../icons/while.svg");
+    insert_token_icon_emmbeded!(map, Token::Break, "../icons/break.svg", ctx);
+    insert_token_icon_emmbeded!(map, Token::FnDef, "../icons/fndef.svg", ctx);
+    insert_token_icon_emmbeded!(map, Token::For, "../icons/for.svg", ctx);
+    insert_token_icon_emmbeded!(map, Token::If, "../icons/if.svg", ctx);
+    insert_token_icon_emmbeded!(map, Token::Else, "../icons/else.svg", ctx);
+    insert_token_icon_emmbeded!(map, Token::Loop, "../icons/loop.svg", ctx);
+    insert_token_icon_emmbeded!(map, Token::Return, "../icons/return.svg", ctx);
+    insert_token_icon_emmbeded!(map, Token::While, "../icons/while.svg", ctx);
     map
 }
 

@@ -3,7 +3,6 @@ use std::sync::mpsc::{self, Receiver};
 use std::collections::{HashMap, HashSet, BTreeMap};
 use std::sync::{Arc, Mutex};
 use egui::Key;
-use egui_extras::RetainedImage;
 use ndarray::prelude::*;
 use turtlicoscript::interpreter::CancellationToken;
 
@@ -20,11 +19,27 @@ pub const SCREEN_WIDTH_PX: f32 = SCREEN_WIDTH as f32 * BLOCK_SIZE_PX;
 pub const SCREEN_HEIGHT_PX: f32 = SCREEN_HEIGHT as f32 * BLOCK_SIZE_PX;
 pub const LONG_PRESS_DURATION: f64 = 1.5;
 
+macro_rules! insert_block_embedded {
+    ( $map:expr, $ctx:expr, $name:expr, $file:expr ) => {
+        World::load_block_bytes(
+            &mut $map, $ctx, $name, include_bytes!($file),
+            std::path::Path::new($file).extension().unwrap().to_str().unwrap()
+        ).unwrap();
+    };
+}
+
 pub type SpriteID = u32;
+pub type BlockTextures = HashMap<String, egui::load::SizedTexture>;
+
+pub enum BlockTextureError {
+    LoadError(egui::load::LoadError),
+    UnknownBlock,
+}
 
 pub struct World {
     pub sprites: HashMap<SpriteID, Sprite>,
-    pub blocks: HashMap<String, egui_extras::RetainedImage>,
+    pub blocks: BlockTextures,
+    blocks_load_default: bool,
     pub block_map: Array3<Option<String>>,
     
     last_anim_time: f64,
@@ -43,7 +58,8 @@ impl World {
         let block_map_depth = 3;
         let s = Self {
             sprites: map,
-            blocks: HashMap::from_iter(default_blocks().into_iter()),
+            blocks: HashMap::new(),
+            blocks_load_default: true,
             block_map: Array::from_elem((SCREEN_WIDTH, SCREEN_HEIGHT, block_map_depth), None),
 
             last_anim_time: 0.0,
@@ -72,28 +88,47 @@ impl World {
         id
     }
 
-    pub fn get_block(&mut self, name: &String) -> Result<String, turtlicoscript::error::RuntimeError> {
+    pub fn get_block(&mut self, name: &str) -> Result<String, turtlicoscript::error::RuntimeError> {
+        if self.blocks.contains_key(name) {
+            return Ok(name.to_owned());
+        }
         if name.starts_with("./") && !self.blocks.contains_key(name) {
             if let Some(project_dir) = &self.script_dir {
                 let path = std::path::Path::new(&project_dir).join(&name[2..]);
                 if path.exists() {
-                    match load_block_file(&mut self.blocks, name, &path) {
+                    return Ok(name.to_owned());
+                }
+            }
+        }
+        Err(turtlicoscript::error::RuntimeError::InvalidBlock(name.to_owned()))
+    }
+
+    fn get_block_texture<'a>(blocks: &'a mut BlockTextures, script_dir: &Option<String>, ctx: &'a egui::Context, name: &'a str) -> Result<&'a egui::load::SizedTexture, BlockTextureError> {
+        if blocks.contains_key(name) {
+            return Ok(blocks.get(name).unwrap());
+        }
+        if name.starts_with("./") {
+            if let Some(project_dir) = script_dir {
+                let path = std::path::Path::new(&project_dir).join(&name[2..]);
+                if path.exists() {
+                    match Self::load_block_file(blocks, ctx, name, &path.into_os_string().into_string().unwrap()) {
                         Ok(_) => {},
-                        Err(_err) => {
-                            return Err(turtlicoscript::error::RuntimeError::InvalidBlock(name.to_owned()));
+                        Err(err) => {
+                            return Err(BlockTextureError::LoadError(err));
                         }
                     }
                 }
             }
         }
-        if self.blocks.contains_key(name) {
-            Ok(name.to_owned())
-        } else {
-            Err(turtlicoscript::error::RuntimeError::InvalidBlock(name.to_owned()))
-        }
+        Err(BlockTextureError::UnknownBlock)
     }
 
     pub fn ui(&mut self, ui: &mut egui::Ui, cancellable: &Option<CancellationToken>) -> egui::Response {
+        if self.blocks_load_default {
+            self.blocks = Self::default_blocks(ui.ctx());
+            self.blocks_load_default = false;
+        }
+        
         let avail_size = ui.available_size();
         let cam_scale = f32::max(f32::min(
             avail_size.x / SCREEN_WIDTH_PX,
@@ -103,7 +138,8 @@ impl World {
 
         let (world_rect, response) = ui.allocate_exact_size(desired_size, egui::Sense::click_and_drag());
 
-        let default_block = self.blocks.get("turtle").unwrap();
+        let default_block = *self.blocks.get("turtle").unwrap();
+        let script_dir = self.script_dir.clone();
 
         // Animations
         let mut current_time = 0.0;
@@ -144,7 +180,7 @@ impl World {
                     for y in 0..self.block_map.len_of(Axis(1)) {
                         let block_name = self.block_map.get((x, y, z)).unwrap();
                         if let Some(block_name) = block_name {
-                            let block = self.blocks.get(block_name).unwrap_or(default_block);
+                            let block = self.blocks.get(block_name).unwrap_or(&default_block);
                             let x = x as f32 * BLOCK_SIZE_PX;
                             let y = y as f32 * BLOCK_SIZE_PX;
                             self.render_block(&wpainter, block, x, y, 0.0, cam_scale);
@@ -155,8 +191,9 @@ impl World {
             // Graphics
             // Sprites
             for sprite in self.sprites.values() {
-                let block = self.blocks.get(&sprite.skin).unwrap_or(default_block);
-                self.render_block(&wpainter, block, sprite.rendered_x, sprite.rendered_y, sprite.rendered_rot, cam_scale);
+                // let block = self.blocks.get(&sprite.skin).unwrap_or(default_block);
+                let block = Self::get_block_texture(&mut self.blocks, &script_dir, ui.ctx(), &sprite.skin).unwrap_or(&default_block).clone();
+                self.render_block(&wpainter, &block, sprite.rendered_x, sprite.rendered_y, sprite.rendered_rot, cam_scale);
             }
         }
 
@@ -178,11 +215,11 @@ impl World {
        response
     }
 
-    pub fn render_block(&self, painter: &egui::Painter, block: &RetainedImage, x: f32, y: f32, rot: f32, cam_scale: f32) {
+    pub fn render_block(&self, painter: &egui::Painter, block: &egui::load::SizedTexture, x: f32, y: f32, rot: f32, cam_scale: f32) {
         let rect = egui::Rect::from_min_size(
             egui::Pos2 { x: x * cam_scale, y: y * cam_scale },
-            block.size_vec2() * cam_scale).translate(egui::vec2(painter.clip_rect().left(), painter.clip_rect().top()));
-        let mut mesh = egui::Mesh::with_texture(block.texture_id(painter.ctx()));
+            block.size * cam_scale).translate(egui::vec2(painter.clip_rect().left(), painter.clip_rect().top()));
+        let mut mesh = egui::Mesh::with_texture(block.id);
         mesh.add_rect_with_uv(
             rect,
             egui::Rect::from_min_max(egui::pos2(0.0, 0.0), egui::pos2(1.0, 1.0)),
@@ -231,31 +268,54 @@ impl World {
             }
         }
     }
+
+    fn load_block_file(blocks: &mut BlockTextures, ctx: &egui::Context, name: &str, path: &str) -> Result<(), egui::load::LoadError> {
+        blocks.insert(name.to_owned(), load_texture_from_uri(ctx, &format!("file://{}", path), egui::SizeHint::Scale(1.0.into()))?);
+        Ok(())
+    }
+
+    fn load_block_bytes(blocks: &mut BlockTextures, ctx: &egui::Context, name: &str, bytes: &'static [u8], fmt: &str) -> Result<(), egui::load::LoadError> {
+        blocks.insert(name.to_owned(), load_texture_from_bytes(ctx, bytes, fmt, egui::SizeHint::Scale(1.0.into()))?);
+        Ok(())
+    }
+
+    pub fn default_blocks(ctx: &egui::Context) -> BlockTextures {
+        egui_extras::install_image_loaders(&ctx);
+        let mut map = BlockTextures::new();
+        insert_block_embedded!(map, ctx, "bricks", "../blocks/bricks.png");
+        insert_block_embedded!(map, ctx, "fence", "../blocks/fence.png");
+        insert_block_embedded!(map, ctx, "flower", "../blocks/flower.png");
+        insert_block_embedded!(map, ctx, "grass", "../blocks/grass.png");
+        insert_block_embedded!(map, ctx, "turtle", "../blocks/turtle.png");
+        insert_block_embedded!(map, ctx, "wood", "../blocks/wood.png");
+        map
+    }
 }
 
-macro_rules! insert_block_embedded {
-    ( $map:expr, $name:expr, $file:expr ) => {
-        $map.insert($name.to_owned(),
-            RetainedImage::from_image_bytes($name, include_bytes!($file)).unwrap()
-            .with_options(egui::TextureOptions::NEAREST));
-    };
+pub fn load_texture_from_uri(ctx: &egui::Context, uri: &str, size_hint: egui::load::SizeHint) -> Result<egui::load::SizedTexture, egui::load::LoadError> {
+    let result = ctx.try_load_texture(uri, egui::TextureOptions::NEAREST, size_hint);
+    match result {
+        Ok(pool) => {
+            loop {
+                match pool {
+                    egui::load::TexturePoll::Pending { size: _ } => {
+                    },
+                    egui::load::TexturePoll::Ready { texture } => {
+                        break Ok(texture);
+                    }
+                }
+            }
+        },
+        Err(err) => {
+            Err(err)
+        }
+    }
 }
 
-fn load_block_file(map: &mut HashMap<String, RetainedImage>, name: &String, path: &std::path::Path) -> Result<(), std::io::Error> {
-    map.insert(name.to_owned(), RetainedImage::from_image_bytes(name, &std::fs::read(path)?).unwrap()
-        .with_options(egui::TextureOptions::NEAREST));
-    Ok(())
-}
-
-pub fn default_blocks() -> BTreeMap<String, RetainedImage> {
-    let mut map = BTreeMap::new();
-    insert_block_embedded!(map, "bricks", "../blocks/bricks.png");
-    insert_block_embedded!(map, "fence", "../blocks/fence.png");
-    insert_block_embedded!(map, "flower", "../blocks/flower.png");
-    insert_block_embedded!(map, "grass", "../blocks/grass.png");
-    insert_block_embedded!(map, "turtle", "../blocks/turtle.png");
-    insert_block_embedded!(map, "wood", "../blocks/wood.png");
-    map
+pub fn load_texture_from_bytes(ctx: &egui::Context, bytes: &'static [u8], fmt: &str, size_hint: egui::load::SizeHint) -> Result<egui::load::SizedTexture, egui::load::LoadError> {
+    let uri = format!("bytes://{}.{}", uuid::Uuid::new_v4(), fmt);
+    ctx.include_bytes(uri.clone(), bytes);
+    load_texture_from_uri(ctx, &uri, size_hint)
 }
 
 pub fn normalize_angle(angle: f32) -> f32 {

@@ -4,14 +4,14 @@ use crate::{project::{Project, Command}, cmdrenderer::{CMD_SIZE, CMD_SIZE_VEC}, 
 
 pub struct CmdPaletteState {
     pub active_plugin: Option<&'static str>,
-    icon_default_blocks: egui_extras::RetainedImage,
+    icon_default_blocks: egui::load::SizedTexture,
 }
 
 impl CmdPaletteState {
-    pub fn new(project: &Project) -> Self {
+    pub fn new(project: &Project, ctx: &egui::Context) -> Self {
         Self {
             active_plugin: project.plugins.first().map(|p| p.name),
-            icon_default_blocks: crate::project::plugin_icon!("../icons/default_blocks.svg"),
+            icon_default_blocks: crate::project::plugin_icon!("../icons/default_blocks.svg", ctx),
         }
     }
 }
@@ -20,13 +20,13 @@ fn cmdpalette_ui(ui: &mut egui::Ui, state: &mut CmdPaletteState, project: std::r
     ui.with_layout(egui::Layout::left_to_right(egui::Align::Min), |ui| {
         ui.vertical(|ui| {
             for plugin in project.borrow().plugins.iter() {
-                let btn = ui.add(egui::ImageButton::new(plugin.icon.texture_id(ui.ctx()), crate::widgets::BTN_ICON_SIZE_VEC));
+                let btn = ui.add(egui::ImageButton::new(plugin.icon));
                 if btn.clicked() {
                     state.active_plugin = Some(plugin.name);
                 }
             }
             // Default blocks
-            let btn = ui.add(egui::ImageButton::new(state.icon_default_blocks.texture_id(ui.ctx()), crate::widgets::BTN_ICON_SIZE_VEC));
+            let btn = ui.add(egui::ImageButton::new(state.icon_default_blocks));
             if btn.clicked() {
                 state.active_plugin = Some("default_blocks");
             }
@@ -73,7 +73,7 @@ pub fn cmdpalette<'a>(state: &'a mut CmdPaletteState, project: std::rc::Rc<std::
 fn cmdiconsource_ui(ui: &mut egui::Ui, cmd: Vec<&Command>, preview_index: usize, project: std::rc::Rc<std::cell::RefCell<Project>>, dndctl: &mut DnDCtl<EditorDragData>) -> egui::Response {
     let (rect, response) = ui.allocate_exact_size(CMD_SIZE_VEC, egui::Sense::drag());
 
-    project.borrow().renderer.render_icon(&cmd[preview_index], &project.borrow(), &ui.painter().with_clip_rect(rect), rect.min, true);
+    project.borrow().renderer.as_ref().unwrap().render_icon(&cmd[preview_index], &project.borrow(), &ui.painter().with_clip_rect(rect), rect.min, true);
     if response.drag_started() {
         dndctl.drag_start(ui, EditorDragData {
             commands: vec![cmd.into_iter().map(|cmd| cmd.clone()).collect::<Vec<Command>>()],

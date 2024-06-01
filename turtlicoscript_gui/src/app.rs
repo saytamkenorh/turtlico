@@ -35,18 +35,18 @@ impl RootApp {
 
     // When compiling natively:
     #[cfg(not(target_arch = "wasm32"))]
-    pub fn run(subapps: Vec<Box<dyn SubApp>>) {
+    pub fn run<F>(subapps_creator: F) where F: FnOnce(&egui::Context) -> Vec<Box<dyn SubApp>> + 'static {
         // Log to stdout (if you run with `RUST_LOG=debug`).
         tracing_subscriber::fmt::init();
 
         let mut native_options = eframe::NativeOptions::default();
-        native_options.decorated = true;
-        native_options.app_id = Some("io.gitlab.Turtlico".to_owned());
-        native_options.maximized = true;
+        // native_options.decorated = true;
+        // native_options.app_id = Some("io.gitlab.Turtlico".to_owned());
+        // native_options.maximized = true;
         eframe::run_native(
             "Turtlico",
             native_options,
-            Box::new(|cc| Box::new(Self::new(cc, subapps))),
+            Box::new(|cc| Box::new(Self::new(cc, subapps_creator(&cc.egui_ctx)))),
         ).expect("failed to start eframe");
     }
 
@@ -73,7 +73,7 @@ impl RootApp {
     #[cfg(not(target_arch = "wasm32"))]
     fn close(&mut self, frame: &mut eframe::Frame) {
         self.subapps.clear();
-        frame.close();
+        //frame.close();
     }
 
     #[cfg(target_arch = "wasm32")]
