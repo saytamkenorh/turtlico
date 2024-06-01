@@ -8,6 +8,7 @@ use turtlicoscript_gui::app::{SubApp, ScriptApp, ScriptState};
 use crate::{programview, cmdpalette, dndctl::{DnDCtl, DragData, DragAction}, project::{Command, Project, CommandRange}, cmdrenderer::CMD_SIZE_VEC, nativedialogs, widgets::{self, MARGIN_SMALL, MARGIN_MEDIUM, BTN_ICON_SIZE_VEC, BTN_ICON_SIZE}};
 
 const MODIFIERS_CTRL: egui::Modifiers = egui::Modifiers { alt: false, ctrl: true, shift: false, mac_cmd: false, command: false };
+const MODIFIERS_CTRL_SHIFT: egui::Modifiers = egui::Modifiers { alt: false, ctrl: true, shift: true, mac_cmd: false, command: false };
 
 pub struct EditorApp {
     ctx: egui::Context,
@@ -112,6 +113,17 @@ impl EditorApp {
                 {
                     self.local_save(false);
                 }
+                // Save as
+                let save_as_img = self.icons.get("save_as").unwrap();
+                let save_as_btn = ui.add(
+                    egui::ImageButton::new(save_as_img.clone()));
+                if save_as_btn.clicked() || ui.ctx().input_mut(
+                    |i| i.consume_shortcut(&egui::KeyboardShortcut::new(MODIFIERS_CTRL_SHIFT, egui::Key::S)))
+                {
+                    println!("save as");
+                    self.local_save(true);
+                }
+
                 if let Some(receiver) = &self.save_file_receiver {
                     if let Ok(result) = receiver.try_recv() {
                         match result {
