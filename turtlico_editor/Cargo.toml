@@ -9,13 +9,13 @@ edition = "2021"
 turtlicoscript = { version = "0.1.0", path = "../turtlicoscript" }
 turtlicoscript_gui = { version = "0.1.0", path = "../turtlicoscript_gui"}
 
-egui = "0.26.2"
-eframe = { version = "0.26.2", default-features = false, features = [
+egui = "0.27.2"
+eframe = { version = "0.27.2", default-features = false, features = [
     "default_fonts", # Embed the default egui fonts.
     "glow",          # Use the glow rendering backend. Alternative: "wgpu".
 ] }
-egui_extras =  { version = "0.26.2", features = ["image", "svg", "all_loaders"] }
-emath = "0.26.2"
+egui_extras =  { version = "0.27.2", features = ["image", "svg", "all_loaders"] }
+emath = "0.27.2"
 image = { version = "0.24", features = ["jpeg", "png", "bmp", "gif"] }
 chrono = "0.4.31"
 

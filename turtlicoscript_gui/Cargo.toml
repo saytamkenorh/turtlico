@@ -9,14 +9,14 @@ build = "build.rs"
 [dependencies]
 checkargs = { version = "0.1.0", path = "../turtlicoscript/checkargs" }
 turtlicoscript = { version = "0.1.0", path = "../turtlicoscript" }
-egui = "0.26.2"
-eframe = { version = "0.26.2", default-features = false, features = [
+egui = "0.27.2"
+eframe = { version = "0.27.2", default-features = false, features = [
     "default_fonts", # Embed the default egui fonts.
     "glow",          # Use the glow rendering backend. Alternative: "wgpu".
     "persistence",
 ] }
-egui_extras =  { version = "0.26.2", features = ["image"] }
-emath = "0.26.2"
+egui_extras =  { version = "0.27.2", features = ["image"] }
+emath = "0.27.2"
 image = { version = "0.24", features = ["jpeg", "png", "bmp", "gif"] }
 log = "0.4"
 web-sys =  { version = "0.3", features = ["DedicatedWorkerGlobalScope", "ErrorEvent", "Worker", "MessageEvent", "console"] }
