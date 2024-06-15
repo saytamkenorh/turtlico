@@ -39,7 +39,7 @@ impl RootApp {
         // Log to stdout (if you run with `RUST_LOG=debug`).
         tracing_subscriber::fmt::init();
 
-        let mut native_options = eframe::NativeOptions::default();
+        let native_options = eframe::NativeOptions::default();
         // native_options.decorated = true;
         // native_options.app_id = Some("io.gitlab.Turtlico".to_owned());
         // native_options.maximized = true;
@@ -71,7 +71,7 @@ impl RootApp {
     }
 
     #[cfg(not(target_arch = "wasm32"))]
-    fn close(&mut self, frame: &mut eframe::Frame) {
+    fn close(&mut self, _frame: &mut eframe::Frame) {
         self.subapps.clear();
         //frame.close();
     }

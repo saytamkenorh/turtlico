@@ -100,6 +100,18 @@ impl Context {
             }
         }
     }
+
+    pub fn update_events(&mut self) {
+        World::update_events(&self.world);
+    }
+
+    pub fn key_pressed(&mut self, key: &str) -> Result<bool, RuntimeError> {
+        World::key_pressed(&self.world, key)
+    }
+
+    pub fn key_down(&mut self, key: &str) -> Result<bool, RuntimeError> {
+        World::key_down(&self.world, key)
+    }
 }
 
 pub fn init_library(world: Arc<Mutex<world::World>>, sync_rx: Receiver<WorldSyncState>) -> Library {
@@ -107,6 +119,9 @@ pub fn init_library(world: Arc<Mutex<world::World>>, sync_rx: Receiver<WorldSync
     scope.vars.extend(funcmap!{
         "gui",
         new_turtle,
+        update_events,
+        key_pressed,
+        key_down,
         wait
     });
     // Consts
@@ -359,4 +374,20 @@ pub fn wait(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, mut args: NativeF
     let time = arg0;
     unwrap_context::<Context>(ctx).wait(time);
     Ok(Value::None)
+}
+
+#[check_args()]
+pub fn update_events(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
+    unwrap_context::<Context>(ctx).update_events();
+    Ok(Value::None)
+}
+
+#[check_args(Key)]
+pub fn key_pressed(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
+    unwrap_context::<Context>(ctx).key_pressed(arg0).map(|val| Value::Bool(val))
+}
+
+#[check_args(Key)]
+pub fn key_down(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
+    unwrap_context::<Context>(ctx).key_down(arg0).map(|val| Value::Bool(val))
 }

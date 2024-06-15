@@ -48,6 +48,23 @@ pub fn dialog(ui: &mut egui::Ui, state: &mut ProgramViewState) {
                             }
                         }
                     },
+                    Token::Key(val) => {
+                        let mut new_value = val.to_string();
+                        match show_dialog(ui, "Press a key", |ui: &mut egui::Ui| {
+                            ui.add(crate::widgets::key_selector(&mut new_value))
+                        }) {
+                            DialogResult::Apply => {
+                                state.project.borrow_mut().program[edited_cmd.1][edited_cmd.0] = Command::Token(Token::Key(new_value));
+                                state.edited_cmd = None;
+                            },
+                            DialogResult::Cancel => {
+                                state.edited_cmd = None;
+                            },
+                            _ => {
+                                edited_cmd.2 = Command::Token(Token::Key(new_value));
+                            }
+                        }
+                    },
                     Token::Integer(mut val) => {
                         match show_dialog(ui, "Enter an integer", |ui: &mut egui::Ui| {
                             ui.add(egui::DragValue::new(&mut val))

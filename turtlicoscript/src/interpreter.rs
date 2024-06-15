@@ -278,6 +278,7 @@ impl Context {
             Expression::Float(val) => Ok(Value::Float(*val)),
             Expression::String(val) => Ok(Value::String(val.to_owned())),
             Expression::Image(val) => Ok(Value::Image(val.to_owned())),
+            Expression::Key(val) => Ok(Value::Key(val.to_owned())),
             Expression::Variable {parent, name} => {
                 match parent {
                     Some(parent) => {

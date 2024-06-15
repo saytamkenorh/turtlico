@@ -27,6 +27,7 @@ pub struct CommandRenderer {
     color_var: egui::Color32,
     color_int: egui::Color32,
     color_string: egui::Color32,
+    color_key: egui::Color32,
     color_float: egui::Color32,
 }
 
@@ -49,6 +50,7 @@ impl CommandRenderer {
             color_var: egui::Color32::from_rgb(154, 153, 150),
             color_int: egui::Color32::from_rgb(28, 113, 216),
             color_string: egui::Color32::from_rgb(249, 240, 107),
+            color_key: egui::Color32::from_rgb(50, 50, 50),
             color_float: egui::Color32::from_rgb(51, 209, 122),
         }
     }
@@ -120,6 +122,11 @@ impl CommandRenderer {
                                 }
                             }
                         }
+                    },
+                    Token::Key(value) => {
+                        background = self.color_key;
+                        text = Some(value);
+                        color_text = self.color_text;
                     },
                     Token::String(value) => {
                         background = self.color_string;
@@ -252,6 +259,8 @@ fn load_funcs_icons(ctx: &egui::Context) -> HashMap<String, SizedTexture> {
     let mut map = HashMap::new();
     insert_func_icon_emmbeded!(map, "destroy_block", "../icons/destroy_block.svg", ctx);
     insert_func_icon_emmbeded!(map, "go", "../icons/go.svg", ctx);
+    insert_func_icon_emmbeded!(map, "key_down", "../icons/key_down.svg", ctx);
+    insert_func_icon_emmbeded!(map, "key_pressed", "../icons/key_pressed.svg", ctx);
     insert_func_icon_emmbeded!(map, "left", "../icons/left.svg", ctx);
     insert_func_icon_emmbeded!(map, "new_turtle", "../icons/new_turtle.svg", ctx);
     insert_func_icon_emmbeded!(map, "place_block", "../icons/place_block.svg", ctx);
@@ -263,6 +272,7 @@ fn load_funcs_icons(ctx: &egui::Context) -> HashMap<String, SizedTexture> {
     insert_func_icon_emmbeded!(map, "set_xy", "../icons/set_xy.svg", ctx);
     insert_func_icon_emmbeded!(map, "skin", "../icons/skin.svg", ctx);
     insert_func_icon_emmbeded!(map, "speed", "../icons/speed.svg", ctx);
+    insert_func_icon_emmbeded!(map, "update_events", "../icons/update_events.svg", ctx);
     insert_func_icon_emmbeded!(map, "wait", "../icons/wait.svg", ctx);
     map
 }

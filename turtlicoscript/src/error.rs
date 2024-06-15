@@ -80,6 +80,7 @@ pub enum RuntimeError {
     InvalidBlock(String),
     NativeLibraryError(String),
     MethodCalledAsFunction,
+    InvalidKey,
 }
 
 impl Display for RuntimeError {

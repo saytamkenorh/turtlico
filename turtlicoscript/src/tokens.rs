@@ -36,6 +36,8 @@ pub enum Token {
     Variable(String),
     #[regex(r#"@"([^"\\]|\\t|\\u|\\n|\\")*""#, get_image)]
     Image(String),
+    #[regex(r#"k"([^"\\]|\\t|\\u|\\n|\\")*""#, get_key)]
+    Key(String),
     #[regex(r"\p{XID_Start}[\p{XID_Continue}]+", get_indentifier)]
     Function(String),
     // Literals
@@ -103,6 +105,10 @@ fn get_indentifier_var(lexer: &mut Lexer<Token>) -> String {
 
 fn get_image(lexer: &mut Lexer<Token>) -> String {
     lexer.slice().trim_start_matches("@\"").trim_end_matches('"').to_owned()
+}
+
+fn get_key(lexer: &mut Lexer<Token>) -> String {
+    lexer.slice().trim_start_matches("k\"").trim_end_matches('"').to_owned()
 }
 
 fn get_value<T: std::str::FromStr>(lexer: &mut Lexer<Token>) -> Option<T> {

@@ -1,9 +1,10 @@
 use std::collections::hash_map::RandomState;
 use std::sync::mpsc::{self, Receiver};
-use std::collections::{HashMap, HashSet, BTreeMap};
+use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, Mutex};
 use egui::Key;
 use ndarray::prelude::*;
+use turtlicoscript::error::RuntimeError;
 use turtlicoscript::interpreter::CancellationToken;
 
 use crate::WorldSyncState;
@@ -48,8 +49,10 @@ pub struct World {
     pub script_dir: Option<String>,
 
     pub keys_down: HashSet<Key, RandomState>,
-    pub primary_ptr_down: bool,
-    pub secondary_ptr_down: bool,
+    keys_down_prev: HashSet<Key, RandomState>,
+    pub keys_pressed: HashSet<Key, RandomState>,
+    pub primary_ptr_clicked: bool,
+    pub secondary_ptr_clicked: bool,
 }
 
 impl World {
@@ -68,8 +71,10 @@ impl World {
             script_dir: None,
             
             keys_down: HashSet::new(),
-            primary_ptr_down: false,
-            secondary_ptr_down: false,
+            keys_down_prev: HashSet::new(),
+            keys_pressed: HashSet::new(),
+            primary_ptr_clicked: false,
+            secondary_ptr_clicked: false,
         };
         s
     }
@@ -198,19 +203,20 @@ impl World {
         }
 
         // Input
-        self.primary_ptr_down = response.clicked_by(egui::PointerButton::Primary);
-
+        let mut long_touch = false;
         ui.input(|i| {
-            let long_touch = i.pointer.button_down(egui::PointerButton::Primary) &&
+            long_touch = i.pointer.button_down(egui::PointerButton::Primary) &&
              match i.pointer.press_start_time() {
                 Some(start_time) => {
                     f64::abs(i.time - start_time) >= LONG_PRESS_DURATION
                 },
                 None => {false}
             };
-            self.secondary_ptr_down = response.clicked_by(egui::PointerButton::Secondary) || long_touch;
-            self.keys_down =  i.keys_down.clone();
+            self.keys_down = i.keys_down.clone();
         });
+
+        self.primary_ptr_clicked = response.clicked_by(egui::PointerButton::Primary);
+        self.secondary_ptr_clicked = response.clicked_by(egui::PointerButton::Secondary) || long_touch;
 
        response
     }
@@ -236,7 +242,7 @@ impl World {
             let state = sync_rx.recv().unwrap(); // Wait for next frame
             {
                 let _world = world.lock().unwrap();
-                if _world.keys_down.len() > 0 || _world.primary_ptr_down || _world.secondary_ptr_down || matches!(state, WorldSyncState::Cancelled) {
+                if _world.keys_down.len() > 0 || _world.primary_ptr_clicked || _world.secondary_ptr_clicked || matches!(state, WorldSyncState::Cancelled) {
                     break;
                 }
             }
@@ -267,6 +273,29 @@ impl World {
                 }
             }
         }
+    }
+
+    pub fn update_events(world: &Arc<Mutex<World>>) {
+        let mut world = world.lock().unwrap();
+        world.keys_pressed = world.keys_down.iter().filter(|key| {
+            !world.keys_down_prev.contains(key)
+        }).cloned().collect();
+
+        world.keys_down_prev = world.keys_down.clone();
+    }
+
+    pub fn key_pressed(world: &Arc<Mutex<World>>, key: &str) -> Result<bool, RuntimeError> {
+        let world = world.lock().unwrap();
+        egui::Key::from_name(key).map_or(Err(RuntimeError::InvalidKey), |key| {
+            Ok(world.keys_pressed.contains(&key))
+        })
+    }
+
+    pub fn key_down(world: &Arc<Mutex<World>>, key: &str) -> Result<bool, RuntimeError> {
+        let world = world.lock().unwrap();
+        egui::Key::from_name(key).map_or(Err(RuntimeError::InvalidKey), |key| {
+            Ok(world.keys_down.contains(&key))
+        })
     }
 
     fn load_block_file(blocks: &mut BlockTextures, ctx: &egui::Context, name: &str, path: &str) -> Result<(), egui::load::LoadError> {

@@ -85,6 +85,7 @@ impl Project {
         let mut proj: Project = serde_json::from_str(data)?;
 
         proj.plugins = get_cmd_plugins(ctx);
+        proj.default_blocks = BTreeMap::from_iter(turtlicoscript_gui::world::World::default_blocks(ctx).into_iter());
         proj.renderer = Some(CommandRenderer::new(ctx));
 
         Ok(proj)
@@ -234,6 +235,11 @@ fn get_cmd_plugins(ctx: &egui::Context) -> Vec<Plugin> {
                 Command::Token(Token::Function("skin".to_owned())),
 
                 Command::Token(Token::Function("new_turtle".to_owned())),
+                Command::Token(Token::Function("update_events".to_owned())),
+                Command::Token(Token::Key("A".to_owned())),
+                Command::Token(Token::Function("key_pressed".to_owned())),
+
+                Command::Token(Token::Function("key_down".to_owned())),
             ]
         }
     );
