@@ -1,0 +1,6 @@
+loop {
+    update_events
+    if key_down k"Up" go
+    if key_down k"Left" left
+    if key_down k"Right" right
+}
