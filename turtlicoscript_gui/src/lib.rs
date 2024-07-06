@@ -18,6 +18,16 @@ pub mod sprite;
 pub mod world;
 pub mod worker;
 
+#[cfg(not(target_arch = "wasm32"))]
+pub fn t_log(text: &str) {
+    println!("{}", text);
+}
+
+#[cfg(target_arch = "wasm32")]
+pub fn t_log(text: &str) {
+    web_sys::console::log_1(&text.into());
+}
+
 pub enum WorldSyncState {
     Update,
     Cancelled,

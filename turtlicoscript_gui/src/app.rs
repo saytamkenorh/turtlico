@@ -1,9 +1,12 @@
-use std::{sync::{Arc, Mutex}, thread::JoinHandle};
+use std::{
+    sync::{Arc, Mutex},
+    thread::JoinHandle,
+};
 
 use egui::Color32;
-use turtlicoscript::interpreter::CancellationToken;
-use turtlicoscript::ast::{Spanned, Expression};
 use std::sync::{atomic::AtomicBool, mpsc::channel};
+use turtlicoscript::ast::{Expression, Spanned};
+use turtlicoscript::interpreter::CancellationToken;
 
 use crate::world::World;
 
@@ -16,7 +19,7 @@ pub trait SubApp {
 }
 
 pub struct RootApp {
-    subapps: Vec<Box<dyn SubApp>>
+    subapps: Vec<Box<dyn SubApp>>,
 }
 
 impl RootApp {
@@ -28,14 +31,15 @@ impl RootApp {
             }
         }
 
-        Self {
-            subapps: subapps
-        }
+        Self { subapps: subapps }
     }
 
     // When compiling natively:
     #[cfg(not(target_arch = "wasm32"))]
-    pub fn run<F>(subapps_creator: F) where F: FnOnce(&egui::Context) -> Vec<Box<dyn SubApp>> + 'static {
+    pub fn run<F>(subapps_creator: F)
+    where
+        F: FnOnce(&egui::Context) -> Vec<Box<dyn SubApp>> + 'static,
+    {
         // Log to stdout (if you run with `RUST_LOG=debug`).
         tracing_subscriber::fmt::init();
 
@@ -47,12 +51,16 @@ impl RootApp {
             "Turtlico",
             native_options,
             Box::new(|cc| Box::new(Self::new(cc, subapps_creator(&cc.egui_ctx)))),
-        ).expect("failed to start eframe");
+        )
+        .expect("failed to start eframe");
     }
 
     // when compiling to web using trunk.
     #[cfg(target_arch = "wasm32")]
-    pub fn run(subapps: Vec<Box<dyn SubApp>>) {
+    pub fn run<F>(subapps_creator: F)
+    where
+        F: FnOnce(&egui::Context) -> Vec<Box<dyn SubApp>> + 'static,
+    {
         // Redirect `log` message to `console.log` and friends:
         eframe::WebLogger::init(log::LevelFilter::Debug).ok();
 
@@ -63,7 +71,7 @@ impl RootApp {
                 .start(
                     "turtlico",
                     web_options,
-                    Box::new(|cc| Box::new(Self::new(cc, subapps))),
+                    Box::new(|cc| Box::new(Self::new(cc, subapps_creator(&cc.egui_ctx)))),
                 )
                 .await
                 .expect("failed to start eframe");
@@ -115,7 +123,7 @@ impl eframe::App for RootApp {
 pub enum ScriptState {
     Running,
     Finished,
-    Error(Spanned<turtlicoscript::error::Error>)
+    Error(Spanned<turtlicoscript::error::Error>),
 }
 
 pub struct ScriptApp {
@@ -127,7 +135,7 @@ pub struct ScriptApp {
     pub program_state: Arc<Mutex<ScriptState>>,
 }
 
-impl ScriptApp{
+impl ScriptApp {
     pub fn new(world: Arc<Mutex<World>>, windowed: bool) -> Self {
         Self {
             world: world,
@@ -140,9 +148,11 @@ impl ScriptApp{
     }
 
     #[cfg(not(target_arch = "wasm32"))]
-    pub fn spawn(ast: Spanned<Expression>, script_dir: Option<String>, windowed: bool)
-        -> ScriptApp
-    {
+    pub fn spawn(
+        ast: Spanned<Expression>,
+        script_dir: Option<String>,
+        windowed: bool,
+    ) -> ScriptApp {
         let (tx, rx) = channel();
         let world = crate::world::World::new_arc_mutex(tx, script_dir);
         let world_clone = world.clone();
@@ -159,7 +169,7 @@ impl ScriptApp{
                 Ok(_) => {
                     let mut _state = state.lock().unwrap();
                     *_state = ScriptState::Finished;
-                },
+                }
                 Err(err) => {
                     let mut _state = state.lock().unwrap();
                     *_state = ScriptState::Error(err);
@@ -171,9 +181,11 @@ impl ScriptApp{
         app
     }
     #[cfg(target_arch = "wasm32")]
-    pub fn spawn(ast: Spanned<Expression>, script_dir: Option<String>, windowed: bool)
-        -> ScriptApp
-    {
+    pub fn spawn(
+        ast: Spanned<Expression>,
+        script_dir: Option<String>,
+        windowed: bool,
+    ) -> ScriptApp {
         use web_sys::console;
         let (tx, rx) = channel();
         let world = crate::world::World::new_arc_mutex(tx, script_dir);
@@ -193,21 +205,37 @@ impl ScriptApp{
                 Ok(_result) => {
                     let mut _state = state.lock().unwrap();
                     *_state = ScriptState::Finished;
-                },
+                }
                 Err(err) => {
                     let mut _state = state.lock().unwrap();
                     *_state = ScriptState::Error(err);
                 }
             }
-        }).unwrap();
+        })
+        .unwrap();
 
         app.pool = Some(worker);
         app
     }
 
+
+    #[cfg(not(target_arch = "wasm32"))]
     fn ui(&mut self, ui: &mut egui::Ui) {
+        ui.ctx().request_repaint();
         let mut world = self.world.lock().unwrap();
         world.ui(ui, &self.cancellable);
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    fn ui(&mut self, ui: &mut egui::Ui) {
+        ui.ctx().request_repaint();
+        // Yes, this is horrible and it should be done better
+        loop {
+            if let Ok(mut world) = self.world.try_lock() {
+                world.ui(ui, &self.cancellable);
+                break;
+            }
+        }
     }
 }
 
@@ -216,7 +244,11 @@ impl SubApp for ScriptApp {
         let mut win_open = true;
         if !self.windowed {
             egui::CentralPanel::default()
-                .frame(egui::Frame { inner_margin: 0.0.into(), fill: Color32::BLACK, ..Default::default()})
+                .frame(egui::Frame {
+                    inner_margin: 0.0.into(),
+                    fill: Color32::BLACK,
+                    ..Default::default()
+                })
                 .show(ctx, |ui| {
                     self.ui(ui);
                 });

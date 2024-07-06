@@ -159,12 +159,12 @@ pub fn open_file() -> Box<impl OpenFileDialog> {
         let result = file_reader2.result();
         match result {
             Ok(result) => {
-                crate::t_log("File loaded successfully");
+                t_log("File loaded successfully");
                 let data = js_sys::Uint8Array::new(&result);
                 sender2.send(OpenFileMsg::Openend(data.to_vec(), None)).ok();
             },
             Err(err) => {
-                crate::t_log("File loading failed");
+                t_log("File loading failed");
                 let msg = format!("{}", err.is_string());
                 sender2.send(OpenFileMsg::Err(msg)).ok();
             }
@@ -174,7 +174,7 @@ pub fn open_file() -> Box<impl OpenFileDialog> {
     let on_change = gloo::events::EventListener::new(&input, "change", move |_event| {
         let files = input2.files().expect("Cannot get files from input element");
         if files.length() > 0 {
-            crate::t_log("File chosen");
+            t_log("File chosen");
             let f = files.get(0).unwrap();           
             file_reader.read_as_array_buffer(&f).unwrap();
         } else {

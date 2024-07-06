@@ -45,7 +45,7 @@ rm -rf "$DEST_DIR"
 mkdir -p "$DEST_DIR"
 
 echo "Running wasm-bindgen..."
-if [[ $PROFILE -eq "release" ]]; then
+if [ "$PROFILE" == "release" ]; then
   WASM_FILE="$SCRIPT_DIR/target/wasm32-unknown-unknown/release/turtlico_editor.wasm"
 else
   WASM_FILE="$SCRIPT_DIR/target/wasm32-unknown-unknown/debug/turtlico_editor.wasm"

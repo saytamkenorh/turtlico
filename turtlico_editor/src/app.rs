@@ -3,15 +3,10 @@ use std::collections::HashMap;
 use egui::ImageSource;
 use emath::{Pos2, Vec2};
 use turtlicoscript::{ast::Spanned, parser, tokens::Token};
-use turtlicoscript_gui::app::{ScriptApp, ScriptState, SubApp};
+use turtlicoscript_gui::{app::{ScriptApp, ScriptState, SubApp}, t_log};
 
 use crate::{
-    cmdpalette,
-    cmdrenderer::CMD_SIZE_VEC,
-    dndctl::{DnDCtl, DragAction, DragData},
-    nativedialogs, programview,
-    project::{Command, CommandRange, Project},
-    widgets::{self, BTN_ICON_SIZE, BTN_ICON_SIZE_VEC, MARGIN_MEDIUM, MARGIN_SMALL},
+    cmdpalette, cmdrenderer::CMD_SIZE_VEC, dndctl::{DnDCtl, DragAction, DragData}, nativedialogs, programview, project::{Command, CommandRange, Project}, widgets::{self, BTN_ICON_SIZE, BTN_ICON_SIZE_VEC, MARGIN_MEDIUM, MARGIN_SMALL}
 };
 
 const MODIFIERS_CTRL: egui::Modifiers = egui::Modifiers {
@@ -115,7 +110,7 @@ impl EditorApp {
             save_file_receiver: None,
             open_file_dialog: None,
         };
-        crate::t_log("EditorApp initialized");
+        turtlicoscript_gui::t_log("EditorApp initialized");
         app
     }
 
@@ -305,7 +300,7 @@ impl EditorApp {
     fn autosave(&self, storage: &mut dyn eframe::Storage) {
         match self.programview_state.project.borrow().save() {
             Ok(str) => {
-                crate::t_log("Autosaving...");
+                t_log("Autosaving...");
                 storage.set_string("project_autosave", str);
             }
             Err(_err) => {}
@@ -327,7 +322,7 @@ impl EditorApp {
     fn load_project_string(&mut self, input: &str) -> Result<(), serde_json::Error> {
         match self.programview_state.load_project(input, &self.ctx) {
             Ok(_) => {
-                crate::t_log("Program loaded");
+                t_log("Program loaded");
                 Ok(())
             }
             Err(err) => Err(err),

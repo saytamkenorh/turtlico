@@ -168,8 +168,6 @@ impl World {
         if let Err(_) = self.update_tx.send(state) {
             self.update_tx_closed = true;
         }
-        ui.ctx().request_repaint();
-
 
         // Rendering
         if ui.is_rect_visible(world_rect) {

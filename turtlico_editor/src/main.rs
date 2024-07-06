@@ -20,16 +20,6 @@ fn main() {
 }
 
 #[cfg(not(target_arch = "wasm32"))]
-fn t_log(text: &str) {
-    println!("{}", text);
-}
-
-#[cfg(target_arch = "wasm32")]
-fn t_log(text: &str) {
-    web_sys::console::log_1(&text.into());
-}
-
-#[cfg(not(target_arch = "wasm32"))]
 fn env_init() {
 }
 
