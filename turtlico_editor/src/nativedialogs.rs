@@ -141,6 +141,7 @@ pub fn open_file() -> Box<impl OpenFileDialog> {
 
 #[cfg(target_arch = "wasm32")]
 pub fn open_file() -> Box<impl OpenFileDialog> {
+    use turtlicoscript_gui::t_log;
     let (sender, receiver) = std::sync::mpsc::channel();
 
     let window = web_sys::window().unwrap();
