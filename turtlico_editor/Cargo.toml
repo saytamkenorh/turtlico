@@ -9,20 +9,17 @@ edition = "2021"
 turtlicoscript = { version = "0.1.0", path = "../turtlicoscript" }
 turtlicoscript_gui = { version = "0.1.0", path = "../turtlicoscript_gui"}
 
-egui = "0.27.2"
-eframe = { version = "0.27.2", default-features = false, features = [
-    "default_fonts", # Embed the default egui fonts.
-    "glow",          # Use the glow rendering backend. Alternative: "wgpu".
-] }
-egui_extras =  { version = "0.27.2", features = ["image", "svg", "all_loaders"] }
-emath = "0.27.2"
-image = { version = "0.24", features = ["jpeg", "png", "bmp", "gif"] }
+egui = { workspace = true }
+eframe = { workspace = true }
+egui_extras =  { workspace = true, features = ["image", "svg", "all_loaders"] }
+emath = { workspace = true }
+image = { version = "0.25", features = ["jpeg", "png", "bmp", "gif"] }
 chrono = "0.4.31"
 
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
-rfd = { version = "0.14.0" }
+rfd = { version = "0.15.0" }
 base64 = "0.22.0"
 
 # native:

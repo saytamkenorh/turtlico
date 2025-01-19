@@ -38,7 +38,11 @@ pub enum Token {
     Image(String),
     #[regex(r#"k"([^"\\]|\\t|\\u|\\n|\\")*""#, get_key)]
     Key(String),
-    #[regex(r"\p{XID_Start}[\p{XID_Continue}]+", get_indentifier)]
+    #[regex(r#"f"([^"\\]|\\t|\\u|\\n|\\")*""#, get_file)]
+    File(String),
+    #[regex(r#"s"([^"\\]|\\t|\\u|\\n|\\")*""#, get_tilemap)]
+    Tilemap(String),
+    #[regex(r"\p{XID_Start}[\p{XID_Continue}]+", get_indentifier, priority = 2)]
     Function(String),
     // Literals
     /// String
@@ -109,6 +113,14 @@ fn get_image(lexer: &mut Lexer<Token>) -> String {
 
 fn get_key(lexer: &mut Lexer<Token>) -> String {
     lexer.slice().trim_start_matches("k\"").trim_end_matches('"').to_owned()
+}
+
+fn get_file(lexer: &mut Lexer<Token>) -> String {
+    lexer.slice().trim_start_matches("f\"").trim_end_matches('"').to_owned()
+}
+
+fn get_tilemap(lexer: &mut Lexer<Token>) -> String {
+    lexer.slice().trim_start_matches("s\"").trim_end_matches('"').to_owned()
 }
 
 fn get_value<T: std::str::FromStr>(lexer: &mut Lexer<Token>) -> Option<T> {

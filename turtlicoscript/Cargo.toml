@@ -6,11 +6,11 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-logos = "0.13"
+logos = "0.15"
 chumsky = "0.9"
 async-recursion = "1"
 futures = "0.3"
 rand = "0.8"
 serde = { version = "1.0", features = ["derive"] }
-serde_derive = "1.0.170"
+serde_derive = "1.0"
 checkargs = { version = "0.1.0", path = "./checkargs" }
