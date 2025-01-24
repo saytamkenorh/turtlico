@@ -19,15 +19,15 @@ pub struct ProgramViewState {
 
 impl ProgramViewState {
     pub fn new(ctx: &egui::Context) -> Self {
-        let this = Self {
+        
+        Self {
             project: std::rc::Rc::new(Project::empty(ctx).into()),
             size: Rect::from_min_size(Pos2::new(0.0, 0.0), Vec2::new(0.0, 0.0)),
             drag_started: None,
             project_modify_timestamp: chrono::Local::now(),
             layout: vec![],
             edited_cmd: None,
-        };
-        this
+        }
     }
 
     fn recalc_layout(&mut self, ui: &mut egui::Ui) {

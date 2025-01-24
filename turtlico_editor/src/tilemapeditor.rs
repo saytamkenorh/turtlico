@@ -1,5 +1,3 @@
-use std::thread::panicking;
-
 use turtlicoscript::tokens::Token;
 use turtlicoscript_gui::{tilemap::Tilemap, world::BLOCK_SIZE_PX};
 
@@ -8,7 +6,7 @@ use crate::{
     cmdpalette::{self, CmdPaletteState},
     dialogs::{show_dialog, DialogResult, DialogSizeMode},
     dndctl::{self, DnDCtl},
-    project::{Command, CommandRange, Project},
+    project::{Command, Project},
     widgets::MARGIN_SMALL,
 };
 
@@ -24,7 +22,7 @@ impl TilemapEditorState {
         let mut palette_state = CmdPaletteState::new(project, ctx);
         palette_state.active_plugin = Some("default_blocks");
         Self {
-            tilemap: tilemap,
+            tilemap,
             blocks: turtlicoscript_gui::world::World::default_blocks(ctx),
             cmdpalette_state: Box::new(palette_state),
             dndctl: DnDCtl::new(),
@@ -36,18 +34,12 @@ impl TilemapEditorState {
         if row >= self.tilemap.get_width() || col >= self.tilemap.get_height() {
             return;
         }
-        if data.commands.len() < 1 || data.commands[0].len() < 1 {
+        if data.commands.is_empty() || data.commands[0].is_empty() {
             return;
         }
-        match &data.commands[0][0] {
-            Command::Token(token) => match token {
-                turtlicoscript::tokens::Token::Image(img) => {
-                    self.tilemap.set_block(row, col, Some(img.to_owned()));
-                }
-                _ => {}
-            },
-            _ => {}
-        }
+        if let Command::Token(token) = &data.commands[0][0] { if let turtlicoscript::tokens::Token::Image(img) = token {
+            self.tilemap.set_block(row, col, Some(img.to_owned()));
+        } }
     }
 
     pub fn relpos_to_col_row(&self, relpos: emath::Pos2) -> (usize, usize) {
@@ -97,11 +89,11 @@ fn tilemapeditor_view_ui(
                         egui::Vec2::new(
                             f32::max(
                                 ui.available_width(),
-                                state.tilemap.get_width() as f32 * BLOCK_SIZE_PX as f32,
+                                state.tilemap.get_width() as f32 * BLOCK_SIZE_PX,
                             ),
                             f32::max(
                                 ui.available_height(),
-                                state.tilemap.get_height() as f32 * BLOCK_SIZE_PX as f32,
+                                state.tilemap.get_height() as f32 * BLOCK_SIZE_PX,
                             ),
                         ),
                         egui::Sense::click_and_drag(),
@@ -111,20 +103,18 @@ fn tilemapeditor_view_ui(
                         if let Some((droppos, data)) = state.dndctl.drag_receive(rect) {
                             state.drag_insert((droppos - rect.min).to_pos2(), data);
                         }
-                        if response.drag_started() {
-                            if response.drag_delta().length_sq() > 3.0 {
-                                if let Some((cmd, col, row)) = state.get_cmd_at_pointer(ui, rect) {
-                                    state.tilemap.set_block(col, row, None);
-                                    state.dndctl.drag_start(
-                                        ui,
-                                        EditorDragData {
-                                            action: dndctl::DragAction::MOVE,
-                                            commands: vec![vec![cmd]],
-                                            commands_range: None,
-                                            project: project.clone(),
-                                        },
-                                    );
-                                }
+                        if response.drag_started() && response.drag_delta().length_sq() > 3.0 {
+                            if let Some((cmd, col, row)) = state.get_cmd_at_pointer(ui, rect) {
+                                state.tilemap.set_block(col, row, None);
+                                state.dndctl.drag_start(
+                                    ui,
+                                    EditorDragData {
+                                        action: dndctl::DragAction::MOVE,
+                                        commands: vec![vec![cmd]],
+                                        commands_range: None,
+                                        project: project.clone(),
+                                    },
+                                );
                             }
                         }
                     }
@@ -139,8 +129,8 @@ fn tilemapeditor_view_ui(
                             egui::Rect::from_min_size(
                                 rect.min,
                                 egui::vec2(
-                                    state.tilemap.get_width() as f32 * BLOCK_SIZE_PX as f32,
-                                    state.tilemap.get_height() as f32 * BLOCK_SIZE_PX as f32,
+                                    state.tilemap.get_width() as f32 * BLOCK_SIZE_PX,
+                                    state.tilemap.get_height() as f32 * BLOCK_SIZE_PX,
                                 ),
                             ),
                             0.0,
@@ -187,10 +177,10 @@ fn tilemapeditor_view_ui(
     })
 }
 
-pub fn tilemapeditor_view<'a>(
-    state: &'a mut TilemapEditorState,
+pub fn tilemapeditor_view(
+    state: &mut TilemapEditorState,
     project: std::rc::Rc<std::cell::RefCell<Project>>,
-) -> impl egui::Widget + 'a {
+) -> impl egui::Widget + '_ {
     move |ui: &mut egui::Ui| tilemapeditor_view_ui(ui, state, project)
 }
 

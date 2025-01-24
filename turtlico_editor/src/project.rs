@@ -92,7 +92,7 @@ impl Project {
             blocks: HashMap::new(),
             tilemaps: HashMap::new(),
             default_blocks: BTreeMap::from_iter(
-                turtlicoscript_gui::world::World::default_blocks(ctx).into_iter(),
+                turtlicoscript_gui::world::World::default_blocks(ctx),
             ),
             renderer: Some(CommandRenderer::new(ctx)),
             plugins: get_cmd_plugins(ctx),
@@ -104,19 +104,14 @@ impl Project {
 
         proj.plugins = get_cmd_plugins(ctx);
         proj.default_blocks =
-            BTreeMap::from_iter(turtlicoscript_gui::world::World::default_blocks(ctx).into_iter());
+            BTreeMap::from_iter(turtlicoscript_gui::world::World::default_blocks(ctx));
         proj.renderer = Some(CommandRenderer::new(ctx));
 
         Ok(proj)
     }
 
     pub fn get_plugin(&self, name: &str) -> Option<&Plugin> {
-        for plugin in self.plugins.iter() {
-            if plugin.name == name {
-                return Some(&plugin);
-            }
-        }
-        None
+        self.plugins.iter().find(|&plugin| plugin.name == name)
     }
 
     pub fn save(&self) -> Result<String, serde_json::Error> {
@@ -132,38 +127,35 @@ impl Project {
             row = self.program.len() - 1;
         }
         if let Command::Token(token) = &cmd {
-            match token {
-                Token::Newline => {
-                    // Split lines
-                    let row_len = self.program[row].len();
-                    if col >= row_len {
-                        self.program
-                            .insert(row + 1, vec![Command::Token(Token::Newline)]);
-                    } else {
-                        let mut following_newline: Vec<_> =
-                            self.program[row].drain(col..row_len).collect();
-                        if let Some(cmd) = self.program[row].last() {
-                            if get_is_token!(cmd, LeftCurly)
-                                && !matches!(
-                                    following_newline.first(),
-                                    Some(Command::Token(Token::RightCurly))
-                                )
-                            {
-                                following_newline.insert(0, Command::Token(Token::Space));
-                            }
-                        }
-                        for cmd in self.program[row].iter() {
-                            if !get_is_token!(cmd, Space) {
-                                break;
-                            }
+            if token == &Token::Newline {
+                // Split lines
+                let row_len = self.program[row].len();
+                if col >= row_len {
+                    self.program
+                        .insert(row + 1, vec![Command::Token(Token::Newline)]);
+                } else {
+                    let mut following_newline: Vec<_> =
+                        self.program[row].drain(col..row_len).collect();
+                    if let Some(cmd) = self.program[row].last() {
+                        if get_is_token!(cmd, LeftCurly)
+                            && !matches!(
+                                following_newline.first(),
+                                Some(Command::Token(Token::RightCurly))
+                            )
+                        {
                             following_newline.insert(0, Command::Token(Token::Space));
                         }
-                        self.program[row].push(Command::Token(Token::Newline));
-                        self.program.insert(row + 1, following_newline);
                     }
-                    return;
+                    for cmd in self.program[row].iter() {
+                        if !get_is_token!(cmd, Space) {
+                            break;
+                        }
+                        following_newline.insert(0, Command::Token(Token::Space));
+                    }
+                    self.program[row].push(Command::Token(Token::Newline));
+                    self.program.insert(row + 1, following_newline);
                 }
-                _ => {}
+                return;
             }
         }
         let row_len = self.program[row].len();
@@ -210,12 +202,10 @@ impl Project {
         } else {
             self.program[row].remove(col);
         }
-        if self.program[row].len() == 0 {
+        if self.program[row].is_empty() {
             self.program.remove(row);
-        } else {
-            if !get_is_token!(self.program[row].last().unwrap(), Newline) {
-                self.program[row].push(Command::Token(Token::Newline));
-            }
+        } else if !get_is_token!(self.program[row].last().unwrap(), Newline) {
+            self.program[row].push(Command::Token(Token::Newline));
         }
     }
 

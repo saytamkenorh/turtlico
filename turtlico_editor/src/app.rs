@@ -6,7 +6,7 @@ use turtlicoscript::{ast::Spanned, parser, tokens::Token};
 use turtlicoscript_gui::{app::{ScriptApp, ScriptState, SubApp}, t_log};
 
 use crate::{
-    cmdpalette, cmdrenderer::CMD_SIZE_VEC, dndctl::{DnDCtl, DragAction, DragData}, nativedialogs, programview, project::{Command, CommandRange, Project}, widgets::{self, BTN_ICON_SIZE, BTN_ICON_SIZE_VEC, MARGIN_MEDIUM, MARGIN_SMALL}
+    cmdpalette, cmdrenderer::CMD_SIZE_VEC, dndctl::{DnDCtl, DragAction, DragData}, nativedialogs, programview, project::{Command, CommandRange, Project}, widgets::{self, BTN_ICON_SIZE, MARGIN_MEDIUM, MARGIN_SMALL}
 };
 
 const MODIFIERS_CTRL: egui::Modifiers = egui::Modifiers {
@@ -99,8 +99,8 @@ impl EditorApp {
             ctx: ctx.clone(),
             icons: HashMap::new(),
             dndctl: DnDCtl::new(),
-            programview_state: programview_state,
-            cmdpalette_state: cmdpalette_state,
+            programview_state,
+            cmdpalette_state,
             script_subapp: None,
             script_errors: None,
             project_autosave_time: chrono::DateTime::<chrono::Local>::MIN_UTC.into(),
@@ -115,7 +115,7 @@ impl EditorApp {
     }
 
     fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
-        if self.icons.len() == 0 {
+        if self.icons.is_empty() {
             self.icons = load_icons();
         }
         let style = ui.style_mut();
@@ -383,7 +383,7 @@ impl EditorApp {
             }
             Err(err) => {
                 self.app_errors
-                    .push(format!("File serialization failed: {}", err.to_string()));
+                    .push(format!("File serialization failed: {}", err));
                 false
             }
         };
@@ -428,25 +428,19 @@ impl SubApp for EditorApp {
             .show(ctx, |ui| {
                 self.ui(ui, frame);
             });
-        match self.script_subapp.as_mut() {
-            Some(code_subapp) => {
-                let app_continues = code_subapp.update(ctx, frame);
-                if !app_continues {
-                    match &*code_subapp.program_state.lock().unwrap() {
-                        ScriptState::Error(err) => match err.item {
-                            turtlicoscript::error::Error::Interrupted => {}
-                            _ => {
-                                self.script_errors = Some(vec![err.clone()]);
-                            }
-                        },
-                        _ => {}
+        if let Some(code_subapp) = self.script_subapp.as_mut() {
+            let app_continues = code_subapp.update(ctx, frame);
+            if !app_continues {
+                if let ScriptState::Error(err) = &*code_subapp.program_state.lock().unwrap() { match err.item {
+                    turtlicoscript::error::Error::Interrupted => {}
+                    _ => {
+                        self.script_errors = Some(vec![err.clone()]);
                     }
-                    self.script_subapp = None;
-                }
+                } }
+                self.script_subapp = None;
             }
-            _ => (),
         }
-        return true;
+        true
     }
 
     fn save(&mut self, storage: &mut dyn eframe::Storage) {

@@ -22,6 +22,12 @@ pub trait DragData {
     fn render(&mut self, painter: &egui::Painter, pos: Pos2);
 }
 
+impl<T: DragData> Default for DnDCtl<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: DragData> DnDCtl<T> {
     pub fn new() -> Self {
         Self {
@@ -43,23 +49,20 @@ impl<T: DragData> DnDCtl<T> {
             }
             pos = i.pointer.interact_pos();
         });
-        match &mut self.drag_data {
-            Some(ref mut drag_data) => {
-                match pos {
-                    Some(pos) => {
-                        let (size, offset) = drag_data.1.get_size(&ui.painter());
-                        self.offset = offset;
-                        drag_data.0 = pos + self.offset;
-                        let rect = Rect::from_min_size(drag_data.0.round(), size);
-                        let painter = ui.painter_at(rect);
-                        drag_data.1.render(&painter, rect.min);
-                    },
-                    None => {
-                        self.dropped = true;
-                    }
+        if let Some(ref mut drag_data) = &mut self.drag_data {
+            match pos {
+                Some(pos) => {
+                    let (size, offset) = drag_data.1.get_size(ui.painter());
+                    self.offset = offset;
+                    drag_data.0 = pos + self.offset;
+                    let rect = Rect::from_min_size(drag_data.0.round(), size);
+                    let painter = ui.painter_at(rect);
+                    drag_data.1.render(&painter, rect.min);
+                },
+                None => {
+                    self.dropped = true;
                 }
             }
-            _ => (),
         }
 
     }

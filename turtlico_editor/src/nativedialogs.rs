@@ -135,7 +135,7 @@ pub fn open_file() -> Box<impl OpenFileDialog> {
         }
     });
     Box::new(OpenFileDialogRfd{
-        receiver: receiver
+        receiver
     })
 }
 
@@ -193,7 +193,7 @@ pub fn open_file() -> Box<impl OpenFileDialog> {
 
 #[allow(dead_code)]
 fn save_to_path(path: &std::path::PathBuf, data: Vec<u8>) -> Result<(), String> {
-    let mut file = std::fs::File::create(&path).map_err(|err| err.to_string())?;
+    let mut file = std::fs::File::create(path).map_err(|err| err.to_string())?;
     use std::io::Write;
 
     file.write_all(&data).map_err(|err| err.to_string())?;

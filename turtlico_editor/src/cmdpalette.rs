@@ -1,10 +1,8 @@
-use egui::Widget;
 use turtlicoscript::tokens::Token;
-use turtlicoscript_gui::tilemap::Tilemap;
 
 use crate::{
     app::EditorDragData,
-    cmdrenderer::{CMD_SIZE, CMD_SIZE_VEC},
+    cmdrenderer::CMD_SIZE,
     dialogs,
     dndctl::{DnDCtl, DragAction},
     project::{Command, Project},
@@ -323,16 +321,16 @@ fn cmdiconsource_ui(
     dndctl: &mut DnDCtl<EditorDragData>,
 ) -> egui::Response {
     let render_rect = project.borrow().renderer.as_ref().unwrap().render_icon(
-        &cmd[preview_index],
+        cmd[preview_index],
         &project.borrow(),
-        &ui.painter(),
+        ui.painter(),
         egui::pos2(0.0, 0.0),
         false,
     );
     let (rect, response) = ui.allocate_exact_size(render_rect.size(), egui::Sense::drag());
 
     project.borrow().renderer.as_ref().unwrap().render_icon(
-        &cmd[preview_index],
+        cmd[preview_index],
         &project.borrow(),
         &ui.painter().with_clip_rect(rect),
         rect.min,
@@ -343,8 +341,7 @@ fn cmdiconsource_ui(
             ui,
             EditorDragData {
                 commands: vec![cmd
-                    .into_iter()
-                    .map(|cmd| cmd.clone())
+                    .into_iter().cloned()
                     .collect::<Vec<Command>>()],
                 commands_range: None,
                 project: project.clone(),
