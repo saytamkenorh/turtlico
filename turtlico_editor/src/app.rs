@@ -248,6 +248,12 @@ impl EditorApp {
                     &mut self.cmdpalette_state,
                     self.programview_state.project.clone(),
                     &mut self.dndctl,
+                    0.0,
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
                 ));
                 ui.vertical(|ui| {
                     if let Some(errors) = self.script_errors.clone() {
@@ -278,6 +284,7 @@ impl EditorApp {
                     ui.add(programview::programview(
                         &mut self.programview_state,
                         &mut self.dndctl,
+                        self.cmdpalette_state.edited_tilemap.is_none()
                     ));
                 });
             });
@@ -349,6 +356,7 @@ impl EditorApp {
             .collect::<Vec<Token>>();
         match parser::parse_tokens(tokens) {
             Ok(ast) => {
+                println!("AST: {:?}", ast);
                 let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, None, true);
                 self.script_subapp = Some(subapp);
             }

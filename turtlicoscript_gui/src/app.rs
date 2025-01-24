@@ -50,7 +50,7 @@ impl RootApp {
         eframe::run_native(
             "Turtlico",
             native_options,
-            Box::new(|cc| Box::new(Self::new(cc, subapps_creator(&cc.egui_ctx)))),
+            Box::new(|cc| Ok(Box::new(Self::new(cc, subapps_creator(&cc.egui_ctx))))),
         )
         .expect("failed to start eframe");
     }

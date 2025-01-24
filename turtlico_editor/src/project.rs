@@ -1,31 +1,44 @@
-use std::collections::{HashMap, BTreeMap};
 use egui::load::SizedTexture;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use std::collections::{BTreeMap, HashMap};
 
 use turtlicoscript::tokens::Token;
+use turtlicoscript_gui::{
+    tilemap::Tilemap,
+    world::{SCREEN_HEIGHT, SCREEN_WIDTH},
+};
 
 use crate::cmdrenderer::CommandRenderer;
 
-
 macro_rules! get_is_token {
     ($cmd:expr, $token:ident) => {
-        if let Command::Token(token) = &$cmd  {
+        if let Command::Token(token) = &$cmd {
             match token {
-                turtlicoscript::tokens::Token::$token => {
-                    true
-                },
-                _ => {false}
+                turtlicoscript::tokens::Token::$token => true,
+                _ => false,
             }
-        } else {false}
+        } else {
+            false
+        }
     };
 }
 
 macro_rules! plugin_icon {
     ( $file:expr, $ctx:expr ) => {
         turtlicoscript_gui::world::load_texture_from_bytes(
-            $ctx, include_bytes!($file),
-            std::path::Path::new($file).extension().unwrap().to_str().unwrap(),
-            egui::load::SizeHint::Size(crate::widgets::BTN_ICON_SIZE, crate::widgets::BTN_ICON_SIZE)).unwrap()
+            $ctx,
+            include_bytes!($file),
+            std::path::Path::new($file)
+                .extension()
+                .unwrap()
+                .to_str()
+                .unwrap(),
+            egui::load::SizeHint::Size(
+                crate::widgets::BTN_ICON_SIZE,
+                crate::widgets::BTN_ICON_SIZE,
+            ),
+        )
+        .unwrap()
     };
 }
 
@@ -36,14 +49,16 @@ pub struct Project {
     #[serde(skip, default = "chrono::Local::now")]
     pub modify_timestamp: chrono::DateTime<chrono::Local>,
     pub program: Vec<Vec<Command>>,
-    
-    /// Project emmbeded files (blocks etc.)
+
+    /// Project emmbeded files (images etc.)
     pub files: HashMap<String, Vec<u8>>,
+    /// Project emmbeded tilemaps
+    pub tilemaps: HashMap<String, Tilemap>,
     #[serde(skip)]
     pub blocks: HashMap<String, SizedTexture>,
     #[serde(skip)]
     pub default_blocks: BTreeMap<String, SizedTexture>,
-    
+
     #[serde(skip)]
     pub renderer: Option<CommandRenderer>,
     #[serde(skip)]
@@ -59,7 +74,7 @@ pub struct Plugin {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum Command {
     Comment(String),
-    Token(Token)
+    Token(Token),
 }
 
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -75,7 +90,10 @@ impl Project {
             program: Vec::new(),
             files: HashMap::new(),
             blocks: HashMap::new(),
-            default_blocks: BTreeMap::from_iter(turtlicoscript_gui::world::World::default_blocks(ctx).into_iter()),
+            tilemaps: HashMap::new(),
+            default_blocks: BTreeMap::from_iter(
+                turtlicoscript_gui::world::World::default_blocks(ctx).into_iter(),
+            ),
             renderer: Some(CommandRenderer::new(ctx)),
             plugins: get_cmd_plugins(ctx),
         }
@@ -85,7 +103,8 @@ impl Project {
         let mut proj: Project = serde_json::from_str(data)?;
 
         proj.plugins = get_cmd_plugins(ctx);
-        proj.default_blocks = BTreeMap::from_iter(turtlicoscript_gui::world::World::default_blocks(ctx).into_iter());
+        proj.default_blocks =
+            BTreeMap::from_iter(turtlicoscript_gui::world::World::default_blocks(ctx).into_iter());
         proj.renderer = Some(CommandRenderer::new(ctx));
 
         Ok(proj)
@@ -112,47 +131,60 @@ impl Project {
             }
             row = self.program.len() - 1;
         }
-        if let Command::Token(token) = &cmd  {
+        if let Command::Token(token) = &cmd {
             match token {
                 Token::Newline => {
                     // Split lines
                     let row_len = self.program[row].len();
                     if col >= row_len {
-                        self.program.insert(row + 1, vec![Command::Token(Token::Newline)]);
+                        self.program
+                            .insert(row + 1, vec![Command::Token(Token::Newline)]);
                     } else {
-                        let mut following_newline: Vec<_> = self.program[row].drain(col..row_len).collect();
+                        let mut following_newline: Vec<_> =
+                            self.program[row].drain(col..row_len).collect();
                         if let Some(cmd) = self.program[row].last() {
-                            if get_is_token!(cmd, LeftCurly) && !matches!(following_newline.first(), Some(Command::Token(Token::RightCurly))) {
-                                following_newline.insert(0, Command::Token(Token::Space));   
+                            if get_is_token!(cmd, LeftCurly)
+                                && !matches!(
+                                    following_newline.first(),
+                                    Some(Command::Token(Token::RightCurly))
+                                )
+                            {
+                                following_newline.insert(0, Command::Token(Token::Space));
                             }
                         }
                         for cmd in self.program[row].iter() {
                             if !get_is_token!(cmd, Space) {
-                                break;   
+                                break;
                             }
                             following_newline.insert(0, Command::Token(Token::Space));
-                        };
+                        }
                         self.program[row].push(Command::Token(Token::Newline));
                         self.program.insert(row + 1, following_newline);
                     }
                     return;
-                },
+                }
                 _ => {}
             }
         }
         let row_len = self.program[row].len();
-        if col >= row_len && row_len > 0 && get_is_token!(self.program[row].last().unwrap(), Newline) {
+        if col >= row_len
+            && row_len > 0
+            && get_is_token!(self.program[row].last().unwrap(), Newline)
+        {
             col = row_len - 1;
         }
         if extra_insert {
             if get_is_token!(cmd, LeftCurly) {
-                self.program[row].insert(usize::min(row_len, col), Command::Token(Token::RightCurly));
+                self.program[row]
+                    .insert(usize::min(row_len, col), Command::Token(Token::RightCurly));
             }
             if get_is_token!(cmd, LeftParent) {
-                self.program[row].insert(usize::min(row_len, col), Command::Token(Token::RightParent));
+                self.program[row]
+                    .insert(usize::min(row_len, col), Command::Token(Token::RightParent));
             }
             if get_is_token!(cmd, LeftSquare) {
-                self.program[row].insert(usize::min(row_len, col), Command::Token(Token::RightSquare));
+                self.program[row]
+                    .insert(usize::min(row_len, col), Command::Token(Token::RightSquare));
             }
         }
         self.program[row].insert(usize::min(row_len, col), cmd);
@@ -197,11 +229,38 @@ impl Project {
         }
         self.modify_timestamp = chrono::Local::now();
     }
+
+    pub fn new_tilemap(&mut self) -> String {
+        let tilemap = Tilemap::new(SCREEN_WIDTH, SCREEN_HEIGHT);
+        let mut id = 0;
+        while self.tilemaps.contains_key(&format!("Tile map {}", id)) {
+            id += 1;
+        }
+        let name = format!("Tile map {}", id);
+        self.tilemaps.insert(name.clone(), tilemap);
+        name
+    }
+
+    pub fn remove_tilemap(&mut self, name: &str) {
+        for y in (0..self.program.len()).rev() {
+            for x in (0..self.program[y].len()).rev() {
+                if let Command::Token(Token::Tilemap(val)) = &self.program[y][x] {
+                    if val == name {
+                        self.program[y].remove(x);
+                    }
+                }
+            }
+        }
+        self.tilemaps.remove(name);
+    }
 }
 
 impl CommandRange {
     pub fn single_icon(col: usize, row: usize) -> Self {
-        Self { start: (col, row), end: (col, row) }
+        Self {
+            start: (col, row),
+            end: (col, row),
+        }
     }
 }
 
@@ -209,91 +268,74 @@ fn get_cmd_plugins(ctx: &egui::Context) -> Vec<Plugin> {
     let mut pv = Vec::new();
 
     // Turtle
-    pv.push(
-        Plugin {
-            name: "turtle",
-            icon: plugin_icon!("../icons/turtlico.svg", ctx),
-            commands: vec![
-                Command::Token(Token::Newline),
-                Command::Token(Token::Space),
-                Command::Token(Token::Function("place_block".to_owned())),
-                Command::Token(Token::Function("destroy_block".to_owned())),
-
-                Command::Token(Token::Function("go".to_owned())),
-                Command::Token(Token::Function("left".to_owned())),
-                Command::Token(Token::Function("right".to_owned())),
-                Command::Token(Token::Function("wait".to_owned())),
-
-                Command::Token(Token::Function("set_xy".to_owned())),
-                Command::Token(Token::Function("set_xy_px".to_owned())),
-                Command::Token(Token::Function("set_target_xy".to_owned())),
-                Command::Token(Token::Function("set_target_xy_px".to_owned())),
-
-                Command::Token(Token::Variable("block_xy".to_owned())),
-                Command::Token(Token::Function("set_rot".to_owned())),
-                Command::Token(Token::Function("speed".to_owned())),
-                Command::Token(Token::Function("skin".to_owned())),
-
-                Command::Token(Token::Function("new_turtle".to_owned())),
-                Command::Token(Token::Function("update_events".to_owned())),
-                Command::Token(Token::Key("A".to_owned())),
-                Command::Token(Token::Function("key_pressed".to_owned())),
-
-                Command::Token(Token::Function("key_down".to_owned())),
-            ]
-        }
-    );
+    pv.push(Plugin {
+        name: "turtle",
+        icon: plugin_icon!("../icons/turtlico.svg", ctx),
+        commands: vec![
+            Command::Token(Token::Newline),
+            Command::Token(Token::Space),
+            Command::Token(Token::Function("place_block".to_owned())),
+            Command::Token(Token::Function("destroy_block".to_owned())),
+            Command::Token(Token::Function("go".to_owned())),
+            Command::Token(Token::Function("left".to_owned())),
+            Command::Token(Token::Function("right".to_owned())),
+            Command::Token(Token::Function("wait".to_owned())),
+            Command::Token(Token::Function("set_xy".to_owned())),
+            Command::Token(Token::Function("set_xy_px".to_owned())),
+            Command::Token(Token::Function("set_target_xy".to_owned())),
+            Command::Token(Token::Function("set_target_xy_px".to_owned())),
+            Command::Token(Token::Variable("block_xy".to_owned())),
+            Command::Token(Token::Function("set_rot".to_owned())),
+            Command::Token(Token::Function("speed".to_owned())),
+            Command::Token(Token::Function("skin".to_owned())),
+            Command::Token(Token::Function("new_turtle".to_owned())),
+            Command::Token(Token::Function("update_events".to_owned())),
+            Command::Token(Token::Key("A".to_owned())),
+            Command::Token(Token::Function("key_pressed".to_owned())),
+            Command::Token(Token::Function("key_down".to_owned())),
+        ],
+    });
     // Control commands
-    pv.push(
-        Plugin {
-            name: "control",
-            icon: plugin_icon!("../icons/plugin_control.svg", ctx),
-            commands: vec![
-                Command::Token(Token::Loop),
-                Command::Token(Token::For),
-                Command::Token(Token::While),
-                Command::Token(Token::Break),
-                
-                Command::Token(Token::If),
-                Command::Token(Token::Else),
-                Command::Token(Token::FnDef),
-                Command::Token(Token::Return),
-
-                Command::Token(Token::Variable("x".to_owned())),
-                Command::Token(Token::Function("".to_owned())),
-                Command::Token(Token::Assignment),
-                Command::Token(Token::Dot),
-
-                Command::Token(Token::String("str".to_owned())),
-                Command::Token(Token::Integer(0)),
-                Command::Token(Token::Float("0.0".to_owned())),
-                Command::Token(Token::Colon),
-               
-                Command::Token(Token::LeftCurly),
-                Command::Token(Token::RightCurly),
-                Command::Token(Token::LeftSquare),
-                Command::Token(Token::RightSquare),
-
-                Command::Token(Token::Plus),
-                Command::Token(Token::Minus),
-                Command::Token(Token::Star),
-                Command::Token(Token::Slash),
-
-                Command::Token(Token::Lt),
-                Command::Token(Token::Gt),
-                Command::Token(Token::Lte),
-                Command::Token(Token::Gte),
-
-                Command::Token(Token::LeftParent),
-                Command::Token(Token::RightParent),
-                Command::Token(Token::Eq),
-                Command::Token(Token::Neq),
-                
-                Command::Token(Token::Comma),
-                Command::Comment("".to_owned()),
-            ]
-        }
-    );
+    pv.push(Plugin {
+        name: "control",
+        icon: plugin_icon!("../icons/plugin_control.svg", ctx),
+        commands: vec![
+            Command::Token(Token::Loop),
+            Command::Token(Token::For),
+            Command::Token(Token::While),
+            Command::Token(Token::Break),
+            Command::Token(Token::If),
+            Command::Token(Token::Else),
+            Command::Token(Token::FnDef),
+            Command::Token(Token::Return),
+            Command::Token(Token::Variable("x".to_owned())),
+            Command::Token(Token::Function("".to_owned())),
+            Command::Token(Token::Assignment),
+            Command::Token(Token::Dot),
+            Command::Token(Token::String("str".to_owned())),
+            Command::Token(Token::Integer(0)),
+            Command::Token(Token::Float("0.0".to_owned())),
+            Command::Token(Token::Colon),
+            Command::Token(Token::LeftCurly),
+            Command::Token(Token::RightCurly),
+            Command::Token(Token::LeftSquare),
+            Command::Token(Token::RightSquare),
+            Command::Token(Token::Plus),
+            Command::Token(Token::Minus),
+            Command::Token(Token::Star),
+            Command::Token(Token::Slash),
+            Command::Token(Token::Lt),
+            Command::Token(Token::Gt),
+            Command::Token(Token::Lte),
+            Command::Token(Token::Gte),
+            Command::Token(Token::LeftParent),
+            Command::Token(Token::RightParent),
+            Command::Token(Token::Eq),
+            Command::Token(Token::Neq),
+            Command::Token(Token::Comma),
+            Command::Comment("".to_owned()),
+        ],
+    });
 
     pv
 }

@@ -4,7 +4,7 @@ use crate::{
     app::EditorDragData,
     cmdrenderer::{CMD_ICON_SIZE_VEC, CMD_SIZE_VEC},
     dndctl::{DnDCtl, DragAction},
-    programviewdialogs,
+    dialogs,
     project::{Command, CommandRange, Project},
 };
 
@@ -122,6 +122,7 @@ fn programview_ui(
     ui: &mut egui::Ui,
     state: &mut ProgramViewState,
     dndctl: &mut DnDCtl<EditorDragData>,
+    enabled: bool,
 ) -> egui::Response {
     // Layout updates
     let project_modify_timestamp = state.project.borrow().modify_timestamp;
@@ -159,7 +160,9 @@ fn programview_ui(
                     );
 
                     // User input
-                    ui.set_enabled(state.edited_cmd.is_none());
+                    if !(state.edited_cmd.is_none() && enabled) {
+                        ui.disable();
+                    }
                     if ui.is_enabled() {
                         if let Some((droppos, data)) = dndctl.drag_receive(rect) {
                             state.insert((droppos - rect.min).to_pos2(), data);
@@ -202,7 +205,7 @@ fn programview_ui(
                         }
                     }
 
-                    programviewdialogs::dialog(ui, state);
+                    dialogs::programview_dialog(ui, state);
 
                     if ui.is_rect_visible(rect) {
                         let visuals = ui.style().noninteractive();
@@ -232,6 +235,7 @@ fn programview_ui(
 pub fn programview<'a>(
     state: &'a mut ProgramViewState,
     dndctl: &'a mut DnDCtl<EditorDragData>,
+    enabled: bool,
 ) -> impl egui::Widget + 'a {
-    move |ui: &mut egui::Ui| programview_ui(ui, state, dndctl)
+    move |ui: &mut egui::Ui| programview_ui(ui, state, dndctl, enabled)
 }

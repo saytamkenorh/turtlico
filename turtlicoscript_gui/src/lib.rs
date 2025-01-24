@@ -15,6 +15,7 @@ use world::{SpriteID, BLOCK_SIZE_PX, World};
 
 pub mod app;
 pub mod sprite;
+pub mod tilemap;
 pub mod world;
 pub mod worker;
 

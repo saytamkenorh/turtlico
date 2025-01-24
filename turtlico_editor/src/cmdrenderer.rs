@@ -98,6 +98,10 @@ impl CommandRenderer {
                             text = Some(name)
                         }
                     },
+                    Token::Tilemap(value) => {
+                        text = Some(value);
+                        icon = self.funcs_icons.get("tilemap");
+                    },
                     Token::Variable(name) => {
                         match self.var_icons.get(name) {
                             Some(image) => {
@@ -272,6 +276,7 @@ fn load_funcs_icons(ctx: &egui::Context) -> HashMap<String, SizedTexture> {
     insert_func_icon_emmbeded!(map, "set_xy", "../icons/set_xy.svg", ctx);
     insert_func_icon_emmbeded!(map, "skin", "../icons/skin.svg", ctx);
     insert_func_icon_emmbeded!(map, "speed", "../icons/speed.svg", ctx);
+    insert_func_icon_emmbeded!(map, "tilemap", "../icons/tilemaps.svg", ctx);
     insert_func_icon_emmbeded!(map, "update_events", "../icons/update_events.svg", ctx);
     insert_func_icon_emmbeded!(map, "wait", "../icons/wait.svg", ctx);
     map
