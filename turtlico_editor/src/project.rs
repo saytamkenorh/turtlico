@@ -53,6 +53,7 @@ pub struct Project {
     /// Project emmbeded files (images etc.)
     pub files: HashMap<String, Vec<u8>>,
     /// Project emmbeded tilemaps
+    #[serde(default)]
     pub tilemaps: HashMap<String, Tilemap>,
     #[serde(skip)]
     pub blocks: HashMap<String, SizedTexture>,
