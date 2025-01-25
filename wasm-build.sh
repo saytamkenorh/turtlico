@@ -56,12 +56,12 @@ wasm-bindgen \
   --target no-modules \
   "$WASM_FILE"
 
-if [ "$PROFILE" == "release" ]; then
-  # Temporarily disabled
-  # https://github.com/rustwasm/wasm-pack/issues/1441
-  # echo "Optimizing WASM..."
-  # wasm-opt -O3 --fast-math --enable-bulk-memory -o "$DEST_DIR/turtlico_editor_bg.wasm" "$DEST_DIR/turtlico_editor_bg.wasm"
-fi
+# if [ "$PROFILE" == "release" ]; then
+#   Temporarily disabled
+#   https://github.com/rustwasm/wasm-pack/issues/1441
+#   echo "Optimizing WASM..."
+#   wasm-opt -O3 --fast-math --enable-bulk-memory -o "$DEST_DIR/turtlico_editor_bg.wasm" "$DEST_DIR/turtlico_editor_bg.wasm"
+# fi
 
 echo "Copying assets..."
 cp "$SCRIPT_DIR/turtlico_editor/index.html" "$DEST_DIR/index.html"
