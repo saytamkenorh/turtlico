@@ -52,8 +52,8 @@ pub fn save_file(data: Vec<u8>, path: Option<std::path::PathBuf>) -> std::sync::
     let data = String::from_utf8(data).unwrap();
 
     let a = wasm_bindgen::JsCast::dyn_into::<web_sys::HtmlAnchorElement>(document.create_element("a").unwrap()).unwrap();
-    let mut blob_props = web_sys::BlobPropertyBag::new();
-    blob_props.type_("application/octet-stream");
+    let blob_props = web_sys::BlobPropertyBag::new();
+    blob_props.set_type("application/octet-stream");
     let blob = web_sys::Blob::new_with_str_sequence_and_options(&js_array(&[data.as_str()]), &blob_props).unwrap();
     
     a.set_href(&web_sys::Url::create_object_url_with_blob(&blob).unwrap());

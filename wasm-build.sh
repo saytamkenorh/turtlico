@@ -58,7 +58,7 @@ wasm-bindgen \
 
 if [ "$PROFILE" == "release" ]; then
   echo "Optimizing WASM..."
-  wasm-opt -O3 --fast-math -o "$DEST_DIR/turtlico_editor_bg.wasm" "$DEST_DIR/turtlico_editor_bg.wasm"
+  wasm-opt -O3 --fast-math --enable-bulk-memory -o "$DEST_DIR/turtlico_editor_bg.wasm" "$DEST_DIR/turtlico_editor_bg.wasm"
 fi
 
 echo "Copying assets..."
