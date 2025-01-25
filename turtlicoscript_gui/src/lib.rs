@@ -123,16 +123,21 @@ impl Context {
     pub fn key_down(&mut self, key: &str) -> Result<bool, RuntimeError> {
         World::key_down(&self.world, key)
     }
+
+    pub fn show_tilemap(&mut self, name: &str) -> Result<(), RuntimeError> {
+        World::show_tilemap(&self.world, name)
+    }
 }
 
 pub fn init_library(world: Arc<Mutex<world::World>>, sync_rx: Receiver<WorldSyncState>) -> Library {
     let mut scope = Scope::new();
     scope.vars.extend(funcmap!{
         "gui",
-        new_turtle,
-        update_events,
-        key_pressed,
         key_down,
+        key_pressed,
+        new_turtle,
+        show_tilemap,
+        update_events,
         wait
     });
     // Consts
@@ -401,4 +406,10 @@ pub fn key_pressed(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, args: Nati
 #[check_args(Key)]
 pub fn key_down(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
     unwrap_context::<Context>(ctx).key_down(arg0).map(|val| Value::Bool(val))
+}
+
+#[check_args(String)]
+pub fn show_tilemap(ctx: &mut NativeFuncCtxArg, _this: FuncThisObject, args: NativeFuncArgs) -> NativeFuncReturn {
+    unwrap_context::<Context>(ctx).show_tilemap(arg0)?;
+    Ok(Value::None)
 }

@@ -95,6 +95,7 @@ pub enum Expression {
     Float(f64),
     String(String),
     Image(String),
+    Tilemap(String),
     Key(String),
     Variable {
         parent: Option<Box<Spanned<Expression>>>,

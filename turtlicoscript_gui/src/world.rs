@@ -1,15 +1,15 @@
-use std::collections::hash_map::RandomState;
-use std::sync::mpsc::{self, Receiver};
-use std::collections::{HashMap, HashSet};
-use std::sync::{Arc, Mutex};
 use egui::Key;
 use ndarray::prelude::*;
+use std::collections::hash_map::RandomState;
+use std::collections::{HashMap, HashSet};
+use std::sync::mpsc::{self, Receiver};
+use std::sync::{Arc, Mutex};
 use turtlicoscript::error::RuntimeError;
 use turtlicoscript::interpreter::CancellationToken;
 
-use crate::WorldSyncState;
 use crate::sprite::Sprite;
-
+use crate::tilemap::Tilemap;
+use crate::WorldSyncState;
 
 pub const NORMAL_SPEED: f32 = 64.0; // pixels per second
 pub const NORMAL_SPEED_ROTATION: f32 = 180.0; // degrees per second
@@ -23,9 +23,17 @@ pub const LONG_PRESS_DURATION: f64 = 1.5;
 macro_rules! insert_block_embedded {
     ( $map:expr, $ctx:expr, $name:expr, $file:expr ) => {
         World::load_block_bytes(
-            &mut $map, $ctx, $name, include_bytes!($file),
-            std::path::Path::new($file).extension().unwrap().to_str().unwrap()
-        ).unwrap();
+            &mut $map,
+            $ctx,
+            $name,
+            include_bytes!($file),
+            std::path::Path::new($file)
+                .extension()
+                .unwrap()
+                .to_str()
+                .unwrap(),
+        )
+        .unwrap();
     };
 }
 
@@ -37,12 +45,18 @@ pub enum BlockTextureError {
     UnknownBlock,
 }
 
+pub struct WorldCreationData {
+    pub tilemaps: HashMap<String, Tilemap>,
+    pub script_dir: Option<String>,
+}
+
 pub struct World {
     pub sprites: HashMap<SpriteID, Sprite>,
     pub blocks: BlockTextures,
     blocks_load_default: bool,
     pub block_map: Array3<Option<String>>,
-    
+    pub tilemaps: HashMap<String, Tilemap>,
+
     last_anim_time: f64,
     pub update_tx: mpsc::Sender<WorldSyncState>,
     pub update_tx_closed: bool, // Interpreter disconnected
@@ -64,12 +78,13 @@ impl World {
             blocks: HashMap::new(),
             blocks_load_default: true,
             block_map: Array::from_elem((SCREEN_WIDTH, SCREEN_HEIGHT, block_map_depth), None),
+            tilemaps: HashMap::new(),
 
             last_anim_time: 0.0,
             update_tx,
             update_tx_closed: false,
             script_dir: None,
-            
+
             keys_down: HashSet::new(),
             keys_down_prev: HashSet::new(),
             keys_pressed: HashSet::new(),
@@ -78,16 +93,20 @@ impl World {
         };
         s
     }
-    pub fn new_arc_mutex(update_tx: mpsc::Sender<WorldSyncState>, script_dir: Option<String>) -> Arc<Mutex<Self>> {
+    pub fn new_arc_mutex(
+        update_tx: mpsc::Sender<WorldSyncState>,
+        data: WorldCreationData,
+    ) -> Arc<Mutex<Self>> {
         let mut world = Self::new(update_tx);
-        world.script_dir = script_dir;
+        world.tilemaps = data.tilemaps;
+        world.script_dir = data.script_dir;
         Arc::new(Mutex::new(world))
     }
 
     pub fn add_sprite(&mut self) -> SpriteID {
         let mut id = 0;
         while self.sprites.contains_key(&id) {
-            id+= 1;
+            id += 1;
         }
         self.sprites.insert(id, Sprite::new());
         id
@@ -105,10 +124,17 @@ impl World {
                 }
             }
         }
-        Err(turtlicoscript::error::RuntimeError::InvalidBlock(name.to_owned()))
+        Err(turtlicoscript::error::RuntimeError::InvalidBlock(
+            name.to_owned(),
+        ))
     }
 
-    fn get_block_texture<'a>(blocks: &'a mut BlockTextures, script_dir: &Option<String>, ctx: &'a egui::Context, name: &'a str) -> Result<&'a egui::load::SizedTexture, BlockTextureError> {
+    fn get_block_texture<'a>(
+        blocks: &'a mut BlockTextures,
+        script_dir: &Option<String>,
+        ctx: &'a egui::Context,
+        name: &'a str,
+    ) -> Result<&'a egui::load::SizedTexture, BlockTextureError> {
         if blocks.contains_key(name) {
             return Ok(blocks.get(name).unwrap());
         }
@@ -116,8 +142,13 @@ impl World {
             if let Some(project_dir) = script_dir {
                 let path = std::path::Path::new(&project_dir).join(&name[2..]);
                 if path.exists() {
-                    match Self::load_block_file(blocks, ctx, name, &path.into_os_string().into_string().unwrap()) {
-                        Ok(_) => {},
+                    match Self::load_block_file(
+                        blocks,
+                        ctx,
+                        name,
+                        &path.into_os_string().into_string().unwrap(),
+                    ) {
+                        Ok(_) => {}
                         Err(err) => {
                             return Err(BlockTextureError::LoadError(err));
                         }
@@ -128,27 +159,36 @@ impl World {
         Err(BlockTextureError::UnknownBlock)
     }
 
-    pub fn ui(&mut self, ui: &mut egui::Ui, cancellable: &Option<CancellationToken>) -> egui::Response {
+    pub fn ui(
+        &mut self,
+        ui: &mut egui::Ui,
+        cancellable: &Option<CancellationToken>,
+    ) -> egui::Response {
         if self.blocks_load_default {
             self.blocks = Self::default_blocks(ui.ctx());
             self.blocks_load_default = false;
         }
-        
+
         let avail_size = ui.available_size();
-        let cam_scale = f32::max(f32::min(
-            avail_size.x / SCREEN_WIDTH_PX,
-            avail_size.y / SCREEN_HEIGHT_PX), 1.0);
+        let cam_scale = f32::max(
+            f32::min(
+                avail_size.x / SCREEN_WIDTH_PX,
+                avail_size.y / SCREEN_HEIGHT_PX,
+            ),
+            1.0,
+        );
         let _cam_block_size = cam_scale * BLOCK_SIZE_PX;
         let desired_size = egui::vec2(SCREEN_WIDTH_PX * cam_scale, SCREEN_HEIGHT_PX * cam_scale);
 
-        let (world_rect, response) = ui.allocate_exact_size(desired_size, egui::Sense::click_and_drag());
+        let (world_rect, response) =
+            ui.allocate_exact_size(desired_size, egui::Sense::click_and_drag());
 
         let default_block = *self.blocks.get("turtle").unwrap();
         let script_dir = self.script_dir.clone();
 
         // Animations
         let mut current_time = 0.0;
-        ui.ctx().input(|state|{
+        ui.ctx().input(|state| {
             current_time = state.time;
         });
         if self.last_anim_time == 0.0 {
@@ -174,8 +214,12 @@ impl World {
             let visuals = ui.style().noninteractive();
             //let world_rect = world_rect.expand(visuals.expansion);
             let wpainter = ui.painter().with_clip_rect(world_rect);
-            wpainter
-                .rect(world_rect, 0.0, egui::Color32::from_rgb(255, 255, 255), visuals.bg_stroke);
+            wpainter.rect(
+                world_rect,
+                0.0,
+                egui::Color32::from_rgb(255, 255, 255),
+                visuals.bg_stroke,
+            );
 
             // Blocks
             for z in (0..self.block_map.len_of(Axis(2))).rev() {
@@ -195,42 +239,69 @@ impl World {
             // Sprites
             for sprite in self.sprites.values() {
                 // let block = self.blocks.get(&sprite.skin).unwrap_or(default_block);
-                let block = Self::get_block_texture(&mut self.blocks, &script_dir, ui.ctx(), &sprite.skin).unwrap_or(&default_block).clone();
-                self.render_block(&wpainter, &block, sprite.rendered_x, sprite.rendered_y, sprite.rendered_rot, cam_scale);
+                let block =
+                    Self::get_block_texture(&mut self.blocks, &script_dir, ui.ctx(), &sprite.skin)
+                        .unwrap_or(&default_block)
+                        .clone();
+                self.render_block(
+                    &wpainter,
+                    &block,
+                    sprite.rendered_x,
+                    sprite.rendered_y,
+                    sprite.rendered_rot,
+                    cam_scale,
+                );
             }
         }
 
         // Input
         let mut long_touch = false;
         ui.input(|i| {
-            long_touch = i.pointer.button_down(egui::PointerButton::Primary) &&
-             match i.pointer.press_start_time() {
-                Some(start_time) => {
-                    f64::abs(i.time - start_time) >= LONG_PRESS_DURATION
-                },
-                None => {false}
-            };
+            long_touch = i.pointer.button_down(egui::PointerButton::Primary)
+                && match i.pointer.press_start_time() {
+                    Some(start_time) => f64::abs(i.time - start_time) >= LONG_PRESS_DURATION,
+                    None => false,
+                };
             self.keys_down = i.keys_down.clone();
         });
 
         self.primary_ptr_clicked = response.clicked_by(egui::PointerButton::Primary);
-        self.secondary_ptr_clicked = response.clicked_by(egui::PointerButton::Secondary) || long_touch;
+        self.secondary_ptr_clicked =
+            response.clicked_by(egui::PointerButton::Secondary) || long_touch;
 
-       response
+        response
     }
 
-    pub fn render_block(&self, painter: &egui::Painter, block: &egui::load::SizedTexture, x: f32, y: f32, rot: f32, cam_scale: f32) {
+    pub fn render_block(
+        &self,
+        painter: &egui::Painter,
+        block: &egui::load::SizedTexture,
+        x: f32,
+        y: f32,
+        rot: f32,
+        cam_scale: f32,
+    ) {
         let rect = egui::Rect::from_min_size(
-            egui::Pos2 { x: x * cam_scale, y: y * cam_scale },
-            block.size * cam_scale).translate(egui::vec2(painter.clip_rect().left(), painter.clip_rect().top()));
+            egui::Pos2 {
+                x: x * cam_scale,
+                y: y * cam_scale,
+            },
+            block.size * cam_scale,
+        )
+        .translate(egui::vec2(
+            painter.clip_rect().left(),
+            painter.clip_rect().top(),
+        ));
         let mut mesh = egui::Mesh::with_texture(block.id);
         mesh.add_rect_with_uv(
             rect,
             egui::Rect::from_min_max(egui::pos2(0.0, 0.0), egui::pos2(1.0, 1.0)),
-            egui::Color32::WHITE);
+            egui::Color32::WHITE,
+        );
         mesh.rotate(
             emath::Rot2::from_angle(rot.to_radians()),
-            rect.min + egui::vec2(0.5, 0.5) * rect.size());
+            rect.min + egui::vec2(0.5, 0.5) * rect.size(),
+        );
         painter.add(egui::Shape::mesh(mesh));
     }
 
@@ -240,23 +311,47 @@ impl World {
             let state = sync_rx.recv().unwrap(); // Wait for next frame
             {
                 let _world = world.lock().unwrap();
-                if _world.keys_down.len() > 0 || _world.primary_ptr_clicked || _world.secondary_ptr_clicked || matches!(state, WorldSyncState::Cancelled) {
+                if _world.keys_down.len() > 0
+                    || _world.primary_ptr_clicked
+                    || _world.secondary_ptr_clicked
+                    || matches!(state, WorldSyncState::Cancelled)
+                {
                     break;
                 }
             }
         }
     }
 
-    pub fn place_block(world: &Arc<Mutex<World>>, sprite: SpriteID, block: Option<&String>, on_sprite: bool, x: Option<f64>, y: Option<f64>) {
+    pub fn place_block(
+        world: &Arc<Mutex<World>>,
+        sprite: SpriteID,
+        block: Option<&String>,
+        on_sprite: bool,
+        x: Option<f64>,
+        y: Option<f64>,
+    ) {
         let mut world = world.lock().unwrap();
         let sprite = world.sprites.get(&sprite).unwrap();
 
-        if (x.is_some() && x.unwrap().fract() != 0.0) || (y.is_some() && y.unwrap().fract() != 0.0) {
+        if (x.is_some() && x.unwrap().fract() != 0.0) || (y.is_some() && y.unwrap().fract() != 0.0)
+        {
             todo!("Placing blocks as graphics is not supported yet")
         }
 
-        let bx = if let Some(x) = x { x as usize } else if on_sprite || y.is_some() { sprite.get_block_x() } else { sprite.get_forward_block_x() };
-        let by = if let Some(y) = y { y as usize } else if on_sprite || x.is_some() { sprite.get_block_y() } else { sprite.get_forward_block_y() };
+        let bx = if let Some(x) = x {
+            x as usize
+        } else if on_sprite || y.is_some() {
+            sprite.get_block_x()
+        } else {
+            sprite.get_forward_block_x()
+        };
+        let by = if let Some(y) = y {
+            y as usize
+        } else if on_sprite || x.is_some() {
+            sprite.get_block_y()
+        } else {
+            sprite.get_forward_block_y()
+        };
         match block {
             Some(block) => {
                 for bz in 0..world.block_map.len_of(Axis(2)) - 1 {
@@ -264,7 +359,7 @@ impl World {
                     world.block_map[(bx, by, bz + 1)] = new_val;
                 }
                 world.block_map[(bx, by, 0)] = Some(block.to_owned());
-            },
+            }
             None => {
                 for bz in 0..world.block_map.len_of(Axis(2)) {
                     world.block_map[(bx, by, bz)] = None;
@@ -275,9 +370,12 @@ impl World {
 
     pub fn update_events(world: &Arc<Mutex<World>>) {
         let mut world = world.lock().unwrap();
-        world.keys_pressed = world.keys_down.iter().filter(|key| {
-            !world.keys_down_prev.contains(key)
-        }).cloned().collect();
+        world.keys_pressed = world
+            .keys_down
+            .iter()
+            .filter(|key| !world.keys_down_prev.contains(key))
+            .cloned()
+            .collect();
 
         world.keys_down_prev = world.keys_down.clone();
     }
@@ -296,13 +394,55 @@ impl World {
         })
     }
 
-    fn load_block_file(blocks: &mut BlockTextures, ctx: &egui::Context, name: &str, path: &str) -> Result<(), egui::load::LoadError> {
-        blocks.insert(name.to_owned(), load_texture_from_uri(ctx, &format!("file://{}", path), egui::SizeHint::Scale(1.0.into()))?);
+    pub fn show_tilemap(world: &Arc<Mutex<World>>, key: &str) -> Result<(), RuntimeError> {
+        let mut world = world.lock().unwrap();
+        if let Some(tilemap) = world.tilemaps.get(key).cloned() {
+            let sizex = world.block_map.len_of(Axis(0));
+            let sizey = world.block_map.len_of(Axis(1));
+            for bx in 0..sizex {
+                for by in 0..sizey {
+                    world.block_map[(bx, by, 0)] = tilemap.tiles.get((bx, by)).cloned().unwrap_or(None);
+                    for bz in 1..world.block_map.len_of(Axis(2)) {
+                        world.block_map[(bx, by, bz)] = None;
+                    }
+                }
+            }
+            Ok(())
+        } else {
+            Err(RuntimeError::NativeLibraryError(
+                "Invalid tilemap".to_owned(),
+            ))
+        }
+    }
+
+    fn load_block_file(
+        blocks: &mut BlockTextures,
+        ctx: &egui::Context,
+        name: &str,
+        path: &str,
+    ) -> Result<(), egui::load::LoadError> {
+        blocks.insert(
+            name.to_owned(),
+            load_texture_from_uri(
+                ctx,
+                &format!("file://{}", path),
+                egui::SizeHint::Scale(1.0.into()),
+            )?,
+        );
         Ok(())
     }
 
-    fn load_block_bytes(blocks: &mut BlockTextures, ctx: &egui::Context, name: &str, bytes: &'static [u8], fmt: &str) -> Result<(), egui::load::LoadError> {
-        blocks.insert(name.to_owned(), load_texture_from_bytes(ctx, bytes, fmt, egui::SizeHint::Scale(1.0.into()))?);
+    fn load_block_bytes(
+        blocks: &mut BlockTextures,
+        ctx: &egui::Context,
+        name: &str,
+        bytes: &'static [u8],
+        fmt: &str,
+    ) -> Result<(), egui::load::LoadError> {
+        blocks.insert(
+            name.to_owned(),
+            load_texture_from_bytes(ctx, bytes, fmt, egui::SizeHint::Scale(1.0.into()))?,
+        );
         Ok(())
     }
 
@@ -319,27 +459,31 @@ impl World {
     }
 }
 
-pub fn load_texture_from_uri(ctx: &egui::Context, uri: &str, size_hint: egui::load::SizeHint) -> Result<egui::load::SizedTexture, egui::load::LoadError> {
+pub fn load_texture_from_uri(
+    ctx: &egui::Context,
+    uri: &str,
+    size_hint: egui::load::SizeHint,
+) -> Result<egui::load::SizedTexture, egui::load::LoadError> {
     let result = ctx.try_load_texture(uri, egui::TextureOptions::NEAREST, size_hint);
     match result {
-        Ok(pool) => {
-            loop {
-                match pool {
-                    egui::load::TexturePoll::Pending { size: _ } => {
-                    },
-                    egui::load::TexturePoll::Ready { texture } => {
-                        break Ok(texture);
-                    }
+        Ok(pool) => loop {
+            match pool {
+                egui::load::TexturePoll::Pending { size: _ } => {}
+                egui::load::TexturePoll::Ready { texture } => {
+                    break Ok(texture);
                 }
             }
         },
-        Err(err) => {
-            Err(err)
-        }
+        Err(err) => Err(err),
     }
 }
 
-pub fn load_texture_from_bytes(ctx: &egui::Context, bytes: &'static [u8], fmt: &str, size_hint: egui::load::SizeHint) -> Result<egui::load::SizedTexture, egui::load::LoadError> {
+pub fn load_texture_from_bytes(
+    ctx: &egui::Context,
+    bytes: &'static [u8],
+    fmt: &str,
+    size_hint: egui::load::SizeHint,
+) -> Result<egui::load::SizedTexture, egui::load::LoadError> {
     let uri = format!("bytes://{}.{}", uuid::Uuid::new_v4(), fmt);
     ctx.include_bytes(uri.clone(), bytes);
     load_texture_from_uri(ctx, &uri, size_hint)
@@ -347,5 +491,9 @@ pub fn load_texture_from_bytes(ctx: &egui::Context, bytes: &'static [u8], fmt: &
 
 pub fn normalize_angle(angle: f32) -> f32 {
     let angle = angle % 360.0;
-    if angle < 0.0 { 360.0 + angle } else { angle }
+    if angle < 0.0 {
+        360.0 + angle
+    } else {
+        angle
+    }
 }

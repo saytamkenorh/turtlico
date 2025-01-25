@@ -15,7 +15,7 @@ for i in "$@"; do
       SERVE=1
       shift
       ;;
-    -s|--https)
+    -t|--https)
       HTTPS=1
       shift
       ;;

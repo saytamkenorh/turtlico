@@ -7,6 +7,7 @@ use egui::Color32;
 use std::sync::{atomic::AtomicBool, mpsc::channel};
 use turtlicoscript::ast::{Expression, Spanned};
 use turtlicoscript::interpreter::CancellationToken;
+use crate::world::WorldCreationData;
 
 use crate::world::World;
 
@@ -43,10 +44,13 @@ impl RootApp {
         // Log to stdout (if you run with `RUST_LOG=debug`).
         tracing_subscriber::fmt::init();
 
-        let native_options = eframe::NativeOptions::default();
-        // native_options.decorated = true;
-        // native_options.app_id = Some("io.gitlab.Turtlico".to_owned());
-        // native_options.maximized = true;
+        let native_options = eframe::NativeOptions {
+            viewport: egui::ViewportBuilder::default()
+                .with_app_id("io.gitlab.Turtlico")
+                .with_decorations(true)
+                .with_min_inner_size(egui::vec2(300.0, 220.0)),
+            ..Default::default()
+        };
         eframe::run_native(
             "Turtlico",
             native_options,
@@ -67,11 +71,23 @@ impl RootApp {
         let web_options = eframe::WebOptions::default();
 
         wasm_bindgen_futures::spawn_local(async {
+            use wasm_bindgen::JsCast;
+            let document = web_sys::window()
+                .expect("No window")
+                .document()
+                .expect("No document");
+
+            let canvas = document
+                .get_element_by_id("turtlico")
+                .expect("Failed to find turtlico canvas")
+                .dyn_into::<web_sys::HtmlCanvasElement>()
+                .expect("turtlico was not a HtmlCanvasElement");
+
             eframe::WebRunner::new()
                 .start(
-                    "turtlico",
+                    canvas,
                     web_options,
-                    Box::new(|cc| Box::new(Self::new(cc, subapps_creator(&cc.egui_ctx)))),
+                    Box::new(|cc| Ok(Box::new(Self::new(cc, subapps_creator(&cc.egui_ctx))))),
                 )
                 .await
                 .expect("failed to start eframe");
@@ -150,21 +166,20 @@ impl ScriptApp {
     #[cfg(not(target_arch = "wasm32"))]
     pub fn spawn(
         ast: Spanned<Expression>,
-        script_dir: Option<String>,
+        data: WorldCreationData,
         windowed: bool,
     ) -> ScriptApp {
         let (tx, rx) = channel();
-        let world = crate::world::World::new_arc_mutex(tx, script_dir);
-        let world_clone = world.clone();
+        let world = crate::world::World::new_arc_mutex(tx, data);
         let cancellable = Arc::new(AtomicBool::new(false));
 
-        let mut app = ScriptApp::new(world, windowed);
+        let mut app = ScriptApp::new(world.clone(), windowed);
         let state = app.program_state.clone();
         app.cancellable = Some(cancellable.clone());
 
         let handle = std::thread::spawn(move || {
             let mut ctx = turtlicoscript::interpreter::Context::new_parent(Some(cancellable));
-            ctx.import_library(crate::init_library(world_clone, rx), false);
+            ctx.import_library(crate::init_library(world, rx), false);
             match ctx.eval_root(&ast) {
                 Ok(_) => {
                     let mut _state = state.lock().unwrap();
@@ -183,12 +198,12 @@ impl ScriptApp {
     #[cfg(target_arch = "wasm32")]
     pub fn spawn(
         ast: Spanned<Expression>,
-        script_dir: Option<String>,
+        data: WorldCreationData,
         windowed: bool,
     ) -> ScriptApp {
         use web_sys::console;
         let (tx, rx) = channel();
-        let world = crate::world::World::new_arc_mutex(tx, script_dir);
+        let world = crate::world::World::new_arc_mutex(tx, data);
         let world_clone = world.clone();
         let cancellable = Arc::new(AtomicBool::new(false));
 

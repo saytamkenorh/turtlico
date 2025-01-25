@@ -133,8 +133,8 @@ fn programview_ui(
 
     let available_space = ui.available_size();
     let desired_size = egui::vec2(
-        available_space.x - ui.style().spacing.item_spacing.x,
-        available_space.y - ui.style().spacing.item_spacing.y,
+        f32::max(available_space.x - ui.style().spacing.item_spacing.x, 0.0),
+        f32::max(available_space.y - ui.style().spacing.item_spacing.y, 0.0),
     );
     let bg_color = ui.style().visuals.extreme_bg_color;
     let fg_color = ui.style().visuals.text_color();

@@ -1,12 +1,12 @@
+use std::collections::HashMap;
 use std::{env, fs};
 use turtlicoscript::parser;
 use turtlicoscript::ast::{Spanned, Expression};
+use turtlicoscript_gui::{app::ScriptState, world::WorldCreationData};
 
 #[cfg(feature = "gui")]
-fn run(ast: Spanned<Expression>, src: &String, script_dir: Option<String>) {
-    use turtlicoscript_gui::app::ScriptState;
-
-    let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, script_dir, false);
+fn run(ast: Spanned<Expression>, src: &String, data: WorldCreationData) {
+    let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, data, false);
     let state = subapp.program_state.clone();
 
     turtlicoscript_gui::app::RootApp::run(
@@ -24,7 +24,7 @@ fn run(ast: Spanned<Expression>, src: &String, script_dir: Option<String>) {
 }
 
 #[cfg(not(feature = "gui"))]
-fn run(ast: Spanned<Expression>, src: &String) {
+fn run(ast: Spanned<Expression>, src: &String, data: WorldCreationData) {
     todo!();
     use {interpreter::Context, value::Value};
     let mut ctx = Context::new_parent();
@@ -62,7 +62,11 @@ fn run_file(file: String) {
         Ok(ast) => {
             println!("AST:");
             println!("{:#?}", ast);
-            run(ast, &src, script_dir);
+            let data = WorldCreationData {
+                tilemaps: HashMap::new(),
+                script_dir
+            };
+            run(ast, &src, data);
         },
         Err(errors) => {
             eprintln!("File parse error (s):\n{}", errors.into_iter().map(|err| err.build_message(&src)).collect::<Vec<String>>().join("\n"));

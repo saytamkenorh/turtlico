@@ -3,10 +3,18 @@ use std::collections::HashMap;
 use egui::ImageSource;
 use emath::{Pos2, Vec2};
 use turtlicoscript::{ast::Spanned, parser, tokens::Token};
-use turtlicoscript_gui::{app::{ScriptApp, ScriptState, SubApp}, t_log};
+use turtlicoscript_gui::{
+    app::{ScriptApp, ScriptState, SubApp},
+    t_log, world::WorldCreationData,
+};
 
 use crate::{
-    cmdpalette, cmdrenderer::CMD_SIZE_VEC, dndctl::{DnDCtl, DragAction, DragData}, nativedialogs, programview, project::{Command, CommandRange, Project}, widgets::{self, BTN_ICON_SIZE, MARGIN_MEDIUM, MARGIN_SMALL}
+    cmdpalette,
+    cmdrenderer::CMD_SIZE_VEC,
+    dndctl::{DnDCtl, DragAction, DragData},
+    nativedialogs, programview,
+    project::{Command, CommandRange, Project},
+    widgets::{self, BTN_ICON_SIZE, MARGIN_MEDIUM, MARGIN_SMALL},
 };
 
 const MODIFIERS_CTRL: egui::Modifiers = egui::Modifiers {
@@ -284,7 +292,7 @@ impl EditorApp {
                     ui.add(programview::programview(
                         &mut self.programview_state,
                         &mut self.dndctl,
-                        self.cmdpalette_state.edited_tilemap.is_none()
+                        self.cmdpalette_state.edited_tilemap.is_none(),
                     ));
                 });
             });
@@ -357,7 +365,12 @@ impl EditorApp {
         match parser::parse_tokens(tokens) {
             Ok(ast) => {
                 println!("AST: {:?}", ast);
-                let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, None, true);
+                let project = self.programview_state.project.borrow();
+                let data = WorldCreationData {
+                    tilemaps: project.tilemaps.clone(),
+                    script_dir: None
+                };
+                let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, data, true);
                 self.script_subapp = Some(subapp);
             }
             Err(errors) => {
@@ -431,12 +444,14 @@ impl SubApp for EditorApp {
         if let Some(code_subapp) = self.script_subapp.as_mut() {
             let app_continues = code_subapp.update(ctx, frame);
             if !app_continues {
-                if let ScriptState::Error(err) = &*code_subapp.program_state.lock().unwrap() { match err.item {
-                    turtlicoscript::error::Error::Interrupted => {}
-                    _ => {
-                        self.script_errors = Some(vec![err.clone()]);
+                if let ScriptState::Error(err) = &*code_subapp.program_state.lock().unwrap() {
+                    match err.item {
+                        turtlicoscript::error::Error::Interrupted => {}
+                        _ => {
+                            self.script_errors = Some(vec![err.clone()]);
+                        }
                     }
-                } }
+                }
                 self.script_subapp = None;
             }
         }

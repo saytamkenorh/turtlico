@@ -92,6 +92,7 @@ fn create_parser() -> impl Parser<Token, Spanned<Expression>, Error = Simple<Tok
             Token::Integer(x) => Ok(Expression::Int(x)),
             Token::String(x) => Ok(Expression::String(x)),
             Token::Image(x) => Ok(Expression::Image(x)),
+            Token::Tilemap(x) => Ok(Expression::Tilemap(x)),
             Token::Key(x) => Ok(Expression::Key(x)),
             Token::Float(x) => x
                 .parse()
