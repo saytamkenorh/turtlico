@@ -34,7 +34,7 @@ jobs:
         components: rust-src
     
     - name: "Install wasm-bindgen-cli"
-      run: cargo +nightly install -f wasm-bindgen-cli --version 0.2.89
+      run: cargo +nightly install -f wasm-bindgen-cli --version 0.2.100
     
     - uses: Swatinem/rust-cache@v2
       with:
