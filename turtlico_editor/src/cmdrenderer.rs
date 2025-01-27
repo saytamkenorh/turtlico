@@ -274,6 +274,7 @@ fn load_funcs_icons(ctx: &egui::Context) -> HashMap<String, SizedTexture> {
     insert_func_icon_emmbeded!(map, "set_target_xy", "../icons/set_target_xy.svg", ctx);
     insert_func_icon_emmbeded!(map, "set_xy_px", "../icons/set_xy_px.svg", ctx);
     insert_func_icon_emmbeded!(map, "set_xy", "../icons/set_xy.svg", ctx);
+    insert_func_icon_emmbeded!(map, "show_background", "../icons/show_background.svg", ctx);
     insert_func_icon_emmbeded!(map, "skin", "../icons/skin.svg", ctx);
     insert_func_icon_emmbeded!(map, "speed", "../icons/speed.svg", ctx);
     insert_func_icon_emmbeded!(map, "tilemap", "../icons/tilemaps.svg", ctx);

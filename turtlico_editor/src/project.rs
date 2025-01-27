@@ -54,7 +54,7 @@ pub struct Project {
     pub files: HashMap<String, Vec<u8>>,
     /// Project emmbeded tilemaps
     #[serde(default)]
-    pub tilemaps: HashMap<String, Tilemap>,
+    pub tilemaps: BTreeMap<String, Tilemap>,
     #[serde(skip)]
     pub blocks: HashMap<String, SizedTexture>,
     #[serde(skip)]
@@ -91,7 +91,7 @@ impl Project {
             program: Vec::new(),
             files: HashMap::new(),
             blocks: HashMap::new(),
-            tilemaps: HashMap::new(),
+            tilemaps: BTreeMap::new(),
             default_blocks: BTreeMap::from_iter(
                 turtlicoscript_gui::world::World::default_blocks(ctx),
             ),

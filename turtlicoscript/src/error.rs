@@ -81,6 +81,9 @@ pub enum RuntimeError {
     NativeLibraryError(String),
     MethodCalledAsFunction,
     InvalidKey,
+    InvalidTilemap,
+    /// Invalid function call flag (on_sprite, transparent etc.)
+    InvalidFlag,
 }
 
 impl Display for RuntimeError {

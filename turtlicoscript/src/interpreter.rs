@@ -101,8 +101,7 @@ impl Context {
                     Error::ThisCannotBeCalled(value.to_string()),
                     expression.span.to_owned(),
                 )),
-            },
-            Expression::Tilemap(name) => self.tilemap(name, expression.span.to_owned()),
+            },          
             // Control flow
             Expression::If { cond, body } => {
                 let cond_res = self.eval(&cond)?;
@@ -273,6 +272,7 @@ impl Context {
             Expression::Float(val) => Ok(Value::Float(*val)),
             Expression::String(val) => Ok(Value::String(val.to_owned())),
             Expression::Image(val) => Ok(Value::Image(val.to_owned())),
+            Expression::Tilemap(val) => Ok(Value::Tilemap(val.to_owned())),
             Expression::Key(val) => Ok(Value::Key(val.to_owned())),
             Expression::Variable { parent, name } => match parent {
                 Some(parent) => {
@@ -574,26 +574,6 @@ impl Context {
                 ),
                 span_a,
             )),
-        }
-    }
-
-    fn gui_error(span: Range<usize>) -> Result<Value, Spanned<Error>> {
-        Err(Spanned::new(
-            Error::RuntimeError(RuntimeError::NativeLibraryError(
-                "GUI library not available".to_owned(),
-            )),
-            span.clone(),
-        ))
-    }
-
-    fn tilemap(&mut self, name: &str, span: Range<usize>) -> Result<Value, Spanned<Error>> {
-        match self.get_var("show_tilemap", None).unwrap() {
-            Value::Callable(callable) => self.call_callable(
-                &callable,
-                span.clone(),
-                &vec![Spanned::new(Expression::String(name.to_owned()), span)],
-            ),
-            _ => Self::gui_error(span),
         }
     }
 }

@@ -367,7 +367,7 @@ impl EditorApp {
                 println!("AST: {:?}", ast);
                 let project = self.programview_state.project.borrow();
                 let data = WorldCreationData {
-                    tilemaps: project.tilemaps.clone(),
+                    tilemaps: HashMap::from_iter(project.tilemaps.clone()),
                     script_dir: None
                 };
                 let subapp = turtlicoscript_gui::app::ScriptApp::spawn(ast, data, true);

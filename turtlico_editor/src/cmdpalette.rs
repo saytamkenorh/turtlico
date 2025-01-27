@@ -86,7 +86,9 @@ fn cmdpalette_ui(
                 .group(|ui| {
                     ui.set_min_height(ui.available_height() - space_after);
                     ui.push_id(ui.id().with("scrollview"), |ui| {
-                        ui.set_width((CMD_SIZE as f32) * 4.0 + ui.style().spacing.item_spacing.x * 3.0);
+                        ui.set_width(
+                            (CMD_SIZE as f32) * 4.0 + ui.style().spacing.item_spacing.x * 3.0,
+                        );
                         egui::ScrollArea::both().show(ui, |ui| {
                             //ui.set_height(ui.available_height() - space_after);
                             ui.with_layout(
@@ -124,11 +126,9 @@ fn cmdpalette_ui(
                                                         )),
                                                     ]
                                                 } else {
-                                                    vec![
-                                                        Command::Token(Token::Image(
-                                                            name.to_owned(),
-                                                        ))
-                                                    ]
+                                                    vec![Command::Token(Token::Image(
+                                                        name.to_owned(),
+                                                    ))]
                                                 };
                                                 ui.add(cmdiconsource(
                                                     cmds.iter().collect(),
@@ -182,12 +182,18 @@ fn cmdpalette_ui(
                                                     btn
                                                 },
                                             );
-                                            for (scene, _data) in project.borrow().tilemaps.iter() {
+                                            for tilemap in project.borrow().tilemaps.keys()
+                                            {
                                                 ui.add(cmdiconsource(
-                                                    vec![&Command::Token(Token::Tilemap(
-                                                        scene.to_owned(),
-                                                    ))],
-                                                    0,
+                                                    vec![
+                                                        &Command::Token(Token::Function(
+                                                            "show_background".to_owned(),
+                                                        )),
+                                                        &Command::Token(Token::Tilemap(
+                                                            tilemap.clone(),
+                                                        )),
+                                                    ],
+                                                    1,
                                                     project.clone(),
                                                     dndctl,
                                                 ));
@@ -203,9 +209,11 @@ fn cmdpalette_ui(
                                                             dndctl.drag_receive(resp.rect)
                                                         {
                                                             if data.commands.len() == 1
-                                                                && data.commands[0].len() == 1
+                                                                && (data.commands[0].len() == 1
+                                                                    || data.commands[0].len() == 2)
                                                             {
-                                                                let cmd = &data.commands[0][0];
+                                                                let cmd = &data.commands[0]
+                                                                    [data.commands[0].len() - 1];
                                                                 let project = project.borrow();
                                                                 if let Command::Token(
                                                                     Token::Tilemap(tilemap),
@@ -249,9 +257,11 @@ fn cmdpalette_ui(
                                                             dndctl.drag_receive(resp.rect)
                                                         {
                                                             if data.commands.len() == 1
-                                                                && data.commands[0].len() == 1
+                                                                && (data.commands[0].len() == 1
+                                                                    || data.commands[0].len() == 2)
                                                             {
-                                                                let cmd = &data.commands[0][0];
+                                                                let cmd = &data.commands[0]
+                                                                    [data.commands[0].len() - 1];
                                                                 if let Command::Token(
                                                                     Token::Tilemap(tilemap),
                                                                 ) = cmd
@@ -340,9 +350,7 @@ fn cmdiconsource_ui(
         dndctl.drag_start(
             ui,
             EditorDragData {
-                commands: vec![cmd
-                    .into_iter().cloned()
-                    .collect::<Vec<Command>>()],
+                commands: vec![cmd.into_iter().cloned().collect::<Vec<Command>>()],
                 commands_range: None,
                 project: project.clone(),
                 action: DragAction::COPY,

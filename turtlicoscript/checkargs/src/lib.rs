@@ -120,6 +120,19 @@ pub fn check_args(
                 }
                 let #varname = #varname.unwrap();
             });
+        } else if arg_type == "Tilemap" {
+            arg_checker.extend(quote! {
+                let mut #varname = None;
+                match &args[#pos] {
+                    Value::Tilemap(val) => {
+                        #varname = Some(val);
+                    },
+                    _ => {
+                        return Err(RuntimeError::InvalidArgType(#pos));
+                    }
+                }
+                let #varname = #varname.unwrap();
+            });
         } else if arg_type == "Key" {
             arg_checker.extend(quote! {
                 let mut #varname = None;

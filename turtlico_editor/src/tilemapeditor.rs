@@ -105,11 +105,18 @@ fn tilemapeditor_view_ui(
                         }
                         if response.drag_started() && response.drag_delta().length_sq() > 3.0 {
                             if let Some((cmd, col, row)) = state.get_cmd_at_pointer(ui, rect) {
-                                state.tilemap.set_block(col, row, None);
+                                let action = if response.drag_started_by(egui::PointerButton::Secondary) {
+                                    dndctl::DragAction::COPY
+                                } else {
+                                    dndctl::DragAction::MOVE
+                                };
+                                if action == dndctl::DragAction::MOVE {
+                                    state.tilemap.set_block(col, row, None);
+                                }
                                 state.dndctl.drag_start(
                                     ui,
                                     EditorDragData {
-                                        action: dndctl::DragAction::MOVE,
+                                        action,
                                         commands: vec![vec![cmd]],
                                         commands_range: None,
                                         project: project.clone(),

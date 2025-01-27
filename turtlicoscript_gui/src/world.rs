@@ -98,7 +98,7 @@ impl World {
         data: WorldCreationData,
     ) -> Arc<Mutex<Self>> {
         let mut world = Self::new(update_tx);
-        world.tilemaps = data.tilemaps;
+        world.tilemaps = HashMap::from_iter(data.tilemaps.clone().into_iter());
         world.script_dir = data.script_dir;
         Arc::new(Mutex::new(world))
     }
@@ -352,6 +352,10 @@ impl World {
         } else {
             sprite.get_forward_block_y()
         };
+        Self::place_block_no_sprite(&mut world, block, bx, by);
+    }
+
+    pub fn place_block_no_sprite(world: &mut World, block: Option<&String>, bx: usize, by: usize) {
         match block {
             Some(block) => {
                 for bz in 0..world.block_map.len_of(Axis(2)) - 1 {
@@ -394,24 +398,33 @@ impl World {
         })
     }
 
-    pub fn show_tilemap(world: &Arc<Mutex<World>>, key: &str) -> Result<(), RuntimeError> {
+    pub fn show_tilemap(
+        world: &Arc<Mutex<World>>,
+        key: &str,
+        transparent: bool,
+    ) -> Result<(), RuntimeError> {
         let mut world = world.lock().unwrap();
         if let Some(tilemap) = world.tilemaps.get(key).cloned() {
             let sizex = world.block_map.len_of(Axis(0));
             let sizey = world.block_map.len_of(Axis(1));
             for bx in 0..sizex {
                 for by in 0..sizey {
-                    world.block_map[(bx, by, 0)] = tilemap.tiles.get((bx, by)).cloned().unwrap_or(None);
-                    for bz in 1..world.block_map.len_of(Axis(2)) {
-                        world.block_map[(bx, by, bz)] = None;
+                    let block = tilemap.tiles.get((bx, by)).cloned().unwrap_or(None);
+                    if transparent {
+                        if block.is_some() {
+                            Self::place_block_no_sprite(&mut world, block.as_ref(), bx, by);
+                        }
+                    } else {
+                        world.block_map[(bx, by, 0)] = block;
+                        for bz in 1..world.block_map.len_of(Axis(2)) {
+                            world.block_map[(bx, by, bz)] = None;
+                        }
                     }
                 }
             }
             Ok(())
         } else {
-            Err(RuntimeError::NativeLibraryError(
-                "Invalid tilemap".to_owned(),
-            ))
+            Err(RuntimeError::InvalidTilemap)
         }
     }
 
